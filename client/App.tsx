@@ -1,6 +1,6 @@
 import {useGameTools} from './webmcp';
 import {ownKeyConfigured,setOwnKey,ownAudio,wavRecording} from './own-ai';
-import {EXPEDITION,expeditionRoom} from '../shared/campaign';
+import {CAMPAIGN_MAP as EXPEDITION,campaignRoom as expeditionRoom} from '../shared/campaign-map';
 import {Component,useEffect,useRef,useState,type ReactNode} from 'react';
 import World from './World';
 import {TurnPlayback} from './TurnPlayback';

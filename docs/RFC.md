@@ -148,3 +148,9 @@ Current automated suite is Node's test runner via tsx, not Vitest. Browser QA us
 ### Authored companion conversation state
 
 `shared/companion-stories.ts` defines six private scenes at trust1/4/8. Later scenes require explicit discovered-fact IDs, preventing future-story leakage. `companionStoryId` is additive saved state. While active, legal actions contain only the two offered replies; reload resumes the same decision. Completion records the selected canonical bond memory, increments trust once and grants Mira +2 maximum/current health or Oren +1 maximum/current focus. No XP or repeated farming is possible. Bond facts are retained in AI context beyond the recent-history window. The camera uses the active speaker, and focus is displayed numerically to remain readable at higher levels.
+
+## Narrative boundary correction (6 September 2026)
+
+Full campaign clues and outcomes remain server-side. A generated `shared/campaign-map.ts` exposes only room ID, title, chapter number and chapter name for navigation. The production build rejects client bundles containing authored future clues. Encounter content reaches the browser through its current public save.
+
+Every dialogue request identifies the replying character and listening hero separately from world facts. Relationship memory names the subject of feelings and decisions explicitly; legacy ambiguous Mira memories receive a request-time clarification without rewriting saves. Local, hosted and personal-key paths share this binding. A real Luna check previously reversed the participants; after this correction both tested phrasings preserved Mira’s agency. This is bounded evidence, not a guarantee of all generated dialogue.
