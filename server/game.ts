@@ -314,7 +314,7 @@ export function log(
   });
   if (s.logs.length > 250) s.logs.shift();
   if (s.presentation && (rolls.length || /moves|guards|aims|runs|restores/.test(text))) {
-    s.presentation.push({actorId:speaker,sceneId:s.sceneId,party:structuredClone(s.party),enemies:structuredClone(s.enemies),log:structuredClone(s.logs.at(-1)!)});
+    s.presentation.push({mode:s.mode,turn:structuredClone(s.turn),actorId:speaker,sceneId:s.sceneId,party:structuredClone(s.party),enemies:structuredClone(s.enemies),log:structuredClone(s.logs.at(-1)!)});
   }
 }
 export function createSave(input: CreateSaveRequest): Save {

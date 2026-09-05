@@ -54,6 +54,8 @@ export interface GameLog {
   rolls: Roll[];
 }
 export interface PresentationFrame {
+  mode?: Mode;
+  turn?: PublicSave["turn"];
   actorId: string;
   sceneId: SceneId;
   party: Actor[];

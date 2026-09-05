@@ -46,3 +46,15 @@ The live evaluation and browser work remained below the explicit $2 evaluation c
 - Whisper was tested with a real generated audio file, not a person speaking into this Mac's microphone. Recording lifecycle/cancellation is covered by production-helper regression tests; actual microphone permissions and hardware depend on the browser/device. Text play is available throughout.
 - Primary action text is smaller than the aspirational16px-everywhere PRD target. Some nearby world labels can overlap; the target list provides all targets. Broader accessibility and five-player acceptance checks remain future work.
 - Puglin and unused character variants are acquired assets, not claims that all their animations have been visually certified. Enemy appearance is a permitted Imp adaptation, not an official Goblin/Hobgoblin model.
+
+
+## Public expansion verification: 6 September2026
+
+- Public URL: https://echoes-below.naufaldi.chatgpt.site. First deployment succeeded; release-fix version2 also succeeded; current bundle and representative assets respond200.
+-41 automated tests pass; client/local-server/Worker type checks pass; Vite8 + Worker build passes.
+- Deployed HTTP adventure: opening combat route, all40 additional locations,215 revisions, level8 with35725XP, final ending and reload. Automated traversal299 seconds; this is not human playtime or a24-hour validation.
+- Distinct visitor cannot read/list another save. Duplicate action returns original revision; stale action returns409.
+-41 model files parsed; no missing external dependencies; largest public file9.89MB. Browser animation/material appearance still requires inspection.
+- Computer-use blocked because Mac is locked and cannot auto-unlock. No new browser screenshots, voice playback claim, or WebMCP verification.
+- Personal key path uses direct OpenAI requests and page memory. OpenAI CORS preflight accepted. Real browser BYOK remains to be tested. Sponsored server key has not been configured.
+- Existing local saves preserved; local server restarted with the expansion and the page responds200 at127.0.0.1:4317.
