@@ -90,6 +90,7 @@ export interface Scene {
   index: number;
 }
 export interface PublicSave {
+  companionStoryId?: string | null;
   xp?: number;
   level?: number;
   presentation?: PresentationFrame[];

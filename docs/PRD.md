@@ -37,7 +37,7 @@ Mira is a perceptive scout with dry humour, searching for her brother Tavin. Her
 
 Companion turns use legal AI proposals when configured, with deterministic protective tactics on provider failure. Oren prioritizes downed or badly injured allies when healing is possible; Mira attacks vulnerable reachable targets. Guard protects only the actor. The party never accepts a major bargain without player confirmation. AI context contains current visible state, confirmed discoveries, recent exchanges, and key cross-chapter facts. Player assertions and prior generated text are conversation, not authoritative facts.
 
-Trust changes once for a recorded decision and persists. Current release records relationship values and uses them in AI context; threshold-specific authored unlocks remain a follow-up requirement, not a shipped feature.
+Trust changes once for a recorded decision and persists. Six private companion scenes unlock at trust1/4/8, with later scenes additionally requiring witnessed archive, market, prison or choir events. Each offers two original responses, preserves the chosen memory for later AI context, and grants the speaking companion +1 maximum/current focus once (Shared Resolve). Starting a scene temporarily replaces other actions with its two replies; unfinished conversations survive reload. These scenes work without paid AI.
 
 ## Campaign and worked opening
 
@@ -94,7 +94,7 @@ Microphone refusal leaves typing available. Unsupported requests show a limitati
 | EB-11 | Cohesive assets | Verified licences, usable geometry/materials/clips, furnished prison, three additional enemy types. Expansion |
 | EB-12 | Recovery | Provider errors, duplicates, stale requests and interrupted playback preserve committed state. Both |
 | EB-13 | Safe AI access | Personal key absent from server/storage; sponsored atomic budgets enforced. Public release |
-| EB-14 | Relationships | Once-only trust effects persist; authored threshold unlocks tracked as outstanding. Expansion/follow-up |
+| EB-14 | Relationships | Once-only trust effects and six fact-gated private conversations persist, including chosen replies and Shared Resolve. Expansion/follow-up |
 | EB-15 | Campaign/progression | Six chapters/46 locations, XP/levels, recorded decisions and ending;24h separately measured. Expansion + long-form follow-up |
 | EB-16 | Responsiveness | Target p95 frame≤33.3ms at1080p; report measured AI and action latency. Release gate |
 | EB-17 | Public publication | Exact tested source/build deployed to registered Sites URL; deployed API and browser checks. Public release |

@@ -1,3 +1,4 @@
+import {COMPANION_STORIES} from '../shared/companion-stories.js';
 import {EXPEDITION,expeditionRoom,expeditionScene} from "../shared/campaign.js";
 import { randomUUID } from "node:crypto";
 import type {
@@ -441,6 +442,7 @@ export function legalActions(s: Save): ActionOption[] {
     s.party.every((x) => x.hp <= 0)
   )
     return a;
+  if(s.companionStoryId){const story=COMPANION_STORIES.find(story=>story.id===s.companionStoryId);if(story)return story.responses.map((response,i)=>opt(`bond_reply:${i}`,response.label,'Answer honestly. This reply becomes part of your shared history.','interact',story.speaker));}
   if (s.mode === "combat") {
     if (s.party.filter((x) => x.hp > 0).every((x) => x.position[1] <= -2))
       a.push(
@@ -564,6 +566,8 @@ export function legalActions(s: Save): ActionOption[] {
     );
     return a;
   }
+  const safeForConversation=s.sceneId==='approach'||s.sceneId==='aftermath'||s.sceneId==='prison'&&f.rescued||!!f[`${s.sceneId}:resolved`];
+  for(const story of COMPANION_STORIES){if(safeForConversation&&s.relationships[story.speaker]>=story.threshold&&(!story.fact||s.facts.some(fact=>fact.id===story.fact))&&!f[`bond:${story.id}`]&&s.party.find(member=>member.id===story.speaker)!.hp>0)a.push(opt(`bond_begin:${story.id}`,story.title,`A private conversation with ${story.speaker==='mira'?'Mira':'Oren'}. Unlocked by trust and shared experiences.`,'interact',story.speaker));}
   if(!expeditionRoom(s.sceneId)&&!f[`cache:${s.sceneId}`])a.push(opt('loot_cache','Search the forgotten chest','Recover one healing potion. Each room’s chest can be searched once.','inspect','cache'));
   for (const healer of s.party.filter(
     (x) => x.hp > 0 && x.classId !== "scout" && x.focus > 0,
@@ -1300,6 +1304,17 @@ export function applyAction(original: Save, id: string, dice: Dice): Save {
   const [kind, actorId] = id.split(":");
   const a = s.party.find((x) => x.id === actorId) ?? h;
   const leader = s.party.find((x) => x.hp > 0) ?? h;
+  if(kind==='bond_begin'){
+    const story=COMPANION_STORIES.find(story=>story.id===actorId)!;s.companionStoryId=story.id;log(s,story.opening,story.speaker,[],'authored');s.revision++;s.updatedAt=new Date().toISOString();return s;
+  }
+  if(kind==='bond_reply'){
+    const story=COMPANION_STORIES.find(story=>story.id===s.companionStoryId)!;const choice=Number(actorId) as 0|1;
+    log(s,story.responses[choice].label,'hero',[],'authored');log(s,story.responses[choice].answer,story.speaker,[],'authored');
+    s.flags[`bond:${story.id}`]=true;s.companionStoryId=null;s.relationships[story.speaker]=Math.min(20,s.relationships[story.speaker]+1);
+    const member=s.party.find(member=>member.id===story.speaker)!;member.maxFocus++;member.focus++;
+    s.facts.push({id:`bond:${story.id}`,text:story.memory[choice]});log(s,`${member.name} gains Shared Resolve: +1 maximum focus from your strengthened bond.`,story.speaker);
+    s.revision++;s.updatedAt=new Date().toISOString();return s;
+  }
   if(kind==='continue_campaign'){
     s.ending=null;enterScene(s,'archive-1');s.party.forEach(member=>{member.hp=member.maxHp;member.focus=member.maxFocus;});
   } else if(kind.startsWith('exp_')) {

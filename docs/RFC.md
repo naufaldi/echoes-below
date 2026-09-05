@@ -129,7 +129,7 @@ Models load under Suspense with a visible loading message and scene error bounda
 | EB-01,15 | creation/rules/campaign | class/background/race roundtrips, all40 expansion rooms, XP once-only, reachable ending |
 | EB-02,05 | engine/World/TurnPlayback | movement and combat tests; individual frames; browser order/highlights |
 | EB-03,04 | preview/commands/dice/playback | no preview rolls, duplicate/stale tests, dice reveal screenshot |
-| EB-06,14 | AI context/dialogue/campaign | knowledge/personality evals, persistent choices/trust; threshold unlocks remain backlog |
+| EB-06,14 | AI context/dialogue/campaign | knowledge/personality evals, persistent choices/trust; six trust/fact-gated authored conversations, once-only Shared Resolve reward and persistent memory |
 | EB-07,12 | audio/session/API | transcription bytes, editable input, cancellation and late-response tests; actual playback |
 | EB-08,13 | Store/Worker/budgets/key UI | visitor isolation, atomic reservations, no key persistence, secure secret configuration |
 | EB-09 | opening rules | peaceful/combat endings and onward continuation |
@@ -143,3 +143,8 @@ Current automated suite is Node's test runner via tsx, not Vitest. Browser QA us
 - [OpenAI model documentation](https://platform.openai.com/docs/models), [pricing](https://openai.com/api/pricing/), [speech](https://platform.openai.com/docs/guides/text-to-speech), [transcription](https://platform.openai.com/docs/guides/speech-to-text).
 - [D&D SRD](https://www.dndbeyond.com/srd), [SRD5.2.1](https://media.dndbeyond.com/compendium-images/srd/5.2/SRD_CC_v5.2.1.pdf). Any future copied/adapted licensed SRD text must carry its required attribution. Current narrative and explanatory text are original; no BG3 story/dialogue/assets are copied.
 - [Quaternius catalog](https://quaternius.com/index.html), [Quaternius Asset License](https://quaternius.com/license.html), [Crazy Taxi visual reference](https://crazy-taxi.astra.demos.sulat.com/).
+
+
+### Authored companion conversation state
+
+`shared/companion-stories.ts` defines six private scenes at trust1/4/8. Later scenes require explicit discovered-fact IDs, preventing future-story leakage. `companionStoryId` is additive saved state. While active, legal actions contain only the two offered replies; reload resumes the same decision. Completion records the selected canonical bond memory, increments trust once and grants that companion +1 maximum/current focus. No XP or repeated farming is possible. Bond facts are retained in AI context beyond the recent-history window. The camera uses the active speaker, and focus is displayed numerically to remain readable at higher levels.
