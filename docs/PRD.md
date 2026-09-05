@@ -102,3 +102,24 @@ Microphone refusal leaves typing available. Unsupported requests show a limitati
 ## Milestones
 
 Opening adventure: previously delivered. Expansion: new content, dice, presentation, creation and progression. Public release: private saves, key controls, build/deployment and verification. Long-form campaign: measured pacing, deeper mechanical consequences and companion unlocks. Do not collapse the last milestone into the existence of a six-chapter ending.
+
+## Consequential campaign encounters
+
+**PRD-25.** Defeating an expedition room’s defenders clears the combat obstacle; it does not decide how people, records or institutions are treated. After victory both authored outcomes remain available without another check. The player must choose one before travel or a sheltered rest. Reload preserves this pending decision. Previously completed saves retain their historical decisions.
+
+**PRD-26.** Ten earlier decisions create optional later opportunities. Each appears as a named interaction in its target room, explains the prior relationship, and records the result in the journal. Help is claimed once per campaign branch. It never commits the room’s main decision for the player.
+
+| Earlier action | Later opportunity | Mechanical result |
+|---|---|---|
+| Share the apprentice’s lantern | Witness Sel’s contract | Contract DC −3 |
+| Save the ferryman’s boat | Receive his return supplies | One potion per party member |
+| Restore Ilyra’s name | Present signed council records | Accounting DC −3 |
+| Rescue the medic immediately | Receive treatment in the Thorn Infirmary | Restore health, not focus |
+| Sponsor the refugees | Work crew helps convert the furnace | Conversion DC −3 |
+| Build the guilds’ shared filter | Receive prisoner relief supplies | One potion per party member |
+| Teach the prisoners silence | Arrange a sentry diversion | One fewer defender at the Seventh Rootbound room |
+| Teach the missing rest | Singers help release Aras | Release DC −3 |
+| Assign choir evacuation guides | Divert a Fracture Gallery guardian | One fewer defender |
+| Trust Mira on the glass causeway | Ask her to inspect the final bridges | Bridge DC −3 |
+
+Acceptance: each opportunity is absent with the opposite earlier decision; reload retains availability/effect; repeated requests do not duplicate a reward; actual dice difficulty and starting enemy count match the displayed explanation. The ten links deepen consequences but do not establish the 24-hour duration target.
