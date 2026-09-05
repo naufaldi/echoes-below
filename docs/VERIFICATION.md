@@ -58,3 +58,5 @@ The live evaluation and browser work remained below the explicit $2 evaluation c
 - Computer-use blocked because Mac is locked and cannot auto-unlock. No new browser screenshots, voice playback claim, or WebMCP verification.
 - Personal key path uses direct OpenAI requests and page memory. OpenAI CORS preflight accepted. Real browser BYOK remains to be tested. Sponsored server key has not been configured.
 - Existing local saves preserved; local server restarted with the expansion and the page responds200 at127.0.0.1:4317.
+
+- Final public version3 succeeded, code commit `e8abb504b544941776346d1e4eed279fe86e4faf`; exact current bundle `/assets/index-BB1P8DBr.js` responds200. Metadata evidence: `artifacts/verification/deployed-v3-health.json`. No paid OpenAI calls were made during this expansion run.
