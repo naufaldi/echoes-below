@@ -37,7 +37,7 @@ Mira is a perceptive scout with dry humour, searching for her brother Tavin. Her
 
 Companion turns use legal AI proposals when configured, with deterministic protective tactics on provider failure. Oren prioritizes downed or badly injured allies when healing is possible; Mira attacks vulnerable reachable targets. Guard protects only the actor. The party never accepts a major bargain without player confirmation. AI context contains current visible state, confirmed discoveries, recent exchanges, and key cross-chapter facts. Player assertions and prior generated text are conversation, not authoritative facts.
 
-Trust changes once for a recorded decision and persists. Six private companion scenes unlock at trust1/4/8, with later scenes additionally requiring witnessed archive, market, prison or choir events. Each offers two original responses, preserves the chosen memory for later AI context, and grants the speaking companion +1 maximum/current focus once (Shared Resolve). Starting a scene temporarily replaces other actions with its two replies; unfinished conversations survive reload. These scenes work without paid AI.
+Trust changes once for a recorded decision and persists. Six private companion scenes unlock at trust1/4/8, with later scenes additionally requiring witnessed archive, market, prison or choir events. Each offers two original responses, preserves the chosen memory for later AI context, and grants Mira +2 maximum/current health (Steady Nerves) or Oren +1 maximum/current focus (Shared Resolve), once. Starting a scene temporarily replaces other actions with its two replies; unfinished conversations survive reload. These scenes work without paid AI.
 
 ## Campaign and worked opening
 

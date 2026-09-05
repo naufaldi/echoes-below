@@ -1311,8 +1311,8 @@ export function applyAction(original: Save, id: string, dice: Dice): Save {
     const story=COMPANION_STORIES.find(story=>story.id===s.companionStoryId)!;const choice=Number(actorId) as 0|1;
     log(s,story.responses[choice].label,'hero',[],'authored');log(s,story.responses[choice].answer,story.speaker,[],'authored');
     s.flags[`bond:${story.id}`]=true;s.companionStoryId=null;s.relationships[story.speaker]=Math.min(20,s.relationships[story.speaker]+1);
-    const member=s.party.find(member=>member.id===story.speaker)!;member.maxFocus++;member.focus++;
-    s.facts.push({id:`bond:${story.id}`,text:story.memory[choice]});log(s,`${member.name} gains Shared Resolve: +1 maximum focus from your strengthened bond.`,story.speaker);
+    const member=s.party.find(member=>member.id===story.speaker)!;if(story.speaker==='mira'){member.maxHp+=2;member.hp+=2;}else{member.maxFocus++;member.focus++;}
+    s.facts.push({id:`bond:${story.id}`,text:story.memory[choice]});log(s,story.speaker==='mira'?`${member.name} gains Steady Nerves: +2 maximum health from your strengthened bond.`:`${member.name} gains Shared Resolve: +1 maximum focus from your strengthened bond.`,story.speaker);
     s.revision++;s.updatedAt=new Date().toISOString();return s;
   }
   if(kind==='continue_campaign'){
