@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+data/
+*.log
+research/raw/
+artifacts/
+.wrangler/
+.DS_Store
+*.tgz
+*.tar.gz

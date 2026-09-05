@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "lib": ["ES2023", "DOM"],
+    "outDir": "build/server"
+  },
+  "include": ["server/**/*.ts", "shared/**/*.ts", "tests/backend*.ts"]
+}

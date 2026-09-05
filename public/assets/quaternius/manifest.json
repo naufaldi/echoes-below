@@ -1,0 +1,96 @@
+[
+  {
+    "file": "Warrior.gltf",
+    "sha256": "2bab905ce12d279e1d099c2a8de0b1ef31c9f5e8d1959b41d24470b4f4181add",
+    "animations": [
+      "Death",
+      "Idle",
+      "Idle_Attacking",
+      "Idle_Weapon",
+      "PickUp",
+      "Punch",
+      "RecieveHit",
+      "Roll",
+      "Run",
+      "Run_Weapon",
+      "Sword_Attack",
+      "Sword_Attack2",
+      "Walk"
+    ],
+    "skins": 1,
+    "source": "https://raw.githubusercontent.com/euuuuuuan/cairnfall-public/main/assets/vendor/quaternius_rpg/Warrior.gltf",
+    "license": "CC0 per original Quaternius RPG Character pack",
+    "original": "https://quaternius.com/packs/rpgcharacters.html"
+  },
+  {
+    "file": "Ranger.gltf",
+    "sha256": "2732741d5e21c20760d7f3dd9d71812d4b796f466be1a6cba212f45483dd56ed",
+    "animations": [
+      "Bow_Draw",
+      "Bow_Shoot",
+      "Death",
+      "Idle",
+      "Idle_Attacking",
+      "Idle_Weapon",
+      "PickUp",
+      "Punch",
+      "RecieveHit",
+      "RecieveHit_2",
+      "Roll",
+      "Run",
+      "Run_Holding",
+      "Walk"
+    ],
+    "skins": 1,
+    "source": "https://raw.githubusercontent.com/euuuuuuan/cairnfall-public/main/assets/vendor/quaternius_rpg/Ranger.gltf",
+    "license": "CC0 per original Quaternius RPG Character pack",
+    "original": "https://quaternius.com/packs/rpgcharacters.html"
+  },
+  {
+    "file": "Wizard.gltf",
+    "sha256": "320de17289857db6794e4eef55101ce3427e755319a4384fb6d9d9ca5206b41b",
+    "animations": [
+      "Death",
+      "Idle",
+      "Idle_Attacking",
+      "Idle_Weapon",
+      "PickUp",
+      "Punch",
+      "RecieveHit",
+      "RecieveHit_2",
+      "Roll",
+      "Run",
+      "Run_Weapon",
+      "Spell1",
+      "Spell2",
+      "Staff_Attack",
+      "Walk"
+    ],
+    "skins": 1,
+    "source": "https://raw.githubusercontent.com/euuuuuuan/cairnfall-public/main/assets/vendor/quaternius_rpg/Wizard.gltf",
+    "license": "CC0 per original Quaternius RPG Character pack",
+    "original": "https://quaternius.com/packs/rpgcharacters.html"
+  },
+  {
+    "file": "Rogue.gltf",
+    "sha256": "5a9eaca0871cd69f554747a1d42870b3bca702ba721d941d909fc530cf18afb8",
+    "animations": [
+      "Attacking_Idle",
+      "Dagger_Attack",
+      "Dagger_Attack2",
+      "Death",
+      "Idle",
+      "PickUp",
+      "Punch",
+      "RecieveHit",
+      "RecieveHit_2",
+      "Roll",
+      "Run",
+      "Walk"
+    ],
+    "skins": 1,
+    "source": "https://raw.githubusercontent.com/euuuuuuan/cairnfall-public/main/assets/vendor/quaternius_rpg/Rogue.gltf",
+    "license": "CC0 per original Quaternius RPG Character pack",
+    "original": "https://quaternius.com/packs/rpgcharacters.html"
+  }
+]
