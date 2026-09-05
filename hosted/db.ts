@@ -11,7 +11,7 @@ export class Store{
   if(checkpointId)after.checkpointIds.push({id:checkpointId,label:publicSave(after).scene.title});
   const result=publicSave(after),body=JSON.stringify(after);
   const statements=[this.db.prepare('INSERT INTO commands(owner,id,save_id,hash,result) SELECT ?,?,?,?,? FROM saves WHERE id=? AND owner=? AND revision=? ON CONFLICT(owner,id) DO NOTHING').bind(this.owner,commandId,after.id,hash,JSON.stringify(result),before.id,this.owner,before.revision),this.db.prepare('UPDATE saves SET revision=?,body=?,updated_at=? WHERE id=? AND owner=? AND revision=? AND EXISTS(SELECT 1 FROM commands WHERE owner=? AND id=? AND hash=?)').bind(after.revision,body,after.updatedAt,after.id,this.owner,before.revision,this.owner,commandId,hash)];
-  if(checkpointId)statements.push(this.db.prepare('INSERT INTO checkpoints(id,owner,save_id,body) SELECT ?,?,?,? WHERE EXISTS(SELECT 1 FROM commands WHERE owner=? AND id=? AND hash=?)').bind(checkpointId,this.owner,after.id,body,this.owner,commandId,hash));
+  if(checkpointId)statements.push(this.db.prepare('INSERT INTO checkpoints(id,owner,save_id,body) SELECT ?,?,?,? WHERE EXISTS(SELECT 1 FROM commands WHERE owner=? AND id=? AND hash=? AND result=?)').bind(checkpointId,this.owner,after.id,body,this.owner,commandId,hash,JSON.stringify(result)));
   await this.db.batch(statements);
   const stored=await this.duplicate(commandId,hash);if(!stored)throw new GameError(409,'STALE_REVISION','Another action was saved first. Reload your adventure.');return stored;
  }

@@ -1,6 +1,6 @@
 # Expansion status
 
-Updated6 September2026. Goal remains active. Public release is being prepared; do not claim deployment or browser acceptance yet.
+Updated6 September2026. Goal remains active. First public deployment succeeded at https://echoes-below.naufaldi.chatgpt.site. Browser acceptance remains unfinished.
 
 Implemented this expansion:
 - Saved per-action presentation frames, prominent animated die/reveal, sequential Next action and skip, initiative strip and active actor highlights.
@@ -11,11 +11,11 @@ Implemented this expansion:
 - Personal API key in page memory with direct OpenAI requests; optional sponsored Worker adapter with atomic conservative caps. Sponsored secret is not configured yet.
 - Updated PRD/RFC/reusable goal prompt. Earlier specifications archived, not normative.
 
-Verified:39 automated tests pass, including all40 new locations, level8 reachability, new enemy archetypes, duplicate XP prevention, individual frame copies, visitor isolation, checkpoint branches and budget admission. Client/server/Worker type checks pass. Production build passed before the latest small UI changes and must be rerun before publication. OpenAI browser CORS preflight accepts direct API requests.
+Verified:41 automated tests pass, including all40 new locations, level8 reachability, new enemy archetypes, duplicate XP prevention, individual frame copies, visitor isolation, checkpoint branches and budget admission. Client/server/Worker type checks pass. Production build and three type checks passed. Post-release retry/streaming/animation fixes require a new build and version. OpenAI browser CORS preflight accepts direct API requests.
 
 Outstanding release work:
 1. Review hosted idempotency and player-key retry behavior, hostile/oversized inputs, and actual Worker deploy behavior.
-2. Finish exact-source Git push, Sites version packaging/public deployment and deployed HTTP checks.
+2. First exact-source deployment succeeded (version1, commit53690e097669856d8b299c58b9e9b5cd2f9f99ed). Deployed HTTP traversal has passed ChaptersI–IV, visitor isolation, duplicates and stale requests; it is continuing throughV–VI. Publish the subsequent fixes and record final evidence.
 3. Browser visual/playtest remains blocked: computer-use reports the Mac is locked and cannot auto-unlock. Do not substitute HTTP tests for screenshots or actual voice playback. Recheck when user unlocks.
 4. WebMCP read/preview tools added; supported-context verification unavailable while locked. Not a user-requested WebMCP blocker.
 5. Sponsored secret provisioning remains pending; personal-key/authored modes are available. Never expose the existing local key to normal tool output or public files.

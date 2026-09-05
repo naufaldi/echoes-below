@@ -12,12 +12,13 @@ function Die({rolling,sides}:{rolling:boolean;sides:number}) {
 
 /** Presentation never rolls dice or writes game state. Its frames are committed server outcomes. */
 export function TurnPlayback({before,after,reduced,onFrame,onDone}:{before:PublicSave;after:PublicSave;reduced:boolean;onFrame:(save:PublicSave)=>void;onDone:()=>void}) {
+ const panel=useRef<HTMLElement>(null);
  const [index,setIndex]=useState(0),[revealed,setRevealed]=useState(false);
  const frames=after.presentation??[],frame=frames[index],done=useRef(onDone),show=useRef(onFrame);
  done.current=onDone;show.current=onFrame;
  useEffect(()=>{
   if(!frame){done.current();return;}
-  setRevealed(false);
+  setRevealed(false);panel.current?.focus();
   const previous=index?frames[index-1]:null;
   const room=frame.sceneId===before.scene.id?before:after;
   const visible={...room,actions:[],party:previous?.party??before.party,enemies:previous?.enemies.length?previous.enemies:frame.enemies,logs:before.logs,turn:after.turn?{...after.turn,actorId:frame.actorId}:null};
@@ -27,7 +28,7 @@ export function TurnPlayback({before,after,reduced,onFrame,onDone}:{before:Publi
  },[index,frame,before,after,reduced,frames]);
  if(!frame)return null;
  const roll=frame.log.rolls[0],actor=[...frame.party,...frame.enemies].find(a=>a.id===frame.actorId);
- return <section className={'turn-playback '+(roll?'with-roll':'')} role="dialog" aria-modal="true" aria-label="Action playback">
+ return <section ref={panel} tabIndex={-1} onKeyDown={event=>{if(event.key!=='Tab')return;const buttons=Array.from(panel.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)')??[]);if(!buttons.length)return;const index=buttons.indexOf(document.activeElement as HTMLButtonElement);event.preventDefault();buttons[(index+(event.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}} className={'turn-playback '+(roll?'with-roll':'')} role="dialog" aria-modal="true" aria-label="Action playback">
   <div className="eyebrow">{actor?.name??'FATE'} · {index+1} / {frames.length}</div>
   <h2>{roll?`D${roll.sides} · ${roll.purpose}`:'Taking action'}</h2>
   {roll&&<div className="rolling-die"><Canvas camera={{position:[0,0,5]}}><ambientLight intensity={2}/><directionalLight position={[3,4,5]} intensity={6}/><Die sides={roll.sides} rolling={!revealed&&!reduced}/></Canvas><strong className={revealed?'revealed':''}>{revealed?roll.kept:'?'}</strong></div>}

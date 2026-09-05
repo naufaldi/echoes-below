@@ -2,6 +2,7 @@ import {companionOptions} from '../shared/companion-options';
 import {ownKeyConfigured,ownDialogue,ownStructured,ownRequest} from './own-ai';
 import {narrativeContext} from '../shared/ai-context';
 import type {PublicSave,Speaker} from '../shared/types';
+const planCache=new Map<string,Record<string,string>>();
 let csrf='',session:Promise<void>|null=null;
 export class ApiFailure extends Error {constructor(message:string,public status:number){super(message);}}
 async function establish(){if(csrf)return;if(!session)session=fetch('/api/session').then(async r=>{if(!r.ok)throw new Error('The game server is unavailable.');csrf=(await r.json()).csrfToken;}).finally(()=>{session=null;});await session;}
@@ -13,7 +14,7 @@ export async function api<T>(path:string,body?:unknown):Promise<T>{
   if(path==='/api/actions/preview'&&b.text){const s=await raw<PublicSave>('/api/saves/'+b.saveId);const value=await ownStructured('Choose one offered action matching the request, or null when unsupported. Never resolve an action.',{context:narrativeContext(s),options:s.actions,text:b.text},{type:'object',properties:{actionId:{type:['string','null']}},required:['actionId'],additionalProperties:false});if(!s.actions.some(a=>a.id===value.actionId))throw new Error('That request does not match a supported action. Choose a contextual option.');return raw<T>(path,{saveId:s.id,expectedRevision:b.expectedRevision,actionId:value.actionId});}
   if(/\/saves\/[^/]+\/actions$/.test(path)&&['end_turn','continue'].includes(b.actionId as string)){
    const s=await raw<PublicSave>(path.replace(/\/actions$/,'')),choices=companionOptions(s.party,s.enemies);
-   if(Object.keys(choices).length){try{const companionPlans=await ownStructured('Choose one offered action per companion. Oren heals downed allies first, otherwise attacks; Mira attacks vulnerable targets. Never invent targets or outcomes.',{party:s.party,enemies:s.enemies,choices},{type:'object',properties:Object.fromEntries(Object.entries(choices).map(([id,legal])=>[id,{type:'string',enum:legal}])),required:Object.keys(choices),additionalProperties:false});return raw<T>(path,{...b,companionPlans});}catch{/* The authoritative engine has protective fallback tactics. */}}
+   if(Object.keys(choices).length){try{const companionPlans=planCache.get(b.commandId as string)??await ownStructured('Choose one offered action per companion. Oren heals downed allies first, otherwise attacks; Mira attacks vulnerable targets. Never invent targets or outcomes.',{party:s.party,enemies:s.enemies,choices},{type:'object',properties:Object.fromEntries(Object.entries(choices).map(([id,legal])=>[id,{type:'string',enum:legal}])),required:Object.keys(choices),additionalProperties:false});planCache.set(b.commandId as string,companionPlans);if(planCache.size>30)planCache.delete(planCache.keys().next().value!);return raw<T>(path,{...b,companionPlans});}catch{/* The authoritative engine has protective fallback tactics. */}}
   }
   if(path==='/api/transcriptions'){const bytes=Uint8Array.from(atob(b.audioBase64 as string),c=>c.charCodeAt(0)),form=new FormData();form.set('model','whisper-1');form.set('file',new Blob([bytes],{type:'audio/wav'}),'speech.wav');return await(await ownRequest('audio/transcriptions',form)).json() as T;}
  }

@@ -1,43 +1,27 @@
 # Echoes Below
 
-A playable local 3D narrative dungeon adventure. Lead one hero and two companions through Briarwatch, choose actions, roll checks, talk with AI characters, and resolve the bell chamber by combat or negotiation.
+A desktop-browser 3D narrative adventure with a human hero, Mira and Oren, contextual exploration, visible dice, turn-based combat, and optional OpenAI dialogue and voice.
 
-**Play:** http://127.0.0.1:4317
+**Public game:** https://echoes-below.naufaldi.chatgpt.site
 
-The server must be running on this Mac. Open `START.command` to restart it, or run `npm start` from this directory. Node 24 is required. The current production client is already built; after code changes run `npm run build`.
+The expansion has six chapters,46 locations, four race identities, four compact class profiles, shared experience through level8, and a reachable ending. It uses original stories and simplified D&D-inspired rules. Race abilities, full tabletop class features, and a measured24-hour campaign are not shipped claims. Read [current verification/status](docs/EXPANSION_STATUS.md) before describing it as fully tested.
 
-## Playing
+## Play
 
-1. Choose Guardian, Scout, or Adept, then a name, background, and appearance.
-2. Select an object or use the Focus menu. Scroll the action list to see all choices.
-3. Read the confirmation and take the action. The server rolls dice and saves the result.
-4. During combat, movement and one action are separate. **End turn** lets companions and enemies act. Companions use real AI choices with a legal tactical fallback when unavailable. **Gather party at exit** coordinates a retreat.
-5. Talk to Mira, Oren, or the Dungeon Master. AI dialogue can be spoken automatically, replayed, stopped, or muted in settings. **Speak** records up to 30 seconds; review the transcript before submitting it.
-6. Use the journal for discoveries, dice, and saved conversations. Every game action autosaves locally. Continue returns to the last selected adventure.
+Choose a character and begin the descent. Select a contextual action, review it, then confirm. The engine saves its result before showing dice and individual turns. Use Next action or Skip presentation to continue. ChapterI's ending offers Continue to ChapterII. An existing local ChapterI adventure remains usable.
 
-The microphone requires browser permission. Text controls remain available. Voices are AI-generated. The private server environment supplies the OpenAI key; it is never bundled into browser code.
+AI is optional. Open Settings to connect a personal OpenAI key for the current page. It goes directly to OpenAI and clears on reload; the game server never receives it. Dialogue and game progress are stored on the hosted service under a private browser cookie. Clearing cookies loses access because account recovery is not implemented. Sponsored mode is available in code but disabled until a protected owner secret is configured.
 
-## Delivered scope
+## Local development
 
-This is the complete **compact opening adventure**, with six scenes and a reachable ending. The planned 24-hour campaign, expanded chapters, and fresh-player duration studies are future work. It is an original simplified fantasy ruleset inspired by tabletop play.
+Node24+, npm. Install with `npm install`; build with `npm run build`; run `npm start` for the local game at127.0.0.1:4317. `START.command` starts the local production game from Finder. The existing private `.env` may contain OpenAI settings; never commit or print it. Local saves remain in ignored `data/echoes.sqlite` and are not uploaded to Sites.
 
-The 3D scene uses Quaternius characters and adapted free Bestiary monsters, with original modular scenery. Camera orbit and zoom are supported. Movement uses authored open-room anchors; presentation interpolates authoritative snapshots. It does not simulate an unrestricted world or animate every imagined action.
+`npm run dev` starts the Vite client and proxies API requests to the local backend. `npm run dev:server` watches the backend. Use `npm test`, `npm run typecheck:client`, `npm run typecheck:server`, and `npm run typecheck:hosted` for verification. Browser interaction must be checked separately; automated traversal does not measure human campaign duration.
 
-## Project documents
+The production build emits `dist/client`, `dist/server/index.js`, and Sites metadata. Hosted runtime uses D1 and owner-scoped saves; generated migrations are in `drizzle/`. Reuse `.openai/hosting.json` and the existing Site registration. Do not initialize another Site or commit personal artifacts/secrets.
 
-- [PRD](docs/PRD.md): product vision, campaign outline, numbered requirements.
-- [RFC](docs/RFC.md): architecture, rules, AI and voice decisions, asset research.
-- [Implementation plan and reusable goal prompt](docs/IMPLEMENTATION.md).
-- [Implemented API](docs/API.md): exact current integration contract.
-- [Asset ledger and licenses](docs/ASSETS.md).
-- [Verification report](docs/VERIFICATION.md): actual checks, evidence and remaining limitations.
+## Design and credits
 
-## Development
+[PRD](docs/PRD.md), [RFC](docs/RFC.md), [goal prompt](docs/GOAL_PROMPT.md), [asset audit](docs/ASSETS.md).
 
-`npm install` installs dependencies. `npm run dev:server` starts the API on 4317; `npm run dev` starts Vite on 5173. Production serves `dist` directly from the API.
-
-Validation: `npm test`, `npm run typecheck:server`, `npm run typecheck:client`, `npm run build`.
-
-Saves, conversation history, audio cache, and usage records live in `data/`. Keep that directory to retain progress. `.env` and `data/` are ignored. Lower positive `AI_HOURLY_LIMIT_USD` and `AI_CAMPAIGN_LIMIT_USD` values reduce the default limits of $2/hour and $25/campaign; the implemented limits cannot exceed those ceilings. Text costs use returned token counts; audio accounting is conservative. These limits apply to this local application.
-
-The game binds only to loopback. Public hosting, accounts, and deployment hardening are outside this release.
+Quaternius created the character, monster and environment assets. Most shipped models are CC0. The adapted Bestiary Imp uses the Quaternius Asset License, not CC0. Source/license manifests are included with the assets. Unused restricted models are excluded from the published game. Baldur’s Gate3 and the Crazy Taxi demo are experiential references; their proprietary content is not copied.
