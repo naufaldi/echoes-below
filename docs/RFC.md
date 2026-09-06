@@ -263,3 +263,7 @@ Browser QA exposed legacy `campheal` on a curated Fighter after combat. The cura
 ### Chapter atmosphere rendering
 
 `client/ChapterAtmosphere.tsx` owns deterministic chapter colors and geometric landmarks. World uses the same chapter definition for fog, lighting and instanced floor tint; changing chapters refreshes instance colors. New solid landmarks sit outside ±4.8 world units, the current tactical grid footprint. Existing later-room furniture is moved outward; opening layouts are preserved. Geometric scenery uses local Three.js primitives and adds no third-party license requirements or texture downloads. Further visual review must check all five themes, room-specific layout, prop bounds and label occlusion.
+
+### Durable speaker presentation
+
+GameLog adds optional `speakerName`; server logging snapshots canonical actor identity before actors leave the scene. The original speaker ID remains the identity key for rules and AI. `shared/speaker-label.ts` renders saved names first, then current actors and explicit legacy mappings. Unknown old rules IDs display Creature rather than leaking implementation identifiers. React text rendering preserves name escaping. Tests cover duplicate-enemy names after scene removal and legacy fallback.

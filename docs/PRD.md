@@ -208,3 +208,7 @@ Selecting “Let [actor] act” now directly commits one NPC step, using the sam
 ### Chapter visual identity checkpoint
 
 Added chapter palettes and original geometric landmarks around the existing licensed props: Archive canals/boat/reeds, Market awnings/furnace, Prison roots, Choir organ pipes, and Depths circuit rings. Large new solids stay outside the central tactical footprint; later chapter props were moved toward the perimeter to reduce traversal conflicts. This differentiates chapters but does not yet provide a unique authored layout for every room.
+
+### Journal character naming
+
+New combat log entries preserve the character’s display name at the time of the event, including duplicate-enemy numbering. Existing journal entries use readable legacy fallbacks instead of exposing internal IDs such as SENTRY-1. Names remain available after leaving the encounter.

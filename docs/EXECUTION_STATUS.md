@@ -99,3 +99,9 @@ Correction to the prior creation observation: source and browser both show curat
 ### Chapter atmosphere checkpoint (local)
 
 Added five distinct chapter treatments using original geometry alongside existing assets. Browser screenshot of Side Adventure QA at archive-1 confirms cyan stone/water, perimeter canals, boat/reeds, party and Elian render without an asset warning. Action panel and labels remain readable. Other themes still need visual inspection; this is chapter differentiation, not per-room environmental completeness. Later-room furniture was subsequently moved toward the outer perimeter to reduce overlap with tactical paths; that final relocation still needs screenshot verification.
+
+### Elian browser completion and journal names
+
+Side Adventure QA completed Elian's request entirely through browser controls: accepted at archive-1, investigated at archive-2, chose private letters at archive-3, then refreshed/resumed. Journal retained 3/3 completed steps; party potions increased 5→8 and rations 2→4; reward actions and Elian's completed marker were absent. This verifies one actual side-adventure route, not every authored route.
+
+Browser journal exposed technical SENTRY-1 headers in older combat logs. Added durable speaker names and legacy fallbacks. Reloaded browser confirmed Goblin sentry headers instead. 140 tests, all TypeScript checks and build pass. Current browser save is Side Adventure QA at archive-3 with journal open; other chapter visual reviews and remaining goal gates are still pending.

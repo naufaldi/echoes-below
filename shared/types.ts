@@ -48,6 +48,7 @@ export interface Roll {
   purpose: string;
 }
 export interface GameLog {
+  speakerName?: string;
   id: string;
   revision: number;
   speaker: Speaker | string;

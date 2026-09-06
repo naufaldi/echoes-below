@@ -1,3 +1,4 @@
+import {speakerLabel} from '../shared/speaker-label.js';
 import {explorationHealingActions,resolveExplorationHealing} from './exploration-healing.js';
 import {sideActions,sideEntities,resolveSide} from './side-adventures.js';
 import {questProgress,updateQuests,questActions,declineQuest} from './quests.js';
@@ -320,6 +321,7 @@ export function log(
     id: randomUUID(),
     revision: s.revision + 1,
     speaker,
+    speakerName:speakerLabel({speaker,source},s.party,s.enemies),
     text,
     source,
     rolls,
