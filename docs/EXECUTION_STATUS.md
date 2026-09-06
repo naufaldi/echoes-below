@@ -95,3 +95,7 @@ The browser exposed an incorrect Fighter healing action after combat. Fixed the 
 Removed redundant confirmation for each `tactical:auto` step. Browser verified one click immediately produced a single Goblin guard movement playback, leaving its attack/turn boundary intact. Retry IDs and revision handling use the existing commit path. Hidden party-only Fighter resource labels on enemy turns.
 
 Correction to the prior creation observation: source and browser both show curated HP correctly after selecting curated rules (Fighter12, Rogue10, Wizard8, Cleric10). The earlier screenshot displayed Echo Rules before that selection, so no HP implementation fix was needed. Current browser tab is Spell Browser QA at the goblin movement playback; Side Adventure QA remains saved at archive-1.
+
+### Chapter atmosphere checkpoint (local)
+
+Added five distinct chapter treatments using original geometry alongside existing assets. Browser screenshot of Side Adventure QA at archive-1 confirms cyan stone/water, perimeter canals, boat/reeds, party and Elian render without an asset warning. Action panel and labels remain readable. Other themes still need visual inspection; this is chapter differentiation, not per-room environmental completeness. Later-room furniture was subsequently moved toward the outer perimeter to reduce overlap with tactical paths; that final relocation still needs screenshot verification.

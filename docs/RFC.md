@@ -259,3 +259,7 @@ Browser QA exposed legacy `campheal` on a curated Fighter after combat. The cura
 ### Direct NPC step dispatch
 
 `App.choose` dispatches only `tactical:auto` directly through the existing confirmation/commit implementation with an explicit action argument. It clears unrelated previews; the synchronous action lock, expected revision, retained retry command ID and single-step presentation remain shared. Other actions use the existing confirmation dialog. Browser validation resumed Spell Browser QA, ended the hero turn, selected Let Goblin guard act once and received exactly one 20-foot movement playback with the guard still active. No confirmation dialog was inserted. Enemy class-resource labels are hidden in TacticalControls; engine special-feature guards were already party-only.
+
+### Chapter atmosphere rendering
+
+`client/ChapterAtmosphere.tsx` owns deterministic chapter colors and geometric landmarks. World uses the same chapter definition for fog, lighting and instanced floor tint; changing chapters refreshes instance colors. New solid landmarks sit outside ±4.8 world units, the current tactical grid footprint. Existing later-room furniture is moved outward; opening layouts are preserved. Geometric scenery uses local Three.js primitives and adds no third-party license requirements or texture downloads. Further visual review must check all five themes, room-specific layout, prop bounds and label occlusion.
