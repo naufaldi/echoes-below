@@ -1,3 +1,4 @@
+import {parleyActions,resolveParley,parleyDC} from './vark-parley.js';
 import {counterweightActions,resolveCounterweight} from './counterweight-puzzle.js';
 import {checkInActions,resolveCheckIn} from './party-checkin.js';
 import {CURATED_ENCOUNTERS,encounterEnemies} from './encounters.js';
@@ -449,7 +450,7 @@ function approachTarget(s: Save, option: ActionOption) {
     ];
   }
 }
-export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
+export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s),...parleyActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
 function baseActions(s: Save): ActionOption[] {
   if(s.tactical&&s.mode==="combat")return tacticalActions(s);
   const a: ActionOption[] = [];
@@ -880,11 +881,11 @@ function baseActions(s: Save): ActionOption[] {
           opt(
             "negotiate",
             "Negotiate a seal transfer",
-            "Present the courier’s testimony and Scrit’s explanation. Presence DC16; failure begins combat.",
+            `Present the courier’s testimony and Scrit’s explanation. Presence DC${parleyDC(s)}; failure begins combat.`,
             "persuade",
             "vark",
             "hero",
-            16,
+            parleyDC(s),
             "presence",
             true,
           ),
@@ -1340,6 +1341,7 @@ export function applyAction(original: Save, id: string, dice: Dice): Save {
  const result=resolveAction(original,id,dice);updateQuests(result,original);return result;
 }
 function resolveAction(original: Save, id: string, dice: Dice): Save {
+  if(id.startsWith("parley:"))return resolveParley(original,id);
   if(id.startsWith("counterweight:"))return resolveCounterweight(original,id);
   if(id.startsWith("checkin:"))return resolveCheckIn(original,id);
   if(id.startsWith("recover:"))return resolveExplorationHealing(original,id,dice);
@@ -1653,7 +1655,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
               dice,
               h,
               "presence",
-              16,
+              parleyDC(s),
               "persuade",
               "Negotiate the seal transfer",
             )

@@ -44,3 +44,10 @@ The Mac is now unlocked. Opening-adventure browser QA through the boss, ending, 
 ### Ability advancement checkpoint, 2026-09-06
 
 Implemented local player-selected ability improvements for all three party members, six-score display, before/after selection and review, and inventory notification. Fixed XP level-up reviving unconscious characters and temporarily resetting canonical equipment AC. All 172 backend tests, server/client/hosted typechecks and production build pass. Browser check attempted but Mac is locked. These changes are not yet deployed; public version 12 remains the last verified release. Campaign duration and human playtest requirements remain unmet.
+
+
+### Legal campaign progression and Vark dialogue checkpoint
+
+`scripts/audit-campaign-progression.ts` traverses all 40 expansion rooms with each curated hero class using only legal actions, maximum dice and a peaceful main route; every action is serialized and reloaded. No XP, levels or resources are injected. All four runs reach level 8 and retain all eligible ability improvements. Evidence: `docs/CAMPAIGN_PROGRESSION.json`. On this route level 8 arrives only after depth-8’s final decision. This is a pacing limitation, not evidence of a balanced combat campaign or 24-hour duration.
+
+Added optional Vark questions and an evidence-backed DC reduction with saved facts and no repeat rewards. The new content is local pending browser verification and publication. Mac remains locked on the current verification attempt. Public version 12 is still the last verified release.

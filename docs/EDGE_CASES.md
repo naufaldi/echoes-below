@@ -56,3 +56,15 @@ Each supplied asset is listed in artifacts/verification/assets-feedback.json. Al
 - Level-up while wearing a ward cloak: retain its armor bonus in canonical and displayed state.
 
 Verified by `tests/backend-advancement.test.ts`. Visual/keyboard validation of the panel remains pending; Mac locked during the attempt.
+
+
+### Vark parley
+
+- Missing courier rescue or Scrit explanation: no evidence challenge and no invented testimony.
+- Unasked preliminary questions: evidence challenge remains unavailable.
+- Replayed question or extra ID segment: reject without XP, dice or state mutation.
+- Reload after questions: remember the statements and the reduced final DC.
+- Combat, another room, unconscious hero or companion conversation: do not expose questions.
+- Prepared final negotiation: apply DC13 to the actual check; unprepared remains DC16. Failure still starts combat.
+
+Covered by `tests/backend-vark-parley.test.ts`; browser presentation remains pending.

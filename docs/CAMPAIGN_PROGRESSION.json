@@ -1,0 +1,1027 @@
+{
+  "kind": "Deterministic legal-action traversal, not measured player duration or combat balance",
+  "assumptions": "Four classes, existing starting party, maximum dice, peaceful main route, all room evidence and supplies, no injected XP/levels/resources, serialized reload after every action, oldest available ability choices.",
+  "runs": [
+    {
+      "classId": "guardian",
+      "mode": "complete",
+      "level": 8,
+      "xp": 35545,
+      "revisions": 222,
+      "milestones": [
+        {
+          "scene": "prison",
+          "level": 2,
+          "xp": 325
+        },
+        {
+          "scene": "archive-3",
+          "level": 3,
+          "xp": 930
+        },
+        {
+          "scene": "market-2",
+          "level": 4,
+          "xp": 2705
+        },
+        {
+          "scene": "roots-4",
+          "level": 5,
+          "xp": 6665
+        },
+        {
+          "scene": "choir-6",
+          "level": 6,
+          "xp": 14345
+        },
+        {
+          "scene": "depth-3",
+          "level": 7,
+          "xp": 23445
+        },
+        {
+          "scene": "depth-8",
+          "level": 8,
+          "xp": 35545
+        }
+      ],
+      "choices": [
+        "advance:hero:4:strength:strength",
+        "advance:mira:4:strength:strength",
+        "advance:oren:4:strength:strength",
+        "advance:hero:6:strength:strength",
+        "advance:oren:6:strength:strength",
+        "advance:hero:8:dexterity:dexterity",
+        "advance:mira:8:strength:strength",
+        "advance:oren:8:dexterity:dexterity"
+      ],
+      "rooms": [
+        {
+          "scene": "archive-1",
+          "entryLevel": 2,
+          "entryXp": 475
+        },
+        {
+          "scene": "archive-2",
+          "entryLevel": 2,
+          "entryXp": 685
+        },
+        {
+          "scene": "archive-3",
+          "entryLevel": 2,
+          "entryXp": 895
+        },
+        {
+          "scene": "archive-4",
+          "entryLevel": 3,
+          "entryXp": 1105
+        },
+        {
+          "scene": "archive-5",
+          "entryLevel": 3,
+          "entryXp": 1315
+        },
+        {
+          "scene": "archive-6",
+          "entryLevel": 3,
+          "entryXp": 1525
+        },
+        {
+          "scene": "archive-7",
+          "entryLevel": 3,
+          "entryXp": 1735
+        },
+        {
+          "scene": "archive-8",
+          "entryLevel": 3,
+          "entryXp": 1945
+        },
+        {
+          "scene": "market-1",
+          "entryLevel": 3,
+          "entryXp": 2155
+        },
+        {
+          "scene": "market-2",
+          "entryLevel": 3,
+          "entryXp": 2455
+        },
+        {
+          "scene": "market-3",
+          "entryLevel": 4,
+          "entryXp": 2755
+        },
+        {
+          "scene": "market-4",
+          "entryLevel": 4,
+          "entryXp": 3055
+        },
+        {
+          "scene": "market-5",
+          "entryLevel": 4,
+          "entryXp": 3355
+        },
+        {
+          "scene": "market-6",
+          "entryLevel": 4,
+          "entryXp": 3655
+        },
+        {
+          "scene": "market-7",
+          "entryLevel": 4,
+          "entryXp": 3955
+        },
+        {
+          "scene": "market-8",
+          "entryLevel": 4,
+          "entryXp": 4255
+        },
+        {
+          "scene": "roots-1",
+          "entryLevel": 4,
+          "entryXp": 4555
+        },
+        {
+          "scene": "roots-2",
+          "entryLevel": 4,
+          "entryXp": 5095
+        },
+        {
+          "scene": "roots-3",
+          "entryLevel": 4,
+          "entryXp": 5635
+        },
+        {
+          "scene": "roots-4",
+          "entryLevel": 4,
+          "entryXp": 6175
+        },
+        {
+          "scene": "roots-5",
+          "entryLevel": 5,
+          "entryXp": 6715
+        },
+        {
+          "scene": "roots-6",
+          "entryLevel": 5,
+          "entryXp": 7255
+        },
+        {
+          "scene": "roots-7",
+          "entryLevel": 5,
+          "entryXp": 7795
+        },
+        {
+          "scene": "roots-8",
+          "entryLevel": 5,
+          "entryXp": 8335
+        },
+        {
+          "scene": "choir-1",
+          "entryLevel": 5,
+          "entryXp": 8875
+        },
+        {
+          "scene": "choir-2",
+          "entryLevel": 5,
+          "entryXp": 9795
+        },
+        {
+          "scene": "choir-3",
+          "entryLevel": 5,
+          "entryXp": 10715
+        },
+        {
+          "scene": "choir-4",
+          "entryLevel": 5,
+          "entryXp": 11635
+        },
+        {
+          "scene": "choir-5",
+          "entryLevel": 5,
+          "entryXp": 12555
+        },
+        {
+          "scene": "choir-6",
+          "entryLevel": 5,
+          "entryXp": 13475
+        },
+        {
+          "scene": "choir-7",
+          "entryLevel": 6,
+          "entryXp": 14395
+        },
+        {
+          "scene": "choir-8",
+          "entryLevel": 6,
+          "entryXp": 15315
+        },
+        {
+          "scene": "depth-1",
+          "entryLevel": 6,
+          "entryXp": 16235
+        },
+        {
+          "scene": "depth-2",
+          "entryLevel": 6,
+          "entryXp": 18655
+        },
+        {
+          "scene": "depth-3",
+          "entryLevel": 6,
+          "entryXp": 21075
+        },
+        {
+          "scene": "depth-4",
+          "entryLevel": 7,
+          "entryXp": 23495
+        },
+        {
+          "scene": "depth-5",
+          "entryLevel": 7,
+          "entryXp": 25915
+        },
+        {
+          "scene": "depth-6",
+          "entryLevel": 7,
+          "entryXp": 28335
+        },
+        {
+          "scene": "depth-7",
+          "entryLevel": 7,
+          "entryXp": 30755
+        },
+        {
+          "scene": "depth-8",
+          "entryLevel": 7,
+          "entryXp": 33175
+        }
+      ]
+    },
+    {
+      "classId": "scout",
+      "mode": "complete",
+      "level": 8,
+      "xp": 35545,
+      "revisions": 221,
+      "milestones": [
+        {
+          "scene": "prison",
+          "level": 2,
+          "xp": 325
+        },
+        {
+          "scene": "archive-3",
+          "level": 3,
+          "xp": 930
+        },
+        {
+          "scene": "market-2",
+          "level": 4,
+          "xp": 2705
+        },
+        {
+          "scene": "roots-4",
+          "level": 5,
+          "xp": 6665
+        },
+        {
+          "scene": "choir-6",
+          "level": 6,
+          "xp": 14345
+        },
+        {
+          "scene": "depth-3",
+          "level": 7,
+          "xp": 23445
+        },
+        {
+          "scene": "depth-8",
+          "level": 8,
+          "xp": 35545
+        }
+      ],
+      "choices": [
+        "advance:hero:4:strength:strength",
+        "advance:mira:4:strength:strength",
+        "advance:oren:4:strength:strength",
+        "advance:oren:6:strength:strength",
+        "advance:hero:8:strength:strength",
+        "advance:mira:8:strength:strength",
+        "advance:oren:8:dexterity:dexterity"
+      ],
+      "rooms": [
+        {
+          "scene": "archive-1",
+          "entryLevel": 2,
+          "entryXp": 475
+        },
+        {
+          "scene": "archive-2",
+          "entryLevel": 2,
+          "entryXp": 685
+        },
+        {
+          "scene": "archive-3",
+          "entryLevel": 2,
+          "entryXp": 895
+        },
+        {
+          "scene": "archive-4",
+          "entryLevel": 3,
+          "entryXp": 1105
+        },
+        {
+          "scene": "archive-5",
+          "entryLevel": 3,
+          "entryXp": 1315
+        },
+        {
+          "scene": "archive-6",
+          "entryLevel": 3,
+          "entryXp": 1525
+        },
+        {
+          "scene": "archive-7",
+          "entryLevel": 3,
+          "entryXp": 1735
+        },
+        {
+          "scene": "archive-8",
+          "entryLevel": 3,
+          "entryXp": 1945
+        },
+        {
+          "scene": "market-1",
+          "entryLevel": 3,
+          "entryXp": 2155
+        },
+        {
+          "scene": "market-2",
+          "entryLevel": 3,
+          "entryXp": 2455
+        },
+        {
+          "scene": "market-3",
+          "entryLevel": 4,
+          "entryXp": 2755
+        },
+        {
+          "scene": "market-4",
+          "entryLevel": 4,
+          "entryXp": 3055
+        },
+        {
+          "scene": "market-5",
+          "entryLevel": 4,
+          "entryXp": 3355
+        },
+        {
+          "scene": "market-6",
+          "entryLevel": 4,
+          "entryXp": 3655
+        },
+        {
+          "scene": "market-7",
+          "entryLevel": 4,
+          "entryXp": 3955
+        },
+        {
+          "scene": "market-8",
+          "entryLevel": 4,
+          "entryXp": 4255
+        },
+        {
+          "scene": "roots-1",
+          "entryLevel": 4,
+          "entryXp": 4555
+        },
+        {
+          "scene": "roots-2",
+          "entryLevel": 4,
+          "entryXp": 5095
+        },
+        {
+          "scene": "roots-3",
+          "entryLevel": 4,
+          "entryXp": 5635
+        },
+        {
+          "scene": "roots-4",
+          "entryLevel": 4,
+          "entryXp": 6175
+        },
+        {
+          "scene": "roots-5",
+          "entryLevel": 5,
+          "entryXp": 6715
+        },
+        {
+          "scene": "roots-6",
+          "entryLevel": 5,
+          "entryXp": 7255
+        },
+        {
+          "scene": "roots-7",
+          "entryLevel": 5,
+          "entryXp": 7795
+        },
+        {
+          "scene": "roots-8",
+          "entryLevel": 5,
+          "entryXp": 8335
+        },
+        {
+          "scene": "choir-1",
+          "entryLevel": 5,
+          "entryXp": 8875
+        },
+        {
+          "scene": "choir-2",
+          "entryLevel": 5,
+          "entryXp": 9795
+        },
+        {
+          "scene": "choir-3",
+          "entryLevel": 5,
+          "entryXp": 10715
+        },
+        {
+          "scene": "choir-4",
+          "entryLevel": 5,
+          "entryXp": 11635
+        },
+        {
+          "scene": "choir-5",
+          "entryLevel": 5,
+          "entryXp": 12555
+        },
+        {
+          "scene": "choir-6",
+          "entryLevel": 5,
+          "entryXp": 13475
+        },
+        {
+          "scene": "choir-7",
+          "entryLevel": 6,
+          "entryXp": 14395
+        },
+        {
+          "scene": "choir-8",
+          "entryLevel": 6,
+          "entryXp": 15315
+        },
+        {
+          "scene": "depth-1",
+          "entryLevel": 6,
+          "entryXp": 16235
+        },
+        {
+          "scene": "depth-2",
+          "entryLevel": 6,
+          "entryXp": 18655
+        },
+        {
+          "scene": "depth-3",
+          "entryLevel": 6,
+          "entryXp": 21075
+        },
+        {
+          "scene": "depth-4",
+          "entryLevel": 7,
+          "entryXp": 23495
+        },
+        {
+          "scene": "depth-5",
+          "entryLevel": 7,
+          "entryXp": 25915
+        },
+        {
+          "scene": "depth-6",
+          "entryLevel": 7,
+          "entryXp": 28335
+        },
+        {
+          "scene": "depth-7",
+          "entryLevel": 7,
+          "entryXp": 30755
+        },
+        {
+          "scene": "depth-8",
+          "entryLevel": 7,
+          "entryXp": 33175
+        }
+      ]
+    },
+    {
+      "classId": "adept",
+      "mode": "complete",
+      "level": 8,
+      "xp": 35545,
+      "revisions": 221,
+      "milestones": [
+        {
+          "scene": "prison",
+          "level": 2,
+          "xp": 325
+        },
+        {
+          "scene": "archive-3",
+          "level": 3,
+          "xp": 930
+        },
+        {
+          "scene": "market-2",
+          "level": 4,
+          "xp": 2705
+        },
+        {
+          "scene": "roots-4",
+          "level": 5,
+          "xp": 6665
+        },
+        {
+          "scene": "choir-6",
+          "level": 6,
+          "xp": 14345
+        },
+        {
+          "scene": "depth-3",
+          "level": 7,
+          "xp": 23445
+        },
+        {
+          "scene": "depth-8",
+          "level": 8,
+          "xp": 35545
+        }
+      ],
+      "choices": [
+        "advance:hero:4:strength:strength",
+        "advance:mira:4:strength:strength",
+        "advance:oren:4:strength:strength",
+        "advance:oren:6:strength:strength",
+        "advance:hero:8:strength:strength",
+        "advance:mira:8:strength:strength",
+        "advance:oren:8:dexterity:dexterity"
+      ],
+      "rooms": [
+        {
+          "scene": "archive-1",
+          "entryLevel": 2,
+          "entryXp": 475
+        },
+        {
+          "scene": "archive-2",
+          "entryLevel": 2,
+          "entryXp": 685
+        },
+        {
+          "scene": "archive-3",
+          "entryLevel": 2,
+          "entryXp": 895
+        },
+        {
+          "scene": "archive-4",
+          "entryLevel": 3,
+          "entryXp": 1105
+        },
+        {
+          "scene": "archive-5",
+          "entryLevel": 3,
+          "entryXp": 1315
+        },
+        {
+          "scene": "archive-6",
+          "entryLevel": 3,
+          "entryXp": 1525
+        },
+        {
+          "scene": "archive-7",
+          "entryLevel": 3,
+          "entryXp": 1735
+        },
+        {
+          "scene": "archive-8",
+          "entryLevel": 3,
+          "entryXp": 1945
+        },
+        {
+          "scene": "market-1",
+          "entryLevel": 3,
+          "entryXp": 2155
+        },
+        {
+          "scene": "market-2",
+          "entryLevel": 3,
+          "entryXp": 2455
+        },
+        {
+          "scene": "market-3",
+          "entryLevel": 4,
+          "entryXp": 2755
+        },
+        {
+          "scene": "market-4",
+          "entryLevel": 4,
+          "entryXp": 3055
+        },
+        {
+          "scene": "market-5",
+          "entryLevel": 4,
+          "entryXp": 3355
+        },
+        {
+          "scene": "market-6",
+          "entryLevel": 4,
+          "entryXp": 3655
+        },
+        {
+          "scene": "market-7",
+          "entryLevel": 4,
+          "entryXp": 3955
+        },
+        {
+          "scene": "market-8",
+          "entryLevel": 4,
+          "entryXp": 4255
+        },
+        {
+          "scene": "roots-1",
+          "entryLevel": 4,
+          "entryXp": 4555
+        },
+        {
+          "scene": "roots-2",
+          "entryLevel": 4,
+          "entryXp": 5095
+        },
+        {
+          "scene": "roots-3",
+          "entryLevel": 4,
+          "entryXp": 5635
+        },
+        {
+          "scene": "roots-4",
+          "entryLevel": 4,
+          "entryXp": 6175
+        },
+        {
+          "scene": "roots-5",
+          "entryLevel": 5,
+          "entryXp": 6715
+        },
+        {
+          "scene": "roots-6",
+          "entryLevel": 5,
+          "entryXp": 7255
+        },
+        {
+          "scene": "roots-7",
+          "entryLevel": 5,
+          "entryXp": 7795
+        },
+        {
+          "scene": "roots-8",
+          "entryLevel": 5,
+          "entryXp": 8335
+        },
+        {
+          "scene": "choir-1",
+          "entryLevel": 5,
+          "entryXp": 8875
+        },
+        {
+          "scene": "choir-2",
+          "entryLevel": 5,
+          "entryXp": 9795
+        },
+        {
+          "scene": "choir-3",
+          "entryLevel": 5,
+          "entryXp": 10715
+        },
+        {
+          "scene": "choir-4",
+          "entryLevel": 5,
+          "entryXp": 11635
+        },
+        {
+          "scene": "choir-5",
+          "entryLevel": 5,
+          "entryXp": 12555
+        },
+        {
+          "scene": "choir-6",
+          "entryLevel": 5,
+          "entryXp": 13475
+        },
+        {
+          "scene": "choir-7",
+          "entryLevel": 6,
+          "entryXp": 14395
+        },
+        {
+          "scene": "choir-8",
+          "entryLevel": 6,
+          "entryXp": 15315
+        },
+        {
+          "scene": "depth-1",
+          "entryLevel": 6,
+          "entryXp": 16235
+        },
+        {
+          "scene": "depth-2",
+          "entryLevel": 6,
+          "entryXp": 18655
+        },
+        {
+          "scene": "depth-3",
+          "entryLevel": 6,
+          "entryXp": 21075
+        },
+        {
+          "scene": "depth-4",
+          "entryLevel": 7,
+          "entryXp": 23495
+        },
+        {
+          "scene": "depth-5",
+          "entryLevel": 7,
+          "entryXp": 25915
+        },
+        {
+          "scene": "depth-6",
+          "entryLevel": 7,
+          "entryXp": 28335
+        },
+        {
+          "scene": "depth-7",
+          "entryLevel": 7,
+          "entryXp": 30755
+        },
+        {
+          "scene": "depth-8",
+          "entryLevel": 7,
+          "entryXp": 33175
+        }
+      ]
+    },
+    {
+      "classId": "cleric",
+      "mode": "complete",
+      "level": 8,
+      "xp": 35545,
+      "revisions": 221,
+      "milestones": [
+        {
+          "scene": "prison",
+          "level": 2,
+          "xp": 325
+        },
+        {
+          "scene": "archive-3",
+          "level": 3,
+          "xp": 930
+        },
+        {
+          "scene": "market-2",
+          "level": 4,
+          "xp": 2705
+        },
+        {
+          "scene": "roots-4",
+          "level": 5,
+          "xp": 6665
+        },
+        {
+          "scene": "choir-6",
+          "level": 6,
+          "xp": 14345
+        },
+        {
+          "scene": "depth-3",
+          "level": 7,
+          "xp": 23445
+        },
+        {
+          "scene": "depth-8",
+          "level": 8,
+          "xp": 35545
+        }
+      ],
+      "choices": [
+        "advance:hero:4:strength:strength",
+        "advance:mira:4:strength:strength",
+        "advance:oren:4:strength:strength",
+        "advance:oren:6:strength:strength",
+        "advance:hero:8:strength:strength",
+        "advance:mira:8:strength:strength",
+        "advance:oren:8:dexterity:dexterity"
+      ],
+      "rooms": [
+        {
+          "scene": "archive-1",
+          "entryLevel": 2,
+          "entryXp": 475
+        },
+        {
+          "scene": "archive-2",
+          "entryLevel": 2,
+          "entryXp": 685
+        },
+        {
+          "scene": "archive-3",
+          "entryLevel": 2,
+          "entryXp": 895
+        },
+        {
+          "scene": "archive-4",
+          "entryLevel": 3,
+          "entryXp": 1105
+        },
+        {
+          "scene": "archive-5",
+          "entryLevel": 3,
+          "entryXp": 1315
+        },
+        {
+          "scene": "archive-6",
+          "entryLevel": 3,
+          "entryXp": 1525
+        },
+        {
+          "scene": "archive-7",
+          "entryLevel": 3,
+          "entryXp": 1735
+        },
+        {
+          "scene": "archive-8",
+          "entryLevel": 3,
+          "entryXp": 1945
+        },
+        {
+          "scene": "market-1",
+          "entryLevel": 3,
+          "entryXp": 2155
+        },
+        {
+          "scene": "market-2",
+          "entryLevel": 3,
+          "entryXp": 2455
+        },
+        {
+          "scene": "market-3",
+          "entryLevel": 4,
+          "entryXp": 2755
+        },
+        {
+          "scene": "market-4",
+          "entryLevel": 4,
+          "entryXp": 3055
+        },
+        {
+          "scene": "market-5",
+          "entryLevel": 4,
+          "entryXp": 3355
+        },
+        {
+          "scene": "market-6",
+          "entryLevel": 4,
+          "entryXp": 3655
+        },
+        {
+          "scene": "market-7",
+          "entryLevel": 4,
+          "entryXp": 3955
+        },
+        {
+          "scene": "market-8",
+          "entryLevel": 4,
+          "entryXp": 4255
+        },
+        {
+          "scene": "roots-1",
+          "entryLevel": 4,
+          "entryXp": 4555
+        },
+        {
+          "scene": "roots-2",
+          "entryLevel": 4,
+          "entryXp": 5095
+        },
+        {
+          "scene": "roots-3",
+          "entryLevel": 4,
+          "entryXp": 5635
+        },
+        {
+          "scene": "roots-4",
+          "entryLevel": 4,
+          "entryXp": 6175
+        },
+        {
+          "scene": "roots-5",
+          "entryLevel": 5,
+          "entryXp": 6715
+        },
+        {
+          "scene": "roots-6",
+          "entryLevel": 5,
+          "entryXp": 7255
+        },
+        {
+          "scene": "roots-7",
+          "entryLevel": 5,
+          "entryXp": 7795
+        },
+        {
+          "scene": "roots-8",
+          "entryLevel": 5,
+          "entryXp": 8335
+        },
+        {
+          "scene": "choir-1",
+          "entryLevel": 5,
+          "entryXp": 8875
+        },
+        {
+          "scene": "choir-2",
+          "entryLevel": 5,
+          "entryXp": 9795
+        },
+        {
+          "scene": "choir-3",
+          "entryLevel": 5,
+          "entryXp": 10715
+        },
+        {
+          "scene": "choir-4",
+          "entryLevel": 5,
+          "entryXp": 11635
+        },
+        {
+          "scene": "choir-5",
+          "entryLevel": 5,
+          "entryXp": 12555
+        },
+        {
+          "scene": "choir-6",
+          "entryLevel": 5,
+          "entryXp": 13475
+        },
+        {
+          "scene": "choir-7",
+          "entryLevel": 6,
+          "entryXp": 14395
+        },
+        {
+          "scene": "choir-8",
+          "entryLevel": 6,
+          "entryXp": 15315
+        },
+        {
+          "scene": "depth-1",
+          "entryLevel": 6,
+          "entryXp": 16235
+        },
+        {
+          "scene": "depth-2",
+          "entryLevel": 6,
+          "entryXp": 18655
+        },
+        {
+          "scene": "depth-3",
+          "entryLevel": 6,
+          "entryXp": 21075
+        },
+        {
+          "scene": "depth-4",
+          "entryLevel": 7,
+          "entryXp": 23495
+        },
+        {
+          "scene": "depth-5",
+          "entryLevel": 7,
+          "entryXp": 25915
+        },
+        {
+          "scene": "depth-6",
+          "entryLevel": 7,
+          "entryXp": 28335
+        },
+        {
+          "scene": "depth-7",
+          "entryLevel": 7,
+          "entryXp": 30755
+        },
+        {
+          "scene": "depth-8",
+          "entryLevel": 7,
+          "entryXp": 33175
+        }
+      ]
+    }
+  ]
+}

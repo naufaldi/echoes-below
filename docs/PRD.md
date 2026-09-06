@@ -261,3 +261,8 @@ Retrying a sponsored companion action must not buy the same decision twice. Whil
 Curated campaigns offer an Ability Score Improvement at levels 4 and 8, plus Fighter level 6. The player selects each companion’s improvement as well as their own: +2 to one ability or +1 to two, capped at 20. Inventory & camp displays all six scores, their modifiers, a before/after preview, and a review step before committing a permanent choice. The oldest unspent milestone is offered first; postponing it does not block exploration. A visible inventory cue identifies an available choice. Choices require a conscious, living member outside combat and companion-story conversations. Legacy Echo Rules saves are unchanged.
 
 Acceptance: choices persist through reload and later levels; repeat or forged requests cannot grant another bonus; Constitution adjusts maximum HP retroactively without restoring spent resources; XP level-up cannot revive a downed character and retains equipment defenses. This implements the curated Ability Score Improvement option, not the entire feat catalog.
+
+
+### Vark’s optional accountability dialogue
+
+Before the opening confrontation, curated parties can ask Vark why he imprisoned the courier and how to transfer the ward safely. Each authored answer is saved as an observed statement. After both questions, a party that freed the courier and learned Scrit’s explanation can confront Vark with those accounts. This reduces the existing final negotiation from DC16 to DC13. It does not complete the transfer; a failed final check still begins combat. Asking questions is optional, consumes no dice and awards no XP. Existing direct combat and negotiation routes remain available.
