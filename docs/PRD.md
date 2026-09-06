@@ -221,3 +221,7 @@ The curated campaign now selects 24 explicit combat opportunities across six cha
 Protect means defending a conscious player from nearby threats, then engaging surviving enemies when no nearby threat exists. It must not keep a companion orbiting a downed or safe player while an enemy remains at range. Each automatic step remains separately visible and subject to normal legal movement and actions.
 
 Acceptance: in both downed-player and safe-player fixtures, the protecting Fighter approaches a distant enemy and uses its attack on the next decision. In a seeded low-resource audit across all 24 authored encounters and four hero classes, every run must reach victory or defeat within 220 individual actions. This is a regression bound, not a difficulty or campaign-duration promise.
+
+### Free party conversation checkpoint
+
+Free party check-ins remain available without an API key. Mira and Oren each offer one authored reflection per opening room and one per later chapter, with no XP, relationship farming or resource changes. Downed companions, active combat, defeat and unfinished bond conversations cannot start a check-in. The UI identifies the speaker and distinguishes these authored lines from paid AI dialogue.
