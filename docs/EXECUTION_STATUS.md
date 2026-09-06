@@ -138,3 +138,10 @@ Added seven terrain arrangements, saved-grid-driven pillars/rubble and path-base
 Curated combat logs and presentation frames now carry an optional explicit animation cue (melee, ranged, spell, item or dodge). Spell and defensive actions produce a presentation even without a die roll. The renderer consumes confirmed cues and ignores AI prose; older attack logs retain a compatibility fallback. Rogue ranged attacks use the shipped shooting clip, while spell actions use the casting clip. Action clips play once; idle and walking loop. Repeated attack events restart their clip.
 
 Verification covers Magic Missile, Sacred Flame, Bless, ranged attack and Dodge cues through rules resolution, presentation and serialization. All seven shipped character GLBs resolve locomotion, death and attack clip names; KayKit casting/ranged names are checked explicitly. This validates mappings and data flow, not all on-screen animation poses or weapon/projectile alignment. Local only; no new deployment.
+
+
+### Local target-focus correction
+
+Selecting a focus no longer silently substitutes all actions when that target has no legal action. Matching actor/target actions and untargeted controls remain available; an explicit message and Show all actions control explain an empty focus. Combat target menus exclude exploration props. The tactical heading uses the same canonical enemy names as initiative and world labels.
+
+Verification: three regression tests cover unavailable targets, matching targets, global controls, actor focus and clearing. Local browser selection of Slime brute retained that focus, displayed guidance for the automatic Acid spitter turn and retained its advance button; Show all actions reset the selector and removed the message. Client type check passed. This checkpoint does not deploy or establish full-campaign acceptance.
