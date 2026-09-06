@@ -239,3 +239,10 @@ Post-reaction controlled simulation: 24 authored encounters × four hero classes
 Fixed impossible active objectives caused by main quests never expiring, generic side-quest chapter deadlines and skipped prerequisite meetings. Quest projection and NPC eligibility now share the next required meeting. Location-specific opening steps have their own deadlines. Completed/declined/missed history remains stable; read-time correction of old active saves is mutation-free and grants no rewards.
 
 237 automated tests pass; client/server typechecks and local build pass. Asset bundle verification still covers 45 models and 51 files. Browser journal QA expanded A trail worth following under Opportunities passed and verified both unfinished steps plus the explanatory message. Main-courier and multi-room expiry are covered by engine/projection tests; they were not separately replayed in the browser this checkpoint. No Sites deployment.
+
+### Local checkpoint: peaceful conversation order repaired
+- Fixed food-before-introduction and persuasion-before-food routes at the cookfire. Failed distraction no longer suppresses peaceful inquiry or alarm reconciliation.
+- Dialogue acknowledges existing food/key state; peaceful scene labels and objectives update.
+- Verification: 242 automated tests pass; server, client, hosted type checks and production build pass. Asset build gate verifies 45 models / 51 files.
+- Local Chrome: controlled `Scrit Order QA` save offered food first, then successfully introduced Scrit; remaining questions appeared. Reload/Continue retained the dialogue and updated `Scrit, camp cook` label. No paid AI calls or deployment in this checkpoint.
+- Goal remains in progress. Campaign duration, full human playtesting, remaining content depth and release QA are not established by these checks.

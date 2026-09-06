@@ -6,8 +6,14 @@ const questions={
  captive:{label:'Ask what Scrit knows about the prisoner',text:'“A courier counted the sacks and called them raid supplies,” Scrit says. “Vark ordered the gate locked. I brought water. I should have brought a key.” One guard looks into the fire. “That guard carries the key now. Feed the camp and I can persuade him to give it up. The alarm is another matter: he fears Vark will punish him for ignoring it.”',fact:'Scrit witnessed Vark ordering the courier imprisoned. He brought the prisoner water and says the guards fear punishment for disregarding an alarm.'},
  ward:{label:'Ask why Vark refuses to leave the bell',text:'Scrit lowers his voice. “He took the night watch when the old keeper vanished. Something below presses against the seal. You can hear it when the brace shakes.” He draws a ring in the ash, then keeps his finger inside it. “Do not pull it out. Find someone who can keep it seated. Vark knows the work, but that does not give him the right to lock people away.”',fact:'Scrit explains that the seated resonance seal restrains a force beneath the relay. A keeper must support it; removing it carelessly risks releasing the force.'},
 };
+// Old curated saves recorded the attempt, not its result. A peaceful transfer
+// of the key or food distinguishes negotiated passage from slipping away.
+export function canSpeakToScrit(s:Save):boolean{
+ const distracted=s.flags.guardsDistracted??Boolean(s.flags.distractTried&&s.flags.passage&&!s.flags.fed&&!s.inventory.guardKey);
+ return !s.flags.guardsDefeated&&!distracted;
+}
 export function scritActions(s:Save):ActionOption[]{
- if(!s.tactical||s.mode!=='explore'||s.sceneId!=='cookfire'||s.party[0].hp<=0||s.companionStoryId||!s.flags.scritTalk||s.flags.guardsDefeated||s.flags.distractTried&&s.flags.passage)return[];
+ if(!s.tactical||s.mode!=='explore'||s.sceneId!=='cookfire'||s.party[0].hp<=0||s.companionStoryId||!s.flags.scritTalk||!canSpeakToScrit(s))return[];
  const options=(Object.keys(questions) as (keyof typeof questions)[]).filter(key=>!s.flags[`scrit:${key}`]&&(key!=='ward'||s.flags['scrit:supplies']&&s.flags['scrit:captive'])).map(key=>({id:`scrit:${key}`,label:questions[key].label,description:'Hear a witnessed account. This question does not promise passage or spend supplies.',kind:'talk',targetId:'scrit'}));
  if(s.flags.fed&&s.flags.alarm&&s.flags['scrit:captive']&&!s.flags['scrit:standdown']&&s.party.some(a=>a.rations>0))options.push({id:'scrit:standdown',label:'Share another ration and ask the guards to stand down',description:'Spend one additional party ration. Scrit persuades the guards to cancel the current alarm, preventing its extra scout at Vark’s confrontation. A later alarm can still be raised.',kind:'offer',targetId:'scrit'});
  return options;
@@ -22,7 +28,7 @@ export function resolveScrit(original:Save,id:string):Save{
  }else{
   const key=id.split(':')[1] as keyof typeof questions,question=questions[key];
   fact(s,id,question.fact);if(key==='ward'){s.flags.sealKnowledge=true;fact(s,'seal-purpose',question.fact);}
-  const text=key==='captive'&&s.inventory.guardKey?'“Vark ordered the gate locked,” Scrit says. “I brought the prisoner water. I should have brought that key sooner.” He glances at the key now in your keeping. “You can open it. The guards still fear punishment for disregarding an alarm, even after accepting your food.”':question.text;
+  const text=key==='captive'&&s.inventory.guardKey?'“Vark ordered the gate locked,” Scrit says. “I brought the prisoner water. I should have brought that key sooner.” He glances at the key now in your keeping. “You can open it. The guards still fear punishment for disregarding an alarm.”':question.text;
   log(s,text,'scrit',[],'authored');
  }
  s.revision++;s.updatedAt=new Date().toISOString();return s;

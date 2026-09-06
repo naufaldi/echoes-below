@@ -1,7 +1,7 @@
 import {infirmaryActions,resolveInfirmary,infirmaryPrepared,projectInfirmary,PREPARED_RESCUE} from './infirmary.js';
 import {indexActions,resolveIndex} from './bell-index.js';
 import {bellIndexState} from '../shared/bell-index.js';
-import {scritActions,resolveScrit} from './scrit-inquiry.js';
+import {scritActions,resolveScrit,canSpeakToScrit} from './scrit-inquiry.js';
 import {parleyActions,resolveParley,parleyDC} from './vark-parley.js';
 import {counterweightActions,resolveCounterweight} from './counterweight-puzzle.js';
 import {checkInActions,resolveCheckIn} from './party-checkin.js';
@@ -736,6 +736,28 @@ function baseActions(s: Save): ActionOption[] {
       if (!f.maintenance) inspect("chain", "chain", "Study the mechanism", 10);
       break;
     case "cookfire":
+      if (s.tactical ? canSpeakToScrit(s) : !f.passage) {
+        if (!f.fed && s.party.some((x) => x.rations > 0))
+          a.push(
+            opt(
+              "offer",
+              "Offer a ration",
+              "Give one party ration for peaceful passage. No roll.",
+              "offer",
+              "scrit",
+            ),
+          );
+        if (!f.scritTalk)
+          a.push(
+            opt(
+              "scrit-talk",
+              "Talk to Scrit",
+              "Ask the cook what brought the goblins here. No roll.",
+              "talk",
+              "scrit",
+            ),
+          );
+      }
       if (f.passage) {
         a.push(
           opt(
@@ -748,16 +770,6 @@ function baseActions(s: Save): ActionOption[] {
         );
         break;
       }
-      if (s.party.some((x) => x.rations > 0))
-        a.push(
-          opt(
-            "offer",
-            "Offer a ration",
-            "Give one party ration for peaceful passage. No roll.",
-            "offer",
-            "scrit",
-          ),
-        );
       if (h.hp > 0 && f.tracks && !f.persuadeFailed)
         a.push(
           opt(
@@ -784,16 +796,6 @@ function baseActions(s: Save): ActionOption[] {
             13,
             "agility",
             true,
-          ),
-        );
-      if (!f.scritTalk)
-        a.push(
-          opt(
-            "scrit-talk",
-            "Talk to Scrit",
-            "Ask the cook what brought the goblins here. No roll.",
-            "talk",
-            "scrit",
           ),
         );
       a.push(
@@ -995,6 +997,11 @@ export function publicSave(s: Save): PublicSave {
     gate.open=true;gate.name='Courier’s open gate';gate.description='The gate is open. The courier is free.';
     scene.description='The courier stands free beside the open gate, ready to testify about Vark and the dangerous force below. A ledger lies on the nearby desk.';
     scene.objective='Follow the courier’s testimony to the bell chamber.';
+  }
+  if(s.tactical&&sceneId==='cookfire'&&s.mode==='explore'&&flags.passage&&canSpeakToScrit(s)){
+    scene.objective='Speak with Scrit or continue to the captive courier.';
+    scene.description=flags.fed?'Scrit tends the shared meal. The guards have granted passage to the prison; the cook is willing to talk before you leave.':'The guards have lowered their spears and handed over the prison key. Scrit waits beside his thin pot of soup.';
+    if(flags.fed){const cook=scene.entities.find(e=>e.id==='scrit')!;cook.name='Scrit, camp cook';cook.description='Scrit shares the donated food around the cookfire.';}
   }
   if(s.mode==='combat')scene.entities=scene.entities.filter(e=>!['guards','vark'].includes(e.id));
   // Existing saves also retain the defeated guards, so this survives reloads without a migration.
@@ -1591,6 +1598,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
         break;
       case "cookfire":
         if (kind === "offer") {
+          const alreadyHasKey = s.inventory.guardKey;
           s.party.find((x) => x.rations > 0)!.rations--;
           f.fed = true;
           f.passage = true;
@@ -1603,7 +1611,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
           );
           log(
             s,
-            "Scrit takes the ration, then offers a key. “The courier is through there. Tell Vark we can still choose better.”",
+            alreadyHasKey ? "Scrit divides the ration around the fire. “You have the courier’s key. Tell Vark we can still choose better.”" : "Scrit takes the ration, then offers a key. “The courier is through there. Tell Vark we can still choose better.”",
             "scrit",
             [],
             "authored",
@@ -1622,10 +1630,12 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
           }
         } else if (kind === "distract") {
           f.distractTried = true;
+          f.guardsDistracted = false;
           if (
             check(s, dice, h, "agility", 13, "distract", "Distract the guards")
           ) {
             f.passage = true;
+            f.guardsDistracted = true;
             log(
               s,
               "Mira knocks a pot into the fire. You slip past while the guards stamp out the sparks.",
@@ -1638,7 +1648,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
           f.scritTalk = true;
           log(
             s,
-            "“Caravans stopped. Everyone blames us,” Scrit says. “I just want my people to eat. Can you spare a ration?”",
+            f.fed ? "“Caravans stopped. Everyone blames us,” Scrit says. “Thank you for sharing your food. Maybe you will hear our side before you meet Vark.”" : "“Caravans stopped. Everyone blames us,” Scrit says. “I just want my people to eat. Can you spare a ration?”",
             "scrit",
             [],
             "authored",
