@@ -290,3 +290,9 @@ Fixed impossible active objectives caused by main quests never expiring, generic
 - Current audit: 12/12 full runs completed at level 8, 13,768 legal actions total. Fixed Rogue/Fighter companions, three seeds per hero class, all authored combats, no side quests, no injected resources. Baseline/current evidence: `CAMPAIGN_ATTRITION_BASELINE.json` and `CAMPAIGN_ATTRITION.json`. This is not measured player time or balance acceptance.
 - 264 tests pass; client/server/hosted type checks and production build pass. Asset gate verifies 45 models / 51 files. Local Chrome cache preview promised one potion; collection changed total 6 to 7 and removed the action.
 - No deployment or paid AI. Campaign content depth and human playtime acceptance remain outstanding.
+
+### Local checkpoint: room/chapter playtime measurement
+- Added room and chapter active-time breakdowns to settings and exported reports; legacy timing remains explicitly unattributed. Invalid scene subtotals are ignored without discarding valid segment totals.
+- 268 automated tests pass. Client/server/hosted type checks and production build pass (server check rerun after fixing an explicit import extension). Asset gate verifies 45 models / 51 files.
+- Local Chrome exported `echoes-below-playtest.json`: version 2, archive-2 active 15,770.2 ms, legacy unattributed 327,621.1 ms, total 343,391.3 ms. Verified arithmetic and absence of name/dialogue/API-key fields. This is agent QA timing, not one of the required human playtests.
+- No deployment or paid AI. Two-hour opening and 24+ hour campaign remain unproven until actual playtesting.

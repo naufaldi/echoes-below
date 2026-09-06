@@ -415,3 +415,6 @@ The curated Ink Garden adds an apprentice NPC, living-page reeds and a lantern. 
 
 ### Local checkpoint: varied expedition supplies
 Curated expedition caches now provide two healing potions in authored combat rooms, one in other exploration rooms, and three camp rations at chapter-ending landings. Items go first to surviving party members carrying the least of that resource. Previews state the actual reward. Collection remains once per room; already collected saves are not refilled or reduced. Legacy caches retain one potion per party member. The aim is to support camp decisions while reducing uniform potion accumulation.
+
+### Local checkpoint: chapter-level playtime evidence
+The playtest report must separate observed active time by room and chapter so the opening-adventure target can be measured independently from the campaign. Revisited rooms aggregate their intervals. Legacy measurements remain in overall totals as explicitly unattributed time; no historical chapter duration is inferred. Waiting, hidden/unfocused intervals, settings, idle periods and suspended timer gaps retain their existing exclusions. These estimates support a playtest, but do not certify a first-time human participant or campaign completion.
