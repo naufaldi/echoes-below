@@ -1,3 +1,4 @@
+import {tacticalRequest,tacticalPrompt,checkedTacticalPlan} from '../shared/tactical-planning';
 import {getAIMode,isPaidEndpoint} from './ai-mode';
 import {companionOptions} from '../shared/companion-options';
 import {ownKeyConfigured,ownDialogue,ownStructured,ownRequest} from './own-ai';
@@ -14,6 +15,10 @@ export async function api<T>(path:string,body?:unknown):Promise<T>{
   const b=body as Record<string,unknown>,match=path.match(/^\/api\/saves\/([^/]+)\/dialogue$/);
   if(match){const s=await raw<PublicSave>('/api/saves/'+match[1]);const history=await raw<{history:unknown[]}>('/api/saves/'+s.id+'/dialogue?speaker='+b.speaker);const reply=await ownDialogue(s,b.speaker as Speaker,b.text as string,history.history);return raw<T>(`/api/saves/${s.id}/dialogue/local`,{...b,reply});}
   if(path==='/api/actions/preview'&&b.text){const s=await raw<PublicSave>('/api/saves/'+b.saveId);const value=await ownStructured('Choose one offered action matching the request, or null when unsupported. Never resolve an action.',{context:narrativeContext(s),options:s.actions,text:b.text},{type:'object',properties:{actionId:{type:['string','null']}},required:['actionId'],additionalProperties:false});if(!s.actions.some(a=>a.id===value.actionId))throw new Error('That request does not match a supported action. Choose a contextual option.');return raw<T>(path,{saveId:s.id,expectedRevision:b.expectedRevision,actionId:value.actionId});}
+  if(/\/saves\/[^/]+\/actions$/.test(path)&&b.actionId==='tactical:auto'){
+   const s=await raw<PublicSave>(path.replace(/\/actions$/,'')),request=tacticalRequest(s);
+   if(request){try{const companionPlans=planCache.get(b.commandId as string)??checkedTacticalPlan(s,await ownStructured(tacticalPrompt,request.context,request.schema));planCache.set(b.commandId as string,companionPlans);if(planCache.size>30)planCache.delete(planCache.keys().next().value!);return raw<T>(path,{...b,companionPlans});}catch{return raw<T>(path,b);}}
+  }
   if(/\/saves\/[^/]+\/actions$/.test(path)&&['end_turn','continue'].includes(b.actionId as string)){
    const s=await raw<PublicSave>(path.replace(/\/actions$/,'')),choices=companionOptions(s.party,s.enemies);
    if(Object.keys(choices).length){try{const companionPlans=planCache.get(b.commandId as string)??await ownStructured('Choose one offered action per companion. Oren heals downed allies first, otherwise attacks; Mira attacks vulnerable targets. Never invent targets or outcomes.',{party:s.party,enemies:s.enemies,choices},{type:'object',properties:Object.fromEntries(Object.entries(choices).map(([id,legal])=>[id,{type:'string',enum:legal}])),required:Object.keys(choices),additionalProperties:false});planCache.set(b.commandId as string,companionPlans);if(planCache.size>30)planCache.delete(planCache.keys().next().value!);return raw<T>(path,{...b,companionPlans});}catch{/* The authoritative engine has protective fallback tactics. */}}

@@ -7,7 +7,7 @@ import {sideActions,sideEntities,resolveSide} from './side-adventures.js';
 import {questProgress,updateQuests,questActions,declineQuest} from './quests.js';
 import {logisticsFor,logisticsActions,applyLogistics,grantLogisticsLoot} from './logistics.js';
 import {makeCharacter,restoreClassResources,classResources} from '../shared/curated-rules.js';
-import {initializeTactical,startTacticalCombat,tacticalActions,applyTactical} from './tactical.js';
+import {initializeTactical,startTacticalCombat,tacticalActions,applyTactical,tacticalProposal} from './tactical.js';
 import {availableConsequences,campaignEffects} from './campaign-consequences.js';
 import {COMPANION_STORIES} from '../shared/companion-stories.js';
 import {EXPEDITION,expeditionRoom,expeditionScene} from "../shared/campaign.js";
@@ -987,6 +987,7 @@ export function publicSave(s: Save): PublicSave {
   }
   return {
     ...structuredClone(visible),
+    tacticalProposal:tacticalProposal(s),
     ...(s.tactical?{logistics:structuredClone(logisticsFor(s)),quests:questProgress(s)}:{}),
     scene,
     actions: legalActions(s),

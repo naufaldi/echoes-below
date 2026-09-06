@@ -66,6 +66,11 @@ export function tacticalActions(s:Save):ActionOption[]{
  if(id==='hero'||s.tactical.takeover===id)return[...optionsForActor(s,id),...commands];
  return[option('tactical:auto',`Let ${actorDisplayName(a,s.enemies)} act`,'turn',id),...(a.side==='party'&&a.hp>0&&!s.tactical.started?[option('tactical:takeover',`Control ${a.name} for this turn`,'tactics',id),...commands]:[])];
 }
+export function tacticalProposal(s:Save){
+ const id=s.turn?.actorId;
+ if(!s.tactical||s.mode!=='combat'||!id||id==='hero'||!s.party.some(a=>a.id===id&&a.hp>0)||s.tactical.takeover===id)return undefined;
+ return {actorId:id,directive:s.tactical.directives[id]??'balanced',actions:optionsForActor(s,id)};
+}
 function nextTurn(s:Save){if(finishCheck(s))return;const order=s.turn!.order;for(let i=0;i<order.length;i++){s.turnIndex=(s.turnIndex+1)%order.length;if(s.turnIndex===0)s.turn!.round++;const next=order[s.turnIndex],a=members(s).find(a=>a.id===next)!;if(s.tactical!.actors[next].dead||(a.side==='enemy'&&a.hp===0))continue;s.turn!.actorId=next;beginTurn(s);return;}s.mode='defeat';s.turn=null;}
 function record(s:Save,...args:Parameters<typeof log> extends [Save,...infer Rest]?Rest:never){projectTactical(s);log(s,...args);}
 function savingRoll(s:Save,id:string,dice:Dice,ability:'dexterity'|'constitution',purpose:string){
@@ -113,7 +118,11 @@ export function applyTactical(original:Save,id:string,dice:Dice):Save{
  else if(id.startsWith('tactical:directive:')){s.tactical!.directives[actorId]=id.split(':')[2] as CompanionDirective;log(s,`Tactics changed to ${id.split(':')[2]}.`,actorId);}
  else if(id==='tactical:auto'){
   // Resolve one decision per click. A move can be followed by an attack on the next click.
-  s.tactical!.started=true;resolve(s,chooseAutomatic(s).id,dice);
+  const proposal=s.plans?.[actorId];
+  const allowed=s.party.some(a=>a.id===actorId)&&actorId!=='hero'&&optionsForActor(s,actorId).some(a=>a.id===proposal);
+  s.tactical!.started=true;
+  if(proposal&&!allowed)log(s,'The proposed tactic is no longer legal. The companion uses its fallback tactics.',actorId);
+  resolve(s,allowed?proposal!:chooseAutomatic(s).id,dice);
  }else{if(id.startsWith('tactical:attack:'))s.tactical!.focusTarget=id.split(':')[2];resolve(s,id,dice);}
  projectTactical(s);s.revision++;s.updatedAt=new Date().toISOString();return s;
 }

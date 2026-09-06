@@ -168,7 +168,7 @@ export async function buildApp(
         allowAI && !plans && ai.configured &&
         before.mode === "combat" &&
         !before.flags.retreatRequested &&
-        ["end_turn", "continue"].includes(body.actionId)
+        ["end_turn", "continue", "tactical:auto"].includes(body.actionId)
       ) {
         try {
           plans = await ai.plans(before);

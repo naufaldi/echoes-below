@@ -244,3 +244,8 @@ Counterweight Hall now offers an optional deterministic maintenance puzzle: read
 ### Counterweight visual feedback
 
 The public scene now projects only observable pawl, weight and lock states. A local 3D mechanism uses those states for lever rotation, counterweight height and pin position, with immediate placement under reduced motion. Clicking the model focuses the existing chain target. Labels describe each stage and identify a spent floor mechanism. The old decorative hanging weights are removed. Local browser QA completed read → pawl → weight → reload → pin; state and labels persisted. No new downloaded assets are required.
+
+
+### Tactical AI proposal integration
+
+Paid AI modes can propose one legal action for the currently active tactical companion. The player still advances each visible step. Human turns, enemy turns and manual companion takeover do not request an AI decision. Free mode keeps deterministic tactics. Invalid or stale proposals never grant movement, resources, targets or extra turns; the companion uses validated fallback tactics instead.

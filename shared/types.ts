@@ -97,6 +97,7 @@ export interface Scene {
   index: number;
 }
 export interface PublicSave {
+  tacticalProposal?:{actorId:string;directive:string;actions:ActionOption[]};
   quests?: import("./quests.js").QuestProgress[];
   logistics?: import("./logistics.js").Logistics;
   companionStoryId?: string | null;

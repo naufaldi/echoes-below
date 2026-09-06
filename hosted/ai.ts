@@ -1,3 +1,4 @@
+import {tacticalRequest,tacticalPrompt,checkedTacticalPlan} from '../shared/tactical-planning.js';
 import {GameError,publicSave,type Save} from '../server/game.js';
 import {distance} from '../server/rules.js';
 import {narrativeContext,voiceInstructions,groundedDialogueSchema,dialogueParticipants} from '../shared/ai-context.js';
@@ -31,6 +32,8 @@ export async function dialogue(env:AIEnv,store:Store,s:Save,speaker:Speaker,text
  return store.dialogue(s.id,speaker,text,value.text);
 }
 export async function plans(env:AIEnv,store:Store,s:Save){
+ if(s.tactical){const visible=publicSave(s),request=tacticalRequest(visible);if(!request)return{};const value=await structured(env,store,tacticalPrompt,request.context,request.schema);return checkedTacticalPlan(visible,value);}
+
  const choices:Record<string,string[]>={};
  for(const a of s.party.filter(a=>a.id!=='hero'&&a.hp>0)){
   const attacks=s.enemies.filter(e=>e.hp>0&&distance(a,e)<=6+(a.classId==='scout'?8:1.5)).map(e=>`attack:${e.id}`);

@@ -1,3 +1,4 @@
+import {tacticalRequest,tacticalPrompt,checkedTacticalPlan} from '../shared/tactical-planning.js';
 import {voiceInstructions,dialogueParticipants,groundedDialogueSchema} from '../shared/ai-context.js';
 import { randomUUID } from "node:crypto";
 import { execFile } from "node:child_process";
@@ -234,6 +235,8 @@ export class OpenAIProvider implements AIProvider {
     return p.data.actionId!;
   }
   async plans(s: Save) {
+    if(s.tactical){const visible=publicSave(s),request=tacticalRequest(visible);if(!request)return{};const value=await this.structured(s,'tactical-plan',tacticalPrompt,request.context,request.schema);return checkedTacticalPlan(visible,value);}
+
     const plans: Record<string, string> = {};
     for (const a of s.party.filter((a) => a.id !== "hero" && a.hp > 0)) {
       const attacks = s.enemies
