@@ -276,3 +276,8 @@ After the existing first Hit Die is spent during short rest, injured conscious m
 ### Object-label association and narration identity
 
 Displaced world labels show a leader line and anchor dot to identify their owning object. An anchor covered by an interface panel is hidden instead of moving its label beside another object; its target remains available in the focus menu. Selected long labels have more width and up to two text lines. Narrative headings use the same entries as the displayed text: introductory scene descriptions cannot inherit a companion name from unrelated creation logs.
+
+
+### Long narrative readability
+
+The narrative passage can receive keyboard focus for native scrolling. Long passages show a scroll hint that changes at the end; short passages show no extra hint. Every new passage starts at its beginning. Text remains fully available without expanding the main panel over the dungeon.

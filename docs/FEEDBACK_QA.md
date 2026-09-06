@@ -25,3 +25,12 @@ Browser QA visibly rejected an inert invalid key without marking it connected. L
 DESIGN_REVISION.md and EDGE_CASES.md are the current design and explicit acceptance register. Every possible generated sentence, microphone permission path and animation frame is not certified.
 
 Final regression count: 62 tests passed. Hosted speaker history now filters by the requested speaker; the new regression confirms Mira never receives Oren’s private conversation history. Party world-name labels appear on selection/hover/active turn to avoid obscuring bodies. PRD/RFC and the design/edge-case register are updated.
+
+
+### Local interactive QA: puzzle, rescue and Vark (2026-09-06)
+
+Played the curated Label QA save at port 5173 through real browser controls. Wrong puzzle ordering rang the warning chain without HP loss. Releasing the pawl and seating the weight survived browser reload and Continue saved adventure. Locking the pin disabled the floor; quick crossing reached Goblin Cookfire without damage. Scrit conversation and ration offer opened the prison. Unlocking the gate changed the visible courier identity to Rescued courier; reading the ledger reached level 2.
+
+In Vark’s chamber, both new questions displayed authored Vark text. Presenting the actual witness accounts visibly changed negotiation DC16 to DC13. The real negotiation rolled 5 + 0 = 5 and correctly entered combat. Separate dice/initiative playback was inspected, then skipped to the active Goblin guard turn. The alarm produced the additional Goblin scout. The battle remains unfinished and must continue from this save. Screenshots of the prison, parley and settled d20 are present in the task’s browser tool evidence.
+
+Long parley text overflow was difficult to discover. Added a keyboard-focusable narrative passage, thin stable scrollbar, overflow-only “Scroll to read more” hint, and reset-to-top on a new passage. Client typecheck passes; live short-passage rendering was checked after hot reload. The overflow hint and keyboard scrolling on a long passage still require browser confirmation. No deployment performed.

@@ -63,3 +63,6 @@ Verification: all 179 backend tests and all three typechecks pass. Live local Vi
 ### Local label and narration QA
 
 The Mac became available. Local browser QA at port 5173 created a curated Fighter save named Label QA. Selected-character leader lines and labels were inspected in a rendered screenshot. The inventory modal hid world labels, displayed six abilities, and changed to Mira’s correct Rogue values on selection. QA exposed an opening narration heading incorrectly naming Oren; the shared text/speaker projection fix was verified through hot reload showing THE STORY SO FAR / ADVENTURE JOURNAL. Long-label wrapping, wider camera-angle coverage and level-up choice interaction still need browser verification. No Sites deployment performed.
+
+
+Current local browser save Label QA has reached the Vark battle after a failed prepared negotiation (5 vs DC13); active turn is Goblin guard, with an alarm scout present. Puzzle wrong-order recovery, mid-puzzle reload, safe crossing, peaceful goblin passage, rescue identity, level 2 and parley DC change were observed. Battle completion and long-passage scroll verification remain pending. No Sites deployment.

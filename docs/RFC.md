@@ -337,3 +337,8 @@ Optional `Logistics.shortRestScene` identifies an active rest window. `camp:shor
 ### Label anchors and authored speaker selection
 
 `placeLabels` retains projected `anchorX/anchorY`, rejects non-positive dimensions and anchors inside HUD rectangles, and keeps its existing collision-free placement. `WorldLabels` renders pointer-transparent SVG leaders to the closest label edge, with an anchor dot. Selected labels allow 240px and two lines. `client/session.ts` now derives both narration text and speaker from one filtered entry list, retaining legacy creation-log filtering. A named heading requires all displayed entries to be authored by the same non-DM speaker. The default scene description has no named speaker. Regression tests cover covered anchors, invalid dimensions and opening/check-in/scene-entry heading identity.
+
+
+### Narrative overflow presentation
+
+`NarrativePassage` measures scrollHeight/clientHeight on text changes, resize and scroll, exposes a described keyboard-focusable paragraph, and updates an overflow hint. Text changes reset scrollTop; ResizeObserver disconnects on cleanup. No gameplay or audio state changes. Local typecheck passes; long-passage interaction is pending browser confirmation.
