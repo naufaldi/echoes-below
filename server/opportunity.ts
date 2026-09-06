@@ -1,3 +1,4 @@
+import {consumeAttackHelp} from './attack-help.js';
 import type {Save} from './game.js';
 import type {Actor,Roll} from '../shared/types.js';
 import {classResources,modifier,spendAction,takeDamage,type Ability} from '../shared/curated-rules.js';
@@ -30,10 +31,11 @@ export function resolveOpportunity(s:Save,attackerId:string,targetId:string,dice
  const blessed=(t.effects??[]).some(e=>e.kind==='bless'&&e.targets.includes(attackerId)&&t.actors[e.sourceId]?.concentration===e.id);
  const blessing=blessed?damageRoll(dice,4,0,'Bless'):null;
  const disadvantage=target.guard&&t.actors[targetId].speedFeet>0;
- const r=rollD20(dice,profile.mod+c.proficiency+(blessing?.total??0),'Opportunity attack',false,disadvantage),rolls:Roll[]=blessing?[r,blessing]:[r];
+ const advantage=consumeAttackHelp(s,attackerId,targetId);
+ const r=rollD20(dice,profile.mod+c.proficiency+(blessing?.total??0),advantage?'Opportunity attack · Help':'Opportunity attack',advantage,disadvantage),rolls:Roll[]=blessing?[r,blessing]:[r];
  const critical=r.kept===20||(a.side==='party'&&c.classId==='fighter'&&c.level>=3&&r.kept===19),hit=critical||(r.kept!==1&&r.total>=t.actors[targetId].armorClass);let damage=0;
  if(hit){const d=damageRoll(dice,profile.die,profile.mod,profile.name+' damage',critical);rolls.push(d);damage=Math.max(0,d.total);
-  if(a.side==='party'&&c.classId==='rogue'&&profile.finesse&&!classResources(c).sneakUsed&&!disadvantage&&members(s).some(ally=>ally.id!==a.id&&ally.side===a.side&&t.actors[ally.id].hp>0&&distance(t.cells[ally.id],t.cells[targetId])<=5)){
+  if(a.side==='party'&&c.classId==='rogue'&&profile.finesse&&!classResources(c).sneakUsed&&(!disadvantage||advantage)&&((advantage&&!disadvantage)||members(s).some(ally=>ally.id!==a.id&&ally.side===a.side&&t.actors[ally.id].hp>0&&distance(t.cells[ally.id],t.cells[targetId])<=5))){
    for(let i=0;i<Math.ceil(c.level/2);i++){const sneak=damageRoll(dice,6,0,'Sneak Attack',critical);rolls.push(sneak);damage+=sneak.total;}t.actors[attackerId].features={...classResources(t.actors[attackerId]),sneakUsed:true};
   }
   const victim=t.actors[targetId];let saveTotal:number|undefined;

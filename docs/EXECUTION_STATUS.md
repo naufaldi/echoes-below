@@ -265,3 +265,9 @@ Fixed impossible active objectives caused by main quests never expiring, generic
 - 250 automated tests pass; client/server/hosted type checks and production build pass. Bundle gate verifies 45 models / 51 files. New tests cover separation across the opening route, serialization, live-trap boundaries, and legacy initial positions.
 - Local Chrome `Formation QA`, a separate controlled opening-route save: inspected settled prison view after key rescue. Party members now stand apart rather than stacked around the gate; labels remain outside their bodies. This verifies the destination, not all possible movement paths or camera angles.
 - No deployment or AI spending. Full campaign depth, duration evidence and release QA remain incomplete.
+
+### Local checkpoint: tactical Help implemented
+- Added Help attack assistance, saved lifetime, normal/reaction roll consumption, non-stacking behavior, and Sneak Attack interaction. Skill/tool Help remains outside this checkpoint.
+- 257 automated tests pass. Client/server/hosted type checks and production build pass; asset gate verifies 45 models / 51 files.
+- Local Chrome `Help Visual QA` controlled battle: hero spent main action on Help against adjacent Goblin guard; Oren acted automatically next. Dice presentation displayed Attack · Help, [10,17] -> 17 + 5 = 22, then 8 damage. Help status disappeared after consumption. This fixture uses raised HP and is not balance evidence.
+- Rules source checked: official SRD 5.2.1 Help action, printed page 183. PRD/RFC updated. No deployment or paid AI use. Full campaign duration and remaining release gates stay open.

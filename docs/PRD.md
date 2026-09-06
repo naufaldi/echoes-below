@@ -406,3 +406,6 @@ World labels must avoid projected character bodies as well as HUD panels and oth
 
 ### Local checkpoint: exploration party spacing
 Curated adventures use a wider triangular formation at creation, room arrival, and existing authored approach interactions. Party members should remain at least 1.5 world units apart at these settled positions. Inspection in the live counterweight hall keeps every party member behind the pressure-plate line. Legacy exploration placement and tactical combat cells retain their existing behavior.
+
+### Local checkpoint: Help in tactical combat
+Every conscious combatant with a main action may distract a visible enemy within 5 feet using Help. The next ally attack roll against that enemy gains advantage; the helper cannot consume their own benefit. Benefits expire at the helper’s next initiative slot, survive save/resume, and never stack extra dice. The UI identifies the distracted target and expiry; assisted attack playback names Help. Companion proposals and takeover expose the same legal action. This checkpoint covers attack assistance, not skill/tool assistance during exploration.
