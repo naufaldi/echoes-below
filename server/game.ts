@@ -1,3 +1,4 @@
+import {logisticsFor,logisticsActions,applyLogistics,grantLogisticsLoot} from './logistics.js';
 import {makeCharacter,restoreClassResources,classResources} from '../shared/curated-rules.js';
 import {initializeTactical,startTacticalCombat,tacticalActions,applyTactical} from './tactical.js';
 import {availableConsequences,campaignEffects} from './campaign-consequences.js';
@@ -381,7 +382,7 @@ export function createSave(input: CreateSaveRequest): Save {
   s.party[0]!.raceId=input.raceId??"human";
   s.party[1]!.raceId=input.companions?.mira.raceId??"elf";s.party[2]!.raceId=input.companions?.oren.raceId??"dwarf";
   s.logs.forEach(entry=>{entry.revision=0;});
-  if(input.rulesVersion==="curated-srd-5.2.1-v1")initializeTactical(s);
+  if(input.rulesVersion==="curated-srd-5.2.1-v1"){initializeTactical(s);s.logistics=logisticsFor(s);}
   return s;
 }
 function opt(
@@ -439,7 +440,8 @@ function approachTarget(s: Save, option: ActionOption) {
     ];
   }
 }
-export function legalActions(s: Save): ActionOption[] {
+export function legalActions(s:Save):ActionOption[]{const actions=baseActions(s);return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'),...logisticsActions(s)]:actions;}
+function baseActions(s: Save): ActionOption[] {
   if(s.tactical&&s.mode==="combat")return tacticalActions(s);
   const a: ActionOption[] = [];
   const h = s.party[0]!;
@@ -967,6 +969,7 @@ export function publicSave(s: Save): PublicSave {
   }
   return {
     ...structuredClone(visible),
+    ...(s.tactical?{logistics:structuredClone(logisticsFor(s))}:{}),
     scene,
     actions: legalActions(s),
     checkpoints: checkpointIds,
@@ -1313,8 +1316,9 @@ function autoTurns(s: Save, dice: Dice, skipHero = false) {
     throw new GameError(500, "TURN_LIMIT", "Combat could not advance safely.");
 }
 export function applyAction(original: Save, id: string, dice: Dice): Save {
+  if(original.tactical&&(id.startsWith('gear:')||id.startsWith('camp:')))return applyLogistics(original,id,dice);
   if(original.tactical&&original.mode==='combat')return applyTactical(original,id,dice);
-  const result=applyLegacyAction(original,id,dice);
+  const result=applyLegacyAction(original,id,dice);grantLogisticsLoot(result,original);
   if(result.tactical&&result.mode!=='combat')for(const actor of result.party){const c=result.tactical.actors[actor.id];if(c.dead)actor.hp=0;c.hp=actor.hp;c.maxHp=actor.maxHp;if(c.hp>0)c.death={successes:0,failures:0,stable:false};if(c.hp===0)c.concentration=null;if(id==='rest'||id==='exp_rest'||id==='continue_campaign'){c.slots=[...c.maxSlots];c.hitDice=c.level;restoreClassResources(c);}}
   return result;
 }

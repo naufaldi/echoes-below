@@ -53,3 +53,13 @@ Previous turn was progress (class abilities committed and browser spell verifica
 Tactical movement now serializes ordered waypoint positions. A changing root position prop previously could snap the actor directly to the final coordinates; the root position is now fixed at mount and subsequent movement follows the committed waypoints. Browser QA committed a15ft move and showed the Wizard at the selected destination with15ft remaining. Unit tests cover corners, long frames, duplicate points and persisted presentation paths. Full animation timing across all models remains to be audited.
 
 97 tests, client/server/hosted typechecks and production build pass. Public Sites is still version10; full expansion, additional scene asset checks and deployment are not claimed complete.
+
+### Inventory and camp checkpoint (local, not yet deployed)
+
+Added shared gear, per-actor loadouts, immediate armor-class projection, protected quest items, a unique opening cloak, safe-site short/long rests and persistent rest limits. Existing preview saves receive compatible defaults.
+
+Chrome manual QA at 1440×778: created Camp Browser QA with curated rules; equipped robes (AC18→13), looted the chest, equipped cloak (AC14), used long rest (three rations→zero), refreshed and resumed. Equipment, supplies and removed long-rest availability persisted. Inventory screenshot inspected for readable controls and scrollable content. A real backdrop now prevents click-through behind the modal, with Escape/Tab focus handling. Tests additionally cover unique-item transfer and Arcane Recovery across camps.
+
+Still pending: full rules/class coverage, richer quests and campaign authoring, tactical AI integration, complete voice/browser checks, broad asset visual certification, deployment and human duration measurement. Current local progress does not establish 24-hour playtime.
+
+Checkpoint validation: 104 automated tests pass; client, server and hosted TypeScript checks pass; production client/worker build passes. Public site remains version 10.

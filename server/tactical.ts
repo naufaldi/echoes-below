@@ -1,3 +1,4 @@
+import {ITEMS} from '../shared/logistics.js';
 import type {Actor,ActionOption,ClassId} from '../shared/types.js';
 import {CURATED_RULES_VERSION,CURATED_CLASS_IDS,classResources,resetTurnResources,makeCharacter,modifier,spendAction,spendSlot,takeDamage,heal,deathSave,type CuratedClass} from '../shared/curated-rules.js';
 import {findPath,lineOfSight,type Cell} from '../shared/tactical-grid.js';
@@ -13,7 +14,7 @@ export function initializeTactical(s:Save){
  for(const a of s.party)s.tactical.actors[a.id]=makeCharacter(classes[a.classId as ClassId]);projectTactical(s,false);
 }
 export function projectTactical(s:Save,positions=true){
- if(!s.tactical)return;if(s.tactical.effects)s.tactical.effects=s.tactical.effects.filter(e=>s.tactical!.actors[e.sourceId]?.concentration===e.id);for(const a of members(s)){const c=s.tactical.actors[a.id];if(!c)continue;a.hp=c.hp;a.maxHp=c.maxHp;a.defense=c.armorClass;
+ if(!s.tactical)return;if(s.tactical.effects)s.tactical.effects=s.tactical.effects.filter(e=>s.tactical!.actors[e.sourceId]?.concentration===e.id);for(const a of members(s)){const c=s.tactical.actors[a.id];if(!c)continue;const equipment=s.logistics?.equipped[a.id];if(equipment)c.armorClass=ITEMS[equipment.armor].ac+(equipment.armor==='chain'?0:modifier(c.abilities.dexterity))+(equipment.shield?2:0)+(equipment.cloak?1:0);a.hp=c.hp;a.maxHp=c.maxHp;a.defense=c.armorClass;
   a.attributes={might:modifier(c.abilities.strength),agility:modifier(c.abilities.dexterity),insight:modifier(c.abilities[c.classId==='wizard'?'intelligence':'wisdom']),presence:modifier(c.abilities.charisma)};
   const cell=s.tactical.cells[a.id];if(positions&&cell)a.position=[(cell[0]-4)*1.2,(cell[1]-4)*1.2];
  }
