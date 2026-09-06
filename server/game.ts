@@ -1,3 +1,4 @@
+import {scritActions,resolveScrit} from './scrit-inquiry.js';
 import {parleyActions,resolveParley,parleyDC} from './vark-parley.js';
 import {counterweightActions,resolveCounterweight} from './counterweight-puzzle.js';
 import {checkInActions,resolveCheckIn} from './party-checkin.js';
@@ -452,7 +453,7 @@ function approachTarget(s: Save, option: ActionOption) {
     ];
   }
 }
-export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s),...parleyActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
+export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s),...parleyActions(s),...scritActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
 function baseActions(s: Save): ActionOption[] {
   if(s.tactical&&s.mode==="combat")return tacticalActions(s);
   const a: ActionOption[] = [];
@@ -1343,6 +1344,7 @@ export function applyAction(original: Save, id: string, dice: Dice): Save {
  const result=resolveAction(original,id,dice);if(result.logistics&&id!=='camp:short'&&!id.startsWith('camp:hitdie:'))delete result.logistics.shortRestScene;updateQuests(result,original);return result;
 }
 function resolveAction(original: Save, id: string, dice: Dice): Save {
+  if(id.startsWith("scrit:"))return resolveScrit(original,id);
   if(id.startsWith("parley:"))return resolveParley(original,id);
   if(id.startsWith("counterweight:"))return resolveCounterweight(original,id);
   if(id.startsWith("checkin:"))return resolveCheckIn(original,id);

@@ -145,3 +145,12 @@ Verification covers Magic Missile, Sacred Flame, Bless, ranged attack and Dodge 
 Selecting a focus no longer silently substitutes all actions when that target has no legal action. Matching actor/target actions and untargeted controls remain available; an explicit message and Show all actions control explain an empty focus. Combat target menus exclude exploration props. The tactical heading uses the same canonical enemy names as initiative and world labels.
 
 Verification: three regression tests cover unavailable targets, matching targets, global controls, actor focus and clearing. Local browser selection of Slime brute retained that focus, displayed guidance for the automatic Acid spitter turn and retained its advance button; Show all actions reset the selector and removed the message. Client type check passed. This checkpoint does not deploy or establish full-campaign acceptance.
+
+
+### Local Scrit inquiry expansion
+
+After Scrit’s initial introduction, the curated opening offers separate questions about stolen supplies and the captive. Hearing both unlocks his account of the seal’s purpose. Dialogue records only witnessed facts, grants no repeatable XP and remains optional. Existing ration, distraction and combat routes remain available. Responses acknowledge a key already transferred to the party.
+
+A party that fed Scrit and heard about the captive may spend one additional ration to cancel an existing alarm. This removes its extra scout from the later Vark encounter; subsequent disturbances can raise a new alarm. The offer is unavailable without supplies, after combat victory, in combat, after slipping past by distraction or outside the cookfire scene. Each exchange persists and resolves once.
+
+Verification: regression tests cover question prerequisites, persistent knowledge, duplicate rejection, supply cost, unavailable/hostile states, two-versus-three-enemy boss rosters and a later renewed alarm. Browser presentation of these new exchanges remains pending. This adds narrative choices and a resource consequence, not proof of a two-hour opening or 24-hour campaign. No deployment.
