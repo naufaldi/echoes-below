@@ -259,3 +259,9 @@ Fixed impossible active objectives caused by main quests never expiring, generic
 - 247 tests pass, including priority labels anchored inside silhouettes and crowded bodies near HUD. Server/client/hosted type checks and production build pass; bundle gate verifies 45 models / 51 files.
 - Local Chrome screenshots inspected at prison default framing and with hero selected: gate label moved beside the party, courier label above the group, selected hero label to the right with leader line. Bodies are no longer covered by these labels. This is local visual evidence, not an exhaustive camera/animation sweep.
 - PRD/RFC updated. No deployment or paid AI calls. Full campaign and duration validation remain outstanding.
+
+### Local checkpoint: readable party formation
+- Replaced tight curated exploration spacing with a wider triangle at creation, room entry and existing target approach actions. Legacy and combat layouts remain separate.
+- 250 automated tests pass; client/server/hosted type checks and production build pass. Bundle gate verifies 45 models / 51 files. New tests cover separation across the opening route, serialization, live-trap boundaries, and legacy initial positions.
+- Local Chrome `Formation QA`, a separate controlled opening-route save: inspected settled prison view after key rescue. Party members now stand apart rather than stacked around the gate; labels remain outside their bodies. This verifies the destination, not all possible movement paths or camera angles.
+- No deployment or AI spending. Full campaign depth, duration evidence and release QA remain incomplete.

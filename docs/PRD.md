@@ -403,3 +403,6 @@ Curated prison exploration offers three saved conversations: the reason for dete
 
 ### Local checkpoint: labels preserve character visibility
 World labels must avoid projected character bodies as well as HUD panels and other labels. This applies to party members, enemies, and rendered NPCs, including characters without a visible name label. Selected labels retain priority but cannot cover bodies. Crowded labels may hide; their targets remain selectable in the action focus menu. Leader lines associate displaced labels with the original target.
+
+### Local checkpoint: exploration party spacing
+Curated adventures use a wider triangular formation at creation, room arrival, and existing authored approach interactions. Party members should remain at least 1.5 world units apart at these settled positions. Inspection in the live counterweight hall keeps every party member behind the pressure-plate line. Legacy exploration placement and tactical combat cells retain their existing behavior.

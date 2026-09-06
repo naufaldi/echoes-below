@@ -401,7 +401,7 @@ export function createSave(input: CreateSaveRequest): Save {
   s.party[0]!.raceId=input.raceId??"human";
   s.party[1]!.raceId=input.companions?.mira.raceId??"elf";s.party[2]!.raceId=input.companions?.oren.raceId??"dwarf";
   s.logs.forEach(entry=>{entry.revision=0;});
-  if(input.rulesVersion==="curated-srd-5.2.1-v1"){initializeTactical(s);s.logistics=logisticsFor(s);s.quests=questProgress(s);}
+  if(input.rulesVersion==="curated-srd-5.2.1-v1"){initializeTactical(s);placeExplorationParty(s,s.party[0],[0,-1.5]);s.logistics=logisticsFor(s);s.quests=questProgress(s);}
   return s;
 }
 function opt(
@@ -429,6 +429,15 @@ function opt(
 function attempted(s: Save, key: string) {
   return s.attempts.includes(key);
 }
+// Keep a broad triangle within the authored approach area. Tactical cells are
+// deliberately untouched: combat establishes its own formation on entry.
+function placeExplorationParty(s:Save,leader:Actor,anchor:[number,number]){
+ leader.position=[...anchor];let follower=0;
+ for(const member of s.party){if(member.id===leader.id)continue;
+  const side=follower++===0?-1:1;
+  member.position=[Math.max(-3,Math.min(3,anchor[0]+side*1.4)),anchor[1]-1.4];
+ }
+}
 // Authored interaction anchors stay inside each room's walkable approach area.
 // In the hall, inspection never steps across the unresolved pressure-plate line.
 function approachTarget(s: Save, option: ActionOption) {
@@ -449,6 +458,7 @@ function approachTarget(s: Save, option: ActionOption) {
   const x = Math.max(-2.3, Math.min(2.3, entity.position[0]));
   let z = Math.max(-2.3, Math.min(2.8, entity.position[1] - 1.2));
   if (s.sceneId === "hall" && !s.flags.trapSpent) z = Math.min(z, -1.2);
+  if(s.tactical){placeExplorationParty(s,leader,[x,z]);return;}
   leader.position = [x, z];
   let follower = 0;
   for (const member of s.party) {
@@ -1094,6 +1104,7 @@ function enterScene(s: Save, id: SceneId) {
     a.guard = false;
     a.aim = false;
   });
+  if(s.tactical)placeExplorationParty(s,s.party[0],[0,-1.5]);
   log(s, publicSave(s).scene.description, "dm", [], "authored");
 }
 function trap(s: Save, a: Actor, dice: Dice) {
