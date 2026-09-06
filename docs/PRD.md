@@ -216,3 +216,8 @@ New combat log entries preserve the character’s display name at the time of th
 ### Curated encounter roster
 
 The curated campaign now selects 24 explicit combat opportunities across six chapters, including six named bosses. Twelve roles vary movement, range, armor, hit points, damage die and attack name: goblin guard/scout, hobgoblin commander, bone sentinel/archer/warden, acid spitter/slime brute, cavern hunter/venom stalker, resonant adept and core colossus. Other rooms preserve their narrative alternatives without generating generic defenders. Peaceful resolution remains available. This satisfies roster coverage, not combat balance or full visual animation acceptance.
+### Companion protection reliability checkpoint
+
+Protect means defending a conscious player from nearby threats, then engaging surviving enemies when no nearby threat exists. It must not keep a companion orbiting a downed or safe player while an enemy remains at range. Each automatic step remains separately visible and subject to normal legal movement and actions.
+
+Acceptance: in both downed-player and safe-player fixtures, the protecting Fighter approaches a distant enemy and uses its attack on the next decision. In a seeded low-resource audit across all 24 authored encounters and four hero classes, every run must reach victory or defeat within 220 individual actions. This is a regression bound, not a difficulty or campaign-duration promise.
