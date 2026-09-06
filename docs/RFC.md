@@ -282,3 +282,9 @@ The previous automatic movement scorer used the hero cell as its goal for every 
 ### Free party conversation checkpoint
 
 server/party-checkin.ts owns authored check-in availability and resolution. Existing revision/idempotency and saved-log boundaries apply; private flags prevent repetition after reload. No provider or dice call is made. App uses the legal action when AI is unavailable and preserves the existing AI conversation path when enabled. Tests cover persistence, chapter gates, unchanged resources and unavailable states. Browser QA on Release QA confirmed a free Mira reflection rendered after confirmation and its button became unavailable afterward. Full voice and later-chapter visual acceptance remain pending.
+
+### Higher-level casting checkpoint
+
+Spell action IDs retain their original form at level 1 and append the selected level for higher casting: tactical:missile:guard-1:3, tactical:cure:mira:2, tactical:healing_word:mira:4, tactical:bless:2, recover:cure:hero:mira:2. Resolvers accept only a currently generated legal action before parsing the level, rolling dice or mutating state. Each spell consumes exactly its chosen slot, preserving other ranks. Cure Wounds and Healing Word use two dice per slot level; Magic Missile uses slot level plus two darts. Supported Life Domain healing uses the selected slot level in its bonus. Bless has no extra beneficiary in the current three-member party and explains this tradeoff. Magic Missile remains a single-target curated adaptation; split targeting is still outstanding.
+
+Verified against [official spell descriptions](https://www.dndbeyond.com/sources/dnd/br-2024/spell-descriptions) and [SRD 5.2.1](https://media.dndbeyond.com/compendium-images/srd/5.2/SRD_CC_v5.2.1.pdf). Tests cover every supported rank, slot depletion, healing scaling, action economy, invalid IDs, concentration and serialized exploration healing. Browser selection and presentation validation remain pending.

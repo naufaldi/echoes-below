@@ -225,3 +225,7 @@ Acceptance: in both downed-player and safe-player fixtures, the protecting Fight
 ### Free party conversation checkpoint
 
 Free party check-ins remain available without an API key. Mira and Oren each offer one authored reflection per opening room and one per later chapter, with no XP, relationship farming or resource changes. Downed companions, active combat, defeat and unfinished bond conversations cannot start a check-in. The UI identifies the speaker and distinguishes these authored lines from paid AI dialogue.
+
+### Higher-level casting checkpoint
+
+Players can select an available spell-slot level from 1 through 4 when casting Magic Missile, Cure Wounds, Healing Word or Bless. Each choice displays its slot cost and expected dice in the confirmation. Exhausting level-1 slots does not disable higher-level casting. Healing outside combat supports the same Cure Wounds scaling. Only one slot spell can be spent per turn; a rejected or repeated action cannot consume another slot. Existing level-1 command IDs remain valid.
