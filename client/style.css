@@ -21,3 +21,5 @@
 .companion-picker{margin:18px 0;border:1px solid #65705b;padding:12px;border-radius:8px}.companion-picker summary{cursor:pointer;color:#dec48b}.companion-picker p{font-size:14px;line-height:1.5}.companion-picker fieldset{border:0;padding:8px 0}.companion-picker legend{color:#e4d5b3}.companion-picker .creation-options{grid-template-columns:repeat(3,minmax(0,1fr))}.companion-picker select{min-width:0;width:100%}
 
 .ai-mode-picker{border:1px solid #5b6555;border-radius:8px;padding:12px;margin:16px 0}.ai-mode-picker legend{color:#dec48b}.ai-mode-picker label{display:flex;gap:10px;align-items:flex-start;padding:10px 0;cursor:pointer}.ai-mode-picker input{width:auto;margin-top:4px}.ai-mode-picker strong,.ai-mode-picker small{display:block}.ai-mode-picker small{font-size:13px;line-height:1.5;color:#b1b9aa;margin-top:3px}.ai-mode-picker .unavailable{opacity:.6}
+
+.saved-adventures{margin:12px 0}.saved-adventures summary{cursor:pointer;color:#d5c39e}.saved-adventures button{display:block;width:100%;text-align:left;margin:8px 0;padding:10px;border:1px solid #52604f;border-radius:6px}.saved-adventures small{display:block;color:#a5ae9f;margin-top:4px}

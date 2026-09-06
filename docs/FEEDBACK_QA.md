@@ -11,3 +11,5 @@ Observed browser evidence: repeated Halfling→Elf selection remained correctly 
 Personal-key selector, connect state and reload-to-free were exercised using an inert placeholder; no paid personal-key request was sent. Host sponsorship on the public Site remains disabled until safely configured.
 
 57 automated tests and client/server/hosted type checks pass. This supports sharing as a playable desktop preview, not a finished24-hour campaign or a fully verified voice release. Broader responsive/accessibility, real browser speech/transcription and long-campaign pacing still need coverage.
+
+The creation screen also exposes an adventure picker so QA-created saves never hide older player adventures behind a single Resume button. No saved adventure was deleted or overwritten.
