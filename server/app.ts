@@ -1,3 +1,4 @@
+import {creation} from '../shared/character-creation.js';
 import Fastify from "fastify";
 import fastifyStatic from "@fastify/static";
 import { randomUUID, timingSafeEqual } from "node:crypto";
@@ -17,23 +18,6 @@ import { Storage } from "./storage.js";
 import { OpenAIProvider, type AIProvider } from "./ai.js";
 import type { Preview, PublicSave } from "../shared/types.js";
 const id = z.string().uuid();
-const creation = z
-  .object({
-    name: z
-      .string()
-      .trim()
-      .min(1)
-      .max(40)
-      .regex(
-        /^[\p{L}\p{N} .'-]+$/u,
-        "Use letters, numbers, spaces, apostrophes or hyphens.",
-      ),
-    classId: z.enum(["guardian", "scout", "adept", "cleric"]),
-    raceId: z.enum(["human","elf","dwarf","halfling"]).default("human"),
-    backgroundId: z.enum(["delver", "envoy", "survivor"]),
-    appearanceId: z.enum(["ember", "moss", "moon"]),
-  })
-  .strict();
 const actionSchema = z
   .object({
     companionPlans: z.record(z.string().max(40),z.string().max(100)).optional(),
@@ -75,6 +59,7 @@ export async function buildApp(
     options.ai === false
       ? new OpenAIProvider(storage, "")
       : (options.ai ?? new OpenAIProvider(storage));
+  function requireSponsored(req:{headers:Record<string,unknown>}){if(req.headers['x-echoes-ai-mode']!=='sponsored')throw new GameError(403,'AI_MODE','Choose sponsored AI explicitly before using the server’s AI allowance.');}
   const csrf = randomUUID();
   const inflight = new Map<
     string,
@@ -154,7 +139,7 @@ export async function buildApp(
         `This save is now revision ${actual}. Reload before choosing another action.`,
       );
   };
-  async function execute(saveId: string, body: z.infer<typeof actionSchema>) {
+  async function execute(saveId: string, body: z.infer<typeof actionSchema>, allowAI=false) {
     const duplicate = storage.duplicate(body.commandId, saveId, body);
     if (duplicate) return duplicate;
     const hash = storage.hash({ saveId, ...body });
@@ -180,7 +165,7 @@ export async function buildApp(
       let plans: Record<string, string> | undefined = body.companionPlans;
       let aiFailed = false;
       if (
-        !plans && ai.configured &&
+        allowAI && !plans && ai.configured &&
         before.mode === "combat" &&
         !before.flags.retreatRequested &&
         ["end_turn", "continue"].includes(body.actionId)
@@ -240,14 +225,14 @@ export async function buildApp(
     publicSave(storage.read(saveId(req))),
   );
   app.post("/api/saves/:id/actions", async (req) =>
-    execute(saveId(req), actionSchema.parse(req.body)),
+    execute(saveId(req), actionSchema.parse(req.body),req.headers['x-echoes-ai-mode']==='sponsored'),
   );
   app.post("/api/actions/preview", async (req) => {
     const input = previewSchema.parse(req.body);
     const s = storage.read(input.saveId);
     stale(input.expectedRevision, s.revision);
     const actionId =
-      "actionId" in input ? input.actionId : await ai.interpret(s, input.text);
+      "actionId" in input ? input.actionId : (requireSponsored(req), await ai.interpret(s, input.text));
     const current = storage.read(s.id);
     stale(s.revision, current.revision);
     const action = legalActions(current).find((a) => a.id === actionId);
@@ -282,9 +267,10 @@ export async function buildApp(
         "PREVIEW_EXPIRED",
         "That preview expired. Prepare the action again.",
       );
-    return execute(p.saveId, request);
+    return execute(p.saveId, request,req.headers['x-echoes-ai-mode']==='sponsored');
   });
   app.post("/api/saves/:id/dialogue", async (req) => {
+    requireSponsored(req);
     const body = z
       .object({
         speaker: z.enum(["dm", "mira", "oren"]),
@@ -314,6 +300,7 @@ export async function buildApp(
     return { history: storage.dialogueHistory(s.id) };
   });
   app.post("/api/narrations/:id/audio", async (req) => {
+    requireSponsored(req);
     const audioId = saveId(req);
     z.object({})
       .strict()
@@ -334,6 +321,7 @@ export async function buildApp(
       .send(Buffer.from(row.bytes as Uint8Array));
   });
   app.post("/api/transcriptions", { bodyLimit: 14500000 }, async (req) => {
+    requireSponsored(req);
     const body = z
       .object({
         saveId: id,

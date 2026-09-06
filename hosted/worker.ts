@@ -1,3 +1,4 @@
+import {creation} from '../shared/character-creation.js';
 import {z} from 'zod';
 import {Store,hash,type Database} from './db.js';
 import {applyAction,createSave,GameError,legalActions,log,publicSave,type Save} from '../server/game.js';
@@ -7,7 +8,6 @@ import {narrativeContext} from '../shared/ai-context.js';
 import type {Preview} from '../shared/types.js';
 interface Env extends AIEnv{DB:Database;ASSETS:{fetch(request:Request):Promise<Response>}}
 const uuid=z.string().uuid(),commandSchema=z.object({companionPlans:z.record(z.string().max(40),z.string().max(100)).optional(),commandId:uuid,expectedRevision:z.number().int().min(0),actionId:z.string().min(1).max(100)}).strict();
-const creation=z.object({name:z.string().trim().min(1).max(40).regex(/^[\p{L}\p{N} .'-]+$/u),classId:z.enum(['guardian','scout','adept','cleric']),raceId:z.enum(['human','elf','dwarf','halfling']).default('human'),backgroundId:z.enum(['delver','envoy','survivor']),appearanceId:z.enum(['ember','moss','moon'])}).strict();
 const say=z.object({speaker:z.enum(['dm','mira','oren']),text:z.string().trim().min(1).max(1000)}).strict();
 function json(value:unknown,status=200,headers:Record<string,string>={}){return Response.json(value,{status,headers:{'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff',...headers}});}
 async function readBody(request:Request){if(!request.headers.get('content-type')?.startsWith('application/json'))throw new GameError(415,'TYPE','JSON is required.');const max=1450000;if(Number(request.headers.get('content-length')??0)>max)throw new GameError(413,'SIZE','The request is too large.');const reader=request.body?.getReader(),chunks:Uint8Array[]=[];let total=0;if(reader)while(true){const part=await reader.read();if(part.done)break;total+=part.value.length;if(total>max){await reader.cancel();throw new GameError(413,'SIZE','The request is too large.');}chunks.push(part.value);}const bytes=new Uint8Array(total);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}const text=new TextDecoder().decode(bytes);try{return JSON.parse(text);}catch{throw new GameError(400,'JSON','The request could not be read.');}}
@@ -28,6 +28,7 @@ export default {async fetch(request:Request,env:Env):Promise<Response>{
   const token=raw&&/^[a-f0-9-]{36}$/.test(raw)?raw:null;
   if(path==='/api/session'&&request.method==='GET'){const session=token??crypto.randomUUID();return json({csrfToken:await hash('csrf:'+session)},200,{'Set-Cookie':`__Host-echo=${session}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=31536000`});}
   if(path==='/api/health')return json({ok:true,aiConfigured:!!env.OPENAI_API_KEY,hosted:true});
+  if(request.headers.get('x-echoes-ai-mode')!=='sponsored')env={...env,OPENAI_API_KEY:undefined};
   if(!token)throw new GameError(403,'SESSION','Refresh the page to establish your private save session.');
   if(request.method==='POST'&&request.headers.get('x-csrf-token')!==await hash('csrf:'+token))throw new GameError(403,'CSRF','Refresh your adventure before retrying.');
   const store=new Store(env.DB,await hash('owner:'+token));

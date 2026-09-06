@@ -123,7 +123,9 @@ export interface PublicSave {
   createdAt: string;
   updatedAt: string;
 }
+export interface CompanionSetup {classId:ClassId;raceId:RaceId;appearanceId:'ember'|'moss'|'moon';}
 export interface CreateSaveRequest {
+  companions?: {mira:CompanionSetup;oren:CompanionSetup};
   raceId?: RaceId;
   name: string;
   classId: ClassId;

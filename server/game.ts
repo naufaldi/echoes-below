@@ -340,8 +340,8 @@ export function createSave(input: CreateSaveRequest): Save {
         input.backgroundId,
         input.appearanceId,
       ),
-      actor("mira", "Mira", "scout", "survivor"),
-      actor("oren", "Oren", "guardian", "envoy", "ember"),
+      actor("mira", "Mira", input.companions?.mira.classId??"scout", "survivor", input.companions?.mira.appearanceId??"moss"),
+      actor("oren", "Oren", input.companions?.oren.classId??"guardian", "envoy", input.companions?.oren.appearanceId??"ember"),
     ],
     enemies: [],
     logs: [],
@@ -373,7 +373,7 @@ export function createSave(input: CreateSaveRequest): Save {
     "authored",
   );
   s.party[0]!.raceId=input.raceId??"human";
-  s.party[1]!.raceId="elf";s.party[2]!.raceId="dwarf";
+  s.party[1]!.raceId=input.companions?.mira.raceId??"elf";s.party[2]!.raceId=input.companions?.oren.raceId??"dwarf";
   s.logs.forEach(entry=>{entry.revision=0;});
   return s;
 }

@@ -107,7 +107,7 @@ test("same in-flight command shares AI work, stale AI work cannot overwrite newe
     app.inject({
       method: "POST",
       url,
-      headers: { "x-csrf-token": token },
+      headers: { "x-csrf-token": token, "x-echoes-ai-mode":"sponsored" },
       payload,
     });
   let s = (await post("/api/saves", hero)).json();
