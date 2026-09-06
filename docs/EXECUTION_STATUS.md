@@ -71,3 +71,9 @@ Added persistent objective steps/status, optional refusal, once-only camp suppli
 Chrome QA: opened the new journal on the older Camp Browser QA preview save; main/optional goals appeared without reward backfill. Declined A trail worth following through confirmation, refreshed, resumed and verified its Left aside status while the main travel action remained available. Screenshot at 1440×778 inspected for readable objectives and scrolling. Automated peaceful traversal completes all 30 tracked records; tests also cover skipped opportunities, failed checks and nonduplicated rewards.
 
 Validation for this checkpoint: 110 automated tests pass; client/server/hosted type checks and production build pass. Existing public deployment is unchanged.
+
+### Archive side-adventure checkpoint (local, not deployed)
+
+Replaced the two Chapter II investigation checklists with Elian's passenger identity request and Sera's witness-mask request. Acceptance, cross-room evidence and alternative outcomes are validated and persistent. Healing-potion and testimony routes differ mechanically; testimony lowers the real related DC, not only narration. Added conditional named NPCs and friendly presentation. Eight later optional records remain to be deepened.
+
+116 automated tests pass, including all four new outcome routes, duplicate rejection, missing evidence, refusal, compatibility with old checklist progress, and full peaceful campaign traversal. Client/server/hosted type checks and build pass before the final NPC-friendly presentation change. These new meetings still need browser visual/playthrough validation; no deployment or duration claim is made.

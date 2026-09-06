@@ -184,3 +184,9 @@ Curated campaign constraint: each safe location offers one short rest and one lo
 The journal now tracks main objectives and optional investigations with durable completed steps and active/completed/missed/declined states. Optional objectives may be declined after confirmation without blocking the descent. Completed optional objectives award two camp rations once; existing story XP is unchanged. Failed checks do not complete objectives. Leaving the final opportunity closes an unfinished optional objective, and future arcs stay hidden until encountered.
 
 The existing compact story is mapped to 18 main quest records and 12 optional records. This is tracking coverage, not completion of EB-33's content depth: ten later optional records currently collect evidence and companion responses across rooms and still need distinct authored challenges, outcomes and pacing. The campaign remains unverified for 24-hour duration.
+
+### Drowned Archive side-adventure revision
+
+Two optional investigations now have distinct authored meetings. Elian's passenger-register request spans the Sluice Stair, Ink Garden and Bell Index; Sera's witness-mask request spans the Witness Vault, Glass Causeway and Keeper of Debts. Each requires accepting the request, investigating elsewhere, then returning to choose an outcome. One route grants three healing potions, the other authenticates testimony that reduces a related check by three. Both retain the once-only camp-ration quest reward. Refusal or leaving without the evidence does not block the main story.
+
+Eight later optional records remain investigation checklists and still require distinct content. These two additions do not establish the two-hour slice or 24-hour campaign timing gates.

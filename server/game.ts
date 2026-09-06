@@ -1,3 +1,4 @@
+import {sideActions,sideEntities,resolveSide} from './side-adventures.js';
 import {questProgress,updateQuests,questActions,declineQuest} from './quests.js';
 import {logisticsFor,logisticsActions,applyLogistics,grantLogisticsLoot} from './logistics.js';
 import {makeCharacter,restoreClassResources,classResources} from '../shared/curated-rules.js';
@@ -441,7 +442,7 @@ function approachTarget(s: Save, option: ActionOption) {
     ];
   }
 }
-export function legalActions(s:Save):ActionOption[]{const actions=baseActions(s);return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'),...logisticsActions(s),...questActions(s)]:actions;}
+export function legalActions(s:Save):ActionOption[]{const actions=baseActions(s);return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'),...logisticsActions(s),...questActions(s),...sideActions(s)]:actions;}
 function baseActions(s: Save): ActionOption[] {
   if(s.tactical&&s.mode==="combat")return tacticalActions(s);
   const a: ActionOption[] = [];
@@ -947,6 +948,7 @@ export function publicSave(s: Save): PublicSave {
     ...visible
   } = s;
   const scene=structuredClone(baseScenes[sceneId]);
+  scene.entities.push(...sideEntities(s));
   if(expeditionRoom(sceneId)&&s.mode==='explore'&&!flags[`${sceneId}:resolved`]){
     const aid=availableConsequences(sceneId,flags);
     aid.filter(c=>c.name!=='Mira').forEach((c,i)=>scene.entities.push({id:'ally:'+c.id,name:c.name,kind:'npc',modelClassId:c.effect==='healing'?'cleric':c.effect==='preparation'?'adept':'scout',position:[-4,1+i*1.5],description:c.arrival}));
@@ -1320,6 +1322,7 @@ export function applyAction(original: Save, id: string, dice: Dice): Save {
  const result=resolveAction(original,id,dice);updateQuests(result,original);return result;
 }
 function resolveAction(original: Save, id: string, dice: Dice): Save {
+  if(id.startsWith("side:"))return resolveSide(original,id);
   if(id.startsWith("quest:"))return declineQuest(original,id);
   if(original.tactical&&(id.startsWith('gear:')||id.startsWith('camp:')))return applyLogistics(original,id,dice);
   if(original.tactical&&original.mode==='combat')return applyTactical(original,id,dice);

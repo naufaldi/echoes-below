@@ -1,3 +1,4 @@
+import {sidePreparation} from './side-adventures.js';
 import type {ExpeditionId} from '../shared/campaign.js';
 
 export interface CampaignConsequence {
@@ -19,4 +20,4 @@ export const CAMPAIGN_CONSEQUENCES:CampaignConsequence[]=[
  {id:'chosen-trust',source:'archive-6',choice:0,target:'depth-5',name:'Mira',label:'Let Mira lead the anchor inspection',arrival:'Mira studies the maintenance anchors. “You trusted me on the glass causeway. I know what you need from me now: a route, not a performance.”',result:'Mira marks the load-bearing anchors and names the risks plainly. The bridge check is 3 points easier.',effect:'preparation'},
 ];
 export function availableConsequences(sceneId:string,flags:Record<string,boolean>){return CAMPAIGN_CONSEQUENCES.filter(c=>c.target===sceneId&&flags[`${c.source}:choice:${c.choice}`]&&!flags[`aid:${c.id}`]);}
-export function campaignEffects(sceneId:string,flags:Record<string,boolean>){const used=CAMPAIGN_CONSEQUENCES.filter(c=>c.target===sceneId&&flags[`aid:${c.id}`]);return {dcReduction:Math.min(3,used.some(c=>c.effect==='preparation')?3:0),fewerEnemies:used.some(c=>c.effect==='diversion')?1:0};}
+export function campaignEffects(sceneId:string,flags:Record<string,boolean>){const used=CAMPAIGN_CONSEQUENCES.filter(c=>c.target===sceneId&&flags[`aid:${c.id}`]);return {dcReduction:Math.max(sidePreparation(sceneId,flags),used.some(c=>c.effect==='preparation')?3:0),fewerEnemies:used.some(c=>c.effect==='diversion')?1:0};}

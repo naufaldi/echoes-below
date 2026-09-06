@@ -1,3 +1,4 @@
+import {SIDE_ADVENTURES} from './side-adventures.js';
 import {EXPEDITION} from '../shared/campaign.js';
 import type {QuestProgress} from '../shared/quests.js';
 import type {ActionOption} from '../shared/types.js';
@@ -37,7 +38,9 @@ export function questProgress(s:Save):QuestProgress[]{
  const current=position(s);
  return QUESTS.filter(q=>q.start<=current||s.quests?.some(old=>old.id===q.id)).map(q=>{
   const old=s.quests?.find(old=>old.id===q.id);
-  const steps=q.steps.map((task,i)=>({label:task.label,done:!!old?.steps[i]?.done||task.test(s)}));
+  const adventure=SIDE_ADVENTURES.find(a=>a.questId===q.id);
+  const tasks=adventure?[step(`Accept the request from ${adventure.name}`,flag(`side:${adventure.id}:accepted`)),step(`Investigate in ${EXPEDITION.find(r=>r.id===adventure.investigate)!.title}`,flag(`side:${adventure.id}:evidence`)),step(`Return to ${adventure.name.split(',')[0]} and choose an outcome`,flag(`side:${adventure.id}:done`))]:q.steps;
+  const steps=tasks.map(task=>({label:task.label,done:old?.status==='completed'||!!old?.steps.find(previous=>previous.label===task.label)?.done||task.test(s)}));
   let status:QuestProgress['status']=old?.status==='declined'?'declined':steps.every(task=>task.done)?'completed':(current>q.end||current===q.end&&s.mode==='complete')&&q.kind==='side'?'missed':'active';
   if(old?.status==='completed'||old?.status==='missed')status=old.status;
   return{id:q.id,title:q.title,chapter:q.chapter,kind:q.kind,status,steps,reward:q.kind==='side'?'2 camp rations · awarded once':'Story XP is awarded by discoveries and encounters.'};

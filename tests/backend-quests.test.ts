@@ -28,6 +28,6 @@ test('legacy saves retain no quest actions; old preview projections do not grant
 
 test('all quest arcs can complete through the actual peaceful campaign without duplicate story XP',()=>{
  let s=fresh();for(const id of ['tracks:hero','enter','chain:hero','ledge','scrit-talk','offer','prison','unlock','ledger','bell','negotiate','secure','continue_campaign'])s=applyAction(s,id,n=>n);
- for(const room of EXPEDITION){assert.equal(s.sceneId,room.id);for(const id of ['exp_evidence','exp_talk','exp_choice:1','exp_next'])s=applyAction(JSON.parse(JSON.stringify(s)),id,n=>n);}
+ for(const room of EXPEDITION){assert.equal(s.sceneId,room.id);const side=legalActions(s).find(a=>a.id.startsWith('side:'));if(side)s=applyAction(s,side.id,n=>n);for(const id of ['exp_evidence','exp_talk','exp_choice:1','exp_next'])s=applyAction(JSON.parse(JSON.stringify(s)),id,n=>n);}
  assert.equal(s.mode,'complete');assert.equal(s.quests?.length,30);assert.ok(s.quests?.every(q=>q.status==='completed'));assert.equal(Object.keys(s.flags).filter(k=>k.startsWith('quest-reward:')).length,12);
 });
