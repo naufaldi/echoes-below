@@ -168,3 +168,10 @@ This playthrough exposed a quest-log revision bug: quest/loot hooks run after th
 The production build now runs `scripts/verify-asset-bundle.mjs` after Vite and before worker assembly. It checks every shipped GLB/glTF, literal character/scenery model references, external buffers and image dependencies. Source and bundled files must have identical SHA-256 hashes; glTF buffers/views must fit their declared data. Remote dependencies and references outside public assets fail the gate.
 
 Local result: 45 models and 51 bundled files verified, including six external `.bin` dependencies. Detailed per-model hash, byte size, mesh/skin/clip/image counts are written to ignored `data/asset-bundle-verification.json`. The regression test omits Bookcase_2.bin and separately changes Knight.glb in temporary copies; both fail with the specific dependency/model identified. This guard proves bundle completeness and structural bounds, not rendered appearance, rig compatibility or every animation pose. Production build was checked locally; no Sites deployment occurred.
+
+
+### Local personal-key provider verification
+
+A bounded live evaluation used the existing authorized project credential through the personal-key module: six short replies generated successfully, plus a 74,496-byte speech response. Reviewed outputs maintained Mira/Oren identity, declined future-secret disclosure and declined a fabricated victory/inventory claim. The artifact is `artifacts/verification/personal-narrative-feedback.json`; no credential is included. These are Node module calls, not microphone capture or browser playback, and do not certify all generated responses.
+
+Connection checking now requires a completed provider response with usable output text before the UI may show Connected. HTTP 200 with failed/incomplete/empty/refused or unreadable data is rejected. Network failures and timeouts have actionable messages and do not retain a candidate key. Tests cover these states and existing 401/403/429 handling. No new credential configuration or deployment occurred.

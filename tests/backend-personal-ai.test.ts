@@ -11,4 +11,21 @@ test('opening narration explicitly permits zero discovery references and constra
 test('incomplete provider output has an actionable error, not a JSON parser error',async()=>{const original=globalThis.fetch;setOwnKey('test-only');globalThis.fetch=async()=>Response.json({status:'incomplete',output:[]});try{await assert.rejects(()=>ownStructured('test',{},{}),/incomplete/i);}finally{globalThis.fetch=original;setOwnKey('');}});
 test('unknown world references remain rejected',async()=>{const original=globalThis.fetch;setOwnKey('test-only');globalThis.fetch=async()=>Response.json({status:'completed',output:[{content:[{text:JSON.stringify({text:'Secret invented.',factIds:['invented']})}]}]});try{await assert.rejects(()=>ownDialogue(save(),'dm','Hello',[]),/ground/);}finally{globalThis.fetch=original;setOwnKey('');}});
 
-test('personal key check does not retain candidates and reports invalid or exhausted keys',async()=>{const {verifyOwnKey,ownKeyConfigured}=await import('../client/own-ai.js');const original=globalThis.fetch;setOwnKey('');try{for(const [status,message] of [[401,/rejected this key/],[429,/usage limit/],[403,/permission/]] as const){globalThis.fetch=async()=>new Response('',{status});await assert.rejects(()=>verifyOwnKey('test-only'),message);assert.equal(ownKeyConfigured(),false);}globalThis.fetch=async()=>Response.json({status:'completed'});await verifyOwnKey('test-only');assert.equal(ownKeyConfigured(),false);}finally{globalThis.fetch=original;setOwnKey('');}});
+test('personal key check does not retain candidates and reports invalid or exhausted keys',async()=>{const {verifyOwnKey,ownKeyConfigured}=await import('../client/own-ai.js');const original=globalThis.fetch;setOwnKey('');try{for(const [status,message] of [[401,/rejected this key/],[429,/usage limit/],[403,/permission/]] as const){globalThis.fetch=async()=>new Response('',{status});await assert.rejects(()=>verifyOwnKey('test-only'),message);assert.equal(ownKeyConfigured(),false);}globalThis.fetch=async()=>Response.json({status:'completed',output:[{content:[{type:'output_text',text:'OK'}]}]});await verifyOwnKey('test-only');assert.equal(ownKeyConfigured(),false);}finally{globalThis.fetch=original;setOwnKey('');}});
+
+test('personal key check rejects unsuccessful HTTP-200 provider results and unreadable data',async()=>{
+ const {verifyOwnKey,ownKeyConfigured}=await import('../client/own-ai.js');const original=globalThis.fetch;setOwnKey('');
+ try{
+  for(const payload of [{status:'failed'},{status:'incomplete'},{status:'completed',output:[]},{status:'completed',output:[{content:[{type:'refusal',refusal:'No'}]}]}]){
+   globalThis.fetch=async()=>Response.json(payload);await assert.rejects(()=>verifyOwnKey('test-only'));assert.equal(ownKeyConfigured(),false);
+  }
+  globalThis.fetch=async()=>new Response('not JSON');await assert.rejects(()=>verifyOwnKey('test-only'),/unreadable/i);
+ }finally{globalThis.fetch=original;setOwnKey('');}
+});
+test('personal request failures explain timeout and offline recovery without exposing credentials',async()=>{
+ const {verifyOwnKey}=await import('../client/own-ai.js');const original=globalThis.fetch;
+ try{
+  globalThis.fetch=async()=>{throw new DOMException('test-only','TimeoutError');};await assert.rejects(()=>verifyOwnKey('test-only'),/timed out/i);
+  globalThis.fetch=async()=>{throw new TypeError('test-only');};await assert.rejects(()=>verifyOwnKey('test-only'),/connection/i);
+ }finally{globalThis.fetch=original;setOwnKey('');}
+});
