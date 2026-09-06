@@ -196,3 +196,7 @@ Eight later optional records remain investigation checklists and still require d
 All ten later optional records now have authored cross-room requests instead of read-all-evidence checklists. New requests concern altered water measures, unpaid theatre workers, copied voices, evacuation counts, an erased novice name, an expired work oath, shelter access and a keeper’s parcel. Each has two outcomes with supplies or preparation consequences. Some aid choices cost a shared ration; a free alternative remains available. Preparation is not offered after its target decision has already resolved.
 
 This supplies authored content for all 12 optional records, including the two opening objectives. It does not prove sufficient variety or 24-hour duration: the later requests still share an accept/investigate/return structure and need visual playthroughs and pacing evaluation.
+
+### Exploration recovery parity
+
+Curated exploration recovery now uses class resources: Cleric Cure Wounds consumes one rank-1 slot, Fighter Second Wind is self-only and consumes its limited use, and a potion heals 2d4+2. Any conscious party member can give their potion to an injured living ally after regrouping. Downed allies can recover; dead actors cannot. Echo Rules retains its original healing rules.

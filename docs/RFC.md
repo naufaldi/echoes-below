@@ -251,3 +251,7 @@ Quest steps now preserve progress by matching their label rather than array posi
 ### Side-adventure resource and timing validation
 
 Side choices declare ration costs, potion/ration rewards and optional preparation targets. Legal actions omit unaffordable choices and preparation whose target is already resolved. Resolution validates first, then deducts pooled rations and applies the selected reward atomically with outcome flags. Generated action descriptions report exact resource effects. Twenty outcome routes are tested alongside missing-evidence and duplicate-command rejection, zero-supply free alternatives, save migration and real DC reduction. Current content has ten authored later requests; no read-all checklist remains in the active definitions for them.
+
+### Exploration healing boundary fix
+
+Browser QA exposed legacy `campheal` on a curated Fighter after combat. The curated legal-action wrapper now excludes old camp healing and personal-potion commands and delegates to `server/exploration-healing.ts`. Validation uses tactical HP, death status, class, slot and inventory state before any dice or mutation. Resolution consumes the correct resource, projects mechanics before recording presentation, and preserves existing action revision/idempotency behavior. Tests cover slot use instead of focus, Fighter self-only recovery, 2d4+2 potion healing, downed/dead targets, exhausted resources and serialized state.

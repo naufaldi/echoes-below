@@ -1,3 +1,4 @@
+import {explorationHealingActions,resolveExplorationHealing} from './exploration-healing.js';
 import {sideActions,sideEntities,resolveSide} from './side-adventures.js';
 import {questProgress,updateQuests,questActions,declineQuest} from './quests.js';
 import {logisticsFor,logisticsActions,applyLogistics,grantLogisticsLoot} from './logistics.js';
@@ -442,7 +443,7 @@ function approachTarget(s: Save, option: ActionOption) {
     ];
   }
 }
-export function legalActions(s:Save):ActionOption[]{const actions=baseActions(s);return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'),...logisticsActions(s),...questActions(s),...sideActions(s)]:actions;}
+export function legalActions(s:Save):ActionOption[]{const actions=baseActions(s);return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
 function baseActions(s: Save): ActionOption[] {
   if(s.tactical&&s.mode==="combat")return tacticalActions(s);
   const a: ActionOption[] = [];
@@ -1322,6 +1323,7 @@ export function applyAction(original: Save, id: string, dice: Dice): Save {
  const result=resolveAction(original,id,dice);updateQuests(result,original);return result;
 }
 function resolveAction(original: Save, id: string, dice: Dice): Save {
+  if(id.startsWith("recover:"))return resolveExplorationHealing(original,id,dice);
   if(id.startsWith("side:"))return resolveSide(original,id);
   if(id.startsWith("quest:"))return declineQuest(original,id);
   if(original.tactical&&(id.startsWith('gear:')||id.startsWith('camp:')))return applyLogistics(original,id,dice);
