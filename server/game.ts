@@ -1,3 +1,5 @@
+import {makeCharacter} from '../shared/curated-rules.js';
+import {initializeTactical,startTacticalCombat,tacticalActions,applyTactical} from './tactical.js';
 import {availableConsequences,campaignEffects} from './campaign-consequences.js';
 import {COMPANION_STORIES} from '../shared/companion-stories.js';
 import {EXPEDITION,expeditionRoom,expeditionScene} from "../shared/campaign.js";
@@ -37,6 +39,10 @@ export interface Save
   checkpointIds: { id: string; label: string }[];
   campaignId?: string;
   plans?: Record<string, string>;
+}
+export function assertSaveVersion(s:Save){
+ const tactical=s.rulesVersion==='curated-srd-5.2.1-v1';
+ if(s.schemaVersion!==1||s.contentVersion!=='briarwatch-1'||(!tactical&&s.rulesVersion!=='echo-v1')||tactical!==!!s.tactical||tactical&&s.party.some(a=>!s.tactical!.actors[a.id]))throw new GameError(409,'INCOMPATIBLE_SAVE','This save uses an unsupported or incomplete rules version.');
 }
 const CLASSES = {
   cleric:{hp:20,defense:13,attributes:{might:1,agility:0,insight:3,presence:2}},
@@ -316,7 +322,7 @@ export function log(
   });
   if (s.logs.length > 250) s.logs.shift();
   if (s.presentation && (rolls.length || /moves|guards|aims|runs|restores/.test(text))) {
-    s.presentation.push({mode:s.mode,turn:structuredClone(s.turn),actorId:speaker,sceneId:s.sceneId,party:structuredClone(s.party),enemies:structuredClone(s.enemies),log:structuredClone(s.logs.at(-1)!)});
+    s.presentation.push({...(s.tactical?{tactical:structuredClone(s.tactical)}:{}),mode:s.mode,turn:structuredClone(s.turn),actorId:speaker,sceneId:s.sceneId,party:structuredClone(s.party),enemies:structuredClone(s.enemies),log:structuredClone(s.logs.at(-1)!)});
   }
 }
 export function createSave(input: CreateSaveRequest): Save {
@@ -375,6 +381,7 @@ export function createSave(input: CreateSaveRequest): Save {
   s.party[0]!.raceId=input.raceId??"human";
   s.party[1]!.raceId=input.companions?.mira.raceId??"elf";s.party[2]!.raceId=input.companions?.oren.raceId??"dwarf";
   s.logs.forEach(entry=>{entry.revision=0;});
+  if(input.rulesVersion==="curated-srd-5.2.1-v1")initializeTactical(s);
   return s;
 }
 function opt(
@@ -433,6 +440,7 @@ function approachTarget(s: Save, option: ActionOption) {
   }
 }
 export function legalActions(s: Save): ActionOption[] {
+  if(s.tactical&&s.mode==="combat")return tacticalActions(s);
   const a: ActionOption[] = [];
   const h = s.party[0]!;
   const f = s.flags;
@@ -949,6 +957,7 @@ export function publicSave(s: Save): PublicSave {
     scene.description='The courier stands free beside the open gate, ready to testify about Vark and the dangerous force below. A ledger lies on the nearby desk.';
     scene.objective='Follow the courier’s testimony to the bell chamber.';
   }
+  if(s.mode==='combat')scene.entities=scene.entities.filter(e=>!['guards','vark'].includes(e.id));
   // Existing saves also retain the defeated guards, so this survives reloads without a migration.
   const guardsDefeated=flags.guardsDefeated||(sceneId==='cookfire'&&s.enemies.length>0&&s.enemies.every(e=>e.hp===0));
   if(sceneId==='cookfire'&&guardsDefeated){
@@ -979,8 +988,11 @@ function awardExperience(s:Save,key:string,amount:number){
   const gained=level-(s.level??1);
   log(s,`The party gains ${amount} XP.`, 'dm');
   if(gained>0){
-    for(const member of s.party){member.maxHp+=gained*6;member.hp=Math.min(member.maxHp,member.hp+gained*6);member.maxFocus+=gained;member.focus+=gained;}
-    log(s,`Level ${level}! Everyone gains ${gained*6} maximum health and ${gained} focus.`, 'dm');
+    for(const member of s.party){
+      if(s.tactical){const old=s.tactical.actors[member.id],next=makeCharacter(old.classId,level);const increase=next.maxHp-old.maxHp;next.hp=Math.min(next.maxHp,old.hp+increase);next.slots=next.maxSlots.map((n,i)=>Math.min(n,(old.slots[i]??0)+n-(old.maxSlots[i]??0)));next.death=old.death;next.dead=old.dead;next.concentration=old.concentration;s.tactical.actors[member.id]=next;member.hp=next.hp;member.maxHp=next.maxHp;}
+      else{member.maxHp+=gained*6;member.hp=Math.min(member.maxHp,member.hp+gained*6);member.maxFocus+=gained;member.focus+=gained;}
+    }
+    log(s,s.tactical?`Level ${level}! Your class health and spell slot capacity increase.`:`Level ${level}! Everyone gains ${gained*6} maximum health and ${gained} focus.`, 'dm');
   }
   s.level=level;
 }
@@ -1070,6 +1082,7 @@ function startCombat(s: Save, dice: Dice, advantage = false) {
     const level=s.level??1;
     s.enemies=Array.from({length:(room.enemy==='vark'?2:3)-campaignEffects(s.sceneId,s.flags).fewerEnemies},(_,i)=>({...enemy(`exp-${i}`),name:room.enemy==='vark'?(i===0?'Resonant guardian':'Bound sentry'):room.enemy==='skeleton'?'Bound skeleton':room.enemy==='slime'?'Luminous slime':room.enemy==='spider'?'Cavern spider':'Goblin defender',classId:i&&room.enemy==='vark'?'skeleton':room.enemy,hp:10+level*3+(room.enemy==='vark'&&i===0?12:0),maxHp:10+level*3+(room.enemy==='vark'&&i===0?12:0),defense:11+Math.floor(level/3),attributes:{might:2+Math.floor(level/3),agility:1,insight:0,presence:0},position:[(i-1)*2,2] as [number,number]}));
   }
+  if(s.tactical){startTacticalCombat(s,dice);return;}
   const rolls = [...s.party, ...s.enemies]
     .map((a) => {
       const r = rollD20(
@@ -1101,7 +1114,7 @@ function startCombat(s: Save, dice: Dice, advantage = false) {
 function allActors(s: Save) {
   return [...s.party, ...s.enemies];
 }
-function finishCheck(s: Save) {
+export function finishCheck(s: Save) {
   if (s.party.every((a) => a.hp === 0)) {
     s.mode = "defeat";
     s.turn = null;
@@ -1300,6 +1313,12 @@ function autoTurns(s: Save, dice: Dice, skipHero = false) {
     throw new GameError(500, "TURN_LIMIT", "Combat could not advance safely.");
 }
 export function applyAction(original: Save, id: string, dice: Dice): Save {
+  if(original.tactical&&original.mode==='combat')return applyTactical(original,id,dice);
+  const result=applyLegacyAction(original,id,dice);
+  if(result.tactical&&result.mode!=='combat')for(const actor of result.party){const c=result.tactical.actors[actor.id];if(c.dead)actor.hp=0;c.hp=actor.hp;c.maxHp=actor.maxHp;if(c.hp>0)c.death={successes:0,failures:0,stable:false};if(c.hp===0)c.concentration=null;if(id==='rest'||id==='exp_rest'||id==='continue_campaign'){c.slots=[...c.maxSlots];c.hitDice=c.level;}}
+  return result;
+}
+function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
   const s = structuredClone(original);
   s.presentation = [];
   const option = legalActions(s).find((x) => x.id === id);

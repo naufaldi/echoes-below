@@ -1,9 +1,9 @@
-import {GameError,type Save,publicSave} from '../server/game.js';
+import {GameError,type Save,publicSave,assertSaveVersion} from '../server/game.js';
 export interface Statement{bind(...values:unknown[]):Statement;first<T=Record<string,unknown>>():Promise<T|null>;all<T=Record<string,unknown>>():Promise<{results:T[]}>;run():Promise<{meta:{changes:number}}>}
 export interface Database{prepare(sql:string):Statement;batch(statements:Statement[]):Promise<unknown[]>}
 export class Store{
  constructor(public db:Database,public owner:string){}
- async read(id:string){const row=await this.db.prepare('SELECT body FROM saves WHERE id=? AND owner=?').bind(id,this.owner).first<{body:string}>();if(!row)throw new GameError(404,'NOT_FOUND','That adventure is not available on this device.');return JSON.parse(row.body) as Save;}
+ async read(id:string){const row=await this.db.prepare('SELECT body FROM saves WHERE id=? AND owner=?').bind(id,this.owner).first<{body:string}>();if(!row)throw new GameError(404,'NOT_FOUND','That adventure is not available on this device.');const save=JSON.parse(row.body) as Save;assertSaveVersion(save);return save;}
  async create(s:Save){const checkpointId=crypto.randomUUID();s.checkpointIds.push({id:checkpointId,label:publicSave(s).scene.title});await this.db.batch([this.db.prepare('INSERT INTO saves(id,owner,revision,body,updated_at) VALUES(?,?,?,?,?)').bind(s.id,this.owner,s.revision,JSON.stringify(s),s.updatedAt),this.db.prepare('INSERT INTO checkpoints(id,owner,save_id,body) VALUES(?,?,?,?)').bind(checkpointId,this.owner,s.id,JSON.stringify(s))]);return publicSave(s);}
  async duplicate(id:string,hash:string){const row=await this.db.prepare('SELECT hash,result FROM commands WHERE owner=? AND id=?').bind(this.owner,id).first<{hash:string;result:string}>();if(!row)return null;if(row.hash!==hash)throw new GameError(409,'COMMAND_REUSED','This action identifier already belongs to another request.');return JSON.parse(row.result);}
  async commit(before:Save,after:Save,commandId:string,hash:string){

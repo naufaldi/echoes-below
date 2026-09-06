@@ -2,6 +2,7 @@
  * This module is isolated from echo-v1. Combat/content adapters must opt in explicitly.
  */
 export const CURATED_RULES_VERSION='curated-srd-5.2.1-v1' as const;
+export const CURATED_CLASS_IDS={guardian:'fighter',scout:'rogue',adept:'wizard',cleric:'cleric'} as const;
 export type CuratedClass='fighter'|'rogue'|'wizard'|'cleric';
 export type Ability='strength'|'dexterity'|'constitution'|'intelligence'|'wisdom'|'charisma';
 export type Abilities=Record<Ability,number>;

@@ -55,6 +55,7 @@ export interface GameLog {
   rolls: Roll[];
 }
 export interface PresentationFrame {
+  tactical?: import("./tactical-state.js").TacticalState;
   mode?: Mode;
   turn?: PublicSave["turn"];
   actorId: string;
@@ -100,7 +101,8 @@ export interface PublicSave {
   name: string;
   revision: number;
   schemaVersion: 1;
-  rulesVersion: "echo-v1";
+  rulesVersion: "echo-v1" | "curated-srd-5.2.1-v1";
+  tactical?: import("./tactical-state.js").TacticalState;
   contentVersion: "briarwatch-1";
   mode: Mode;
   scene: Scene;
@@ -126,6 +128,7 @@ export interface PublicSave {
 }
 export interface CompanionSetup {classId:ClassId;raceId:RaceId;appearanceId:'ember'|'moss'|'moon';}
 export interface CreateSaveRequest {
+  rulesVersion?: "echo-v1" | "curated-srd-5.2.1-v1";
   companions?: {mira:CompanionSetup;oren:CompanionSetup};
   raceId?: RaceId;
   name: string;

@@ -2,7 +2,7 @@ import { DatabaseSync } from "node:sqlite";
 import { randomUUID, createHash } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
-import { GameError, publicSave, type Save } from "./game.js";
+import { GameError, publicSave, assertSaveVersion, type Save } from "./game.js";
 import type { PublicSave, Preview, Dialogue } from "../shared/types.js";
 export class Storage {
   db: DatabaseSync;
@@ -51,16 +51,7 @@ export class Storage {
       .get(id);
     if (!row) throw new GameError(404, "NOT_FOUND", "Save not found.");
     const s = JSON.parse(row.snapshot as string) as Save;
-    if (
-      s.schemaVersion !== 1 ||
-      s.rulesVersion !== "echo-v1" ||
-      s.contentVersion !== "briarwatch-1"
-    )
-      throw new GameError(
-        409,
-        "INCOMPATIBLE_SAVE",
-        "This save uses an unsupported rules or content version.",
-      );
+    assertSaveVersion(s);
     return s;
   }
   put(s: Save) {

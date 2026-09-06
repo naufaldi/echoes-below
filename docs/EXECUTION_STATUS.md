@@ -23,3 +23,13 @@ Implemented locally: central collision/HUD-aware labels; selected target and dup
 B foundation added as isolated tested modules: tactical-grid for paths/terrain/LOS/area targets and curated-rules for stat/slot initialization, action resources, HP/concentration/death saves. They are not wired into gameplay yet. SRD notice added. Existing echo-v1 engine and persisted saves remain unchanged.
 
 Next: finish A's full-scene/viewport/name/animation audit, then introduce explicit new-campaign rules routing and persistent curated state; wire tactical previews/resolution; implement class actions, companion priorities/takeover, quests/inventory/camp and slice. C/D/E are still outstanding. Human duration validation remains a later external acceptance requirement, not a reason to stop independent implementation.
+
+## Tactical integration checkpoint
+
+Previous goal turn classified as progress: committed asset/label changes and verified browser recovery. This continuation connects curated state to the actual creation API, save reads, combat dispatch, UI controls and presentation snapshots.
+
+New campaigns can explicitly choose Curated tactics development preview. Echo Rules remains the default while missing mechanics are built. Curated save reads now validate the rule discriminator consistently in local SQLite and hosted D1. Legacy default creation remains unchanged. The preview supports persisted per-actor HP/AC, grid positions, legal movement costs, attacks, Dodge, potion/Cure Wounds, death saves, individual automatic decisions, companion directives and one-turn takeover before the automatic turn starts. Exploration uses the existing authored adventure through an explicit projection boundary; this is not yet a full SRD exploration adapter.
+
+Browser evidence: created Tactical Browser QA, resumed the same saved campaign after server restart, traversed the hall by the side ledge, entered goblin combat, viewed initiative dice, took over Mira, previewed/committed a5ft move, observed25ft remaining, and resolved a ranged miss with visible d20. Screenshots are attached in the task. Browser testing exposed two corrected integration gaps: travel actions were accidentally filtered out by combat movement UI, and local storage rejected the new rulesVersion. A further playback test verifies resolved position/resources instead of prior state.
+
+Still required before B/C acceptance: subclass features and level-up choices, full spell/condition/reaction mechanics, equipment/camp/quest systems, explicit exploration checks/saves, real scene collision data and waypoint animation, trained AI proposals, additional viewport/asset checks, and a measured two-hour slice. No full-campaign or deployment completion is claimed.

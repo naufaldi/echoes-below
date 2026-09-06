@@ -24,7 +24,7 @@ export function TurnPlayback({before,after,reduced,onFrame,onDone}:{before:Publi
   const turn=frame.turn??after.turn??before.turn;
   const visible={...room,mode:frame.mode??room.mode,actions:[],party:previous?.party??before.party,enemies:previous?.enemies.length?previous.enemies:frame.enemies,logs:before.logs,turn:turn?{...turn,actorId:frame.actorId}:null};
   show.current(visible);
-  const t=setTimeout(()=>{setRevealed(true);show.current({...visible,party:frame.party,enemies:frame.enemies,logs:[...before.logs,frame.log]});},reduced?100:frame.log.rolls.length?1250:300);
+  const t=setTimeout(()=>{setRevealed(true);show.current({...visible,tactical:frame.tactical??visible.tactical,party:frame.party,enemies:frame.enemies,logs:[...before.logs,frame.log]});},reduced?100:frame.log.rolls.length?1250:300);
   return()=>clearTimeout(t);
  },[index,frame,before,after,reduced,frames]);
  if(!frame)return null;
