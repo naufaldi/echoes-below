@@ -271,3 +271,9 @@ Fixed impossible active objectives caused by main quests never expiring, generic
 - 257 automated tests pass. Client/server/hosted type checks and production build pass; asset gate verifies 45 models / 51 files.
 - Local Chrome `Help Visual QA` controlled battle: hero spent main action on Help against adjacent Goblin guard; Oren acted automatically next. Dice presentation displayed Attack · Help, [10,17] -> 17 + 5 = 22, then 8 damage. Help status disappeared after consumption. This fixture uses raised HP and is not balance evidence.
 - Rules source checked: official SRD 5.2.1 Help action, printed page 183. PRD/RFC updated. No deployment or paid AI use. Full campaign duration and remaining release gates stay open.
+
+### Local checkpoint: Ink Garden expanded and played
+- Added a four-step preparation route with apprentice dialogue and visible lantern/reed changes. Completing preparation allows a deliberate rescue without destroying surviving pages or rerolling a failed attempt. Existing later testimony remains reachable.
+- 260 automated tests pass; client/server/hosted type checks and production build pass. Bundle verification covers 45 models and 51 files.
+- Local Chrome controlled `Ink Garden QA`: read both clues, fitted sleeves, repaired wick, and committed the prepared departure. Inspected before/prepared/after screenshots: apprentice and steady lantern visible before commitment, absent after departure; protected reeds remain. Final XP 125 from existing decision and room rewards; preparation XP zero. Not a full chapter or duration playtest.
+- No deployment or paid AI calls. Remaining work includes wider chapter depth, complete rules/visual sweeps and human duration evidence.

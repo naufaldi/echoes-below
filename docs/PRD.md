@@ -409,3 +409,6 @@ Curated adventures use a wider triangular formation at creation, room arrival, a
 
 ### Local checkpoint: Help in tactical combat
 Every conscious combatant with a main action may distract a visible enemy within 5 feet using Help. The next ally attack roll against that enemy gains advantage; the helper cannot consume their own benefit. Benefits expire at the helper’s next initiative slot, survive save/resume, and never stack extra dice. The UI identifies the distracted target and expiry; assisted attack playback names Help. Companion proposals and takeover expose the same legal action. This checkpoint covers attack assistance, not skill/tool assistance during exploration.
+
+### Local checkpoint: Ink Garden preparation
+The curated Ink Garden adds an apprentice NPC, living-page reeds and a lantern. Inspecting the lantern and hearing the apprentice unlocks protective sleeves; adjusting the wick then opens a prepared departure with the apprentice and surviving pages. Preparation is optional, grants no XP, persists through saves, and can recover a failed initial attempt. The final choice grants existing encounter rewards once and preserves the apprentice’s later contract testimony. Unprepared choices retain their authored consequences.
