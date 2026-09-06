@@ -286,3 +286,8 @@ The narrative passage can receive keyboard focus for native scrolling. Long pass
 ### Action presentation hierarchy
 
 Non-roll movement and action results use a compact panel below the visible board; dice retain the central presentation. The previous narration is hidden while this panel is active, and duplicate busy status is suppressed. The last-roll summary belongs inside the scrolling party panel so it cannot overlap companion controls. Playback still advances one committed action at a time and supports skipping without changing outcomes.
+
+
+### Dice shape accuracy
+
+D4, D6, D8, D10, D12 and D20 presentation uses a corresponding polyhedron. Geometry and animation remain decorative; the saved numeric result is authoritative. D10 no longer reuses the twenty-sided silhouette.

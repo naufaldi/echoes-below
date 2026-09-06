@@ -1,13 +1,14 @@
-import {useEffect,useRef,useState} from 'react';
+import {createDieGeometry} from './die-geometry';
+import {useEffect,useMemo,useRef,useState} from 'react';
 import {Canvas,useFrame} from '@react-three/fiber';
 import {Edges} from '@react-three/drei';
 import type {Mesh} from 'three';
 import type {PublicSave} from '../shared/types';
 
 function Die({rolling,sides}:{rolling:boolean;sides:number}) {
- const mesh=useRef<Mesh>(null);
+ const mesh=useRef<Mesh>(null);const geometry=useMemo(()=>createDieGeometry(sides),[sides]);useEffect(()=>()=>geometry.dispose(),[geometry]);
  useFrame((_,delta)=>{if(!mesh.current)return;if(rolling){mesh.current.rotation.x+=delta*7;mesh.current.rotation.y+=delta*9;}else {mesh.current.rotation.x*=Math.exp(-delta*9);mesh.current.rotation.y*=Math.exp(-delta*9);}});
- return <mesh ref={mesh}>{sides===6?<boxGeometry args={[2,2,2]}/>:sides===4?<tetrahedronGeometry args={[1.55,0]}/>:sides===8?<octahedronGeometry args={[1.55,0]}/>:<icosahedronGeometry args={[1.55,0]}/>}<meshStandardMaterial color="#173a34" metalness={.75} roughness={.23}/><Edges color="#efcb7d"/></mesh>;
+ return <mesh ref={mesh} geometry={geometry}><meshStandardMaterial color="#173a34" metalness={.75} roughness={.23}/><Edges color="#efcb7d"/></mesh>;
 }
 
 /** Presentation never rolls dice or writes game state. Its frames are committed server outcomes. */

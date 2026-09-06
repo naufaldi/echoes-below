@@ -69,3 +69,6 @@ Current local browser save Label QA has reached the Vark battle after a failed p
 
 
 Local Label QA completed the Vark combat route and opening ending, then reached Chapter II’s Sluice Stair at 725 XP. Non-roll playback and last-roll overlap fixes are local and visually verified. The current browser remains available for the continuing chapter playthrough. Target two-hour/24-hour duration remains unproven; no Sites deployment.
+
+
+Local dice presentation now distinguishes D10 and D12 rather than using the D20 fallback. Geometry regression checks pass, including ten coplanar D10 faces. This fixes the shape issue recorded during Second Wind QA; fresh browser D10 playback is still pending. No deployment performed.

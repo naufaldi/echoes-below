@@ -347,3 +347,8 @@ Optional `Logistics.shortRestScene` identifies an active rest window. `camp:shor
 ### Local playback layout correction
 
 CSS targets `.turn-playback:not(.with-roll)` for the bottom result panel, retains existing focus containment and committed-frame logic, and hides the older narration beneath it. App suppresses its busy toast during playback. Last-roll markup moved into the party sidebar with static positioning, retaining responsive scrolling. No rules, save format or provider behavior changed. Rendered local screenshots verified movement visibility and removal of the sidebar overlap.
+
+
+### Dice geometry
+
+`client/die-geometry.ts` centralizes the existing Three.js primitive choices and adds D12’s dodecahedron plus a D10 pentagonal trapezohedron constructed as ten planar kite faces. The alternating ring height is derived from the pole height and cos(pi/5) so each kite triangulates coplanarly. Outward triangle orientation is verified; geometry is memoized by side count and disposed on replacement/unmount. Two tests count distinct outward face planes for all supported dice and verify D10’s closed triangulated surface and twelve vertices. The old mapping was observed to fail with 20 planes for D10. Reference: [Wolfram MathWorld trapezohedron](https://mathworld.wolfram.com/Trapezohedron.html). Browser inspection of a new D10 roll remains pending.
