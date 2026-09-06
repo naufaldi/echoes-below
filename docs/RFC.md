@@ -482,3 +482,6 @@ Verified against [SRD 5.2.1, Help, printed page 183](https://media.dndbeyond.com
 
 ### Local checkpoint: Ink Garden state and rendering
 `server/ink-garden.ts` owns legal `ink:*` preparation actions and visible projection. Four once-only flags track inspection, conversation, sleeves and wick repair. `inkPrepared` integrates with existing expedition-choice legality and resolution to bypass the check and select `INK_RESCUE`; completion still uses existing quest/reward hooks. `Scene.inkGarden` exposes sleeves, readiness, departure and lantern transfer. The client renders procedural reeds, clay sleeves, wick/hood and light, alongside the existing verified adept model for the apprentice. Final projection removes the departed NPC and carried lantern. Legacy saves do not receive this curated route.
+
+### Correction: NPC body protection
+NPC characters previously received `preview`, which suppressed both duplicate character labels and body-volume registration. `CharacterModel.labelMode` now separates `actor` (party/enemy character label), `entity` (NPC uses its entity marker but registers body protection), and `none` (creation preview). Extra cookfire guards use entity mode too. This corrects the earlier assumption that all rendered NPCs were already protected by the silhouette registry.

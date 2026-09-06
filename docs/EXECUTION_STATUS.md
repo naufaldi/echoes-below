@@ -277,3 +277,9 @@ Fixed impossible active objectives caused by main quests never expiring, generic
 - 260 automated tests pass; client/server/hosted type checks and production build pass. Bundle verification covers 45 models and 51 files.
 - Local Chrome controlled `Ink Garden QA`: read both clues, fitted sleeves, repaired wick, and committed the prepared departure. Inspected before/prepared/after screenshots: apprentice and steady lantern visible before commitment, absent after departure; protected reeds remain. Final XP 125 from existing decision and room rewards; preparation XP zero. Not a full chapter or duration playtest.
 - No deployment or paid AI calls. Remaining work includes wider chapter depth, complete rules/visual sweeps and human duration evidence.
+
+### Local checkpoint: NPC label protection verified
+- Fixed a wiring gap: NPC preview mode disabled body protection. Explicit label modes now keep NPC silhouettes registered without adding duplicate labels. Creation preview remains label-free.
+- Seven label-layout regression tests pass; client type check and production build pass. Asset build gate verifies 45 models / 51 files. Full backend suite last passed at 260 before this client-only change; it was not rerun for this checkpoint.
+- Local Chrome `NPC Label QA`: inspected apprentice unselected and selected. One entity label remains beside the body with a leader line; selecting it shows the three applicable actions and no duplicate HP label.
+- No deployment or paid AI calls. Campaign completion and duration gates remain open.
