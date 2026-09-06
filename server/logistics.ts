@@ -16,7 +16,8 @@ export function logisticsActions(s:Save):ActionOption[]{
   if(usedCopies(l,item,a.id)<l.owned[item])actions.push(option(`gear:equip:${a.id}:${item}`,`Equip ${definition.name} · ${a.name}`,'inventory',`Equip ${definition.name}. Armor class updates immediately; the item stays in the party’s shared inventory.`,a.id));
  }}
  if(safeCamp(s)){
-  if(!l.shortRests.includes(s.sceneId))actions.push(option('camp:short','Take a short rest','camp','One hour at this cleared campsite. Injured conscious allies spend one Hit Die. Fighters recover one Second Wind and Action Surge; Wizards can recover a limited number of spell slots once per long rest.'));
+  if(l.shortRestScene===s.sceneId)for(const a of s.party){const c=s.tactical.actors[a.id];if(!c.dead&&c.hp>0&&c.hp<c.maxHp&&c.hitDice>0)actions.push(option(`camp:hitdie:${a.id}`,`Spend another Hit Die · ${a.name}`,'camp',`Continue this short rest: spend one d${c.hitDie} + Constitution modifier to heal ${a.name}. ${c.hitDice} Hit Dice remain. No additional class recovery. Other actions end this rest window.`,a.id));}
+  if(!l.shortRests.includes(s.sceneId))actions.push(option('camp:short','Take a short rest','camp','One hour at this cleared campsite. Injured conscious allies spend one Hit Die, then may spend more before resuming exploration. Fighters recover one Second Wind and Action Surge; Wizards can recover a limited number of spell slots once per long rest.'));
   const living=s.party.filter(a=>!s.tactical!.actors[a.id].dead).length;
   if(!l.longRests.includes(s.sceneId)&&s.party.reduce((n,a)=>n+a.rations,0)>=living)actions.push(option('camp:long','Share supplies and take a long rest','camp',`Eight hours at this cleared campsite. Spend ${living} rations. Living allies regain health, spell slots, Hit Dice and class resources. Available once at this campsite.`));
  }
@@ -29,8 +30,10 @@ export function grantLogisticsLoot(s:Save,previous:Save){if(!s.tactical)return;s
 export function applyLogistics(original:Save,id:string,dice:Dice):Save{
  if(!logisticsActions(original).some(a=>a.id===id))throw new GameError(422,'LOGISTICS','That equipment change or rest is unavailable.');const s=structuredClone(original);s.logistics??=logisticsFor(s);s.presentation=[];const l=s.logistics,t=s.tactical!;
  if(id.startsWith('gear:')){const [,verb,actor,item]=id.split(':');const e=l.equipped[actor];if(item==='shield')e.shield=verb==='equip';else if(item==='ward_cloak')e.cloak=verb==='equip';else e.armor=item as typeof e.armor;updateArmor(s);projectTactical(s,false);log(s,`${s.party.find(a=>a.id===actor)!.name} ${verb==='equip'?'equips':'removes'} ${ITEMS[item as ItemId].name}. Armor class is now ${t.actors[actor].armorClass}.`,actor);}
- else if(id==='camp:short'){
-  l.shortRests.push(s.sceneId);s.ticks++;
+ else if(id.startsWith('camp:hitdie:')){
+  const actorId=id.split(':')[2],c=t.actors[actorId],a=s.party.find(a=>a.id===actorId)!;const r=damageRoll(dice,c.hitDie,modifier(c.abilities.constitution),'Short rest · Hit Die');t.actors[actorId]=heal(c,Math.max(1,r.total));t.actors[actorId].hitDice--;projectTactical(s,false);log(s,`${a.name} spends another Hit Die during the same rest to restore up to ${Math.max(1,r.total)} health.`,actorId,[r]);
+ }else if(id==='camp:short'){
+  l.shortRestScene=s.sceneId;l.shortRests.push(s.sceneId);s.ticks++;
   for(const a of s.party){let c=t.actors[a.id];if(c.dead||c.hp<=0)continue;
    if(c.hitDice>0&&c.hp<c.maxHp){const r=damageRoll(dice,c.hitDie,modifier(c.abilities.constitution),'Short rest · Hit Die');c=heal(c,Math.max(1,r.total));c.hitDice--;t.actors[a.id]=c;projectTactical(s,false);log(s,`${a.name} spends a Hit Die to restore up to ${Math.max(1,r.total)} health.`,a.id,[r]);}
    const f=classResources(c);if(c.classId==='fighter')c.features={...f,secondWind:Math.min(c.level>=4?3:2,f.secondWind+1),actionSurge:c.level>=2?1:0};

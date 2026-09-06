@@ -266,3 +266,8 @@ Acceptance: choices persist through reload and later levels; repeat or forged re
 ### Vark’s optional accountability dialogue
 
 Before the opening confrontation, curated parties can ask Vark why he imprisoned the courier and how to transfer the ward safely. Each authored answer is saved as an observed statement. After both questions, a party that freed the courier and learned Scrit’s explanation can confront Vark with those accounts. This reduces the existing final negotiation from DC16 to DC13. It does not complete the transfer; a failed final check still begins combat. Asking questions is optional, consumes no dice and awards no XP. Existing direct combat and negotiation routes remain available.
+
+
+### Additional short-rest healing
+
+After the existing first Hit Die is spent during short rest, injured conscious members can choose additional Hit Dice one at a time. All rolls belong to the same one-hour rest, do not repeat class recovery, and stop at full health or no Hit Dice. The window persists through reload and closes when the party performs any other game action. Inventory & camp and the contextual action list expose the choices.

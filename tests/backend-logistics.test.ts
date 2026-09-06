@@ -1,4 +1,6 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import {createSave,applyAction,legalActions,publicSave} from '../server/game.js';import {CURATED_RULES_VERSION,classResources} from '../shared/curated-rules.js';
+import {makeCharacter} from '../shared/curated-rules.js';
+import {projectTactical} from '../server/tactical.js';
 const fresh=()=>createSave({name:'Camp QA',classId:'guardian',backgroundId:'delver',appearanceId:'ember',rulesVersion:CURATED_RULES_VERSION});
 test('equipment changes armor class and cannot duplicate the same owned item',()=>{let s=fresh();s=applyAction(s,'gear:equip:hero:robes',n=>n);assert.equal(s.party[0].defense,13);assert.equal(s.party[0].hp,12);assert.ok(!legalActions(s).some(a=>a.id==='gear:equip:mira:chain'));assert.deepEqual(publicSave(JSON.parse(JSON.stringify(s))),publicSave(s));});
 test('short rest spends hit dice, restores class resource once and cannot repeat',()=>{let s=fresh();s.party[0].hp=s.tactical!.actors.hero.hp=1;s.tactical!.actors.hero.features={...classResources(s.tactical!.actors.hero),secondWind:0};s=applyAction(s,'camp:short',n=>n);assert.equal(s.tactical!.actors.hero.hitDice,0);assert.equal(s.party[0].hp,12);assert.equal(classResources(s.tactical!.actors.hero).secondWind,1);assert.throws(()=>applyAction(s,'camp:short',n=>n));});
@@ -8,3 +10,23 @@ test('uncleared rooms and combat cannot offer camp or equipment actions',()=>{le
 
 test('a unique cloak must return to the pack before another companion can equip it',()=>{let s=fresh();s=applyAction(s,legalActions(s).find(a=>a.label==='Search the forgotten chest')!.id,n=>n);s=applyAction(s,'gear:equip:hero:ward_cloak',n=>n);assert.throws(()=>applyAction(s,'gear:equip:mira:ward_cloak',n=>n));s=applyAction(s,'gear:remove:hero:ward_cloak',n=>n);s=applyAction(s,'gear:equip:mira:ward_cloak',n=>n);assert.equal(s.party[0].defense,18);assert.equal(s.party[1].defense,15);assert.equal(s.logistics!.owned.ward_cloak,1);});
 test('Arcane Recovery is limited across camps and refreshed only by long rest',()=>{let s=createSave({name:'Wizard camp QA',classId:'adept',backgroundId:'delver',appearanceId:'ember',rulesVersion:CURATED_RULES_VERSION});s.tactical!.actors.hero.slots[0]=0;s=applyAction(s,'camp:short',n=>n);assert.equal(s.tactical!.actors.hero.slots[0],1);s.sceneId='aftermath';s=applyAction(s,'camp:short',n=>n);assert.equal(s.tactical!.actors.hero.slots[0],1);s=applyAction(s,'camp:long',n=>n);assert.equal(s.tactical!.actors.hero.slots[0],2);assert.deepEqual(s.logistics!.arcaneRecovery,[]);});
+test('additional Hit Dice can be chosen during the same rest without repeating class recovery',()=>{
+ let s=fresh();s.tactical!.actors.hero=makeCharacter('fighter',4);s.tactical!.actors.hero.hp=1;s.tactical!.actors.hero.features={...classResources(s.tactical!.actors.hero),secondWind:0};projectTactical(s,false);
+ s=applyAction(s,'camp:short',()=>1);assert.equal(s.party[0].hp,4);const ticks=s.ticks;
+ s=JSON.parse(JSON.stringify(s));s=applyAction(s,'camp:hitdie:hero',()=>1);
+ assert.equal(s.party[0].hp,7);assert.equal(s.tactical!.actors.hero.hitDice,2);assert.equal(s.ticks,ticks);assert.equal(classResources(s.tactical!.actors.hero).secondWind,1);
+ s=applyAction(s,'camp:hitdie:hero',()=>1);s=applyAction(s,'camp:hitdie:hero',()=>1);assert.equal(s.tactical!.actors.hero.hitDice,0);
+ assert.throws(()=>applyAction(s,'camp:hitdie:hero',()=>1));
+});
+test('resuming exploration closes the short-rest window and prevents delayed Hit Die spending',()=>{
+ let s=fresh();s.tactical!.actors.hero=makeCharacter('fighter',4);s.tactical!.actors.hero.hp=1;projectTactical(s,false);
+ s=applyAction(s,'camp:short',()=>1);assert.ok(legalActions(s).some(a=>a.id==='camp:hitdie:hero'));
+ s=applyAction(s,'loot_cache',()=>1);assert.ok(!legalActions(s).some(a=>a.id==='camp:hitdie:hero'));
+ assert.throws(()=>applyAction(s,'camp:hitdie:hero',()=>1));
+});
+test('full-health, downed and dead members cannot spend optional Hit Dice',()=>{
+ let s=fresh();s=applyAction(s,'camp:short',()=>1);
+ assert.ok(!legalActions(s).some(a=>a.id.startsWith('camp:hitdie:')));
+ s.tactical!.actors.mira.hp=0;s.tactical!.actors.oren.dead=true;s.tactical!.actors.oren.hp=0;
+ assert.throws(()=>applyAction(s,'camp:hitdie:mira',()=>1));assert.throws(()=>applyAction(s,'camp:hitdie:oren',()=>1));
+});

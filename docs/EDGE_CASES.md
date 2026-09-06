@@ -68,3 +68,8 @@ Verified by `tests/backend-advancement.test.ts`. Visual/keyboard validation of t
 - Prepared final negotiation: apply DC13 to the actual check; unprepared remains DC16. Failure still starts combat.
 
 Covered by `tests/backend-vark-parley.test.ts`; browser presentation remains pending.
+
+
+### Short-rest continuation
+
+Covered by logistics regression tests: reload within a rest; spend remaining dice to zero; do not repeat Second Wind recovery; retain the same elapsed rest time; stop at full health; reject downed/dead members; end the window on resumed exploration. Browser checks remain pending.

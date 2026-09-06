@@ -327,3 +327,8 @@ Rules references verified 2026-09-06: [official Ability Score Improvement feat](
 ### Vark parley boundary
 
 `server/vark-parley.ts` owns once-only `parley:prisoner`, `parley:ward` and `parley:evidence` actions. They require the bell scene, curated exploration, a conscious hero and no active companion story. Evidence additionally requires saved rescue/seal-knowledge flags and both preceding questions. Exact legal IDs are validated before cloning; each action appends a grounded public fact and authored Vark log, sets its flag and increments revision. No XP or provider call occurs. Shared `parleyDC` supplies both displayed and resolved negotiation difficulty. Legacy difficulty remains 16. Regression tests demonstrate that a roll which fails unprepared succeeds after evidence, plus serialization, repetition, missing proof and invalid-state handling. No additional asset or animation is implied by the exchange.
+
+
+### Short-rest continuation
+
+Optional `Logistics.shortRestScene` identifies an active rest window. `camp:short` opens it; `camp:hitdie:<actor>` validates the same safe scene and a living, injured, conscious member with remaining Hit Dice. Each choice heals once, spends one die, logs the resolved roll and increments revision, with no extra tick or class recovery. `applyAction` closes the window after any other successfully resolved action; rejected requests do not close or mutate it. Existing request deduplication applies. Older saves without the optional field have no active rest window. Tests cover serialization, depletion, class-recovery isolation, exploration interruption and ineligible members.

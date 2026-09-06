@@ -1338,7 +1338,7 @@ function autoTurns(s: Save, dice: Dice, skipHero = false) {
     throw new GameError(500, "TURN_LIMIT", "Combat could not advance safely.");
 }
 export function applyAction(original: Save, id: string, dice: Dice): Save {
- const result=resolveAction(original,id,dice);updateQuests(result,original);return result;
+ const result=resolveAction(original,id,dice);if(result.logistics&&id!=='camp:short'&&!id.startsWith('camp:hitdie:'))delete result.logistics.shortRestScene;updateQuests(result,original);return result;
 }
 function resolveAction(original: Save, id: string, dice: Dice): Save {
   if(id.startsWith("parley:"))return resolveParley(original,id);

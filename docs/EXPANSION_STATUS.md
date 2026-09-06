@@ -51,3 +51,10 @@ Implemented local player-selected ability improvements for all three party membe
 `scripts/audit-campaign-progression.ts` traverses all 40 expansion rooms with each curated hero class using only legal actions, maximum dice and a peaceful main route; every action is serialized and reloaded. No XP, levels or resources are injected. All four runs reach level 8 and retain all eligible ability improvements. Evidence: `docs/CAMPAIGN_PROGRESSION.json`. On this route level 8 arrives only after depth-8’s final decision. This is a pacing limitation, not evidence of a balanced combat campaign or 24-hour duration.
 
 Added optional Vark questions and an evidence-backed DC reduction with saved facts and no repeat rewards. The new content is local pending browser verification and publication. Mac remains locked on the current verification attempt. Public version 12 is still the last verified release.
+
+
+### Local development policy and rest continuation
+
+User steering: develop and verify locally; do not repeatedly deploy Sites. Publish only after the repair work is finished and verified. The current public release remains version 12. Local development uses Vite at http://127.0.0.1:5173 with the watched API at http://127.0.0.1:4317. Added optional additional Hit Dice within a persisted short-rest window, without repeated class recovery.
+
+Verification: all 179 backend tests and all three typechecks pass. Live local Vite proxy returned successful creation, short rest, travel to hall and save reload at revision 2. This is HTTP integration evidence, not browser visual evidence. No Sites deployment performed.
