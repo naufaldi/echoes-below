@@ -405,3 +405,12 @@ Local result: 45 models and 51 bundled files verified, including six external `.
 A bounded live evaluation used the existing authorized project credential through the personal-key module: six short replies generated successfully, plus a 74,496-byte speech response. Reviewed outputs maintained Mira/Oren identity, declined future-secret disclosure and declined a fabricated victory/inventory claim. The artifact is `artifacts/verification/personal-narrative-feedback.json`; no credential is included. These are Node module calls, not microphone capture or browser playback, and do not certify all generated responses.
 
 Connection checking now requires a completed provider response with usable output text before the UI may show Connected. HTTP 200 with failed/incomplete/empty/refused or unreadable data is rejected. Network failures and timeouts have actionable messages and do not retain a candidate key. Tests cover these states and existing 401/403/429 handling. No new credential configuration or deployment occurred.
+
+
+### Local browser voice checkpoint
+
+On the Scrit QA adventure, selected the existing local shared allowance with automatic speech enabled. Let the DM narrate returned a grounded recap of the ration/key exchange. The browser exposed Stop; Stop returned to Listen. Listen replayed the saved narration and later returned to Listen without an error. No microphone input was captured, and subjective voice quality was not assessed. This is local sponsored-path browser evidence, distinct from the personal-key module evaluation.
+
+Settings showed $0.1204 of local budget accounting after this test. Local speech uses a conservative $0.12 reservation, so the UI now explicitly labels the total as estimated budget accounted, not actual OpenAI billing. Usage refreshes when settings opens or speech changes state, with stale responses discarded after changing adventures. Public deployment remains unchanged.
+
+Free-mode transition QA also exposed a stale enabled Listen control. Narration and journal replay controls now disable when AI is unavailable, with settings guidance; the generated text remains readable. The local browser confirmed Voice unavailable after switching back to free story mode. Client type checking passed.
