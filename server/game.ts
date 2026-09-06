@@ -954,6 +954,13 @@ export function publicSave(s: Save): PublicSave {
     ...visible
   } = s;
   const scene=structuredClone(baseScenes[sceneId]);
+  if(sceneId==='hall'){
+    const locked=!!flags['counterweight:solved'];
+    scene.counterweight={pawlReleased:locked||!!flags['counterweight:pawl'],weightSeated:locked||!!flags['counterweight:weight'],locked};
+    const chain=scene.entities.find(e=>e.id==='chain')!;
+    chain.name=locked?'Counterweight · secured':scene.counterweight.weightSeated?'Counterweight · weight seated':scene.counterweight.pawlReleased?'Counterweight · pawl released':'Counterweight controls';
+    if(flags.trapSpent){const floor=scene.entities.find(e=>e.id==='floor')!;floor.name='Safe floor';floor.description='The pressure-plate mechanism is spent and cannot fire again.';}
+  }
   scene.entities.push(...sideEntities(s));
   if(expeditionRoom(sceneId)&&s.mode==='explore'&&!flags[`${sceneId}:resolved`]){
     const aid=availableConsequences(sceneId,flags);

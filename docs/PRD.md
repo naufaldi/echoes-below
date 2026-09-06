@@ -239,3 +239,8 @@ After any successful rescue route, the courier’s label becomes Rescued courier
 ### Counterweight maintenance puzzle
 
 Counterweight Hall now offers an optional deterministic maintenance puzzle: read a keeper’s plate, release the pawl, seat the weight, then lock the pin. Visible feedback describes every intermediate state. A wrong order resets progress and raises the existing alarm; safe reset and alternate crossing remain available. Solving disables the trap and discovers the maintenance entrance. No new mandatory gate is added to existing campaigns. This increases interaction depth but does not establish a two-hour duration.
+
+
+### Counterweight visual feedback
+
+The public scene now projects only observable pawl, weight and lock states. A local 3D mechanism uses those states for lever rotation, counterweight height and pin position, with immediate placement under reduced motion. Clicking the model focuses the existing chain target. Labels describe each stage and identify a spent floor mechanism. The old decorative hanging weights are removed. Local browser QA completed read → pawl → weight → reload → pin; state and labels persisted. No new downloaded assets are required.

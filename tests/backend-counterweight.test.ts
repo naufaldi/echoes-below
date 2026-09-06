@@ -8,6 +8,8 @@ test('the complete keeper procedure disables the trap and reveals a durable main
  let s=fresh();assert.throws(()=>act(s,'pin'));
  for(const step of ['read','pawl','weight','pin'])s=act(JSON.parse(JSON.stringify(s)),step);
  assert.equal(s.flags.trapSpent,true);assert.equal(s.flags.maintenance,true);
+ assert.deepEqual(publicSave(s).scene.counterweight,{pawlReleased:true,weightSeated:true,locked:true});
+ assert.equal(publicSave(s).scene.entities.find(e=>e.id==='floor')!.name,'Safe floor');
  assert.ok(publicSave(s).facts.some(f=>f.id==='maintenance'));
  assert.ok(!legalActions(s).some(a=>a.id.startsWith('counterweight:')));
  assert.throws(()=>act(s,'pin'));const hp=s.party[0].hp;

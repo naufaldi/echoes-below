@@ -87,6 +87,7 @@ export interface Entity {
   kind: "clue" | "door" | "npc" | "trap" | "exit" | "camp" | "seal";
 }
 export interface Scene {
+  counterweight?:{pawlReleased:boolean;weightSeated:boolean;locked:boolean};
   id: SceneId;
   title: string;
   subtitle: string;
