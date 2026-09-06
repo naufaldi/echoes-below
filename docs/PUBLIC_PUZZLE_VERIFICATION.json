@@ -1,0 +1,23 @@
+{
+  "origin": "https://echoes-below.naufaldi.chatgpt.site",
+  "checkedAt": "2026-09-06T08:15:50.586Z",
+  "kind": "HTTP integration, not browser or duration evidence",
+  "results": [
+    {
+      "rulesVersion": "echo-v1",
+      "puzzleSolved": true,
+      "reloadPreserved": true,
+      "duplicateActionsStable": true,
+      "safeCrossing": true,
+      "revision": 6
+    },
+    {
+      "rulesVersion": "curated-srd-5.2.1-v1",
+      "puzzleSolved": true,
+      "reloadPreserved": true,
+      "duplicateActionsStable": true,
+      "safeCrossing": true,
+      "revision": 6
+    }
+  ]
+}
