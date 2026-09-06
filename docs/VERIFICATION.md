@@ -60,3 +60,13 @@ The live evaluation and browser work remained below the explicit $2 evaluation c
 - Existing local saves preserved; local server restarted with the expansion and the page responds200 at127.0.0.1:4317.
 
 - Final public version3 succeeded, code commit `e8abb504b544941776346d1e4eed279fe86e4faf`; exact current bundle `/assets/index-BB1P8DBr.js` responds200. Metadata evidence: `artifacts/verification/deployed-v3-health.json`. No paid OpenAI calls were made during this expansion run.
+
+## Public expansion checkpoint: 6 September 2026
+
+Sites version 11 is deployed successfully at https://echoes-below.naufaldi.chatgpt.site. Source: `e6751228a8c442e12ef0ae4a15901d1a1976a696`; saved version `appgprj_6a9c63bb6590819184da979092c5c256~appgver_6ed3147c24788191833c12bab0c1112f`; deployment `appgdep_6a9d19e35be48191bffa3040d0b2c2c7`. Deployment status succeeded at 2026-09-06T07:44:55Z.
+
+This release contains the curated tactical preview, inventory/camp and quest work, authored encounter roles, chapter atmosphere, canonical speaker labels, protection AI regression fix, free authored check-ins and higher-slot casting. Curated tactics remains explicitly a development preview. Existing Echo Rules saves remain supported.
+
+Fresh browser evidence on the public site (Public Expansion QA): selected Halfling and curated rules; displayed creation HP updated to Fighter 12 / Rogue 10 / Wizard 8 / Cleric 10; created a Fighter; free mode showed the sponsored allowance unavailable; opened and confirmed Oren check-in; rendered Oren / PARTY CONVERSATION; reloaded and continued the same save; reflection persisted and the repeated check-in remained disabled. Screenshot inspected at 1200×819: party and world props rendered, labels separated, action and narration panels readable. This checks only the opening viewport, not every asset or encounter.
+
+Pre-publication verification: 155 tests passed, all three type checks and production build succeeded. Full browser campaign traversal, higher-slot casting presentation, actual personal-key voice playback, broader scene visuals and three human duration playtests remain pending. No claim of measured two-hour opening or 24-hour campaign is made.
