@@ -45,3 +45,11 @@ Browser Spell Browser QA: fresh Wizard creation, hall bypass, combat initiation,
 Remaining class work includes additional spell ranks/upcasting/areas, reactions, conditions, subclass feature coverage and level-up choices. No expansion milestone or public deployment has been marked complete.
 
 Reload verification after Magic Missile retained1/2 rank1 slots and the spent action. The updated dice-history screenshot no longer covers the YOUR PARTY heading; it occupies unused lower-left space. The same screenshot shows a downed goblinoid pose remaining above the floor. Treat this as a remaining asset/retargeting defect for the A audit, not a passed death-animation check.
+
+## Death pose and waypoint checkpoint
+
+Previous turn was progress (class abilities committed and browser spell verification). This turn fixed the observed airborne goblinoid death pose. The real cause was the conversion script dropping all translation channels, including pelvis descent. Death now preserves a proportional pelvis descent, with a measured endpoint correction. A skinned-geometry audit changed from5.6cm floor penetration to approximately zero clearance, and the same browser save renders the fallen body on the floor. Locomotion still omits root translation.
+
+Tactical movement now serializes ordered waypoint positions. A changing root position prop previously could snap the actor directly to the final coordinates; the root position is now fixed at mount and subsequent movement follows the committed waypoints. Browser QA committed a15ft move and showed the Wizard at the selected destination with15ft remaining. Unit tests cover corners, long frames, duplicate points and persisted presentation paths. Full animation timing across all models remains to be audited.
+
+97 tests, client/server/hosted typechecks and production build pass. Public Sites is still version10; full expansion, additional scene asset checks and deployment are not claimed complete.

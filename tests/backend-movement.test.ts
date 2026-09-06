@@ -1,0 +1,3 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {advanceMovement} from '../shared/movement.js';
+test('movement follows corners and preserves the path under a long frame',()=>{const path:[number,number][]=[[0,2],[2,2],[2,4]];const first=advanceMovement([0,0],path,3);assert.deepEqual(first.position,[1,2]);assert.deepEqual(first.remaining,[[2,2],[2,4]]);assert.deepEqual(advanceMovement(first.position,first.remaining,4),{position:[2,4],remaining:[]});assert.deepEqual(path,[[0,2],[2,2],[2,4]]);});
+test('duplicate waypoints and zero movement terminate safely',()=>{assert.deepEqual(advanceMovement([0,0],[[0,0],[1,0]],0),{position:[0,0],remaining:[[1,0]]});assert.throws(()=>advanceMovement([0,0],[],Infinity));});

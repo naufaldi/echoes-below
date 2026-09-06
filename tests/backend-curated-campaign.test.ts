@@ -35,7 +35,7 @@ test('tactical campaign persists through the public API and duplicate command re
 test('movement playback records the resolved position and remaining budget, not the prior state',()=>{
  let s=combat();if(s.turn!.actorId!=='hero')s=applyAction(s,'tactical:takeover',n=>n);
  const move=legalActions(s).find(a=>a.kind==='move')!;const before=s.tactical!.actors[s.turn!.actorId].economy.movementFeet;const next=applyAction(s,move.id,n=>n);const frame=next.presentation!.at(-1)!;
- assert.ok(frame.tactical);assert.ok(frame.tactical.actors[frame.actorId].economy.movementFeet<before);assert.deepEqual(frame.party.find(a=>a.id===frame.actorId)?.position,next.party.find(a=>a.id===frame.actorId)?.position);
+ assert.ok(frame.party.find(a=>a.id===frame.actorId)?.motion?.points.length);assert.ok(frame.tactical);assert.ok(frame.tactical.actors[frame.actorId].economy.movementFeet<before);assert.deepEqual(frame.party.find(a=>a.id===frame.actorId)?.position,next.party.find(a=>a.id===frame.actorId)?.position);
 });
 test('a tactical victory unlocks the prison and never repeats encounter XP',()=>{
  let s=createSave({...input,classId:'adept',rulesVersion:CURATED_RULES_VERSION});for(const id of ['enter','ledge','fight'])s=applyAction(s,id,n=>n);

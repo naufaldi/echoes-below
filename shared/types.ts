@@ -13,6 +13,7 @@ export type SceneId =
 export type Mode = "explore" | "combat" | "defeat" | "complete";
 export type Speaker = "dm" | "mira" | "oren";
 export interface Actor {
+  motion?:{id:string;points:[number,number][]};
   assetId?: import("./visual-identity.js").CharacterAssetId;
   raceId?: RaceId;
   id: string;
