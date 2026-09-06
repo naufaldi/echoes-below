@@ -1,4 +1,4 @@
-import {SIDE_ADVENTURES} from './side-adventures.js';
+import {SIDE_ADVENTURES,sideNextMeeting} from './side-adventures.js';
 import {EXPEDITION} from '../shared/campaign.js';
 import type {QuestProgress} from '../shared/quests.js';
 import type {ActionOption} from '../shared/types.js';
@@ -6,16 +6,16 @@ import {GameError,log,type Save} from './game.js';
 
 const opening=['approach','hall','cookfire','prison','bell','aftermath'];
 const position=(s:Save)=>opening.includes(s.sceneId)?opening.indexOf(s.sceneId):6+EXPEDITION.findIndex(r=>r.id===s.sceneId);
-type Definition={id:string;title:string;chapter:number;kind:'main'|'side';start:number;end:number;steps:{label:string;test:(s:Save)=>boolean}[]};
+type Definition={id:string;title:string;chapter:number;kind:'main'|'side';start:number;end:number;steps:{label:string;test:(s:Save)=>boolean;until?:number}[]};
 const flag=(key:string)=>(s:Save)=>!!s.flags[key];
 const reached=(n:number)=>(s:Save)=>position(s)>=n;
-const step=(label:string,test:(s:Save)=>boolean)=>({label,test});
+const step=(label:string,test:(s:Save)=>boolean,until?:number)=>({label,test,until});
 const openingQuests:Definition[]=[
  {id:'relay-road',title:'The road beneath Briarwatch',chapter:1,kind:'main',start:0,end:1,steps:[step('Enter the abandoned relay',reached(1)),step('Find a route across the counterweight hall',reached(2))]},
  {id:'relay-courier',title:'A voice behind iron',chapter:1,kind:'main',start:2,end:3,steps:[step('Resolve the goblin passage',s=>!!s.flags.passage||position(s)>2),step('Free the captive courier',flag('rescued'))]},
  {id:'relay-seal',title:'Who keeps the bell?',chapter:1,kind:'main',start:4,end:5,steps:[step('Resolve the confrontation with Vark',reached(5)),step('Decide who will guard the seal',s=>position(s)>5||s.sceneId==='aftermath'&&s.mode==='complete')]},
- {id:'relay-trail',title:'A trail worth following',chapter:1,kind:'side',start:0,end:1,steps:[step('Read the captive tracks outside',flag('tracks')),step('Study the relay maintenance diagram',flag('maintenance'))]},
- {id:'relay-mercy',title:'More than enemies',chapter:1,kind:'side',start:2,end:3,steps:[step('Hear Scrit’s account',flag('scritTalk')),step('Share a ration with Scrit',flag('fed')),step('Free the courier',flag('rescued'))]},
+ {id:'relay-trail',title:'A trail worth following',chapter:1,kind:'side',start:0,end:1,steps:[step('Read the captive tracks outside',flag('tracks'),0),step('Study the relay maintenance diagram',flag('maintenance'))]},
+ {id:'relay-mercy',title:'More than enemies',chapter:1,kind:'side',start:2,end:3,steps:[step('Hear Scrit’s account',flag('scritTalk'),2),step('Share a ration with Scrit',flag('fed'),2),step('Free the courier',flag('rescued'))]},
 ];
 const arcTitles=[
  ['Recover the lost index','Follow the witnesses','Settle the archive’s debt'],
@@ -41,7 +41,9 @@ export function questProgress(s:Save):QuestProgress[]{
   const adventure=SIDE_ADVENTURES.find(a=>a.questId===q.id);
   const tasks=adventure?[step(`Accept the request from ${adventure.name}`,flag(`side:${adventure.id}:accepted`)),step(`Investigate in ${EXPEDITION.find(r=>r.id===adventure.investigate)!.title}`,flag(`side:${adventure.id}:evidence`)),step(`Return to ${adventure.name.split(',')[0]} and choose an outcome`,flag(`side:${adventure.id}:done`))]:q.steps;
   const steps=tasks.map(task=>({label:task.label,done:old?.status==='completed'||!!old?.steps.find(previous=>previous.label===task.label)?.done||task.test(s)}));
-  let status:QuestProgress['status']=old?.status==='declined'?'declined':steps.every(task=>task.done)?'completed':(current>q.end||current===q.end&&s.mode==='complete')&&q.kind==='side'?'missed':'active';
+  const nextMeeting=adventure?sideNextMeeting(s,adventure):undefined;
+  const deadline=nextMeeting?6+EXPEDITION.findIndex(room=>room.id===nextMeeting):Math.min(q.end,...tasks.filter((_,i)=>!steps[i].done).map(task=>task.until??q.end));
+  let status:QuestProgress['status']=old?.status==='declined'?'declined':steps.every(task=>task.done)?'completed':(current>deadline||current===deadline&&s.mode==='complete')?'missed':'active';
   if(old?.status==='completed'||old?.status==='missed')status=old.status;
   return{id:q.id,title:q.title,chapter:q.chapter,kind:q.kind,status,steps,reward:q.kind==='side'?'2 camp rations · awarded once':'Story XP is awarded by discoveries and encounters.'};
  });

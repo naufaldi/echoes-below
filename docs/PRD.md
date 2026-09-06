@@ -387,3 +387,10 @@ Leaving a visible opponent's melee reach can trigger its opportunity attack befo
 Disengage spends a main action and protects movement through the current turn. Rogue Cunning Disengage is available from level 2 and spends a bonus action. Party reactions default to automatic; the active character's tactics can hold them until explicitly enabled again. This is a deliberate curated automation policy, not a prompt for every reaction. Wounded ranged companions can disengage, withdraw, then use their remaining action on a later automatic step.
 
 The reaction gets its own die/outcome frame and REACTING NOW label. The following movement frame restores the mover's highlight without advancing initiative. Status shows ready/spent reactions and current Disengage protection. Reference for the underlying rule: [D&D Basic Rules, opportunity attacks](https://www.dndbeyond.com/sources/dnd/br-2024/playing-the-game).
+
+
+### Quest deadlines and unreachable objectives (local)
+
+Objectives close as missed when an unfinished required stage can no longer be reached on the linear route. This applies to main objectives as well as optional ones: leaving the captive behind must not keep “Free the captive courier” active forever. Opening investigations carry deadlines for location-specific prerequisites. Multi-room side adventures follow the next required meeting: acceptance, investigation, then the final decision. Skipping acceptance or evidence therefore closes the quest immediately after that room, rather than leaving it active until a later chapter boundary.
+
+Completed, declined and previously missed records remain durable. Reading an old active record recomputes availability without granting rewards or rewriting the save. The journal groups missed objectives under Opportunities passed, retains incomplete steps, and explains that they cannot be completed on this route. Side-quest NPC visibility uses the same prerequisite boundary, so an old active record cannot display a meeting that has already become impossible.

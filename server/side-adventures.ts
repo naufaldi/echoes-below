@@ -1,3 +1,4 @@
+import {EXPEDITION} from '../shared/campaign.js';
 import type {ActionOption,Entity,SceneId} from '../shared/types.js';
 import {GameError,log,type Save} from './game.js';
 
@@ -58,7 +59,8 @@ export const SIDE_ADVENTURES:SideAdventure[]=[
   choices:[{label:'Give Neris her unopened parcel',potions:3,result:'Iven places the parcel with Neris’s travelling things. She has something to plant after the descent. Iven shares three healing potions kept for a delivery emergency.'},{label:'Ask Iven to help inspect the final circuit first',preparation:'depth-7',result:'Iven checks the circuit using the delivery register’s inspection procedure, then places the parcel with Neris’s things. The final closure is easier with a second verified reading.'}]},
 ];
 const key=(a:SideAdventure,suffix:string)=>`side:${a.id}:${suffix}`;
-const eligible=(s:Save,a:SideAdventure)=>!['declined','missed','completed'].includes(s.quests?.find(q=>q.id===a.questId)?.status??'active');
+export function sideNextMeeting(s:Save,a:SideAdventure){return !s.flags[key(a,'accepted')]?a.start:!s.flags[key(a,'evidence')]?a.investigate:a.finish;}
+const eligible=(s:Save,a:SideAdventure)=>!['declined','missed','completed'].includes(s.quests?.find(q=>q.id===a.questId)?.status??'active')&&EXPEDITION.findIndex(r=>r.id===s.sceneId)<=EXPEDITION.findIndex(r=>r.id===sideNextMeeting(s,a));
 export function sideEntities(s:Save):Entity[]{
  if(!s.tactical||s.mode!=='explore')return[];
  return SIDE_ADVENTURES.filter(a=>eligible(s,a)&&!s.flags[key(a,'done')]&&[a.start,a.investigate,a.finish].includes(s.sceneId)&&(s.sceneId===a.start||s.flags[key(a,'accepted')])).map((a,i)=>({

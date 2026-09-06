@@ -232,3 +232,10 @@ Opportunity Visual QA and Reaction Label QA are controlled local fixtures with r
 231 automated tests and client/server/hosted typechecks pass. Local build verifies 45 models and 51 bundled files. Public Sites remains unchanged.
 
 Post-reaction controlled simulation: 24 authored encounters × four hero classes × three seeds = 288 runs; all ended in wins and none remained unfinished. Each encounter starts with fresh resources at the script’s assumed chapter level. This does not validate continuous campaign attrition, difficulty quality or duration. `docs/COMBAT_SIMULATION.json` records the run.
+
+
+## Quest deadline correction (local)
+
+Fixed impossible active objectives caused by main quests never expiring, generic side-quest chapter deadlines and skipped prerequisite meetings. Quest projection and NPC eligibility now share the next required meeting. Location-specific opening steps have their own deadlines. Completed/declined/missed history remains stable; read-time correction of old active saves is mutation-free and grants no rewards.
+
+237 automated tests pass; client/server typechecks and local build pass. Asset bundle verification still covers 45 models and 51 files. Browser journal QA expanded A trail worth following under Opportunities passed and verified both unfinished steps plus the explanatory message. Main-courier and multi-room expiry are covered by engine/projection tests; they were not separately replayed in the browser this checkpoint. No Sites deployment.
