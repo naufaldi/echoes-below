@@ -33,7 +33,7 @@ test('tactical campaign persists through the public API and duplicate command re
  }finally{await app.close();}
 });
 test('movement playback records the resolved position and remaining budget, not the prior state',()=>{
- let s=combat();if(s.turn!.actorId!=='hero')s=applyAction(s,'tactical:takeover',n=>n);
+ let s=combat();for(let i=0;i<10&&s.enemies.some(a=>a.id===s.turn!.actorId);i++)s=applyAction(s,'tactical:auto',()=>1);assert.ok(s.party.some(a=>a.id===s.turn!.actorId));if(s.turn!.actorId!=='hero')s=applyAction(s,'tactical:takeover',n=>n);
  const move=legalActions(s).find(a=>a.kind==='move')!;const before=s.tactical!.actors[s.turn!.actorId].economy.movementFeet;const next=applyAction(s,move.id,n=>n);const frame=next.presentation!.at(-1)!;
  assert.ok(frame.party.find(a=>a.id===frame.actorId)?.motion?.points.length);assert.ok(frame.tactical);assert.ok(frame.tactical.actors[frame.actorId].economy.movementFeet<before);assert.deepEqual(frame.party.find(a=>a.id===frame.actorId)?.position,next.party.find(a=>a.id===frame.actorId)?.position);
 });

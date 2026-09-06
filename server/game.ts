@@ -1,3 +1,4 @@
+import {CURATED_ENCOUNTERS,encounterEnemies} from './encounters.js';
 import {speakerLabel} from '../shared/speaker-label.js';
 import {explorationHealingActions,resolveExplorationHealing} from './exploration-healing.js';
 import {sideActions,sideEntities,resolveSide} from './side-adventures.js';
@@ -637,7 +638,7 @@ function baseActions(s: Save): ActionOption[] {
     if(!f[`${prefix}:resolved`]){
       if(defeated||(h.hp>0&&!f[`${prefix}:tried`]))a.push(opt('exp_choice:0',expedition.choice[0],defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`, 'interact','encounter',defeated?undefined:'hero',defeated?undefined:dc,defeated?undefined:expedition.challenge,!defeated));
       a.push(opt('exp_choice:1',expedition.choice[1],'Commit to this alternative and its consequences without a check.','interact','encounter'));
-      if(!defeated)a.push(opt('exp_fight','Confront the chamber’s defenders','Resolve the obstruction in turn-based combat, then choose the outcome.','attack','encounter',undefined,undefined,undefined,true));
+      if(!defeated&&(!s.tactical||CURATED_ENCOUNTERS[s.sceneId]))a.push(opt('exp_fight','Confront the chamber’s defenders','Resolve the obstruction in turn-based combat, then choose the outcome.','attack','encounter',undefined,undefined,undefined,true));
     }else{
       if(!f[`${prefix}:rest`])a.push(opt('exp_rest','Rest with your companions','Recover health and focus; the sheltered rest is available once.','rest','camp'));
       a.push(opt('exp_next',EXPEDITION.at(-1)!.id===s.sceneId?'Finish the campaign':'Continue the descent','Travel onward with this decision recorded.','move','encounter'));
@@ -1091,7 +1092,7 @@ function startCombat(s: Save, dice: Dice, advantage = false) {
     const level=s.level??1;
     s.enemies=Array.from({length:(room.enemy==='vark'?2:3)-campaignEffects(s.sceneId,s.flags).fewerEnemies},(_,i)=>({...enemy(`exp-${i}`),name:room.enemy==='vark'?(i===0?'Resonant guardian':'Bound sentry'):room.enemy==='skeleton'?'Bound skeleton':room.enemy==='slime'?'Luminous slime':room.enemy==='spider'?'Cavern spider':'Goblin defender',classId:i&&room.enemy==='vark'?'skeleton':room.enemy,hp:10+level*3+(room.enemy==='vark'&&i===0?12:0),maxHp:10+level*3+(room.enemy==='vark'&&i===0?12:0),defense:11+Math.floor(level/3),attributes:{might:2+Math.floor(level/3),agility:1,insight:0,presence:0},position:[(i-1)*2,2] as [number,number]}));
   }
-  if(s.tactical){startTacticalCombat(s,dice);return;}
+  if(s.tactical){s.enemies=encounterEnemies(s.sceneId,enemy('template'),campaignEffects(s.sceneId,s.flags).fewerEnemies,!!s.flags.alarm);if(!s.enemies.length)throw new GameError(422,'NO_ENCOUNTER','This room has no authored combat encounter.');startTacticalCombat(s,dice);return;}
   const rolls = [...s.party, ...s.enemies]
     .map((a) => {
       const r = rollD20(

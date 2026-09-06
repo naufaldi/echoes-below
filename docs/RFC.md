@@ -267,3 +267,9 @@ Browser QA exposed legacy `campheal` on a curated Fighter after combat. The cura
 ### Durable speaker presentation
 
 GameLog adds optional `speakerName`; server logging snapshots canonical actor identity before actors leave the scene. The original speaker ID remains the identity key for rules and AI. `shared/speaker-label.ts` renders saved names first, then current actors and explicit legacy mappings. Unknown old rules IDs display Creature rather than leaking implementation identifiers. React text rendering preserves name escaping. Tests cover duplicate-enemy names after scene removal and legacy fallback.
+
+### Enemy roles and encounter selection
+
+`shared/enemy-roles.ts` separates authored role mechanics from model files. `server/encounters.ts` selects rosters and six boss names per scene for new curated combats. Existing in-progress actors without role IDs retain fallback mechanics; Echo Rules encounter construction is unchanged. Initiative/speed/range/damage use the role where present, with line-of-sight and close-range disadvantage still applied. Diversion removes an escort, never the first boss; the opening alarm can add a scout.
+
+Tests count actual authored coverage, instantiate every roster, verify ranged attacks from spawn, preserve old combat data and resolve each encounter using favorable controlled dice within a step bound. They do not certify normal-dice difficulty. Models reuse available assets; distinct ranged weapon/bolt animations and broader visual role readability still need verification/adaptation.

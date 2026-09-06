@@ -212,3 +212,7 @@ Added chapter palettes and original geometric landmarks around the existing lice
 ### Journal character naming
 
 New combat log entries preserve the character’s display name at the time of the event, including duplicate-enemy numbering. Existing journal entries use readable legacy fallbacks instead of exposing internal IDs such as SENTRY-1. Names remain available after leaving the encounter.
+
+### Curated encounter roster
+
+The curated campaign now selects 24 explicit combat opportunities across six chapters, including six named bosses. Twelve roles vary movement, range, armor, hit points, damage die and attack name: goblin guard/scout, hobgoblin commander, bone sentinel/archer/warden, acid spitter/slime brute, cavern hunter/venom stalker, resonant adept and core colossus. Other rooms preserve their narrative alternatives without generating generic defenders. Peaceful resolution remains available. This satisfies roster coverage, not combat balance or full visual animation acceptance.

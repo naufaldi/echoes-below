@@ -13,6 +13,7 @@ export type SceneId =
 export type Mode = "explore" | "combat" | "defeat" | "complete";
 export type Speaker = "dm" | "mira" | "oren";
 export interface Actor {
+  enemyRole?: import("./enemy-roles.js").EnemyRole;
   motion?:{id:string;points:[number,number][]};
   assetId?: import("./visual-identity.js").CharacterAssetId;
   raceId?: RaceId;

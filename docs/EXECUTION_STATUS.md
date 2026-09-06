@@ -105,3 +105,9 @@ Added five distinct chapter treatments using original geometry alongside existin
 Side Adventure QA completed Elian's request entirely through browser controls: accepted at archive-1, investigated at archive-2, chose private letters at archive-3, then refreshed/resumed. Journal retained 3/3 completed steps; party potions increased 5→8 and rations 2→4; reward actions and Elian's completed marker were absent. This verifies one actual side-adventure route, not every authored route.
 
 Browser journal exposed technical SENTRY-1 headers in older combat logs. Added durable speaker names and legacy fallbacks. Reloaded browser confirmed Goblin sentry headers instead. 140 tests, all TypeScript checks and build pass. Current browser save is Side Adventure QA at archive-3 with journal open; other chapter visual reviews and remaining goal gates are still pending.
+
+### Authored encounter roles checkpoint (local, not deployed)
+
+Added 24 curated encounter definitions, six bosses and twelve role profiles with actual speed/range/armor/HP/damage differences. Non-encounter rooms retain narrative progression. Revised a movement test that had assumed the first initiative actor was always a companion; faster scouts can now act first.
+
+145 automated tests pass; client/server/hosted type checks and build pass. Every roster instantiated and a bounded winning route resolved under favorable controlled dice. Ranged scout attacked from spawn without moving. Normal-dice balance, role-specific weapon/projectile animation, real browser roster playthrough and deployment remain pending. This roster checkpoint does not establish campaign duration.
