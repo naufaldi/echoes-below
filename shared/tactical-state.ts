@@ -10,4 +10,5 @@ export interface TacticalState {
  focusTarget:string|null;
  takeover:string|null;
  started?:boolean;
+ dashedThisTurn?:boolean;
 }

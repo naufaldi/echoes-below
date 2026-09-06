@@ -11,3 +11,26 @@ test('Champion expands critical hits at level three',()=>{let s=battle('guardian
 test('Sneak Attack requires an engaged ally and no disadvantage',()=>{let s=battle('scout',3);s.tactical!.cells.hero=[4,1];s.tactical!.cells.oren=[3,4];s=applyAction(s,'tactical:attack:guard-1',n=>n===20?15:n);assert.equal(s.logs.at(-1)!.rolls.filter(r=>r.purpose==='Sneak Attack').length,2);let blocked=battle('scout',3);blocked.tactical!.cells.oren=[3,4];blocked=applyAction(blocked,'tactical:attack:guard-1',n=>n===20?15:n);assert.equal(blocked.logs.at(-1)!.rolls.filter(r=>r.purpose==='Sneak Attack').length,0);});
 test('Bless consumes concentration and increases attacks, then ends when the source loses concentration',()=>{let s=battle('cleric');s=applyAction(s,'tactical:bless',n=>n);const effect=s.tactical!.effects![0];assert.ok(effect.targets.includes('hero'));assert.equal(s.tactical!.actors.hero.concentration,effect.id);assert.equal(s.tactical!.actors.hero.slots[0],1);s.turn!.actorId='mira';s.tactical!.takeover='mira';s=applyAction(s,'tactical:attack:guard-1',n=>n);assert.equal(s.logs.at(-1)!.rolls[0].modifier,9);s.tactical!.actors.hero.concentration=null;s=applyAction(s,'tactical:end',n=>n);assert.equal(s.tactical!.effects!.length,0);});
 test('Sacred Flame is a Dexterity save rather than an attack roll',()=>{let s=battle('cleric');s=applyAction(s,'tactical:attack:guard-1',()=>1);assert.ok(s.logs.at(-1)!.rolls[0].purpose.includes('Dexterity save'));assert.equal(s.enemies[0].hp,199);});
+
+test('Dash adds current speed to remaining movement and spends only the main action',()=>{
+ for(const cls of ['guardian','scout','adept','cleric'] as const){let s=battle(cls);s.tactical!.actors.hero.economy.movementFeet=10;s.tactical!.actors.hero.speedFeet=25;
+ s=applyAction(s,'tactical:dash',()=>1);assert.equal(s.tactical!.actors.hero.economy.movementFeet,35);assert.equal(s.tactical!.actors.hero.economy.action,false);assert.equal(s.tactical!.actors.hero.economy.bonus,true);
+ assert.throws(()=>applyAction(s,'tactical:dash',()=>1));assert.ok(legalActions(s).some(a=>a.kind==='move'));
+ }
+});
+test('Dash can combine with Cunning Dash or a regained action without resetting spent movement',()=>{
+ let rogue=battle('scout',2);rogue=applyAction(rogue,'tactical:dash',()=>1);rogue=applyAction(rogue,'tactical:cunning_dash',()=>1);assert.equal(rogue.tactical!.actors.hero.economy.movementFeet,90);
+ let fighter=battle('guardian',2);fighter=applyAction(fighter,'tactical:dash',()=>1);fighter=applyAction(fighter,'tactical:action_surge',()=>1);fighter=applyAction(fighter,'tactical:dash',()=>1);assert.equal(fighter.tactical!.actors.hero.economy.movementFeet,90);
+});
+
+test('automatic companion uses Dash then moves, and resets its intent on the next turn',()=>{
+ let s=battle('guardian');s.turn!.actorId='oren';s.turnIndex=s.turn!.order.indexOf('oren');s.tactical!.cells.oren=[1,1];s.tactical!.actors.oren.economy.movementFeet=0;
+ s=applyAction(s,'tactical:auto',()=>1);assert.equal(s.tactical!.actors.oren.economy.action,false);assert.equal(s.tactical!.dashedThisTurn,true);
+ s=JSON.parse(JSON.stringify(s));const before=s.tactical!.cells.oren;
+ s=applyAction(s,'tactical:auto',()=>1);assert.notDeepEqual(s.tactical!.cells.oren,before);assert.match(s.logs.at(-1)!.text,/moves/);
+ s=applyAction(s,'tactical:auto',()=>1);assert.notEqual(s.turn!.actorId,'oren');assert.equal(s.tactical!.dashedThisTurn,false);
+});
+test('unconscious actors and zero-speed actors cannot Dash',()=>{
+ const down=battle('guardian');down.tactical!.actors.hero.hp=0;assert.ok(!legalActions(down).some(a=>a.id==='tactical:dash'));
+ const stopped=battle('guardian');stopped.tactical!.actors.hero.speedFeet=0;assert.ok(!legalActions(stopped).some(a=>a.id==='tactical:dash'));
+});

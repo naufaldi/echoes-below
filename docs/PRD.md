@@ -346,3 +346,10 @@ On the Scrit QA adventure, selected the existing local shared allowance with aut
 Settings showed $0.1204 of local budget accounting after this test. Local speech uses a conservative $0.12 reservation, so the UI now explicitly labels the total as estimated budget accounted, not actual OpenAI billing. Usage refreshes when settings opens or speech changes state, with stale responses discarded after changing adventures. Public deployment remains unchanged.
 
 Free-mode transition QA also exposed a stale enabled Listen control. Narration and journal replay controls now disable when AI is unavailable, with settings guidance; the generated text remains readable. The local browser confirmed Voice unavailable after switching back to free story mode. Client type checking passed.
+
+
+### Curated Dash action (local)
+
+Every conscious creature with positive Speed and an available action can take Dash: spend the main action and add current Speed to remaining movement for this turn. Movement is selected afterward and retains terrain/occupancy costs. Rogue Cunning Dash remains a separate bonus action; Fighter Action Surge can fund another Dash. No roll is required. Reference: https://www.dndbeyond.com/sources/dnd/br-2024/playing-the-game and SRD 5.2.1 https://media.dndbeyond.com/compendium-images/srd/5.2/SRD_CC_v5.2.1.pdf .
+
+Automatic creatures can Dash when movement is exhausted and a legal approach exists. Saved turn state records the intent to use that movement; fallback advances on the next step instead of ending immediately. It stops on reaching an adjacent target and clears the intent when the turn changes. Tests cover spent movement, modified Speed, both class combinations, duplicate rejection, unconscious/zero-speed actors, save serialization and the automatic Dash/move/end sequence. Browser presentation and broader balance under the new action remain pending. No deployment.
