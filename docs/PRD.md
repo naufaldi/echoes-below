@@ -234,3 +234,8 @@ Players can select an available spell-slot level from 1 through 4 when casting M
 ### Rescued courier visual state
 
 After any successful rescue route, the courier’s label becomes Rescued courier and the model stands outside the open cell. Public scene projection derives this from the saved rescue flag while retaining the courier entity ID, so old saves receive the correction without changing identity or quest state.
+
+
+### Counterweight maintenance puzzle
+
+Counterweight Hall now offers an optional deterministic maintenance puzzle: read a keeper’s plate, release the pawl, seat the weight, then lock the pin. Visible feedback describes every intermediate state. A wrong order resets progress and raises the existing alarm; safe reset and alternate crossing remain available. Solving disables the trap and discovers the maintenance entrance. No new mandatory gate is added to existing campaigns. This increases interaction depth but does not establish a two-hour duration.

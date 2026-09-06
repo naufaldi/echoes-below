@@ -293,3 +293,8 @@ Verified against [official spell descriptions](https://www.dndbeyond.com/sources
 ### Rescued courier visual state
 
 After any successful rescue route, the courier’s label becomes Rescued courier and the model stands outside the open cell. Public scene projection derives this from the saved rescue flag while retaining the courier entity ID, so old saves receive the correction without changing identity or quest state.
+
+
+### Counterweight maintenance puzzle
+
+server/counterweight-puzzle.ts owns legal control actions and saved stage flags. Action requests use counterweight:read/pawl/weight/pin/reset. Legal-state validation occurs before cloning or mutation. Reading stores the procedure as a public fact; completion reuses the maintenance fact and its existing once-only XP key. Wrong ordering sets the same alarm boolean used by authored enemy reinforcement. Control state survives serialization; spent traps, unconscious heroes and other scenes expose no controls. Tests cover the full sequence, interruption/reload, wrong order, reset, alternate route, spent traps and no trap damage after completion. Current visual representation uses the existing chain interaction target; distinct animated controls remain an asset/presentation task.
