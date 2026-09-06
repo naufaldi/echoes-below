@@ -39,3 +39,8 @@ Version8 publication succeeded for commit `8f20e7635eb953126279212e24974a8935262
 ## 6 September feedback follow-up
 
 The Mac is now unlocked. Opening-adventure browser QA through the boss, ending, reload and Chapter II continuation passed locally; public version 9 passed creation, action and save/resume smoke checks. Race preview, companion setup and explicit billing modes are corrected. 57 tests pass. See FEEDBACK_QA.md for current evidence. Earlier lock statements above are historical. Real personal-key browser audio, broader accessibility and long-form campaign pacing remain unverified; the full 24-hour goal is not complete.
+
+
+### Ability advancement checkpoint, 2026-09-06
+
+Implemented local player-selected ability improvements for all three party members, six-score display, before/after selection and review, and inventory notification. Fixed XP level-up reviving unconscious characters and temporarily resetting canonical equipment AC. All 172 backend tests, server/client/hosted typechecks and production build pass. Browser check attempted but Mac is locked. These changes are not yet deployed; public version 12 remains the last verified release. Campaign duration and human playtest requirements remain unmet.

@@ -6,8 +6,11 @@ export const CURATED_CLASS_IDS={guardian:'fighter',scout:'rogue',adept:'wizard',
 export type CuratedClass='fighter'|'rogue'|'wizard'|'cleric';
 export type Ability='strength'|'dexterity'|'constitution'|'intelligence'|'wisdom'|'charisma';
 export type Abilities=Record<Ability,number>;
+export const ABILITIES:Ability[]=["strength","dexterity","constitution","intelligence","wisdom","charisma"];
+export interface AbilityImprovement {level:number;first:Ability;second:Ability}
 export interface ClassResources {secondWind:number;actionSurge:number;attacksRemaining:number;sneakUsed:boolean;slotSpent:boolean;disengaged:boolean}
 export interface CuratedCharacter {
+ improvements?:AbilityImprovement[];
  features?:ClassResources;
  rulesVersion:typeof CURATED_RULES_VERSION;classId:CuratedClass;level:number;abilities:Abilities;proficiency:number;
  hp:number;maxHp:number;temporaryHp:number;armorClass:number;hitDice:number;hitDie:number;speedFeet:number;
@@ -26,10 +29,19 @@ const PRESETS:Record<CuratedClass,{abilities:Abilities;hitDie:number;armorClass:
 };
 const SLOTS=[[2,0,0,0],[3,0,0,0],[4,2,0,0],[4,3,0,0],[4,3,2,0],[4,3,3,0],[4,3,3,1],[4,3,3,2]];
 const cleanDeath=()=>({successes:0,failures:0,stable:false});
-export function makeCharacter(classId:CuratedClass,level=1):CuratedCharacter{
+export function makeCharacter(classId:CuratedClass,level=1,improvements:AbilityImprovement[]=[]):CuratedCharacter{
  integer(level,1,8);const preset=PRESETS[classId];if(!preset)throw new Error('Unknown class.');
  const con=modifier(preset.abilities.constitution);const hp=preset.hitDie+con+(level-1)*(preset.hitDie/2+1+con);const slots=classId==='wizard'||classId==='cleric'?[...SLOTS[level-1]]:[];
- return{rulesVersion:CURATED_RULES_VERSION,classId,level,abilities:{...preset.abilities},proficiency:proficiency(level),hp,maxHp:hp,temporaryHp:0,armorClass:preset.armorClass,hitDice:level,hitDie:preset.hitDie,speedFeet:30,slots,maxSlots:[...slots],concentration:null,dead:false,death:cleanDeath(),economy:{action:true,bonus:true,reaction:true,movementFeet:30}};
+ const character:CuratedCharacter={rulesVersion:CURATED_RULES_VERSION,classId,level,abilities:{...preset.abilities},proficiency:proficiency(level),hp,maxHp:hp,temporaryHp:0,armorClass:preset.armorClass,hitDice:level,hitDie:preset.hitDie,speedFeet:30,slots,maxSlots:[...slots],concentration:null,dead:false,death:cleanDeath(),economy:{action:true,bonus:true,reaction:true,movementFeet:30}};
+ return improvements.reduce((c,choice)=>improveCharacter(c,choice),character);
+}
+export function pendingImprovements(c:CuratedCharacter){return (c.classId==='fighter'?[4,6,8]:[4,8]).filter(level=>level<=c.level&&!c.improvements?.some(i=>i.level===level));}
+export function improveCharacter(c:CuratedCharacter,choice:AbilityImprovement):CuratedCharacter{
+ if(!pendingImprovements(c).includes(choice.level)||!ABILITIES.includes(choice.first)||!ABILITIES.includes(choice.second))throw new Error('That ability improvement is unavailable.');
+ const abilities={...c.abilities};abilities[choice.first]++;abilities[choice.second]++;
+ if(ABILITIES.some(a=>abilities[a]>20))throw new Error('Ability improvements cannot raise a score above 20.');
+ const increase=(modifier(abilities.constitution)-modifier(c.abilities.constitution))*c.level;
+ return{...c,abilities,improvements:[...(c.improvements??[]),{...choice}],maxHp:c.maxHp+increase,hp:c.hp>0&&!c.dead?c.hp+increase:0};
 }
 export function spendAction(original:CuratedCharacter,resource:'action'|'bonus'|'reaction'){
  if(original.dead||original.hp<=0||!original.economy[resource])throw new Error('That action is unavailable.');

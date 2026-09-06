@@ -41,3 +41,18 @@
 | Campaign duration | Report measured duration only | 24 hours not validated or claimed |
 
 Each supplied asset is listed in artifacts/verification/assets-feedback.json. All 45 models passed browser texture loading, shader compilation and animation sampling. See FEEDBACK_QA.md for scope. This release does not claim exhaustive evaluation of all possible generated wording.
+
+
+### Ability advancement regression coverage
+
+- Reload after a permanent choice: retain scores and spent milestone.
+- Reach another XP threshold: retain previously selected increases.
+- Repeat, extra-segment, invalid ability, enemy, early-level or wrong-class milestone: reject before changing state.
+- Fighter level 6: additional choice; Rogue level 6: none.
+- Proposed score above 20: do not offer or accept it.
+- Combat, conversation, unconscious or dead member: no improvement action.
+- Constitution choice: adjust maximum and conscious current HP by level × modifier increase, preserve spell/class resources and Hit Dice.
+- XP while downed: remain downed, preserve death-save counters.
+- Level-up while wearing a ward cloak: retain its armor bonus in canonical and displayed state.
+
+Verified by `tests/backend-advancement.test.ts`. Visual/keyboard validation of the panel remains pending; Mac locked during the attempt.

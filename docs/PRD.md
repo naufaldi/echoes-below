@@ -254,3 +254,10 @@ Paid AI modes can propose one legal action for the currently active tactical com
 ### Sponsored tactical retry boundary
 
 Retrying a sponsored companion action must not buy the same decision twice. While its decision is pending, the player receives a retry message and the action remains uncommitted. A failed or abandoned paid decision falls back to legal game tactics without another provider purchase for that command. Free mode never invokes a provider.
+
+
+### Player-selected ability improvements
+
+Curated campaigns offer an Ability Score Improvement at levels 4 and 8, plus Fighter level 6. The player selects each companion’s improvement as well as their own: +2 to one ability or +1 to two, capped at 20. Inventory & camp displays all six scores, their modifiers, a before/after preview, and a review step before committing a permanent choice. The oldest unspent milestone is offered first; postponing it does not block exploration. A visible inventory cue identifies an available choice. Choices require a conscious, living member outside combat and companion-story conversations. Legacy Echo Rules saves are unchanged.
+
+Acceptance: choices persist through reload and later levels; repeat or forged requests cannot grant another bonus; Constitution adjusts maximum HP retroactively without restoring spent resources; XP level-up cannot revive a downed character and retains equipment defenses. This implements the curated Ability Score Improvement option, not the entire feat catalog.

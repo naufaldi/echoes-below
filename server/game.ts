@@ -5,9 +5,10 @@ import {speakerLabel} from '../shared/speaker-label.js';
 import {explorationHealingActions,resolveExplorationHealing} from './exploration-healing.js';
 import {sideActions,sideEntities,resolveSide} from './side-adventures.js';
 import {questProgress,updateQuests,questActions,declineQuest} from './quests.js';
+import {advancementActions,applyAdvancement} from './advancement.js';
 import {logisticsFor,logisticsActions,applyLogistics,grantLogisticsLoot} from './logistics.js';
 import {makeCharacter,restoreClassResources,classResources} from '../shared/curated-rules.js';
-import {initializeTactical,startTacticalCombat,tacticalActions,applyTactical,tacticalProposal} from './tactical.js';
+import {projectTactical,initializeTactical,startTacticalCombat,tacticalActions,applyTactical,tacticalProposal} from './tactical.js';
 import {availableConsequences,campaignEffects} from './campaign-consequences.js';
 import {COMPANION_STORIES} from '../shared/companion-stories.js';
 import {EXPEDITION,expeditionRoom,expeditionScene} from "../shared/campaign.js";
@@ -448,7 +449,7 @@ function approachTarget(s: Save, option: ActionOption) {
     ];
   }
 }
-export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
+export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
 function baseActions(s: Save): ActionOption[] {
   if(s.tactical&&s.mode==="combat")return tacticalActions(s);
   const a: ActionOption[] = [];
@@ -1011,12 +1012,13 @@ function awardExperience(s:Save,key:string,amount:number){
   log(s,`The party gains ${amount} XP.`, 'dm');
   if(gained>0){
     for(const member of s.party){
-      if(s.tactical){const old=s.tactical.actors[member.id],next=makeCharacter(old.classId,level);const increase=next.maxHp-old.maxHp;next.hp=old.dead?0:Math.min(next.maxHp,old.hp+increase);next.slots=next.maxSlots.map((n,i)=>Math.min(n,(old.slots[i]??0)+n-(old.maxSlots[i]??0)));next.features={...classResources(old),secondWind:classResources(old).secondWind+Math.max(0,classResources(next).secondWind-(old.classId==="fighter"?(old.level>=4?3:2):0)),actionSurge:classResources(old).actionSurge+(old.classId==="fighter"&&old.level<2&&level>=2?1:0)};next.death=next.hp>0?{successes:0,failures:0,stable:false}:old.death;next.dead=old.dead;next.concentration=old.concentration;s.tactical.actors[member.id]=next;member.hp=next.hp;member.maxHp=next.maxHp;}
+      if(s.tactical){const old=s.tactical.actors[member.id],next=makeCharacter(old.classId,level,old.improvements);const increase=next.maxHp-old.maxHp;next.hp=old.dead||old.hp<=0?0:Math.min(next.maxHp,old.hp+increase);next.slots=next.maxSlots.map((n,i)=>Math.min(n,(old.slots[i]??0)+n-(old.maxSlots[i]??0)));next.features={...classResources(old),secondWind:classResources(old).secondWind+Math.max(0,classResources(next).secondWind-(old.classId==="fighter"?(old.level>=4?3:2):0)),actionSurge:classResources(old).actionSurge+(old.classId==="fighter"&&old.level<2&&level>=2?1:0)};next.death=next.hp>0?{successes:0,failures:0,stable:false}:old.death;next.dead=old.dead;next.concentration=old.concentration;s.tactical.actors[member.id]=next;member.hp=next.hp;member.maxHp=next.maxHp;}
       else{member.maxHp+=gained*6;member.hp=Math.min(member.maxHp,member.hp+gained*6);member.maxFocus+=gained;member.focus+=gained;}
     }
     log(s,s.tactical?`Level ${level}! Your class health and spell slot capacity increase.`:`Level ${level}! Everyone gains ${gained*6} maximum health and ${gained} focus.`, 'dm');
   }
   s.level=level;
+  if(gained>0&&s.tactical)projectTactical(s,false);
 }
 function trust(s: Save, who: "mira" | "oren", key: string) {
   if (!s.flags[`trust:${key}`]) {
@@ -1343,6 +1345,7 @@ function resolveAction(original: Save, id: string, dice: Dice): Save {
   if(id.startsWith("recover:"))return resolveExplorationHealing(original,id,dice);
   if(id.startsWith("side:"))return resolveSide(original,id);
   if(id.startsWith("quest:"))return declineQuest(original,id);
+  if(original.tactical&&id.startsWith('advance:'))return applyAdvancement(original,id);
   if(original.tactical&&(id.startsWith('gear:')||id.startsWith('camp:')))return applyLogistics(original,id,dice);
   if(original.tactical&&original.mode==='combat')return applyTactical(original,id,dice);
   const result=applyLegacyAction(original,id,dice);grantLogisticsLoot(result,original);
