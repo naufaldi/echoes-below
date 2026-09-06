@@ -80,6 +80,7 @@ export interface ActionOption {
   check?: { dc: number; attribute: string };
 }
 export interface Entity {
+  appearanceId?: string;
   modelClassId?: Actor['classId'];
   id: string;
   name: string;

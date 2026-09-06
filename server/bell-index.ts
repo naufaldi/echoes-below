@@ -25,6 +25,6 @@ export function resolveIndex(original:Save,id:string):Save{
    s.flags['index:solved']=true;const text='The catalogue names the witness Ilyra, then records her oath as keeper, then the order binding her into bronze. You now have the sequence that can restore her name. The drawer remains shut until you decide what to do.';
    if(!s.facts.some(f=>f.id==='index-name'))s.facts.push({id:'index-name',text});log(s,text,'dm',[],'authored');
   }else{clear();log(s,'The catalogue gives a hollow note and returns the plates. It rejects an order that puts duty or a vessel before the person. Review the rubbings and try again, or choose another approach.','dm',[],'authored');}
- }else{s.flags[`index:${state.sequence.length}:${part as IndexPlate}`]=true;log(s,`The ${part} plate settles into slot ${state.sequence.length+1}. ${3-state.sequence.length-1} slots remain.`);}
+ }else{s.flags[`index:${state.sequence.length}:${part as IndexPlate}`]=true;log(s,`The ${part} plate settles into slot ${state.sequence.length+1}. ${3-state.sequence.length-1} ${state.sequence.length===1?'slot remains':'slots remain'}.`);}
  s.revision++;s.updatedAt=new Date().toISOString();return s;
 }

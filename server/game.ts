@@ -646,9 +646,9 @@ function baseActions(s: Save): ActionOption[] {
     if(!f[`${prefix}:supplies`])a.push(opt('exp_supplies','Search the supplies','Recover one potion for each party member. One cache per location.','inspect','supplies'));
     if(!f[`${prefix}:resolved`]){
       const named=prefix==='archive-3'&&!!f['index:solved'],certain=defeated||named;
-      if(defeated||(h.hp>0&&(named||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',expedition.choice[0],named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`, 'interact','encounter',certain?undefined:'hero',certain?undefined:dc,certain?undefined:expedition.challenge,!certain));
-      a.push(opt('exp_choice:1',expedition.choice[1],'Commit to this alternative and its consequences without a check.','interact','encounter'));
-      if(!defeated&&(!s.tactical||CURATED_ENCOUNTERS[s.sceneId]))a.push(opt('exp_fight','Confront the chamber’s defenders','Resolve the obstruction in turn-based combat, then choose the outcome.','attack','encounter',undefined,undefined,undefined,true));
+      if(defeated||(h.hp>0&&(named||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',expedition.choice[0],named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`, 'interact',s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:'hero',certain?undefined:dc,certain?undefined:expedition.challenge,!certain));
+      a.push(opt('exp_choice:1',expedition.choice[1],'Commit to this alternative and its consequences without a check.','interact',s.tactical&&prefix==='archive-3'?'index-librarian':'encounter'));
+      if(!defeated&&(!s.tactical||CURATED_ENCOUNTERS[s.sceneId]))a.push(opt('exp_fight','Confront the chamber’s defenders','Resolve the obstruction in turn-based combat, then choose the outcome.','attack',s.tactical&&prefix==='archive-3'?'index-sentinel':'encounter',undefined,undefined,undefined,true));
     }else{
       if(!f[`${prefix}:rest`])a.push(opt('exp_rest','Rest with your companions','Recover health and focus; the sheltered rest is available once.','rest','camp'));
       a.push(opt('exp_next',EXPEDITION.at(-1)!.id===s.sceneId?'Finish the campaign':'Continue the descent','Travel onward with this decision recorded.','move','encounter'));
@@ -963,6 +963,11 @@ export function publicSave(s: Save): PublicSave {
   } = s;
   const scene=structuredClone(baseScenes[sceneId]);
   if(s.tactical&&sceneId==='archive-3'){scene.bellIndex=bellIndexState(flags);scene.entities.push({id:'index-console',name:scene.bellIndex.solved?'Catalogue · name recovered':'Catalogue plates',kind:'clue',position:[-3,-2],description:'Three bronze plates preserve the librarian’s identity.'});}
+  if(s.tactical&&sceneId==='archive-3'&&s.mode!=='combat'){
+   if(flags['archive-3:resolved'])scene.description=expeditionRoom(sceneId)!.outcomes[flags['archive-3:choice:0']?0:1];
+   scene.entities.push({id:'index-librarian',name:flags['archive-3:choice:0']?'Ilyra, restored librarian':'Bronze librarian',kind:'npc',modelClassId:'guardian',appearanceId:'bronze',position:[-2.4,3],description:'The keeper of the catalogue waits beside the suspended chains.'});
+   if(!flags['archive-3:resolved']&&!flags['archive-3:defendersDefeated'])scene.entities.push({id:'index-sentinel',name:'Catalogue sentinel',kind:'npc',modelClassId:'skeleton',position:[2.3,3],description:'A bound skeleton guards the missing catalogue drawer.'});
+  }
   if(sceneId==='hall'){
     const locked=!!flags['counterweight:solved'];
     scene.counterweight={pawlReleased:locked||!!flags['counterweight:pawl'],weightSeated:locked||!!flags['counterweight:weight'],locked};

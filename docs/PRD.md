@@ -362,3 +362,10 @@ The curated Bell Index now includes a three-slot catalogue console. Reading its 
 Saved boolean slot flags project into `scene.bellIndex`; the original bronze console renders occupied slots and a solved color from that state. Controls require a conscious hero, exploration, the correct scene and an unresolved room. The console is hidden during combat. Legacy Echo Rules progression is unchanged.
 
 Tests cover prerequisites, duplicate plates, partial-sequence serialization, wrong-order recovery, final decision without dice and unavailable contexts. 213 tests plus client/server type checks pass. The new console’s actual browser appearance remains pending; this content addition does not establish campaign duration. No deployment.
+
+
+### Bell Index browser and missing-character correction
+
+A separate Bell Index Visual QA fixture tested the room directly. The browser read the clue, placed Witness/Keeper/Vessel, submitted, reloaded and retained the solved state. The restore-name action lost its DC indicator, resolved without dice and awarded the existing 125 XP decision total. This is controlled room QA, not campaign traversal.
+
+The inspection found that the described librarian and sentinel lacked exploration entities. The room now projects a bronze adaptation of the shipped KayKit Knight and the shipped skeleton, with name-restoration decisions targeting the librarian and combat targeting the sentinel. Both models were visually observed. Combat suppresses these exploration duplicates. Once resolved, the sentinel disappears and the restored librarian is named Ilyra; the scene description reflects the chosen outcome instead of describing the earlier captive drawer. Scene projection regression and client/server type checks pass. No deployment.
