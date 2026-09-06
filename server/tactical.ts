@@ -1,3 +1,4 @@
+import {opportunityAttackers,opportunityThreats,resolveOpportunity} from './opportunity.js';
 import {encounterTerrain} from '../shared/encounter-terrain.js';
 import {enemyRole} from '../shared/enemy-roles.js';
 import {ITEMS} from '../shared/logistics.js';
@@ -26,20 +27,23 @@ export function startTacticalCombat(s:Save,dice:Dice){
  const t=s.tactical!;t.takeover=null;t.cells={};t.grid=encounterTerrain(s.sceneId);
  s.party.forEach((a,i)=>{t.cells[a.id]=[3+i,1];});
  s.enemies.forEach((a,i)=>{const c=makeCharacter('fighter',Math.min(8,s.level??1));c.hp=a.hp;c.maxHp=a.maxHp;c.armorClass=a.defense;c.abilities.strength=10+a.attributes.might*2;c.abilities.dexterity=12;c.dead=false;const role=enemyRole(a);if(role){c.speedFeet=role.speed;c.abilities.dexterity=role.dex;c.features={...classResources(c),secondWind:0,actionSurge:0};}t.actors[a.id]=c;t.cells[a.id]=[3+i,6];});
+ for(const a of members(s)){const c=t.actors[a.id];c.economy.reaction=true;c.features={...classResources(c),disengaged:false,sneakUsed:false};}
  const initiative=members(s).map(a=>{const roll=rollD20(dice,modifier(t.actors[a.id].abilities.dexterity),'Initiative');log(s,`${actorDisplayName(a,s.enemies)} rolls initiative ${roll.total}.`,a.id,[roll]);return{id:a.id,total:roll.total};}).sort((a,b)=>b.total-a.total||a.id.localeCompare(b.id));
  s.turnIndex=0;s.turn={actorId:initiative[0].id,order:initiative.map(a=>a.id),round:1,movementM:0,actionRemaining:true};beginTurn(s);projectTactical(s);
  log(s,'Combat begins. Each creature acts separately. Review the active turn, then choose an action or let the creature act.');
 }
-function beginTurn(s:Save){members(s).find(a=>a.id===s.turn!.actorId)!.guard=false;const c=s.tactical!.actors[s.turn!.actorId];for(const e of s.tactical!.effects??[]){if(e.sourceId===s.turn!.actorId&&--e.rounds===0)c.concentration=null;}resetTurnResources(c);c.economy={action:true,bonus:true,reaction:true,movementFeet:c.speedFeet};s.tactical!.takeover=null;s.tactical!.started=false;s.tactical!.dashedThisTurn=false;}
+function beginTurn(s:Save){for(const actor of members(s)){const state=s.tactical!.actors[actor.id];state.features={...classResources(state),sneakUsed:false};}members(s).find(a=>a.id===s.turn!.actorId)!.guard=false;const c=s.tactical!.actors[s.turn!.actorId];for(const e of s.tactical!.effects??[]){if(e.sourceId===s.turn!.actorId&&--e.rounds===0)c.concentration=null;}resetTurnResources(c);c.economy={action:true,bonus:true,reaction:true,movementFeet:c.speedFeet};s.tactical!.takeover=null;s.tactical!.started=false;s.tactical!.dashedThisTurn=false;}
 function gridFor(s:Save,id:string){const t=s.tactical!;return{...t.grid,blocked:[...t.grid.blocked,...members(s).filter(a=>a.id!==id&&a.hp>0).map(a=>t.cells[a.id])]};}
 function range(s:Save,a:string,b:string){const cells=s.tactical!.cells;return Math.max(Math.abs(cells[a][0]-cells[b][0]),Math.abs(cells[a][1]-cells[b][1]))*5;}
 function optionsForActor(s:Save,id:string){
  const t=s.tactical!,a=members(s).find(a=>a.id===id)!,c=t.actors[id],result:ActionOption[]=[];
  if(c.hp<=0)return[option(c.death.stable?'tactical:end':'tactical:death',c.death.stable?'Skip unconscious turn':'Resolve death save','check',id)];
  const features=classResources(c);
+ if(c.economy.action&&!features.disengaged)result.push(option('tactical:disengage','Disengage · main action','feature',id,undefined,'Spend your action. Your movement provokes no opportunity attacks for the rest of this turn.'));
  if(a.side==='party'){
  if(c.classId==='fighter'&&features.secondWind>0&&c.economy.bonus&&c.hp<c.maxHp)result.push(option('tactical:second_wind','Second Wind · bonus action','heal',id,id,'Restore 1d10 + Fighter level health. Spend one Second Wind use and your bonus action.'));
  if(c.classId==='fighter'&&c.level>=2&&features.actionSurge>0&&!c.economy.action&&features.attacksRemaining===0)result.push(option('tactical:action_surge','Action Surge','feature',id,undefined,'Regain one action. Once per short or long rest.'));
+ if(c.classId==='rogue'&&c.level>=2&&c.economy.bonus&&!features.disengaged)result.push(option('tactical:cunning_disengage','Cunning Disengage · bonus action','feature',id,undefined,'Spend your bonus action to avoid opportunity attacks from your movement this turn.'));
  if(c.classId==='rogue'&&c.level>=2&&c.economy.bonus)result.push(option('tactical:cunning_dash','Cunning Dash · bonus action','feature',id,undefined,'Gain movement equal to your speed, spending your bonus action.'));
  }
  const enemyProfile=enemyRole(a);const ranged=a.side==='party'?['wizard','cleric','rogue'].includes(c.classId):(enemyProfile?.range??5)>10;const targets=members(s).filter(x=>x.side!==a.side&&x.hp>0);
@@ -57,12 +61,13 @@ function optionsForActor(s:Save,id:string){
   if(c.classId==='wizard'&&c.economy.action)for(const target of targets.filter(x=>range(s,id,x.id)<=120&&lineOfSight(t.grid,t.cells[id],t.cells[x.id])))result.push(option(spellId('missile',target.id),`Magic Missile · ${cost} · ${actorDisplayName(target,s.enemies)}`,'spell',id,target.id,`${rank+2} darts automatically hit this target for 1d4 + 1 force damage each. Spend one ${cost} and an action.`));
   if(c.classId==='cleric'&&c.economy.bonus)for(const ally of s.party.filter(x=>x.hp<x.maxHp&&!t.actors[x.id].dead&&range(s,id,x.id)<=60&&lineOfSight(t.grid,t.cells[id],t.cells[x.id])))result.push(option(spellId('healing_word',ally.id),`Healing Word · ${cost} · ${ally.name}`,'heal',id,ally.id,`Restore ${rank*2}d4 + Wisdom health, plus supported Life Domain healing. Spend a bonus action and one ${cost}.`));
  }
- if(c.economy.movementFeet>=5){const grid=gridFor(s,id);for(let x=0;x<grid.width;x++)for(let y=0;y<grid.height;y++){if(t.cells[id][0]===x&&t.cells[id][1]===y)continue;const path=findPath(grid,t.cells[id],[x,y],c.economy.movementFeet);if(path)result.push(option(`tactical:move:${x},${y}`,`Move to ${x+1}, ${y+1} · ${path.costFeet} ft`,'move',id,undefined,`Follow a legal path of ${path.costFeet} feet. Remaining movement: ${c.economy.movementFeet-path.costFeet} feet.`));}}
+ if(c.economy.movementFeet>=5){const grid=gridFor(s,id);for(let x=0;x<grid.width;x++)for(let y=0;y<grid.height;y++){if(t.cells[id][0]===x&&t.cells[id][1]===y)continue;const path=findPath(grid,t.cells[id],[x,y],c.economy.movementFeet);if(path){const threats=opportunityThreats(s,id,path.cells);result.push({...option(`tactical:move:${x},${y}`,`Move to ${x+1}, ${y+1} · ${path.costFeet} ft${threats.length?' · threatened':''}`,'move',id,undefined,`Follow a legal path of ${path.costFeet} feet. Remaining movement: ${c.economy.movementFeet-path.costFeet} feet.${threats.length?' Opportunity attack possible from '+threats.map(a=>actorDisplayName(a,s.enemies)).join(', ')+'. Disengage first to avoid it. Being downed stops the move.':''}`),dangerous:threats.length>0});}}}
  result.push(option('tactical:end','End turn','turn',id));return result;
 }
 export function tacticalActions(s:Save):ActionOption[]{
  if(!s.turn||!s.tactical)return[];const id=s.turn.actorId,a=members(s).find(a=>a.id===id)!;
  const commands:ActionOption[]=[];
+ if(a.side==='party'&&a.hp>0){const held=s.tactical.reactionPolicy?.[id]==='hold';commands.push(option('tactical:reaction:'+(held?'automatic':'hold'),held?'Use opportunity reactions automatically':'Hold opportunity reactions','tactics',id,undefined,held?'Use one legal melee reaction automatically when a visible foe leaves reach.':'Decline opportunity attacks for this character until you enable them again. This does not spend the reaction.'));}
  if(a.side==='party'&&id!=='hero')for(const directive of ['balanced','focus','protect','conserve'] as CompanionDirective[]){if(s.tactical.directives[id]!==directive)commands.push(option('tactical:directive:'+directive,'Tactics · '+directive,'tactics',id));}
  if(id==='hero'||s.tactical.takeover===id)return[...optionsForActor(s,id),...commands];
  return[option('tactical:auto',`Let ${actorDisplayName(a,s.enemies)} act`,'turn',id),...(a.side==='party'&&a.hp>0&&!s.tactical.started?[option('tactical:takeover',`Control ${a.name} for this turn`,'tactics',id),...commands]:[])];
@@ -85,7 +90,22 @@ function resolve(s:Save,id:string,dice:Dice){
 
  if(kind==='end'){record(s,`${a.name} ends their turn.`,actorId);nextTurn(s);return;}
  if(kind==='death'){const r=rollD20(dice,0,'Death save');t.actors[actorId]=deathSave(c,r.kept);projectTactical(s);record(s,`${a.name} makes a death save: ${r.kept}.`,actorId,[r]);nextTurn(s);return;}
- if(kind==='move'){const target=targetId.split(',').map(Number) as Cell;const path=findPath(gridFor(s,actorId),t.cells[actorId],target,c.economy.movementFeet);if(!path)throw new GameError(422,'PATH','That route is blocked or exceeds your movement.');a.motion={id:`${s.revision}:${actorId}`,points:path.cells.slice(1).map(([x,y])=>[(x-4)*1.2,(y-4)*1.2])};t.cells[actorId]=target;c.economy.movementFeet-=path.costFeet;record(s,`${a.name} moves ${path.costFeet} feet.`,actorId);}
+ if(kind==='move'){
+  const target=targetId.split(',').map(Number) as Cell,path=findPath(gridFor(s,actorId),t.cells[actorId],target,c.economy.movementFeet);
+  if(!path)throw new GameError(422,'PATH','That route is blocked or exceeds your movement.');
+  let segment:Cell[]=[],segmentCost=0,sequence=0;
+  const flush=()=>{if(!segment.length)return;a.motion={id:`${s.revision}:${actorId}:${sequence++}`,points:segment.map(([x,y])=>[(x-4)*1.2,(y-4)*1.2])};record(s,`${a.name} moves ${segmentCost} feet.`,actorId);segment=[];segmentCost=0;};
+  for(const next of path.cells.slice(1)){
+   const reactors=opportunityAttackers(s,actorId,t.cells[actorId],next);
+   if(reactors.length)flush();
+   for(const reactor of reactors){if(t.actors[actorId].hp<=0)break;const reaction=resolveOpportunity(s,reactor.id,actorId,dice);projectTactical(s);log(s,reaction.text,reactor.id,reaction.rolls,'rules','melee','reaction');}
+   if(t.actors[actorId].hp<=0){record(s,`${a.name} falls before leaving reach. The remaining movement is cancelled.`,actorId);break;}
+   const cost=(t.grid.difficult??[]).some(p=>p[0]===next[0]&&p[1]===next[1])?10:5;
+   t.cells[actorId]=next;t.actors[actorId].economy.movementFeet-=cost;segment.push(next);segmentCost+=cost;
+  }
+  flush();
+ }
+ else if(kind==='disengage'||kind==='cunning_disengage'){t.actors[actorId]=spendAction(c,kind==='disengage'?'action':'bonus');t.actors[actorId].features={...classResources(c),disengaged:true};record(s,`${a.name} disengages. Movement provokes no opportunity attacks for the rest of this turn.`,actorId);}
  else if(kind==='second_wind'){const r=damageRoll(dice,10,c.level,'Second Wind');const f=classResources(c);t.actors[actorId]=heal(spendAction(c,'bonus'),r.total);t.actors[actorId].features={...f,secondWind:f.secondWind-1};record(s,`${a.name} uses Second Wind and restores up to ${r.total} health.`,actorId,[r]);}
  else if(kind==='action_surge'){const f=classResources(c);c.features={...f,actionSurge:f.actionSurge-1};c.economy.action=true;record(s,`${a.name} uses Action Surge to regain an action.`,actorId);}
  else if(kind==='dash'){t.actors[actorId]=spendAction(c,'action');t.actors[actorId].economy.movementFeet+=c.speedFeet;t.dashedThisTurn=true;record(s,`${a.name} takes Dash, gaining ${c.speedFeet} feet of movement for this turn.`,actorId);}
@@ -111,6 +131,14 @@ function chooseAutomatic(s:Save):ActionOption{
  const id=s.turn!.actorId,t=s.tactical!,a=members(s).find(a=>a.id===id)!,options=optionsForActor(s,id),directive=t.directives[id]??'balanced';
  const dying=options.find(o=>o.kind==='heal'&&t.actors[o.targetId!].hp===0);if(dying)return dying;
  const healOption=options.find(o=>o.kind==='heal'&&t.actors[o.targetId!].hp<t.actors[o.targetId!].maxHp/2);if(healOption&&directive!=='conserve')return healOption;
+ const creature=t.actors[id],escapeFoes=members(s).filter(x=>x.side!==a.side&&x.hp>0);
+ const adjacent=escapeFoes.some(foe=>range(s,id,foe.id)<=5&&lineOfSight(t.grid,t.cells[id],t.cells[foe.id]));
+ if(adjacent&&(classResources(creature).disengaged||a.side==='party'&&creature.classId!=='fighter'&&creature.hp<creature.maxHp/2)){
+  const score=(cell:Cell)=>Math.min(...escapeFoes.map(foe=>Math.max(Math.abs(cell[0]-t.cells[foe.id][0]),Math.abs(cell[1]-t.cells[foe.id][1]))));
+  const current=score(t.cells[id]);
+  const escape=options.filter(o=>o.kind==='move').map(o=>({option:o,score:score(o.id.split(':')[2].split(',').map(Number) as Cell)})).filter(o=>o.score>current).sort((x,y)=>y.score-x.score||x.option.id.localeCompare(y.option.id))[0]?.option;
+  if(escape){if(classResources(creature).disengaged)return escape;const disengage=options.find(o=>o.id==='tactical:cunning_disengage')??options.find(o=>o.id==='tactical:disengage');if(disengage)return disengage;}
+ }
  const attacks=options.filter(o=>o.kind==='attack');if(attacks.length){if(directive==='focus'&&t.focusTarget){const focus=attacks.find(o=>o.targetId===t.focusTarget);if(focus)return focus;}return attacks.sort((a,b)=>t.actors[a.targetId!].hp-t.actors[b.targetId!].hp)[0];}
  if(!t.actors[id].economy.action&&(!t.dashedThisTurn||members(s).some(foe=>foe.side!==a.side&&foe.hp>0&&range(s,id,foe.id)<=5&&lineOfSight(t.grid,t.cells[id],t.cells[foe.id]))))return options.find(o=>o.id==='tactical:end')!;
  const foes=members(s).filter(x=>x.side!==a.side&&x.hp>0);const moves=options.filter(o=>o.kind==='move');if(foes.length&&moves.length){const nearest=foes.sort((x,y)=>range(s,id,x.id)-range(s,id,y.id));const threat=directive==='protect'&&a.side==='party'&&t.actors.hero.hp>0?nearest.find(foe=>range(s,'hero',foe.id)<=10):undefined;const ordered=threat?[threat,...nearest.filter(foe=>foe.id!==threat.id)]:nearest;for(const foe of ordered){const next=approachTarget(gridFor(s,id),t.cells[id],t.cells[foe.id],t.actors[id].economy.movementFeet);if(next){const move=moves.find(o=>o.id===`tactical:move:${next.join(',')}`);if(move)return move;}}return options.find(o=>o.id==='tactical:dodge')??options.find(o=>o.id==='tactical:end')!;}
@@ -120,6 +148,7 @@ function chooseAutomatic(s:Save):ActionOption{
 export function applyTactical(original:Save,id:string,dice:Dice):Save{
  const s=structuredClone(original);s.presentation=[];if(!tacticalActions(s).some(a=>a.id===id))throw new GameError(422,'ACTION','That action is no longer available.');const actorId=s.turn!.actorId;
  if(id==='tactical:takeover'){s.tactical!.takeover=actorId;log(s,'You control this companion until the end of this turn.',actorId);}
+ else if(id.startsWith('tactical:reaction:')){const policy=id.split(':')[2] as 'hold'|'automatic';s.tactical!.reactionPolicy={...s.tactical!.reactionPolicy,[actorId]:policy};log(s,policy==='hold'?'Opportunity reactions will be held until enabled again.':'Legal opportunity reactions will be used automatically.',actorId);}
  else if(id.startsWith('tactical:directive:')){s.tactical!.directives[actorId]=id.split(':')[2] as CompanionDirective;log(s,`Tactics changed to ${id.split(':')[2]}.`,actorId);}
  else if(id==='tactical:auto'){
   // Resolve one decision per click. A move can be followed by an attack on the next click.

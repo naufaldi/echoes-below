@@ -50,6 +50,7 @@ export interface Roll {
 }
 export type AnimationCue = "melee" | "ranged" | "spell" | "item" | "dodge";
 export interface GameLog {
+  actionKind?: 'reaction';
   animation?: AnimationCue;
   speakerName?: string;
   id: string;
@@ -103,6 +104,8 @@ export interface Scene {
   index: number;
 }
 export interface PublicSave {
+  /** Client presentation only; never a pending rules action. */
+  activeReaction?: string;
   tacticalProposal?:{actorId:string;directive:string;actions:ActionOption[]};
   quests?: import("./quests.js").QuestProgress[];
   logistics?: import("./logistics.js").Logistics;

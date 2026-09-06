@@ -326,12 +326,14 @@ export function log(
   rolls: Roll[] = [],
   source: GameLog["source"] = "rules",
   animation?: GameLog["animation"],
+  actionKind?: GameLog["actionKind"],
 ) {
   s.logs.push({
     id: randomUUID(),
     revision: s.revision + 1,
     speaker,
     ...(animation?{animation}:{}),
+    ...(actionKind?{actionKind}:{}),
     speakerName:speakerLabel({speaker,source},s.party,s.enemies),
     text,
     source,

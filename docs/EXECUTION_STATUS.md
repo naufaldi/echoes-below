@@ -221,3 +221,14 @@ Verification checkpoint: 214 automated tests pass; client, server and hosted typ
 - Public Sites remains unchanged. Campaign content density, broader visual coverage, balance, voice input and duration gates remain open.
 
 Verification: 220 tests pass; client, server and hosted typechecks pass; local build verifies 45 models and 51 bundled files. The concurrency test now waits for the provider-start signal instead of a fixed 20 ms delay, after that timing assumption failed under parallel validation load. No deployment.
+
+
+## Movement reactions checkpoint (local)
+
+Added opportunity attacks at melee reach boundaries, main-action Disengage, Rogue Cunning Disengage, saved automatic/hold reaction policy, threat previews and segmented movement interruption. The fallback for wounded ranged companions can disengage and withdraw before taking its remaining attack. Existing curated save flags receive defaults; Echo Rules remain on their previous resolver.
+
+Opportunity Visual QA and Reaction Label QA are controlled local fixtures with raised HP. Browser evidence: threatened route preview named Goblin guard; one run missed on 7 + 4, another rolled natural 20 for 6 damage; each reaction appeared before a separate 10-foot movement frame. The final run displayed REACTION and REACTING NOW, then returned to the hero with 20 feet remaining and its action ready. No duplicate initiative advance. These fixtures do not measure campaign duration or realistic encounter balance.
+
+231 automated tests and client/server/hosted typechecks pass. Local build verifies 45 models and 51 bundled files. Public Sites remains unchanged.
+
+Post-reaction controlled simulation: 24 authored encounters × four hero classes × three seeds = 288 runs; all ended in wins and none remained unfinished. Each encounter starts with fresh resources at the script’s assumed chapter level. This does not validate continuous campaign attrition, difficulty quality or duration. `docs/COMBAT_SIMULATION.json` records the run.

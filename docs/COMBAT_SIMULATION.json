@@ -2,112 +2,112 @@
   "depleted": false,
   "kind": "controlled simulation, not human balance acceptance",
   "assumptions": "Independent encounters; baseline uses fresh HP/resources, depleted scenario uses half HP/slots and zero potions; four hero classes; fixed Rogue/Fighter companions; greedy legal-action hero policy; authored chapter-level assumptions; no encounter attrition or paid AI.",
-  "seedCount": 2,
+  "seedCount": 3,
   "results": [
     {
       "scene": "cookfire",
       "level": 1,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 20
-    },
-    {
-      "scene": "bell",
-      "level": 1,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 38
-    },
-    {
-      "scene": "archive-1",
-      "level": 3,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 29
-    },
-    {
-      "scene": "archive-3",
-      "level": 3,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 41
-    },
-    {
-      "scene": "archive-6",
-      "level": 3,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 23
-    },
-    {
-      "scene": "archive-7",
-      "level": 3,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 62
-    },
-    {
-      "scene": "market-1",
-      "level": 4,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 28
-    },
-    {
-      "scene": "market-3",
-      "level": 4,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 48
-    },
-    {
-      "scene": "market-6",
-      "level": 4,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 31
-    },
-    {
-      "scene": "market-7",
-      "level": 4,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 54
-    },
-    {
-      "scene": "roots-1",
-      "level": 5,
-      "runs": 8,
-      "wins": 8,
+      "runs": 12,
+      "wins": 12,
       "losses": 0,
       "unfinished": 0,
       "meanSteps": 17
     },
     {
+      "scene": "bell",
+      "level": 1,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 33
+    },
+    {
+      "scene": "archive-1",
+      "level": 3,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 35
+    },
+    {
+      "scene": "archive-3",
+      "level": 3,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 44
+    },
+    {
+      "scene": "archive-6",
+      "level": 3,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 29
+    },
+    {
+      "scene": "archive-7",
+      "level": 3,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 64
+    },
+    {
+      "scene": "market-1",
+      "level": 4,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 26
+    },
+    {
+      "scene": "market-3",
+      "level": 4,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 45
+    },
+    {
+      "scene": "market-6",
+      "level": 4,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 35
+    },
+    {
+      "scene": "market-7",
+      "level": 4,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 57
+    },
+    {
+      "scene": "roots-1",
+      "level": 5,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 22
+    },
+    {
       "scene": "roots-3",
       "level": 5,
-      "runs": 8,
-      "wins": 8,
+      "runs": 12,
+      "wins": 12,
       "losses": 0,
       "unfinished": 0,
       "meanSteps": 20
@@ -115,110 +115,110 @@
     {
       "scene": "roots-6",
       "level": 5,
-      "runs": 8,
-      "wins": 8,
+      "runs": 12,
+      "wins": 12,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 25
+      "meanSteps": 34
     },
     {
       "scene": "roots-7",
       "level": 5,
-      "runs": 8,
-      "wins": 8,
+      "runs": 12,
+      "wins": 12,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 18
+      "meanSteps": 24
     },
     {
       "scene": "choir-1",
       "level": 6,
-      "runs": 8,
-      "wins": 8,
+      "runs": 12,
+      "wins": 12,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 35
+      "meanSteps": 42
     },
     {
       "scene": "choir-4",
       "level": 6,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 36
-    },
-    {
-      "scene": "choir-6",
-      "level": 6,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 26
-    },
-    {
-      "scene": "choir-7",
-      "level": 6,
-      "runs": 8,
-      "wins": 8,
+      "runs": 12,
+      "wins": 12,
       "losses": 0,
       "unfinished": 0,
       "meanSteps": 37
     },
     {
-      "scene": "depth-1",
-      "level": 8,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 38
-    },
-    {
-      "scene": "depth-2",
-      "level": 8,
-      "runs": 8,
-      "wins": 8,
-      "losses": 0,
-      "unfinished": 0,
-      "meanSteps": 28
-    },
-    {
-      "scene": "depth-3",
-      "level": 8,
-      "runs": 8,
-      "wins": 8,
+      "scene": "choir-6",
+      "level": 6,
+      "runs": 12,
+      "wins": 12,
       "losses": 0,
       "unfinished": 0,
       "meanSteps": 30
     },
     {
-      "scene": "depth-4",
-      "level": 8,
-      "runs": 8,
-      "wins": 8,
+      "scene": "choir-7",
+      "level": 6,
+      "runs": 12,
+      "wins": 12,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 43
+      "meanSteps": 42
+    },
+    {
+      "scene": "depth-1",
+      "level": 8,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 42
+    },
+    {
+      "scene": "depth-2",
+      "level": 8,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 30
+    },
+    {
+      "scene": "depth-3",
+      "level": 8,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 31
+    },
+    {
+      "scene": "depth-4",
+      "level": 8,
+      "runs": 12,
+      "wins": 12,
+      "losses": 0,
+      "unfinished": 0,
+      "meanSteps": 40
     },
     {
       "scene": "depth-6",
       "level": 8,
-      "runs": 8,
-      "wins": 8,
+      "runs": 12,
+      "wins": 12,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 51
+      "meanSteps": 54
     },
     {
       "scene": "depth-7",
       "level": 8,
-      "runs": 8,
-      "wins": 8,
+      "runs": 12,
+      "wins": 12,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 68
+      "meanSteps": 63
     }
   ]
 }

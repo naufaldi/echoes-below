@@ -378,3 +378,12 @@ In curated rules, the Flooded Infirmary supports a deliberate rescue: inspect th
 Acceptance: the medic and cot appear above the floor while suspended; the water pocket disappears and both lower after drainage; the label changes from trapped to waiting to rescued. Saved scene descriptions match the chosen outcome. Controls reject duplicates, skipped prerequisites, combat, unconscious heroes, other rooms and completed encounters. Level-up and XP messages must not replace the action's narrative outcome. Final exploration presentation must show the committed scene when its outcome is revealed.
 
 Local browser QA completed inspection, signalling, bracing, a mid-rescue reload, drainage and prepared rescue. A second controlled fixture verified the drained scene while the playback panel was still open. These room checks establish behavior, not campaign duration or a full playthrough.
+
+
+### Curated movement reactions (local)
+
+Leaving a visible opponent's melee reach can trigger its opportunity attack before departure. Each creature has one reaction, renewed on its next turn. Movement previews identify threats on the chosen route. A creature reduced to zero health stays at the last reached cell; untraveled movement is not charged. Staying within reach, an unconscious opponent, blocked sight, a held/spent reaction, or Disengage suppresses the reaction. Reach weapons use their own boundary. Ranged attacks and cantrips are not opportunity attacks.
+
+Disengage spends a main action and protects movement through the current turn. Rogue Cunning Disengage is available from level 2 and spends a bonus action. Party reactions default to automatic; the active character's tactics can hold them until explicitly enabled again. This is a deliberate curated automation policy, not a prompt for every reaction. Wounded ranged companions can disengage, withdraw, then use their remaining action on a later automatic step.
+
+The reaction gets its own die/outcome frame and REACTING NOW label. The following movement frame restores the mover's highlight without advancing initiative. Status shows ready/spent reactions and current Disengage protection. Reference for the underlying rule: [D&D Basic Rules, opportunity attacks](https://www.dndbeyond.com/sources/dnd/br-2024/playing-the-game).
