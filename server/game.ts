@@ -321,18 +321,20 @@ export function log(
   speaker = "dm",
   rolls: Roll[] = [],
   source: GameLog["source"] = "rules",
+  animation?: GameLog["animation"],
 ) {
   s.logs.push({
     id: randomUUID(),
     revision: s.revision + 1,
     speaker,
+    ...(animation?{animation}:{}),
     speakerName:speakerLabel({speaker,source},s.party,s.enemies),
     text,
     source,
     rolls,
   });
   if (s.logs.length > 250) s.logs.shift();
-  if (s.presentation && (rolls.length || /moves|guards|aims|runs|restores/.test(text))) {
+  if (s.presentation && (animation || rolls.length || /moves|guards|aims|runs|restores/.test(text))) {
     s.presentation.push({...(s.tactical?{tactical:structuredClone(s.tactical)}:{}),mode:s.mode,turn:structuredClone(s.turn),actorId:speaker,sceneId:s.sceneId,party:structuredClone(s.party),enemies:structuredClone(s.enemies),log:structuredClone(s.logs.at(-1)!)});
   }
 }

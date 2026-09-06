@@ -131,3 +131,10 @@ Latest public release: Sites version 12 includes rescued-courier projection, cou
 Added seven terrain arrangements, saved-grid-driven pillars/rubble and path-based autonomous detours. Suppressed unavailable exploration labels during combat and explained terrain costs in turn controls. The Sluice Stair was entered through the local browser, initiative and an enemy attack resolved, and the new battlefield inspected visually. Refresh after the development server restarted recovered the local session and retained the adventure.
 
 188 automated tests and client/server type checks pass. Fresh-resource combat simulation: 192/192 wins under its existing controlled hero policy, no unfinished encounters. This validates bounded completion under those fixtures; it does not establish challenge, attrition or human duration. Human playtesting, richer authored pacing, wider asset/voice verification and final release gates remain. Public version 12 remains unchanged per the local-first instruction.
+
+
+### Local action-animation correction
+
+Curated combat logs and presentation frames now carry an optional explicit animation cue (melee, ranged, spell, item or dodge). Spell and defensive actions produce a presentation even without a die roll. The renderer consumes confirmed cues and ignores AI prose; older attack logs retain a compatibility fallback. Rogue ranged attacks use the shipped shooting clip, while spell actions use the casting clip. Action clips play once; idle and walking loop. Repeated attack events restart their clip.
+
+Verification covers Magic Missile, Sacred Flame, Bless, ranged attack and Dodge cues through rules resolution, presentation and serialization. All seven shipped character GLBs resolve locomotion, death and attack clip names; KayKit casting/ranged names are checked explicitly. This validates mappings and data flow, not all on-screen animation poses or weapon/projectile alignment. Local only; no new deployment.

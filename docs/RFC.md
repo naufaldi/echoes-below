@@ -361,3 +361,10 @@ Curated encounters use seven authored terrain arrangements across the opening an
 The saved tactical grid owns both pathfinding and 3D terrain. New battles select their scene profile; resuming an existing battle retains its saved grid. Autonomous movement follows a complete legal route to an adjacent attack cell and can initially move away from a target to navigate around a wall. It respects living actor occupancy, difficult ground, movement budget, and blocked diagonal corners. Unreachable targets produce a defensive/end-turn fallback.
 
 Verification: regression tests cover connected spawn cells across every authored encounter, disjoint terrain, independent layout copies, wall detours, insufficient movement and sealed targets. A local browser encounter at The Sluice Stair rendered the saved pillars/rubble and resolved an enemy attack with a visible die presentation. This is incremental local evidence, not campaign-duration or full visual acceptance. No deployment in this checkpoint.
+
+
+### Local action-animation correction
+
+Curated combat logs and presentation frames now carry an optional explicit animation cue (melee, ranged, spell, item or dodge). Spell and defensive actions produce a presentation even without a die roll. The renderer consumes confirmed cues and ignores AI prose; older attack logs retain a compatibility fallback. Rogue ranged attacks use the shipped shooting clip, while spell actions use the casting clip. Action clips play once; idle and walking loop. Repeated attack events restart their clip.
+
+Verification covers Magic Missile, Sacred Flame, Bless, ranged attack and Dodge cues through rules resolution, presentation and serialization. All seven shipped character GLBs resolve locomotion, death and attack clip names; KayKit casting/ranged names are checked explicitly. This validates mappings and data flow, not all on-screen animation poses or weapon/projectile alignment. Local only; no new deployment.

@@ -48,7 +48,9 @@ export interface Roll {
   total: number;
   purpose: string;
 }
+export type AnimationCue = "melee" | "ranged" | "spell" | "item" | "dodge";
 export interface GameLog {
+  animation?: AnimationCue;
   speakerName?: string;
   id: string;
   revision: number;

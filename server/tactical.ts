@@ -1,7 +1,7 @@
 import {encounterTerrain} from '../shared/encounter-terrain.js';
 import {enemyRole} from '../shared/enemy-roles.js';
 import {ITEMS} from '../shared/logistics.js';
-import type {Actor,ActionOption,ClassId} from '../shared/types.js';
+import type {Actor,ActionOption,ClassId,AnimationCue,Roll} from '../shared/types.js';
 import {CURATED_RULES_VERSION,CURATED_CLASS_IDS,classResources,resetTurnResources,makeCharacter,modifier,spendAction,spendSlot,takeDamage,heal,deathSave,type CuratedClass} from '../shared/curated-rules.js';
 import {findPath,lineOfSight,approachTarget,type Cell} from '../shared/tactical-grid.js';
 import {actorDisplayName} from '../shared/visual-identity.js';
@@ -73,7 +73,6 @@ export function tacticalProposal(s:Save){
  return {actorId:id,directive:s.tactical.directives[id]??'balanced',actions:optionsForActor(s,id)};
 }
 function nextTurn(s:Save){if(finishCheck(s))return;const order=s.turn!.order;for(let i=0;i<order.length;i++){s.turnIndex=(s.turnIndex+1)%order.length;if(s.turnIndex===0)s.turn!.round++;const next=order[s.turnIndex],a=members(s).find(a=>a.id===next)!;if(s.tactical!.actors[next].dead||(a.side==='enemy'&&a.hp===0))continue;s.turn!.actorId=next;beginTurn(s);return;}s.mode='defeat';s.turn=null;}
-function record(s:Save,...args:Parameters<typeof log> extends [Save,...infer Rest]?Rest:never){projectTactical(s);log(s,...args);}
 function savingRoll(s:Save,id:string,dice:Dice,ability:'dexterity'|'constitution',purpose:string){
  const c=s.tactical!.actors[id];const trained=(c.classId==='fighter'&&ability==='constitution')||(c.classId==='rogue'&&ability==='dexterity');
  const bless=(s.tactical!.effects??[]).some(e=>e.targets.includes(id)&&s.tactical!.actors[e.sourceId]?.concentration===e.id)?dice(4):0;
@@ -81,6 +80,9 @@ function savingRoll(s:Save,id:string,dice:Dice,ability:'dexterity'|'constitution
 }
 function resolve(s:Save,id:string,dice:Dice){
  const t=s.tactical!,actorId=s.turn!.actorId,a=members(s).find(a=>a.id===actorId)!;let c=t.actors[actorId];const [,kind,targetId,rankText]=id.split(':');const rank=Number((kind==='bless'?targetId:rankText)??1);
+ const animation:AnimationCue|undefined=['missile','bless','cure','healing_word'].includes(kind)?'spell':['potion','second_wind'].includes(kind)?'item':kind==='dodge'?'dodge':kind==='attack'?(a.side==='party'?(['wizard','cleric'].includes(c.classId)?'spell':c.classId==='rogue'?'ranged':'melee'):(enemyRole(a)?.range??5)>10?'ranged':'melee'):undefined;
+ const record=(state:Save,text:string,speaker:string,rolls:Roll[]=[])=>{projectTactical(state);log(state,text,speaker,rolls,'rules',animation);};
+
  if(kind==='end'){record(s,`${a.name} ends their turn.`,actorId);nextTurn(s);return;}
  if(kind==='death'){const r=rollD20(dice,0,'Death save');t.actors[actorId]=deathSave(c,r.kept);projectTactical(s);record(s,`${a.name} makes a death save: ${r.kept}.`,actorId,[r]);nextTurn(s);return;}
  if(kind==='move'){const target=targetId.split(',').map(Number) as Cell;const path=findPath(gridFor(s,actorId),t.cells[actorId],target,c.economy.movementFeet);if(!path)throw new GameError(422,'PATH','That route is blocked or exceeds your movement.');a.motion={id:`${s.revision}:${actorId}`,points:path.cells.slice(1).map(([x,y])=>[(x-4)*1.2,(y-4)*1.2])};t.cells[actorId]=target;c.economy.movementFeet-=path.costFeet;record(s,`${a.name} moves ${path.costFeet} feet.`,actorId);}
