@@ -178,3 +178,9 @@ The curated preview now gives each class specific resource-backed actions: Fight
 Implemented locally: a shared pack, per-character armor/shield/cloak slots, immediate AC updates, and a unique opening-chest cloak. Equipped copies count against shared ownership. Quest items cannot be discarded. Outfit models still follow class; the inventory explicitly discloses this visual limitation. Legacy Echo Rules saves retain their original rest behavior.
 
 Curated campaign constraint: each safe location offers one short rest and one long rest. Short rest spends one Hit Die per injured conscious ally and restores supported class resources; Wizard recovery is limited per long rest. Long rest consumes one ration per living party member, restores supported resources, and never revives dead actors. Combat and uncleared locations prohibit resting. These are explicit curated constraints, not a claim of full SRD parity.
+
+### Curated preview checkpoint: quest journal
+
+The journal now tracks main objectives and optional investigations with durable completed steps and active/completed/missed/declined states. Optional objectives may be declined after confirmation without blocking the descent. Completed optional objectives award two camp rations once; existing story XP is unchanged. Failed checks do not complete objectives. Leaving the final opportunity closes an unfinished optional objective, and future arcs stay hidden until encountered.
+
+The existing compact story is mapped to 18 main quest records and 12 optional records. This is tracking coverage, not completion of EB-33's content depth: ten later optional records currently collect evidence and companion responses across rooms and still need distinct authored challenges, outcomes and pacing. The campaign remains unverified for 24-hour duration.

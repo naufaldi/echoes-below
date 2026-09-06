@@ -63,3 +63,11 @@ Chrome manual QA at 1440×778: created Camp Browser QA with curated rules; equip
 Still pending: full rules/class coverage, richer quests and campaign authoring, tactical AI integration, complete voice/browser checks, broad asset visual certification, deployment and human duration measurement. Current local progress does not establish 24-hour playtime.
 
 Checkpoint validation: 104 automated tests pass; client, server and hosted TypeScript checks pass; production client/worker build passes. Public site remains version 10.
+
+### Quest journal checkpoint (local, not deployed)
+
+Added persistent objective steps/status, optional refusal, once-only camp supplies, hidden future arcs and journal UI. The compact campaign now has 18 main tracking records and 12 optional records. Ten later optional records remain investigation checklists and must receive distinct authored challenges before the full campaign content gate can pass.
+
+Chrome QA: opened the new journal on the older Camp Browser QA preview save; main/optional goals appeared without reward backfill. Declined A trail worth following through confirmation, refreshed, resumed and verified its Left aside status while the main travel action remained available. Screenshot at 1440×778 inspected for readable objectives and scrolling. Automated peaceful traversal completes all 30 tracked records; tests also cover skipped opportunities, failed checks and nonduplicated rewards.
+
+Validation for this checkpoint: 110 automated tests pass; client/server/hosted type checks and production build pass. Existing public deployment is unchanged.

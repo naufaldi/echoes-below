@@ -94,6 +94,7 @@ export interface Scene {
   index: number;
 }
 export interface PublicSave {
+  quests?: import("./quests.js").QuestProgress[];
   logistics?: import("./logistics.js").Logistics;
   companionStoryId?: string | null;
   xp?: number;
