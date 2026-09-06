@@ -89,6 +89,7 @@ export interface Entity {
   kind: "clue" | "door" | "npc" | "trap" | "exit" | "camp" | "seal";
 }
 export interface Scene {
+  bellIndex?: {read:boolean;solved:boolean;sequence:import("./bell-index.js").IndexPlate[]};
   counterweight?:{pawlReleased:boolean;weightSeated:boolean;locked:boolean};
   id: SceneId;
   title: string;

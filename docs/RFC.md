@@ -421,3 +421,12 @@ Free-mode transition QA also exposed a stale enabled Listen control. Narration a
 Every conscious creature with positive Speed and an available action can take Dash: spend the main action and add current Speed to remaining movement for this turn. Movement is selected afterward and retains terrain/occupancy costs. Rogue Cunning Dash remains a separate bonus action; Fighter Action Surge can fund another Dash. No roll is required. Reference: https://www.dndbeyond.com/sources/dnd/br-2024/playing-the-game and SRD 5.2.1 https://media.dndbeyond.com/compendium-images/srd/5.2/SRD_CC_v5.2.1.pdf .
 
 Automatic creatures can Dash when movement is exhausted and a legal approach exists. Saved turn state records the intent to use that movement; fallback advances on the next step instead of ending immediately. It stops on reaching an adjacent target and clears the intent when the turn changes. Tests cover spent movement, modified Speed, both class combinations, duplicate rejection, unconscious/zero-speed actors, save serialization and the automatic Dash/move/end sequence. Browser presentation and broader balance under the new action remain pending. No deployment.
+
+
+### Chapter II Bell Index puzzle (local)
+
+The curated Bell Index now includes a three-slot catalogue console. Reading its rubbings teaches the meanings of Witness, Keeper and Vessel, and their ordering clue. The player places unused plates, can reset safely, and submits the complete order. A wrong order resets without damage or blocking alternative choices/combat. Correct order records Ilyra’s name, but the room remains unresolved until the player chooses its outcome. Restoring the name then needs no random check, including after an earlier failed persuasion attempt. Puzzle steps grant no farmable XP; the existing room decision reward remains once-only.
+
+Saved boolean slot flags project into `scene.bellIndex`; the original bronze console renders occupied slots and a solved color from that state. Controls require a conscious hero, exploration, the correct scene and an unresolved room. The console is hidden during combat. Legacy Echo Rules progression is unchanged.
+
+Tests cover prerequisites, duplicate plates, partial-sequence serialization, wrong-order recovery, final decision without dice and unavailable contexts. 213 tests plus client/server type checks pass. The new console’s actual browser appearance remains pending; this content addition does not establish campaign duration. No deployment.

@@ -1,3 +1,5 @@
+import {indexActions,resolveIndex} from './bell-index.js';
+import {bellIndexState} from '../shared/bell-index.js';
 import {scritActions,resolveScrit} from './scrit-inquiry.js';
 import {parleyActions,resolveParley,parleyDC} from './vark-parley.js';
 import {counterweightActions,resolveCounterweight} from './counterweight-puzzle.js';
@@ -453,7 +455,7 @@ function approachTarget(s: Save, option: ActionOption) {
     ];
   }
 }
-export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s),...parleyActions(s),...scritActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
+export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s),...parleyActions(s),...scritActions(s),...indexActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
 function baseActions(s: Save): ActionOption[] {
   if(s.tactical&&s.mode==="combat")return tacticalActions(s);
   const a: ActionOption[] = [];
@@ -643,7 +645,8 @@ function baseActions(s: Save): ActionOption[] {
     if(!f[`${prefix}:talk`])a.push(opt('exp_talk','Hear your companions','Listen to the party’s personal response.','interact','encounter'));
     if(!f[`${prefix}:supplies`])a.push(opt('exp_supplies','Search the supplies','Recover one potion for each party member. One cache per location.','inspect','supplies'));
     if(!f[`${prefix}:resolved`]){
-      if(defeated||(h.hp>0&&!f[`${prefix}:tried`]))a.push(opt('exp_choice:0',expedition.choice[0],defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`, 'interact','encounter',defeated?undefined:'hero',defeated?undefined:dc,defeated?undefined:expedition.challenge,!defeated));
+      const named=prefix==='archive-3'&&!!f['index:solved'],certain=defeated||named;
+      if(defeated||(h.hp>0&&(named||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',expedition.choice[0],named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`, 'interact','encounter',certain?undefined:'hero',certain?undefined:dc,certain?undefined:expedition.challenge,!certain));
       a.push(opt('exp_choice:1',expedition.choice[1],'Commit to this alternative and its consequences without a check.','interact','encounter'));
       if(!defeated&&(!s.tactical||CURATED_ENCOUNTERS[s.sceneId]))a.push(opt('exp_fight','Confront the chamber’s defenders','Resolve the obstruction in turn-based combat, then choose the outcome.','attack','encounter',undefined,undefined,undefined,true));
     }else{
@@ -959,6 +962,7 @@ export function publicSave(s: Save): PublicSave {
     ...visible
   } = s;
   const scene=structuredClone(baseScenes[sceneId]);
+  if(s.tactical&&sceneId==='archive-3'){scene.bellIndex=bellIndexState(flags);scene.entities.push({id:'index-console',name:scene.bellIndex.solved?'Catalogue · name recovered':'Catalogue plates',kind:'clue',position:[-3,-2],description:'Three bronze plates preserve the librarian’s identity.'});}
   if(sceneId==='hall'){
     const locked=!!flags['counterweight:solved'];
     scene.counterweight={pawlReleased:locked||!!flags['counterweight:pawl'],weightSeated:locked||!!flags['counterweight:weight'],locked};
@@ -1350,6 +1354,7 @@ export function applyAction(original: Save, id: string, dice: Dice): Save {
  return result;
 }
 function resolveAction(original: Save, id: string, dice: Dice): Save {
+  if(id.startsWith("index:"))return resolveIndex(original,id);
   if(id.startsWith("scrit:"))return resolveScrit(original,id);
   if(id.startsWith("parley:"))return resolveParley(original,id);
   if(id.startsWith("counterweight:"))return resolveCounterweight(original,id);
@@ -1409,7 +1414,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
     else if(kind==='exp_choice'){
       const choice=Number(actorId) as 0|1;
       let success=true;
-      if(choice===0&&!f[`${prefix}:defendersDefeated`]){f[`${prefix}:tried`]=true;const r=rollD20(dice,h.attributes[room.challenge]+Math.floor((s.level??1)/2),room.choice[0],!!f[`${prefix}:evidence`]);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${h.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,'hero',[r]);}
+      if(choice===0&&!f[`${prefix}:defendersDefeated`]&&!(prefix==='archive-3'&&f['index:solved'])){f[`${prefix}:tried`]=true;const r=rollD20(dice,h.attributes[room.challenge]+Math.floor((s.level??1)/2),room.choice[0],!!f[`${prefix}:evidence`]);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${h.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,'hero',[r]);}
       if(success){f[`${prefix}:resolved`]=true;f[`${prefix}:choice:${choice}`]=true;fact(s,`decision:${prefix}`,room.outcomes[choice]);awardExperience(s,`room:${prefix}`,room.xp);s.relationships[choice===0?'mira':'oren']=Math.min(20,s.relationships[choice===0?'mira':'oren']+1);}
       else{const r=damageRoll(dice,6,0,'Setback');h.hp=Math.max(1,h.hp-r.total);log(s,`The attempt costs ${r.total} health. You can choose the alternative or confront the defenders.`,'hero',[r]);}
     }else if(kind==='exp_next'){
