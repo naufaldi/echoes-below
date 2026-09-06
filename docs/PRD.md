@@ -1,6 +1,12 @@
 # Echoes Below: Product Requirements
 
-Version 2.0, 6 September 2026. Current expansion contract. Historical v1 is archived separately and is not the release contract. Project: `/Users/naufaldisatriya/WebApps/3d-dnd`. See [RFC](RFC.md), [goal prompt](GOAL_PROMPT.md), and [expansion status](EXPANSION_STATUS.md).
+Version 2.1, 6 September 2026. Product contract aligned with the published Sites version 10. Historical v1 is archived separately and is not the release contract. Project: `/Users/naufaldisatriya/WebApps/3d-dnd`. See [RFC](RFC.md), [goal prompt](GOAL_PROMPT.md), and [expansion status](EXPANSION_STATUS.md).
+
+## Release baseline and evidence
+
+The current release is a playable desktop preview at [Echoes Below](https://echoes-below.naufaldi.chatgpt.site/), with six chapters and 46 locations. This revision integrates the character setup, explicit AI payment modes, narrator grounding fix, connection feedback, KayKit party assets and revised HUD. It does not establish a completed 24-hour campaign.
+
+Verified in the latest correction: 62 automated tests; client/server/Worker type checks; six real OpenAI dialogue scenarios; generated speech; browser invalid-key feedback and local server-backed DM narration; runtime loading, textures, shader compilation and animation sampling for all 45 supplied models. Chrome visual inspection at 1440×778 confirmed separation of the party, narration and action panels. Real-key browser dialogue/voice/microphone together, all animation poses, enlarged-text acceptance and full campaign pacing remain open. [Feedback QA](FEEDBACK_QA.md) records evidence; [edge cases](EDGE_CASES.md) records coverage; [design revision](DESIGN_REVISION.md) records the art direction.
 
 ## Vision and audience
 
@@ -12,8 +18,8 @@ The user authorizes a public Sites release and optional player-funded or owner-s
 
 ## Player journey
 
-1. Choose a name, Human/Elf/Dwarf/Halfling identity, Fighter/Rogue/Wizard/Cleric calling, background, and palette. Preview the party, then begin or continue a saved adventure.
-2. Read the room and objective. Select a visible interaction or its menu equivalent. Examine evidence, talk, search supplies, choose a route, or propose a custom action.
+1. Choose a name, Human/Elf/Dwarf/Halfling identity, Fighter/Rogue/Wizard/Cleric calling, background, and palette. Customize Mira and Oren’s class, race and palette while retaining their names and stories. Preview the party, then begin or choose a saved adventure from the adventure picker.
+2. Choose Free story mode (default), a personal OpenAI key, or the host allowance when enabled. A personal key requires **Check & connect**, a disclosed small paid access check, and a visible successful connection before AI dialogue is enabled. Read the room and objective. Select a visible interaction or its menu equivalent. Examine evidence, talk, search supplies, choose a route, or propose a custom action.
 3. Review the action and any check before committing. The server rolls once, saves the outcome, then presents it.
 4. Watch a prominent die animate and reveal its natural value, modifier and total. See the consequence after the reveal. Reduced motion shortens the animation. Skip dismisses presentation, never rerolls.
 5. In combat, see initiative order and the active actor. Each automatic action is presented individually with its own health/position changes. Continue to the next action deliberately. The player cannot submit another game action during playback.
@@ -23,7 +29,7 @@ The user authorizes a public Sites release and optional player-funded or owner-s
 
 ## Rules and character contract
 
-Internal class IDs preserve old saves: guardian=Fighter (24 HP, Defense14, sword1d8+3, Rally); scout=Rogue (18 HP, Defense12, bow1d6+3, Aim); adept=Wizard (16 HP, Defense11, spark1d6+3, Mend); cleric=Cleric (20 HP, Defense13, ranged radiance1d6+3, Mend). These are compact game classes, not full D&D class progressions. Races currently establish identity and model height; racial ability packages are not implemented. Background training grants +2 to specified opening checks.
+Internal class IDs preserve old saves: guardian=Fighter (24 HP, Defense14, sword1d8+3, Rally); scout=Rogue (18 HP, Defense12, bow1d6+3, Aim); adept=Wizard (16 HP, Defense11, spark1d6+3, Mend); cleric=Cleric (20 HP, Defense13, ranged radiance1d6+3, Mend). These are compact game classes, not full D&D class progressions. Races currently establish identity, model height and breadth; racial ability packages are not implemented. Background training grants +2 to specified opening checks.
 
 A turn has 6m movement and one action. Run exchanges the action for 6m additional movement. Melee range1.5m; ranged8m. Guard adds2 Defense to the acting character until their next turn. Aim grants advantage to the next attack. Healing spends focus or a potion for1d6+2 health, capped at maximum. Zero-health characters cannot act; healing can revive them. Party defeat permits checkpoint restoration into a new branch. No permanent death.
 
@@ -35,7 +41,7 @@ Shared XP thresholds: levels1–8 at0/300/900/2700/6500/14000/23000/34000. Level
 
 Mira is a perceptive scout with dry humour, searching for her brother Tavin. Her continuing arc distinguishes a copied voice from a living person, reunion from rescue, and trust from recklessness. Oren is a patient veteran who prioritizes people over institutional obedience. His arc revisits his old company, naming its dead, and choosing his oath again.
 
-Companion turns use legal AI proposals when configured, with deterministic protective tactics on provider failure. Oren prioritizes downed or badly injured allies when healing is possible; Mira attacks vulnerable reachable targets. Guard protects only the actor. The party never accepts a major bargain without player confirmation. AI context contains current visible state, confirmed discoveries, recent exchanges, and key cross-chapter facts. Player assertions and prior generated text are conversation, not authoritative facts.
+Companion turns use legal AI proposals when configured, with deterministic protective tactics on provider failure. Oren prioritizes downed or badly injured allies when healing is possible; Mira attacks vulnerable reachable targets. Guard protects only the actor. The party never accepts a major bargain without player confirmation. AI context contains current visible state, currently available actions, confirmed discoveries, speaker-scoped recent exchanges, and key cross-chapter facts. DM suggestions must refer to available actions. An opening scene can be narrated before any discoveries exist; it must not fail merely because the discovery-reference list is empty. Player assertions and prior generated text are conversation, not authoritative facts.
 
 Trust changes once for a recorded decision and persists. Six private companion scenes unlock at trust1/4/8, with later scenes additionally requiring witnessed archive, market, prison or choir events. Each offers two original responses, preserves the chosen memory for later AI context, and grants Mira +2 maximum/current health (Steady Nerves) or Oren +1 maximum/current focus (Shared Resolve), once. Starting a scene temporarily replaces other actions with its two replies; unfinished conversations survive reload. These scenes work without paid AI.
 
@@ -63,15 +69,15 @@ Measure active foreground play, pause/loading time, AI conversation time, combat
 
 ## Art, camera and interface
 
-Preserve the dark green/charcoal and antique-gold interface, warm torchlight, cool archive water and choir light. The Crazy Taxi reference contributes readable silhouettes and immediate response. Quaternius is the cohesive low-poly source. Use real imported furniture, architecture and animated monsters; enemy identity/stats must not depend on asset filenames. Bestiary Imp adapted as goblin/hobgoblin is an explicit art substitution.
+Use dark blue/charcoal panels with antique-gold accents, warm torchlight, cool archive water and choir light. BG3 informs the compact party HUD, prominent character setup, dice anticipation and separation of narrative from actions; original story and licensed assets remain independent. The earlier Crazy Taxi reference contributes readable silhouettes and immediate response. KayKit Adventurers supplies the current party models; Quaternius supplies monsters and dungeon dressing. Use real imported furniture, architecture and animated monsters; enemy identity/stats must not depend on asset filenames. Bestiary Imp adapted as goblin/hobgoblin is an explicit art substitution.
 
-Exploration uses a raised orbiting party camera with zoom. Dialogue moves closer. Dice appear prominently over the scene; active actors have bright rings and party cards. Initiative remains visible, menus retain keyboard alternatives, and final health does not appear before an action reveal. Keep floor routes unobstructed; dressing belongs around usable routes. Scenes need differentiated props and lighting rather than repeated empty squares. Source assets must be checked in browser for scale, material and animation compatibility.
+Creation uses a closer, front-facing party preview beside a scrollable setup panel. Exploration uses a raised orbiting party camera with zoom. Dialogue moves closer. Dice appear prominently over the scene; active actors have bright rings and party cards. Initiative remains visible, menus retain keyboard alternatives, and final health does not appear before an action reveal. Party world-name labels appear on selection, hover or an active turn, keeping idle characters visible; party cards remain available throughout. Gear follows the source skeleton, with overlapping optional accessories hidden. Keep floor routes unobstructed; dressing belongs around usable routes. Scenes need differentiated props and lighting rather than repeated empty squares. Source assets must be checked in browser for scale, material and animation compatibility.
 
-Desktop targets1280×720 and1920×1080. Main reading text16px+, routine labels14px, secondary metadata12px. Provide scrolling for long menus, setup and journal. The current app is desktop-first; mobile is not a release claim. At200% text zoom, controls must remain reachable. Visual acceptance requires actual screenshots, not code inspection.
+Desktop targets1280×720 and1920×1080. Accessibility targets remain main reading text16px+, routine labels14px and secondary metadata12px; the compact HUD currently includes smaller metadata, so these targets and200% text-zoom acceptance are not yet fully verified. Provide scrolling for long menus, setup and journal. The current app is desktop-first; mobile is not a release claim. At200% text zoom, controls must remain reachable. Visual acceptance requires actual screenshots, not code inspection.
 
 ## Privacy, costs and interruption
 
-A player’s own API key stays only in page memory, is sent directly to OpenAI, never to the game server, and clears on reload/disconnect. No localStorage/sessionStorage persistence for personal keys. Prompts, context and audio go to OpenAI; returned dialogue and the player’s conversational text are stored with the hosted adventure. OpenAI’s own data policies still apply.
+Connection feedback distinguishes checking, connected for this visit, rejected and disconnected. A successful access check enables AI; an invalid key, missing model permission or exhausted quota must not show success. Disconnecting or switching modes invalidates late check results. The small access check is billed by OpenAI and does not verify microphone or speech capability. A player’s own API key stays only in page memory, is sent directly to OpenAI, never to the game server, and clears on reload/disconnect. No localStorage/sessionStorage persistence for personal keys. Prompts, context and audio go to OpenAI; returned dialogue and the player’s conversational text are stored with the hosted adventure. OpenAI’s own data policies still apply.
 
 Hosted adventure access uses a private device cookie. There are no public save listings and no cross-device account recovery yet. Clearing cookies loses access; this limitation must be visible. Owner sponsorship uses a separately protected server secret, never a bundled key. Conservative limits: $0.30 per visitor/day, $2 globally/day, $25 global lifetime. These are admission reservations rather than invoice totals. Sponsorship must be disabled when its secret is absent; authored gameplay remains free of AI calls. Setting another personal key is an explicit choice to pay OpenAI directly.
 
@@ -98,6 +104,12 @@ Microphone refusal leaves typing available. Unsupported requests show a limitati
 | EB-15 | Campaign/progression | Six chapters/46 locations, XP/levels, recorded decisions and ending;24h separately measured. Expansion + long-form follow-up |
 | EB-16 | Responsiveness | Target p95 frame≤33.3ms at1080p; report measured AI and action latency. Release gate |
 | EB-17 | Public publication | Exact tested source/build deployed to registered Sites URL; deployed API and browser checks. Public release |
+| PRD-28 | Live character preview | Repeated race/palette changes keep stable dimensions and update the visible model. Feedback correction |
+| PRD-29 | Companion setup | Chosen class/race/palette and class-derived stats persist; old saves remain selectable. Feedback correction |
+| PRD-30 | Explicit payment source | Free is default; unavailable host mode disabled; personal failure never spends host funds. Public release |
+| PRD-31 | Personal-key confirmation | Checking and success/error/disconnect statuses visible; late check cannot reconnect after mode change. Feedback correction |
+| PRD-32 | Grounded narration | Empty-discovery opening works; unknown references rejected; suggestions use supported actions; speaker histories stay separate. Feedback correction |
+| PRD-33 | Revised asset/HUD presentation | All supplied models pass runtime audit; attached gear and panel separation visually inspected; broader visual gates remain explicit. Feedback correction |
 
 ## Milestones
 
@@ -128,11 +140,11 @@ Acceptance: each opportunity is absent with the opposite earlier decision; reloa
 
 ## Feedback correction: character choices and AI payment (6 September 2026)
 
-**PRD-28.** Hero race and palette update the 3D preview immediately and remain correct after repeated changes. Preview normalization uses the original unattached asset bounds, never the already-scaled animated instance. Human/elf/dwarf/halfling have distinct supported heights; these remain stylized cosmetic identities, not full racial feature implementations. Fighter and Cleric share the source body, with shield/holy-symbol treatment distinguishing their roles.
+**PRD-28.** Hero race and palette update the 3D preview immediately and remain correct after repeated changes. Preview normalization uses the original unattached asset bounds, never the already-scaled animated instance. Human/elf/dwarf/halfling have distinct supported heights; these remain stylized cosmetic identities, not full racial feature implementations. Fighter and Cleric currently share the KayKit Knight body; the Cleric hides the sword and uses spellcasting presentation. Do not claim a unique Cleric sculpt. The previous detached shield/holy-symbol geometry was removed.
 
 **PRD-29.** New-adventure setup offers class, race and palette for Mira and Oren. Names, personalities and personal story arcs remain stable. The chosen class supplies the actual stats/actions and model; party cards show the actual class. Choices persist with the save. Existing adventures retain their current party.
 
-**PRD-30.** Character setup and Settings both show three explicit options: Free story mode (default), personal OpenAI key, and the host’s limited allowance. The last option is disabled when unconfigured. Free mode runs authored scenes and autonomous tactical companions without paid AI. Personal mode requires an entered key, never silently falls back to host billing, and clears the key on disconnect, switching away or reload. Reload returns to Free mode. Paid provider access is opt-in, including companion planning.
+**PRD-30.** Character setup and Settings both show three explicit options: Free story mode (default), personal OpenAI key, and the host’s limited allowance. The last option is disabled when unconfigured. Free mode runs authored scenes and autonomous tactical companions without paid AI. Personal mode requires a successful key access check, never silently falls back to host billing, and clears the key on disconnect, switching away or reload. Reload returns to Free mode. Paid provider access is opt-in, including companion planning.
 
 ## Feedback revision: narrator connection and asset presentation
 
@@ -141,3 +153,16 @@ PRD-31: Connecting a personal key performs a disclosed small access check and vi
 PRD-32: Opening narration must work without discoveries. Scene description and recent confirmed events are valid narrative context. Fact references must use supplied discovery IDs; unsupported references remain rejected. Model refusals and truncation must have readable errors and preserve gameplay.
 
 PRD-33: Use compact fantasy RPG panels and a visible central stage following DESIGN_REVISION.md. All supplied 3D models receive runtime loading, shader and animation checks. Retained gear follows the rig. Native race sculpts and full BG3 mechanics are not claimed. EDGE_CASES.md records evidence and remaining coverage.
+
+## Approved curated campaign expansion (implementation in progress)
+
+The next campaign keeps the KayKit party style and original setting. Its design target is25–35 hours of active play, with a median above24 hours in three first-time complete human playtests before claiming that duration. Six floors/chapters connect linearly; optional rooms and alternative solutions exist inside each floor. No waiting gate or repetitive AI conversation may pad the duration.
+
+- **EB-28, Visual identity:** As a player, I want readable object/actor names and reliable models so I can select the intended target. Handle long/duplicate names, race/class changes, camera occlusion, missing models, crowded labels and narrow viewports. Done when labels avoid one another and the HUD, target menus retain hidden targets, individual failures offer retry, and screenshots verify actor scale/equipment and model anchors.
+- **EB-29, Curated rules:** As a player, I want understandable tactical choices with consistent dice consequences. New campaigns explicitly opt into curated SRD5.2.1; existing echo-v1 saves keep their original rules. Four classes progress1–8, with six abilities, proficiency, saves, AC, movement, action/bonus/reaction, spell slots, concentration, conditions, death saves and rests. Handle exhausted resources, invalid targets, stale commands, interrupted turns, friendly fire and party defeat. Done when server validation owns every outcome, preview agrees with resolution, and old-save regression tests pass.
+- **EB-30, Companion control:** As a player, I want allies to act intelligently while retaining control of major decisions. Provide balanced, focus-target, protect-hero and conserve-resource priorities, plus takeover of one unstarted companion turn. Handle downed targets, no legal attack, delayed AI and changed initiative. Done when each action is shown individually, fallback decisions are legal and takeover never executes twice.
+- **EB-31, Two-hour slice:** As a player, I want a complete dungeon with quests, loot, equipment, camp, level-up and companion consequences. Handle rejected quests, lost combat, full inventory, spent key items, repeated rewards and interrupted rests. Done when multiple peaceful and combat routes reach an ending, rewards are once-only, mandatory progression cannot softlock and human timing supports approximately two hours.
+- **EB-32, Reliable narration:** As a player, I want clear text/voice and control over who pays. Keep Free/personal/sponsored explicit; personal failures never switch to owner billing. Handle invalid/revoked keys, quota, timeout, malformed/ungrounded narration, microphone denial, interrupted playback and refresh. Done when real browser tests confirm connection feedback, DM and both companion dialogue, speech interruption and recovery, with no keys in saves/logs/evidence.
+- **EB-33, Full campaign:** As a player, I want a sustained story with varied challenges and consequential relationships. Target18 main quests,12 side quests and24 combat encounters including six bosses and12 enemy roles across six chapters. Estimated main story15–19.5h, side content8–11h, camp2–3h. Handle skipped side quests, divergent allegiances, early deaths and old checkpoints. Done when all routes have tested endings, content avoids repetitive filler, and three human first-time playtests support the duration claim.
+
+Delivery order: A visual reliability; B curated rules and tactics; C two-hour slice; D AI/voice acceptance; E full campaign. B/C/D must support the slice before the full content expansion is accepted. Current progress is recorded in EXECUTION_STATUS.md; these requirements are not claims about Sites version10.

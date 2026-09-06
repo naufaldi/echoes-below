@@ -1,0 +1,38 @@
+/** Curated dungeon geometry: five-foot cells; equal diagonal cost, no corner cutting. */
+export type Cell=[number,number];
+export interface TacticalGrid {width:number;height:number;blocked:Cell[];difficult?:Cell[]}
+const key=([x,y]:Cell)=>`${x},${y}`;
+const equal=(a:Cell,b:Cell)=>a[0]===b[0]&&a[1]===b[1];
+function valid(grid:TacticalGrid,p:Cell){return p.every(Number.isInteger)&&p[0]>=0&&p[1]>=0&&p[0]<grid.width&&p[1]<grid.height;}
+function traversable(grid:TacticalGrid,p:Cell,walls:Set<string>){return valid(grid,p)&&!walls.has(key(p));}
+export function findPath(grid:TacticalGrid,start:Cell,end:Cell,budgetFeet:number):{cells:Cell[];costFeet:number}|null{
+ const walls=new Set(grid.blocked.map(key));const difficult=new Set((grid.difficult??[]).map(key));
+ if(!Number.isFinite(budgetFeet)||budgetFeet<0||!traversable(grid,start,walls)||!traversable(grid,end,walls))return null;
+ const queue=[{cell:start,cost:0}];const costs=new Map([[key(start),0]]);const parent=new Map<string,Cell>();
+ while(queue.length){queue.sort((a,b)=>a.cost-b.cost||key(a.cell).localeCompare(key(b.cell)));const current=queue.shift()!;
+  if(current.cost!==costs.get(key(current.cell)))continue;
+  if(equal(current.cell,end)){const cells:Cell[]=[end];let cursor=end;while(!equal(cursor,start)){cursor=parent.get(key(cursor))!;cells.unshift(cursor);}return{cells,costFeet:current.cost};}
+  for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){
+   if(dx===0&&dy===0)continue;const next:Cell=[current.cell[0]+dx,current.cell[1]+dy];if(!traversable(grid,next,walls))continue;
+   if(dx&&dy&&(!traversable(grid,[current.cell[0]+dx,current.cell[1]],walls)||!traversable(grid,[current.cell[0],current.cell[1]+dy],walls)))continue;
+   const cost=current.cost+(difficult.has(key(next))?10:5);if(cost>budgetFeet||cost>=(costs.get(key(next))??Infinity))continue;
+   costs.set(key(next),cost);parent.set(key(next),current.cell);queue.push({cell:next,cost});
+  }
+ }
+ return null;
+}
+/** Supercover ray: touching a blocked corner counts as blocked in this curated ruleset. */
+export function lineOfSight(grid:TacticalGrid,start:Cell,end:Cell):boolean{
+ const walls=new Set(grid.blocked.map(key));if(!traversable(grid,start,walls)||!traversable(grid,end,walls))return false;
+ let [x,y]=start;const dx=end[0]-x,dy=end[1]-y,nx=Math.abs(dx),ny=Math.abs(dy),sx=Math.sign(dx),sy=Math.sign(dy);let ix=0,iy=0;
+ while(ix<nx||iy<ny){const compare=(1+2*ix)*ny-(1+2*iy)*nx;
+  if(compare===0){if(!traversable(grid,[x+sx,y],walls)||!traversable(grid,[x,y+sy],walls))return false;x+=sx;y+=sy;ix++;iy++;}
+  else if(compare<0){x+=sx;ix++;}else{y+=sy;iy++;}
+  if(!traversable(grid,[x,y],walls))return false;
+ }
+ return true;
+}
+export function areaTargets(grid:TacticalGrid,origin:Cell,radiusFeet:number,actors:{id:string;position:Cell}[]):string[]{
+ if(!Number.isFinite(radiusFeet)||radiusFeet<0)return[];
+ return actors.filter(a=>Math.hypot(a.position[0]-origin[0],a.position[1]-origin[1])*5<=radiusFeet&&lineOfSight(grid,origin,a.position)).map(a=>a.id);
+}
