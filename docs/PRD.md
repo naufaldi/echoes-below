@@ -291,3 +291,12 @@ Non-roll movement and action results use a compact panel below the visible board
 ### Dice shape accuracy
 
 D4, D6, D8, D10, D12 and D20 presentation uses a corresponding polyhedron. Geometry and animation remain decorative; the saved numeric result is authoritative. D10 no longer reuses the twenty-sided silhouette.
+
+
+### Local tactical terrain update
+
+Curated encounters use seven authored terrain arrangements across the opening and five later chapter environments. Solid stone pillars block movement and sight; amber rubble costs 10 feet per entered cell. Terrain is shown during combat and explained beside the turn controls. Exploration target labels are suppressed in combat so unavailable camp/clue interactions do not obscure actors.
+
+The saved tactical grid owns both pathfinding and 3D terrain. New battles select their scene profile; resuming an existing battle retains its saved grid. Autonomous movement follows a complete legal route to an adjacent attack cell and can initially move away from a target to navigate around a wall. It respects living actor occupancy, difficult ground, movement budget, and blocked diagonal corners. Unreachable targets produce a defensive/end-turn fallback.
+
+Verification: regression tests cover connected spawn cells across every authored encounter, disjoint terrain, independent layout copies, wall detours, insufficient movement and sealed targets. A local browser encounter at The Sluice Stair rendered the saved pillars/rubble and resolved an enemy attack with a visible die presentation. This is incremental local evidence, not campaign-duration or full visual acceptance. No deployment in this checkpoint.

@@ -1,3 +1,4 @@
+import TacticalTerrain from './TacticalTerrain';
 import ChapterAtmosphere,{chapterMood} from './ChapterAtmosphere';
 import CounterweightMechanism from './CounterweightMechanism';
 import {advanceMovement,type Point} from '../shared/movement';
@@ -70,6 +71,7 @@ function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroA
  const mood=chapterMood(save?.scene.id??'approach');
  return <><color attach="background" args={[mood.background]}/><fog attach="fog" args={[mood.background,24,50]}/><ambientLight intensity={.65} color={mood.ambient}/><hemisphereLight args={['#b9cec5','#64553b',1.1]}/><directionalLight position={[3,12,5]} intensity={2.5} color={mood.sun} castShadow shadow-mapSize={[1024,1024]} shadow-camera-left={-10} shadow-camera-right={10} shadow-camera-top={10} shadow-camera-bottom={-10}/><Architecture scene={save?.scene.id??'approach'} gateOpen={save?.scene.entities.find(e=>e.id==='gate')?.open}/><SetDressing scene={save?.scene.id??'approach'}/>
 
+ {save?.tactical&&save.mode==='combat'&&<TacticalTerrain grid={save.tactical.grid}/>}
  {save?.tactical&&save.mode==='combat'&&save.actions.filter(a=>a.kind==='move').map(a=>{const [x,y]=a.id.split(':')[2].split(',').map(Number);return <mesh key={a.id} rotation={[-Math.PI/2,0,0]} position={[(x-4)*1.2,.035,-(y-4)*1.2]} onClick={e=>{e.stopPropagation();onAction?.(a);}}><planeGeometry args={[1.1,1.1]}/><meshBasicMaterial color="#7aaed2" transparent opacity={.3} depthWrite={false}/></mesh>;})}
  <DungeonDressing scene={save?.scene.id??'approach'}/><ChapterAtmosphere scene={save?.scene.id??'approach'}/>
  {save?.scene.counterweight&&<CounterweightMechanism state={save.scene.counterweight} reduced={reduced} onSelect={()=>onSelect('chain')}/>}
@@ -78,7 +80,7 @@ function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroA
  {save?.scene.id==='cookfire'&&save.scene.entities.some(e=>e.id==='guards')&&save.enemies.length===0&&<Character actor={{...demoActor('guard-extra','goblin',[2.4,2.3]),side:'enemy'}} selected={false} onSelect={()=>onSelect('guards')} reduced={reduced} preview/>}
  {save?.enemies.map(a=><Character key={(save?.scene.id??'creation')+a.id} actor={{...a,name:actorDisplayName(a,save?.enemies??[])}} attackId={save?.logs.filter(l=>l.speaker===a.id&&l.text.includes(' attacks ')).at(-1)?.id} selected={a.id===selected||save?.turn?.actorId===a.id} onSelect={()=>onSelect(a.id)} reduced={reduced}/>)}
 
- {save?.scene.entities.map(e=><Marker key={save.scene.id+e.id} entity={e} selected={e.id===selected} onSelect={()=>onSelect(e.id)}/>)}
+ {save?.mode!=='combat'&&save?.scene.entities.map(e=><Marker key={save.scene.id+e.id} entity={e} selected={e.id===selected} onSelect={()=>onSelect(e.id)}/>)}
  <ContactShadows opacity={.3} scale={20} blur={2} far={5} resolution={256} color="#050d0b"/>
  <OrbitControls ref={orbit} onStart={()=>{cameraMotion.current=false;}} makeDefault target={save?[0,.4,-.5]:[0,1,-1]} enablePan={false} minDistance={save?12:7} maxDistance={25} minPolarAngle={.45} maxPolarAngle={1.15} enableDamping={!reduced} maxAzimuthAngle={Math.PI*.6} minAzimuthAngle={-Math.PI*.6}/>
  </>;

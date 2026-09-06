@@ -124,3 +124,10 @@ Pre-publication verification: 155 tests passed, all three type checks and produc
 
 
 Latest public release: Sites version 12 includes rescued-courier projection, counterweight puzzle and 3D controls, tactical AI proposals and durable hosted planning claims. Live migration and both-rule-version public puzzle HTTP tests passed; see VERIFICATION.md. Browser access is currently unavailable because the Mac is locked. Independent content and rules work remains, so the active goal is not blocked or complete.
+
+
+### Local terrain checkpoint (not deployed)
+
+Added seven terrain arrangements, saved-grid-driven pillars/rubble and path-based autonomous detours. Suppressed unavailable exploration labels during combat and explained terrain costs in turn controls. The Sluice Stair was entered through the local browser, initiative and an enemy attack resolved, and the new battlefield inspected visually. Refresh after the development server restarted recovered the local session and retained the adventure.
+
+188 automated tests and client/server type checks pass. Fresh-resource combat simulation: 192/192 wins under its existing controlled hero policy, no unfinished encounters. This validates bounded completion under those fixtures; it does not establish challenge, attrition or human duration. Human playtesting, richer authored pacing, wider asset/voice verification and final release gates remain. Public version 12 remains unchanged per the local-first instruction.

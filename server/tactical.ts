@@ -1,8 +1,9 @@
+import {encounterTerrain} from '../shared/encounter-terrain.js';
 import {enemyRole} from '../shared/enemy-roles.js';
 import {ITEMS} from '../shared/logistics.js';
 import type {Actor,ActionOption,ClassId} from '../shared/types.js';
 import {CURATED_RULES_VERSION,CURATED_CLASS_IDS,classResources,resetTurnResources,makeCharacter,modifier,spendAction,spendSlot,takeDamage,heal,deathSave,type CuratedClass} from '../shared/curated-rules.js';
-import {findPath,lineOfSight,type Cell} from '../shared/tactical-grid.js';
+import {findPath,lineOfSight,approachTarget,type Cell} from '../shared/tactical-grid.js';
 import {actorDisplayName} from '../shared/visual-identity.js';
 import type {CompanionDirective} from '../shared/tactical-state.js';
 import {GameError,log,finishCheck,type Save} from './game.js';
@@ -22,7 +23,7 @@ export function projectTactical(s:Save,positions=true){
  if(s.turn){const c=s.tactical.actors[s.turn.actorId];s.turn.actionRemaining=c.economy.action;s.turn.movementM=c.economy.movementFeet*.3048;}
 }
 export function startTacticalCombat(s:Save,dice:Dice){
- const t=s.tactical!;t.takeover=null;t.cells={};
+ const t=s.tactical!;t.takeover=null;t.cells={};t.grid=encounterTerrain(s.sceneId);
  s.party.forEach((a,i)=>{t.cells[a.id]=[3+i,1];});
  s.enemies.forEach((a,i)=>{const c=makeCharacter('fighter',Math.min(8,s.level??1));c.hp=a.hp;c.maxHp=a.maxHp;c.armorClass=a.defense;c.abilities.strength=10+a.attributes.might*2;c.abilities.dexterity=12;c.dead=false;const role=enemyRole(a);if(role){c.speedFeet=role.speed;c.abilities.dexterity=role.dex;c.features={...classResources(c),secondWind:0,actionSurge:0};}t.actors[a.id]=c;t.cells[a.id]=[3+i,6];});
  const initiative=members(s).map(a=>{const roll=rollD20(dice,modifier(t.actors[a.id].abilities.dexterity),'Initiative');log(s,`${actorDisplayName(a,s.enemies)} rolls initiative ${roll.total}.`,a.id,[roll]);return{id:a.id,total:roll.total};}).sort((a,b)=>b.total-a.total||a.id.localeCompare(b.id));
@@ -109,7 +110,7 @@ function chooseAutomatic(s:Save):ActionOption{
  const healOption=options.find(o=>o.kind==='heal'&&t.actors[o.targetId!].hp<t.actors[o.targetId!].maxHp/2);if(healOption&&directive!=='conserve')return healOption;
  const attacks=options.filter(o=>o.kind==='attack');if(attacks.length){if(directive==='focus'&&t.focusTarget){const focus=attacks.find(o=>o.targetId===t.focusTarget);if(focus)return focus;}return attacks.sort((a,b)=>t.actors[a.targetId!].hp-t.actors[b.targetId!].hp)[0];}
  if(!t.actors[id].economy.action)return options.find(o=>o.id==='tactical:end')!;
- const foes=members(s).filter(x=>x.side!==a.side&&x.hp>0);const moves=options.filter(o=>o.kind==='move');if(foes.length&&moves.length){const nearest=foes.sort((x,y)=>range(s,id,x.id)-range(s,id,y.id));const threat=directive==='protect'&&a.side==='party'&&t.actors.hero.hp>0?nearest.find(foe=>range(s,'hero',foe.id)<=10):undefined;const goal=t.cells[(threat??nearest[0]).id];moves.sort((a,b)=>{const p=(o:ActionOption)=>o.id.split(':')[2].split(',').map(Number);const dist=(o:ActionOption)=>Math.hypot(p(o)[0]-goal[0],p(o)[1]-goal[1]);return dist(a)-dist(b);});const best=moves[0].id.split(':')[2].split(',').map(Number);const here=t.cells[id];if(Math.hypot(best[0]-goal[0],best[1]-goal[1])<Math.hypot(here[0]-goal[0],here[1]-goal[1]))return moves[0];return options.find(o=>o.id==='tactical:dodge')??options.find(o=>o.id==='tactical:end')!;}
+ const foes=members(s).filter(x=>x.side!==a.side&&x.hp>0);const moves=options.filter(o=>o.kind==='move');if(foes.length&&moves.length){const nearest=foes.sort((x,y)=>range(s,id,x.id)-range(s,id,y.id));const threat=directive==='protect'&&a.side==='party'&&t.actors.hero.hp>0?nearest.find(foe=>range(s,'hero',foe.id)<=10):undefined;const ordered=threat?[threat,...nearest.filter(foe=>foe.id!==threat.id)]:nearest;for(const foe of ordered){const next=approachTarget(gridFor(s,id),t.cells[id],t.cells[foe.id],t.actors[id].economy.movementFeet);if(next){const move=moves.find(o=>o.id===`tactical:move:${next.join(',')}`);if(move)return move;}}return options.find(o=>o.id==='tactical:dodge')??options.find(o=>o.id==='tactical:end')!;}
  return options.find(o=>o.id==='tactical:death')??options.find(o=>o.id==='tactical:end')!;
 }
 export function applyTactical(original:Save,id:string,dice:Dice):Save{

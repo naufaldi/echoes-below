@@ -1,6 +1,7 @@
 {
+  "depleted": false,
   "kind": "controlled simulation, not human balance acceptance",
-  "assumptions": "Fresh party and resources each encounter; four hero classes; fixed Rogue/Fighter companions; greedy legal-action hero policy; authored chapter-level assumptions; no encounter attrition or paid AI.",
+  "assumptions": "Independent encounters; baseline uses fresh HP/resources, depleted scenario uses half HP/slots and zero potions; four hero classes; fixed Rogue/Fighter companions; greedy legal-action hero policy; authored chapter-level assumptions; no encounter attrition or paid AI.",
   "seedCount": 2,
   "results": [
     {
@@ -10,7 +11,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 26
+      "meanSteps": 20
     },
     {
       "scene": "bell",
@@ -19,7 +20,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 47
+      "meanSteps": 38
     },
     {
       "scene": "archive-1",
@@ -28,7 +29,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 32
+      "meanSteps": 29
     },
     {
       "scene": "archive-3",
@@ -37,7 +38,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 43
+      "meanSteps": 41
     },
     {
       "scene": "archive-6",
@@ -46,7 +47,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 25
+      "meanSteps": 23
     },
     {
       "scene": "archive-7",
@@ -55,7 +56,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 50
+      "meanSteps": 62
     },
     {
       "scene": "market-1",
@@ -64,7 +65,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 35
+      "meanSteps": 28
     },
     {
       "scene": "market-3",
@@ -73,7 +74,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 56
+      "meanSteps": 48
     },
     {
       "scene": "market-6",
@@ -82,7 +83,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 61
+      "meanSteps": 31
     },
     {
       "scene": "market-7",
@@ -91,7 +92,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 61
+      "meanSteps": 54
     },
     {
       "scene": "roots-1",
@@ -100,7 +101,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 29
+      "meanSteps": 17
     },
     {
       "scene": "roots-3",
@@ -109,7 +110,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 25
+      "meanSteps": 20
     },
     {
       "scene": "roots-6",
@@ -118,7 +119,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 42
+      "meanSteps": 25
     },
     {
       "scene": "roots-7",
@@ -127,7 +128,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 35
+      "meanSteps": 18
     },
     {
       "scene": "choir-1",
@@ -136,7 +137,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 53
+      "meanSteps": 35
     },
     {
       "scene": "choir-4",
@@ -145,7 +146,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 42
+      "meanSteps": 36
     },
     {
       "scene": "choir-6",
@@ -154,7 +155,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 41
+      "meanSteps": 26
     },
     {
       "scene": "choir-7",
@@ -163,7 +164,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 55
+      "meanSteps": 37
     },
     {
       "scene": "depth-1",
@@ -172,7 +173,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 51
+      "meanSteps": 38
     },
     {
       "scene": "depth-2",
@@ -181,7 +182,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 43
+      "meanSteps": 28
     },
     {
       "scene": "depth-3",
@@ -190,7 +191,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 37
+      "meanSteps": 30
     },
     {
       "scene": "depth-4",
@@ -199,7 +200,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 59
+      "meanSteps": 43
     },
     {
       "scene": "depth-6",
@@ -208,7 +209,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 82
+      "meanSteps": 51
     },
     {
       "scene": "depth-7",
@@ -217,7 +218,7 @@
       "wins": 8,
       "losses": 0,
       "unfinished": 0,
-      "meanSteps": 93
+      "meanSteps": 68
     }
   ]
 }

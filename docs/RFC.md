@@ -352,3 +352,12 @@ CSS targets `.turn-playback:not(.with-roll)` for the bottom result panel, retain
 ### Dice geometry
 
 `client/die-geometry.ts` centralizes the existing Three.js primitive choices and adds D12’s dodecahedron plus a D10 pentagonal trapezohedron constructed as ten planar kite faces. The alternating ring height is derived from the pole height and cos(pi/5) so each kite triangulates coplanarly. Outward triangle orientation is verified; geometry is memoized by side count and disposed on replacement/unmount. Two tests count distinct outward face planes for all supported dice and verify D10’s closed triangulated surface and twelve vertices. The old mapping was observed to fail with 20 planes for D10. Reference: [Wolfram MathWorld trapezohedron](https://mathworld.wolfram.com/Trapezohedron.html). Browser inspection of a new D10 roll remains pending.
+
+
+### Local tactical terrain update
+
+Curated encounters use seven authored terrain arrangements across the opening and five later chapter environments. Solid stone pillars block movement and sight; amber rubble costs 10 feet per entered cell. Terrain is shown during combat and explained beside the turn controls. Exploration target labels are suppressed in combat so unavailable camp/clue interactions do not obscure actors.
+
+The saved tactical grid owns both pathfinding and 3D terrain. New battles select their scene profile; resuming an existing battle retains its saved grid. Autonomous movement follows a complete legal route to an adjacent attack cell and can initially move away from a target to navigate around a wall. It respects living actor occupancy, difficult ground, movement budget, and blocked diagonal corners. Unreachable targets produce a defensive/end-turn fallback.
+
+Verification: regression tests cover connected spawn cells across every authored encounter, disjoint terrain, independent layout copies, wall detours, insufficient movement and sealed targets. A local browser encounter at The Sluice Stair rendered the saved pillars/rubble and resolved an enemy attack with a visible die presentation. This is incremental local evidence, not campaign-duration or full visual acceptance. No deployment in this checkpoint.

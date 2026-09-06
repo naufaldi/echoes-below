@@ -36,3 +36,24 @@ export function areaTargets(grid:TacticalGrid,origin:Cell,radiusFeet:number,acto
  if(!Number.isFinite(radiusFeet)||radiusFeet<0)return[];
  return actors.filter(a=>Math.hypot(a.position[0]-origin[0],a.position[1]-origin[1])*5<=radiusFeet&&lineOfSight(grid,origin,a.position)).map(a=>a.id);
 }
+
+/** Follow a complete route to a free adjacent attack cell, even when the first
+ * step leads away from the target. Occupied targets remain blocked in grid. */
+export function approachTarget(grid:TacticalGrid,start:Cell,target:Cell,budgetFeet:number):Cell|null{
+ if(!Number.isFinite(budgetFeet)||budgetFeet<0)return null;
+ const routes:NonNullable<ReturnType<typeof findPath>>[]=[];
+ for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){
+  if(!dx&&!dy)continue;
+  const end:Cell=[target[0]+dx,target[1]+dy];
+  // Ignore target occupancy for the final attack ray, retaining all other walls.
+  const sightGrid={...grid,blocked:grid.blocked.filter(p=>!equal(p,target))};
+  if(!lineOfSight(sightGrid,end,target))continue;
+  const route=findPath(grid,start,end,grid.width*grid.height*10);
+  if(route)routes.push(route);
+ }
+ routes.sort((a,b)=>a.costFeet-b.costFeet);
+ const route=routes[0];if(!route||route.costFeet===0)return null;
+ const difficult=new Set((grid.difficult??[]).map(key));let cost=0,result:Cell|null=null;
+ for(const cell of route.cells.slice(1)){cost+=difficult.has(key(cell))?10:5;if(cost>budgetFeet)break;result=cell;}
+ return result;
+}
