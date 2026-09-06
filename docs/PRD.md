@@ -229,3 +229,8 @@ Free party check-ins remain available without an API key. Mira and Oren each off
 ### Higher-level casting checkpoint
 
 Players can select an available spell-slot level from 1 through 4 when casting Magic Missile, Cure Wounds, Healing Word or Bless. Each choice displays its slot cost and expected dice in the confirmation. Exhausting level-1 slots does not disable higher-level casting. Healing outside combat supports the same Cure Wounds scaling. Only one slot spell can be spent per turn; a rejected or repeated action cannot consume another slot. Existing level-1 command IDs remain valid.
+
+
+### Rescued courier visual state
+
+After any successful rescue route, the courier’s label becomes Rescued courier and the model stands outside the open cell. Public scene projection derives this from the saved rescue flag while retaining the courier entity ID, so old saves receive the correction without changing identity or quest state.

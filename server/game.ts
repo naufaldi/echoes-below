@@ -962,6 +962,8 @@ export function publicSave(s: Save): PublicSave {
   }
   if(!expeditionRoom(sceneId)&&s.mode==='explore'&&!flags[`cache:${sceneId}`])scene.entities.push({id:'cache',name:'Forgotten chest',kind:'clue',position:[4.6,-.7],description:'A dusty chest with a salvageable healing potion.'});
   if(sceneId==='prison'&&flags.rescued){
+    const courier=scene.entities.find(e=>e.id==='courier')!;
+    courier.name='Rescued courier';courier.position=[-1.2,1];courier.description='Free of the cell and ready to testify about Vark.';
     const gate=scene.entities.find(e=>e.id==='gate')!;
     gate.open=true;gate.name='Courier’s open gate';gate.description='The gate is open. The courier is free.';
     scene.description='The courier stands free beside the open gate, ready to testify about Vark and the dangerous force below. A ledger lies on the nearby desk.';
