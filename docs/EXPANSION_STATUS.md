@@ -66,3 +66,6 @@ The Mac became available. Local browser QA at port 5173 created a curated Fighte
 
 
 Current local browser save Label QA has reached the Vark battle after a failed prepared negotiation (5 vs DC13); active turn is Goblin guard, with an alarm scout present. Puzzle wrong-order recovery, mid-puzzle reload, safe crossing, peaceful goblin passage, rescue identity, level 2 and parley DC change were observed. Battle completion and long-passage scroll verification remain pending. No Sites deployment.
+
+
+Local Label QA completed the Vark combat route and opening ending, then reached Chapter II’s Sluice Stair at 725 XP. Non-roll playback and last-roll overlap fixes are local and visually verified. The current browser remains available for the continuing chapter playthrough. Target two-hour/24-hour duration remains unproven; no Sites deployment.

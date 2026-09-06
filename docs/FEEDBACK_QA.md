@@ -34,3 +34,12 @@ Played the curated Label QA save at port 5173 through real browser controls. Wro
 In Vark’s chamber, both new questions displayed authored Vark text. Presenting the actual witness accounts visibly changed negotiation DC16 to DC13. The real negotiation rolled 5 + 0 = 5 and correctly entered combat. Separate dice/initiative playback was inspected, then skipped to the active Goblin guard turn. The alarm produced the additional Goblin scout. The battle remains unfinished and must continue from this save. Screenshots of the prison, parley and settled d20 are present in the task’s browser tool evidence.
 
 Long parley text overflow was difficult to discover. Added a keyboard-focusable narrative passage, thin stable scrollbar, overflow-only “Scroll to read more” hint, and reset-to-top on a new passage. Client typecheck passes; live short-passage rendering was checked after hot reload. The overflow hint and keyboard scrolling on a long passage still require browser confirmation. No deployment performed.
+
+
+### Local boss combat and ending completion
+
+Continued Label QA from the failed Vark negotiation through actual browser actions. Goblin guard moved 25 feet, then hit the hero for 7 damage. Automatic companion steps were advanced individually with presentation skips during the longer sequence. Mira/Oren eliminated the alarm scout. The hero used Second Wind (3 + 2 = 5 healing), missed an attack, used Action Surge, then hit the guard for 8. The next hero attack defeated Vark in round 2 after companion actions. Aftermath showed 675 XP and party HP 18/20, 17/17, 20/20. Securing the seal opened the chapter-complete screen; Continue to Chapter II reached The Sluice Stair, 725 XP, same party and restored opening-transition health. This verifies one real local combat path, not general balance or target duration.
+
+Visual fixes from this session: non-roll action playback moved to a compact bottom panel so movement remains visible; dice retain the large modal. Redundant resolving toast is suppressed during playback. The floating last-roll card overlapped companion text; it now lives in normal party-panel flow. Both corrections were checked in rendered browser screenshots. Client typecheck passed. No Sites deployment.
+
+Remaining observed limitation: D10 playback currently shares an icosahedron fallback geometry with D20 even though its numeric roll is correct. Correct die geometry is still needed.

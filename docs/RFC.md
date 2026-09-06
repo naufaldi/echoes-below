@@ -342,3 +342,8 @@ Optional `Logistics.shortRestScene` identifies an active rest window. `camp:shor
 ### Narrative overflow presentation
 
 `NarrativePassage` measures scrollHeight/clientHeight on text changes, resize and scroll, exposes a described keyboard-focusable paragraph, and updates an overflow hint. Text changes reset scrollTop; ResizeObserver disconnects on cleanup. No gameplay or audio state changes. Local typecheck passes; long-passage interaction is pending browser confirmation.
+
+
+### Local playback layout correction
+
+CSS targets `.turn-playback:not(.with-roll)` for the bottom result panel, retains existing focus containment and committed-frame logic, and hides the older narration beneath it. App suppresses its busy toast during playback. Last-roll markup moved into the party sidebar with static positioning, retaining responsive scrolling. No rules, save format or provider behavior changed. Rendered local screenshots verified movement visibility and removal of the sidebar overlap.

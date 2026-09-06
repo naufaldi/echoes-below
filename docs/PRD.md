@@ -281,3 +281,8 @@ Displaced world labels show a leader line and anchor dot to identify their ownin
 ### Long narrative readability
 
 The narrative passage can receive keyboard focus for native scrolling. Long passages show a scroll hint that changes at the end; short passages show no extra hint. Every new passage starts at its beginning. Text remains fully available without expanding the main panel over the dungeon.
+
+
+### Action presentation hierarchy
+
+Non-roll movement and action results use a compact panel below the visible board; dice retain the central presentation. The previous narration is hidden while this panel is active, and duplicate busy status is suppressed. The last-roll summary belongs inside the scrolling party panel so it cannot overlap companion controls. Playback still advances one committed action at a time and supports skipping without changing outcomes.
