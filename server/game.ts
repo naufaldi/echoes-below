@@ -1341,7 +1341,13 @@ function autoTurns(s: Save, dice: Dice, skipHero = false) {
     throw new GameError(500, "TURN_LIMIT", "Combat could not advance safely.");
 }
 export function applyAction(original: Save, id: string, dice: Dice): Save {
- const result=resolveAction(original,id,dice);if(result.logistics&&id!=='camp:short'&&!id.startsWith('camp:hitdie:'))delete result.logistics.shortRestScene;updateQuests(result,original);return result;
+ const result=resolveAction(original,id,dice);if(result.logistics&&id!=='camp:short'&&!id.startsWith('camp:hitdie:'))delete result.logistics.shortRestScene;updateQuests(result,original);
+ // Resolution helpers commit before post-action quest/loot hooks run. Stamp all
+ // newly emitted records at this boundary so no reward leaks into the next turn.
+ const existing=new Set(original.logs.map(entry=>entry.id));
+ for(const entry of result.logs)if(!existing.has(entry.id))entry.revision=result.revision;
+ for(const frame of result.presentation??[])if(!existing.has(frame.log.id))frame.log.revision=result.revision;
+ return result;
 }
 function resolveAction(original: Save, id: string, dice: Dice): Save {
   if(id.startsWith("scrit:"))return resolveScrit(original,id);

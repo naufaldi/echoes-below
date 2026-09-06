@@ -154,3 +154,10 @@ After Scrit’s initial introduction, the curated opening offers separate questi
 A party that fed Scrit and heard about the captive may spend one additional ration to cancel an existing alarm. This removes its extra scout from the later Vark encounter; subsequent disturbances can raise a new alarm. The offer is unavailable without supplies, after combat victory, in combat, after slipping past by distraction or outside the cookfire scene. Each exchange persists and resolves once.
 
 Verification: regression tests cover question prerequisites, persistent knowledge, duplicate rejection, supply cost, unavailable/hostile states, two-versus-three-enemy boss rosters and a later renewed alarm. Browser presentation of these new exchanges remains pending. This adds narrative choices and a resource consequence, not proof of a two-hour opening or 24-hour campaign. No deployment.
+
+
+### Local narrative playback and revision verification
+
+A fresh free-mode Elf Wizard (Scrit QA) reached the cookfire via the side ledge and completed the three Scrit questions through the browser. The second question unlocked the ward question; each consumed question disappeared. Long text displayed a scroll hint, accepted Page Down while focused, and changed to the end-of-passage hint. The next passage reset to its beginning. Reload/Continue retained character, location and completed questions. Offering a ration afterward reduced supplies from three to two and opened the prison route.
+
+This playthrough exposed a quest-log revision bug: quest/loot hooks run after the resolver increments the save revision, so their log entries were stamped for the following action. The action commit boundary now assigns every newly emitted log and presentation log to the resulting revision, preserving earlier log entries. The regression traverses the quest completion and following Scrit conversation, including serialization, and verifies that the old reward does not contaminate the next speaker heading. All 203 tests and server type checking passed. Existing historical logs are preserved, not rewritten. No deployment or campaign-duration acceptance is claimed.
