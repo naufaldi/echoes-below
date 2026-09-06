@@ -176,3 +176,11 @@ The shared Zod creation schema accepts optional strict companion setups, each co
 Client AI mode is in page memory and defaults to `off`. Mutations send `x-echoes-ai-mode`; only `sponsored` enables server-funded AI. The hosted request uses an environment without its AI key for other modes; the local server gates paid dialogue, audio, transcription and freeform interpretation and only plans companion turns for explicit sponsorship. Personal-key routing never falls back to owner billing. No migration or extra credential persistence is introduced.
 
 Regression coverage: all16 companion class/race combinations, invalid setup, legacy defaults, free-mode provider exclusion and hosted budget non-reservation. Browser QA completed a newly customized party’s opening through Vark combat, the ending, reload and ChapterII continuation. Mode selection was tested with an inert placeholder rather than a paid key; reload reset to Free. Actual paid personal-key generation is not established by that UI check.
+
+## Feedback revision implementation
+
+PRD-31 is owned by client/own-ai.ts and App.tsx: a direct small Responses request checks candidate access, without retaining the key until success. A generation counter invalidates late callbacks after disconnect/mode change. Explicit status text announces the result. No key is sent to the game server.
+
+PRD-32 is owned by shared/ai-context.ts with groundedDialogueSchema used by browser, local API and Worker. Known IDs are enumerated from the supplied facts; zero facts means maxItems 0. The prompt explicitly permits scene narration with no citations. Post-generation validation remains mandatory. A reproduced live failure invented scene/entity citation IDs despite valid text; tests now exercise that empty-fact contract. Refusals/truncation are handled separately in personal mode.
+
+PRD-33 is owned by World.tsx, style.css and AssetReview.tsx. KayKit source licenses are recorded in DESIGN_REVISION.md and public/assets/kaykit/LICENSE.txt. Browser-only local asset review loads every inventory model, compiles materials, samples animations and reports errors. Runtime success is not a visual certification of all frames. Generated equipment that floated independently was removed; source rig attachments are retained with optional extras hidden.

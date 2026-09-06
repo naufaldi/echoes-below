@@ -23,3 +23,28 @@
 .ai-mode-picker{border:1px solid #5b6555;border-radius:8px;padding:12px;margin:16px 0}.ai-mode-picker legend{color:#dec48b}.ai-mode-picker label{display:flex;gap:10px;align-items:flex-start;padding:10px 0;cursor:pointer}.ai-mode-picker input{width:auto;margin-top:4px}.ai-mode-picker strong,.ai-mode-picker small{display:block}.ai-mode-picker small{font-size:13px;line-height:1.5;color:#b1b9aa;margin-top:3px}.ai-mode-picker .unavailable{opacity:.6}
 
 .saved-adventures{margin:12px 0}.saved-adventures summary{cursor:pointer;color:#d5c39e}.saved-adventures button{display:block;width:100%;text-align:left;margin:8px 0;padding:10px;border:1px solid #52604f;border-radius:6px}.saved-adventures small{display:block;color:#a5ae9f;margin-top:4px}
+
+/* Fantasy RPG presentation: compact HUD and an unobstructed central stage. */
+:root{--gold:#d6b477}
+.topbar{height:68px;background:linear-gradient(#10151ef0,#10151eab);border-bottom:1px solid #c6a36745}
+.brand{font-size:23px;letter-spacing:.12em}.top-center{font-size:9px}
+.app:not(.title-mode) .party-panel{top:145px;left:24px;width:210px}
+.party-card{border-radius:3px;padding:10px 9px;background:linear-gradient(120deg,#18212ee8,#101823e8);border-color:#b79a624d}
+.portrait{border-radius:50%;border:1px solid #d3b17477;width:42px;height:42px;flex-shrink:0}
+.app:not(.title-mode) .actions-panel{top:145px;right:24px;width:270px;max-height:calc(100dvh - 210px);background:linear-gradient(150deg,#151c27f0,#0b111ce8);border-color:#d3b17455;padding:16px}
+.action{background:#26303c80;border-color:#a58b573d;border-radius:3px}.action:hover{background:#65513366;border-color:#d6b477}.action strong{font-size:12px;line-height:1.5}
+.app:not(.title-mode) .scene-heading{top:88px;max-width:calc(100% - 620px)}
+.app:not(.title-mode) .scene-heading h1{font-size:36px;margin:8px 0}.scene-heading p{font-size:10px}
+.app:not(.title-mode) .narration-panel{left:calc(50% - 25px);bottom:72px;width:calc(100% - 590px);min-width:280px;max-width:850px;padding:17px 22px;background:linear-gradient(125deg,#151c29f0,#111923f0);border-color:#d3b17466;box-shadow:0 12px 60px #0005}
+.narration-panel p{font-size:23px;max-height:150px;overflow:auto;line-height:1.45}.narration-heading{font-size:10px}.narration-bottom{font-size:11px}
+.world-name{font-size:10px;padding:4px 7px;background:#101721d9;border-color:#c2a87466}.world-name span{font-size:8px}
+.target-pin{font-size:10px;padding:6px 9px;background:#131b26e0;border-color:#c2a87488;max-width:150px;white-space:normal}
+.chapter-track{background:#0b111bd9;border-color:#d3b17444}.objective p{font-size:12px}.party-supplies{font-size:10px}
+.modal{background:linear-gradient(145deg,#1c2633,#101722);border:1px solid #c5a46780;box-shadow:0 30px 120px #000a}.key-status{color:#e9ce96;font-size:14px;line-height:1.5;min-height:22px}.key-settings input{font-size:14px}
+.title-mode .creation{top:90px;bottom:32px;left:4%;width:360px;overflow:auto;padding:20px 24px;background:linear-gradient(135deg,#111925f5,#111925d9);border:1px solid #c6a36755;border-radius:5px}
+.title-mode .creation h1{font-size:48px;margin:15px 0}.title-mode .intro{font-size:12px}.title-mode .creation-note{line-height:1.6}
+.app:has(.initiative-strip) .scene-heading{top:148px}.initiative-strip{top:80px}
+@media(max-height:800px){.app:not(.title-mode) .party-panel,.app:not(.title-mode) .actions-panel{top:123px}.app:not(.title-mode) .scene-heading{top:77px}.app:not(.title-mode) .scene-heading h1{font-size:28px}.app:not(.title-mode) .actions-panel{max-height:calc(100dvh - 180px)}.narration-panel p{font-size:19px;max-height:100px}.party-card{padding:7px}.companion-chat button{padding:9px 0}.objective{padding-top:10px}.app:has(.initiative-strip) .scene-heading{top:142px}}
+@media(max-width:1100px){.app:not(.title-mode) .party-panel{left:12px;width:175px}.app:not(.title-mode) .actions-panel{right:12px;width:230px}.app:not(.title-mode) .narration-panel{width:calc(100% - 465px)}.app:not(.title-mode) .scene-heading{max-width:calc(100% - 460px)}.narration-panel p{font-size:19px}}
+.app:not(.title-mode) .narration-panel{transform:translateX(-50%)}
+@media(max-width:760px){.app:not(.title-mode) .narration-panel{left:calc(50% - 25px);width:280px;min-width:280px}}

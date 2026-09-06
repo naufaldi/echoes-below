@@ -40,7 +40,7 @@ export default {async fetch(request:Request,env:Env):Promise<Response>{
    if(!suffix&&request.method==='GET')return json(publicSave(save));
    if(suffix==='dialogue'&&request.method==='POST'){const b=say.parse(body);return json(await dialogue(env,store,save,b.speaker,b.text));}
    if(suffix==='dialogue/local'&&request.method==='POST'){const b=say.extend({reply:z.string().trim().min(1).max(1200)}).parse(body);return json(await store.dialogue(id,b.speaker,b.text,b.reply));}
-   if((suffix==='dialogues'||suffix==='dialogue')&&request.method==='GET')return json({history:await store.history(id)});
+   if((suffix==='dialogues'||suffix==='dialogue')&&request.method==='GET'){const history=await store.history(id);const speaker=url.searchParams.get('speaker');return json({history:suffix==='dialogue'&&speaker?history.filter(h=>h.speaker===z.enum(['dm','mira','oren']).parse(speaker)):history});}
    const restore=suffix?.match(/^checkpoints\/([^/]+)\/restore$/);if(restore&&request.method==='POST'){const checkpoint=await env.DB.prepare('SELECT body FROM checkpoints WHERE id=? AND owner=? AND save_id=?').bind(uuid.parse(restore[1]),store.owner,id).first<{body:string}>();if(!checkpoint)throw new GameError(404,'CHECKPOINT','Checkpoint unavailable.');const branch=JSON.parse(checkpoint.body) as Save;branch.id=crypto.randomUUID();branch.campaignId=save.campaignId??save.id;branch.name=save.name+' · restored';branch.checkpointIds=[];branch.revision=0;branch.presentation=[];branch.updatedAt=new Date().toISOString();return json(await store.create(branch));}
   }
   if(path==='/api/actions/preview'&&request.method==='POST'){

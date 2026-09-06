@@ -22,3 +22,7 @@ The goal is incomplete. The Mac’s locked state has prevented computer-use/brow
 - No expansion screenshots, actual audio listening, browser personal-key acceptance, measured browser frame-time evidence or human campaign-duration evidence currently establish the remaining release gates.
 
 Resume the existing goal after the Mac is unlocked. Preserve its full scope, including deeper long-form gameplay and honest duration validation.
+
+## 6 September feedback follow-up
+
+The Mac is now unlocked. Opening-adventure browser QA through the boss, ending, reload and Chapter II continuation passed locally; public version 9 passed creation, action and save/resume smoke checks. Race preview, companion setup and explicit billing modes are corrected. 57 tests pass. See FEEDBACK_QA.md for current evidence. Earlier lock statements above are historical. Real personal-key browser audio, broader accessibility and long-form campaign pacing remain unverified; the full 24-hour goal is not complete.

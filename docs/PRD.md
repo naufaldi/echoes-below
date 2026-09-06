@@ -133,3 +133,11 @@ Acceptance: each opportunity is absent with the opposite earlier decision; reloa
 **PRD-29.** New-adventure setup offers class, race and palette for Mira and Oren. Names, personalities and personal story arcs remain stable. The chosen class supplies the actual stats/actions and model; party cards show the actual class. Choices persist with the save. Existing adventures retain their current party.
 
 **PRD-30.** Character setup and Settings both show three explicit options: Free story mode (default), personal OpenAI key, and the host’s limited allowance. The last option is disabled when unconfigured. Free mode runs authored scenes and autonomous tactical companions without paid AI. Personal mode requires an entered key, never silently falls back to host billing, and clears the key on disconnect, switching away or reload. Reload returns to Free mode. Paid provider access is opt-in, including companion planning.
+
+## Feedback revision: narrator connection and asset presentation
+
+PRD-31: Connecting a personal key performs a disclosed small access check and visibly reports checking, connected-for-this-visit, rejected or disconnected. Never describe page-memory storage as permanently saved. Disconnect/mode changes invalidate late connection results.
+
+PRD-32: Opening narration must work without discoveries. Scene description and recent confirmed events are valid narrative context. Fact references must use supplied discovery IDs; unsupported references remain rejected. Model refusals and truncation must have readable errors and preserve gameplay.
+
+PRD-33: Use compact fantasy RPG panels and a visible central stage following DESIGN_REVISION.md. All supplied 3D models receive runtime loading, shader and animation checks. Retained gear follows the rig. Native race sculpts and full BG3 mechanics are not claimed. EDGE_CASES.md records evidence and remaining coverage.

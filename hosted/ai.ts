@@ -1,6 +1,6 @@
 import {GameError,publicSave,type Save} from '../server/game.js';
 import {distance} from '../server/rules.js';
-import {narrativeContext,voiceInstructions,dialogueSchema,dialogueParticipants} from '../shared/ai-context.js';
+import {narrativeContext,voiceInstructions,groundedDialogueSchema,dialogueParticipants} from '../shared/ai-context.js';
 import type {Speaker} from '../shared/types.js';
 import {Store} from './db.js';
 export interface AIEnv{OPENAI_API_KEY?:string}
@@ -26,7 +26,7 @@ export async function structured(env:AIEnv,store:Store,instructions:string,input
 }
 export async function dialogue(env:AIEnv,store:Store,s:Save,speaker:Speaker,text:string){
  const history=(await store.history(s.id)).filter(h=>h.speaker===speaker).slice(-6);
- const value=await structured(env,store,voiceInstructions(speaker),{participants:dialogueParticipants(publicSave(s),speaker),context:narrativeContext(publicSave(s)),history,playerText:text},dialogueSchema);
+ const value=await structured(env,store,voiceInstructions(speaker),{participants:dialogueParticipants(publicSave(s),speaker),context:narrativeContext(publicSave(s)),history,playerText:text},groundedDialogueSchema(publicSave(s)));
  if(typeof value.text!=='string'||value.text.length>1200||!Array.isArray(value.factIds)||value.factIds.some((id:unknown)=>!s.facts.some(f=>f.id===id)))throw new GameError(503,'AI_RESPONSE','The narrator could not ground its reply in your adventure. Try again.');
  return store.dialogue(s.id,speaker,text,value.text);
 }

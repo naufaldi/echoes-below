@@ -22,3 +22,7 @@ Archive/JSON structural inspection complete. Browser rendering and clip compatib
 
 ## Animation adaptation
 Acquired official Universal Animation Library Standard (CC0):43 named clips verified. scripts/prepare-monsters.py maps8 selected rotation-only clips by matching bone names onto Imp/Puglin. Translation tracks intentionally omitted to preserve body proportions and prevent root motion. Generated Imp-animated.glb and Puglin-animated.glb. Structural mapping and browser checks completed for the shipped Imp variant, including idle and combat poses. Puglin is acquired but not used by this opening adventure. Vark adds runtime armor and a larger silhouette. There is no claim of native Goblin/Hobgoblin coverage or general-purpose retarget compatibility.
+
+## 6 September party revision
+
+Party rendering now uses KayKit Adventurers CC0 Knight, Mage and Rogue_Hooded; Barbarian is an acquired candidate. Source: https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0. License lives at public/assets/kaykit/LICENSE.txt. All four GLBs contain embedded textures and 76 animation clips each. Optional overlapping accessories are hidden; retained equipment follows source bones. Race height/breadth are game adaptations, not native racial models. All 45 current supplied models passed a browser loading/shader/animation-sampling audit; this does not certify every visual pose. Original Quaternius models remain available and their licenses remain unchanged.

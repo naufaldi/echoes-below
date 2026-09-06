@@ -1,0 +1,13 @@
+import {useEffect,useState} from 'react';
+import {Canvas,useThree} from '@react-three/fiber';
+import {OrbitControls} from '@react-three/drei';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import * as THREE from 'three';
+function Audit({report}:{report:(line:string)=>void}){
+ const {gl,camera}=useThree();const [object,setObject]=useState<THREE.Object3D|null>(null);
+ useEffect(()=>{let cancelled=false;void(async()=>{const files:string[]=await(await fetch('/assets/audit-index.json')).json();for(const file of files){if(cancelled)return;try{const asset=await new GLTFLoader().loadAsync(file);const bounds=new THREE.Box3().setFromObject(asset.scene);const size=bounds.getSize(new THREE.Vector3());if(!Number.isFinite(size.y)||size.y<=0)throw Error('Invalid model bounds');const center=bounds.getCenter(new THREE.Vector3());asset.scene.position.copy(center).multiplyScalar(-1);const group=new THREE.Group();group.add(asset.scene);group.scale.setScalar(3/Math.max(size.x,size.y,size.z));await gl.compileAsync(group,camera);const mixer=new THREE.AnimationMixer(asset.scene);for(const clip of asset.animations){mixer.clipAction(clip).play();mixer.update(.25);asset.scene.updateMatrixWorld(true);asset.scene.traverse(node=>{if(!node.matrixWorld.elements.every(Number.isFinite))throw Error('Invalid animation transform');});mixer.stopAllAction();}if(cancelled)return;setObject(group);report(`PASS ${file} · ${asset.animations.length} clips · textures loaded, shaders compiled`);await new Promise(resolve=>setTimeout(resolve,150));}catch(e){report(`FAIL ${file} · ${e instanceof Error?e.message:'Unknown failure'}`);}}report('AUDIT COMPLETE');})().catch(e=>report('FAIL '+String(e)));return()=>{cancelled=true;};},[gl,camera,report]);
+ return <><ambientLight intensity={2}/><directionalLight position={[3,5,4]} intensity={3}/>{object&&<primitive object={object}/>}<OrbitControls/></>;
+}
+const lines:string[]=[];let notify:(lines:string[])=>void=()=>{};
+const report=(line:string)=>{lines.push(line);notify([...lines]);};
+export default function AssetReview(){const [results,setResults]=useState<string[]>([]);useEffect(()=>{notify=setResults;return()=>{notify=()=>{};};},[]);return <main style={{height:'100vh',display:'grid',gridTemplateColumns:'1fr 1fr',background:'#101823',color:'#e6d5b0'}}><section style={{overflow:'auto',padding:24}}><h1>Asset runtime audit</h1><p>Every shipped model: texture loading, finite bounds, shader compilation and animation sampling. Visual quality still requires inspection.</p><a href="/">Return to adventure</a><div role="status">{results.at(-1)}</div>{results.map((r,i)=><p key={i}>{r}</p>)}</section><Canvas camera={{position:[4,3,5]}}><Audit report={report}/></Canvas></main>;}
