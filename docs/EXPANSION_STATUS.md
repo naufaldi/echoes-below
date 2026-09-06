@@ -58,3 +58,8 @@ Added optional Vark questions and an evidence-backed DC reduction with saved fac
 User steering: develop and verify locally; do not repeatedly deploy Sites. Publish only after the repair work is finished and verified. The current public release remains version 12. Local development uses Vite at http://127.0.0.1:5173 with the watched API at http://127.0.0.1:4317. Added optional additional Hit Dice within a persisted short-rest window, without repeated class recovery.
 
 Verification: all 179 backend tests and all three typechecks pass. Live local Vite proxy returned successful creation, short rest, travel to hall and save reload at revision 2. This is HTTP integration evidence, not browser visual evidence. No Sites deployment performed.
+
+
+### Local label and narration QA
+
+The Mac became available. Local browser QA at port 5173 created a curated Fighter save named Label QA. Selected-character leader lines and labels were inspected in a rendered screenshot. The inventory modal hid world labels, displayed six abilities, and changed to Mira’s correct Rogue values on selection. QA exposed an opening narration heading incorrectly naming Oren; the shared text/speaker projection fix was verified through hot reload showing THE STORY SO FAR / ADVENTURE JOURNAL. Long-label wrapping, wider camera-angle coverage and level-up choice interaction still need browser verification. No Sites deployment performed.

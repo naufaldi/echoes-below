@@ -271,3 +271,8 @@ Before the opening confrontation, curated parties can ask Vark why he imprisoned
 ### Additional short-rest healing
 
 After the existing first Hit Die is spent during short rest, injured conscious members can choose additional Hit Dice one at a time. All rolls belong to the same one-hour rest, do not repeat class recovery, and stop at full health or no Hit Dice. The window persists through reload and closes when the party performs any other game action. Inventory & camp and the contextual action list expose the choices.
+
+
+### Object-label association and narration identity
+
+Displaced world labels show a leader line and anchor dot to identify their owning object. An anchor covered by an interface panel is hidden instead of moving its label beside another object; its target remains available in the focus menu. Selected long labels have more width and up to two text lines. Narrative headings use the same entries as the displayed text: introductory scene descriptions cannot inherit a companion name from unrelated creation logs.

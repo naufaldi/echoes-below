@@ -332,3 +332,8 @@ Rules references verified 2026-09-06: [official Ability Score Improvement feat](
 ### Short-rest continuation
 
 Optional `Logistics.shortRestScene` identifies an active rest window. `camp:short` opens it; `camp:hitdie:<actor>` validates the same safe scene and a living, injured, conscious member with remaining Hit Dice. Each choice heals once, spends one die, logs the resolved roll and increments revision, with no extra tick or class recovery. `applyAction` closes the window after any other successfully resolved action; rejected requests do not close or mutate it. Existing request deduplication applies. Older saves without the optional field have no active rest window. Tests cover serialization, depletion, class-recovery isolation, exploration interruption and ineligible members.
+
+
+### Label anchors and authored speaker selection
+
+`placeLabels` retains projected `anchorX/anchorY`, rejects non-positive dimensions and anchors inside HUD rectangles, and keeps its existing collision-free placement. `WorldLabels` renders pointer-transparent SVG leaders to the closest label edge, with an anchor dot. Selected labels allow 240px and two lines. `client/session.ts` now derives both narration text and speaker from one filtered entry list, retaining legacy creation-log filtering. A named heading requires all displayed entries to be authored by the same non-DM speaker. The default scene description has no named speaker. Regression tests cover covered anchors, invalid dimensions and opening/check-in/scene-entry heading identity.

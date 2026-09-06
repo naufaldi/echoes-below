@@ -2,8 +2,16 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createSave,applyAction,publicSave,legalActions} from '../server/game.js';
 import {narrationFor,SessionBoundary,automaticVoiceAllowed} from '../client/session.js';
+import * as session from '../client/session.js';
 const make=()=>createSave({name:'Ash',classId:'guardian',backgroundId:'delver',appearanceId:'ember'});
 const dice=(sides:number)=>sides===20?15:Math.ceil(sides/2);
+test('authored speaker heading belongs to the displayed narration rather than the last unrelated log',()=>{
+ assert.equal(session.narrationSpeakerFor(publicSave(make())),null);
+ const checkIn=applyAction(make(),'checkin:mira',dice);
+ assert.equal(session.narrationSpeakerFor(publicSave(checkIn)),'Mira');
+ const entered=applyAction(checkIn,'enter',dice);
+ assert.equal(session.narrationSpeakerFor(publicSave(entered)),null);
+});
 test('creation and legacy first revision never hide the first action outcome',()=>{
  const fresh=make();assert.ok(fresh.logs.every(l=>l.revision===0));
  assert.equal(narrationFor(publicSave(fresh)),publicSave(fresh).scene.description);
