@@ -53,3 +53,7 @@
 .asset-issues{position:absolute;top:72px;left:30%;width:40%;max-height:100px;overflow:auto;pointer-events:auto;display:flex;flex-wrap:wrap;gap:4px;z-index:20}.asset-issues button{padding:8px;background:#442e24;border:1px solid #b79c71;color:#fff}.managed-world-label span{font-size:14px}
 
 .rules-choice{display:flex;flex-direction:column;gap:6px;margin:14px 0}.rules-choice select,.tactical-controls select{width:100%;padding:9px;background:#15202c;color:#eee;border:1px solid #52616c}.rules-disclosure{font-size:13px;color:#c4bca9}.tactical-controls{font-size:13px;border-bottom:1px solid #52616c;padding:8px 0;margin-bottom:10px}.tactical-controls label,.tactical-controls small{display:block;margin-top:6px}.tactical-controls button{padding:8px;margin-top:6px;border:1px solid #b49e71}.tactical-controls strong{color:#e3c891}
+/* The full dice presentation owns attention; the compact history sits below party controls. */
+.dice-result{top:auto;bottom:76px;left:24px;width:205px;max-height:100px;overflow:hidden}
+.turn-playback~.dice-result{display:none}
+@media(max-height:760px){.dice-result{display:none}}

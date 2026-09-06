@@ -1,4 +1,4 @@
-import {makeCharacter} from '../shared/curated-rules.js';
+import {makeCharacter,restoreClassResources,classResources} from '../shared/curated-rules.js';
 import {initializeTactical,startTacticalCombat,tacticalActions,applyTactical} from './tactical.js';
 import {availableConsequences,campaignEffects} from './campaign-consequences.js';
 import {COMPANION_STORIES} from '../shared/companion-stories.js';
@@ -989,7 +989,7 @@ function awardExperience(s:Save,key:string,amount:number){
   log(s,`The party gains ${amount} XP.`, 'dm');
   if(gained>0){
     for(const member of s.party){
-      if(s.tactical){const old=s.tactical.actors[member.id],next=makeCharacter(old.classId,level);const increase=next.maxHp-old.maxHp;next.hp=Math.min(next.maxHp,old.hp+increase);next.slots=next.maxSlots.map((n,i)=>Math.min(n,(old.slots[i]??0)+n-(old.maxSlots[i]??0)));next.death=old.death;next.dead=old.dead;next.concentration=old.concentration;s.tactical.actors[member.id]=next;member.hp=next.hp;member.maxHp=next.maxHp;}
+      if(s.tactical){const old=s.tactical.actors[member.id],next=makeCharacter(old.classId,level);const increase=next.maxHp-old.maxHp;next.hp=old.dead?0:Math.min(next.maxHp,old.hp+increase);next.slots=next.maxSlots.map((n,i)=>Math.min(n,(old.slots[i]??0)+n-(old.maxSlots[i]??0)));next.features={...classResources(old),secondWind:classResources(old).secondWind+Math.max(0,classResources(next).secondWind-(old.classId==="fighter"?(old.level>=4?3:2):0)),actionSurge:classResources(old).actionSurge+(old.classId==="fighter"&&old.level<2&&level>=2?1:0)};next.death=next.hp>0?{successes:0,failures:0,stable:false}:old.death;next.dead=old.dead;next.concentration=old.concentration;s.tactical.actors[member.id]=next;member.hp=next.hp;member.maxHp=next.maxHp;}
       else{member.maxHp+=gained*6;member.hp=Math.min(member.maxHp,member.hp+gained*6);member.maxFocus+=gained;member.focus+=gained;}
     }
     log(s,s.tactical?`Level ${level}! Your class health and spell slot capacity increase.`:`Level ${level}! Everyone gains ${gained*6} maximum health and ${gained} focus.`, 'dm');
@@ -1315,7 +1315,7 @@ function autoTurns(s: Save, dice: Dice, skipHero = false) {
 export function applyAction(original: Save, id: string, dice: Dice): Save {
   if(original.tactical&&original.mode==='combat')return applyTactical(original,id,dice);
   const result=applyLegacyAction(original,id,dice);
-  if(result.tactical&&result.mode!=='combat')for(const actor of result.party){const c=result.tactical.actors[actor.id];if(c.dead)actor.hp=0;c.hp=actor.hp;c.maxHp=actor.maxHp;if(c.hp>0)c.death={successes:0,failures:0,stable:false};if(c.hp===0)c.concentration=null;if(id==='rest'||id==='exp_rest'||id==='continue_campaign'){c.slots=[...c.maxSlots];c.hitDice=c.level;}}
+  if(result.tactical&&result.mode!=='combat')for(const actor of result.party){const c=result.tactical.actors[actor.id];if(c.dead)actor.hp=0;c.hp=actor.hp;c.maxHp=actor.maxHp;if(c.hp>0)c.death={successes:0,failures:0,stable:false};if(c.hp===0)c.concentration=null;if(id==='rest'||id==='exp_rest'||id==='continue_campaign'){c.slots=[...c.maxSlots];c.hitDice=c.level;restoreClassResources(c);}}
   return result;
 }
 function applyLegacyAction(original: Save, id: string, dice: Dice): Save {

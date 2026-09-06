@@ -6,7 +6,9 @@ export const CURATED_CLASS_IDS={guardian:'fighter',scout:'rogue',adept:'wizard',
 export type CuratedClass='fighter'|'rogue'|'wizard'|'cleric';
 export type Ability='strength'|'dexterity'|'constitution'|'intelligence'|'wisdom'|'charisma';
 export type Abilities=Record<Ability,number>;
+export interface ClassResources {secondWind:number;actionSurge:number;attacksRemaining:number;sneakUsed:boolean;slotSpent:boolean;disengaged:boolean}
 export interface CuratedCharacter {
+ features?:ClassResources;
  rulesVersion:typeof CURATED_RULES_VERSION;classId:CuratedClass;level:number;abilities:Abilities;proficiency:number;
  hp:number;maxHp:number;temporaryHp:number;armorClass:number;hitDice:number;hitDie:number;speedFeet:number;
  slots:number[];maxSlots:number[];concentration:string|null;dead:boolean;
@@ -53,3 +55,7 @@ export function deathSave(original:CuratedCharacter,d20:number):CuratedCharacter
  if(d20===1)a.death.failures+=2;else if(d20>=10)a.death.successes++;else a.death.failures++;
  if(a.death.failures>=3)a.dead=true;else if(a.death.successes>=3)a.death={successes:0,failures:0,stable:true};return a;
 }
+
+export function classResources(c:CuratedCharacter):ClassResources{return c.features??{secondWind:c.classId==='fighter'?(c.level>=4?3:2):0,actionSurge:c.classId==='fighter'&&c.level>=2?1:0,attacksRemaining:0,sneakUsed:false,slotSpent:false,disengaged:false};}
+export function resetTurnResources(c:CuratedCharacter){c.features={...classResources(c),attacksRemaining:0,sneakUsed:false,slotSpent:false,disengaged:false};}
+export function restoreClassResources(c:CuratedCharacter){c.features=undefined;c.features={...classResources(c)};}

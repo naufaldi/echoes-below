@@ -33,3 +33,15 @@ New campaigns can explicitly choose Curated tactics development preview. Echo Ru
 Browser evidence: created Tactical Browser QA, resumed the same saved campaign after server restart, traversed the hall by the side ledge, entered goblin combat, viewed initiative dice, took over Mira, previewed/committed a5ft move, observed25ft remaining, and resolved a ranged miss with visible d20. Screenshots are attached in the task. Browser testing exposed two corrected integration gaps: travel actions were accidentally filtered out by combat movement UI, and local storage rejected the new rulesVersion. A further playback test verifies resolved position/resources instead of prior state.
 
 Still required before B/C acceptance: subclass features and level-up choices, full spell/condition/reaction mechanics, equipment/camp/quest systems, explicit exploration checks/saves, real scene collision data and waypoint animation, trained AI proposals, additional viewport/asset checks, and a measured two-hour slice. No full-campaign or deployment completion is claimed.
+
+## Class actions checkpoint
+
+This continuation adds playable Second Wind, Action Surge, level5 Extra Attack, Champion critical range, Cunning Dash, conditional Sneak Attack, Fire Bolt scaling, Sacred Flame Dexterity saves, Magic Missile, Healing Word and Bless. Bonus/action/slot resources are tracked separately, slot spending is limited within the active turn, and class rest resources recover through the current rest adapter. Life Domain healing bonuses are applied at the relevant levels. These additions are a curated subset, not completion of all class/subclass features1–8.
+
+Bless stores explicit source, targets and lifetime, contributes to attacks/saves, and is pruned when concentration ends. Optional resource fields keep existing tactical preview saves readable. A serialization regression from assigning an undefined effect list was caught and fixed.
+
+Browser Spell Browser QA: fresh Wizard creation, hall bypass, combat initiation, Magic Missile confirmation and dice playback. The observed spell dealt11 force damage across three displayed dart rolls, consumed one rank1 slot (2→1) and spent the main action. Screenshot attached in the task. Last-roll history positioning was then adjusted to avoid the party heading; it is hidden during the full dice presentation.
+
+Remaining class work includes additional spell ranks/upcasting/areas, reactions, conditions, subclass feature coverage and level-up choices. No expansion milestone or public deployment has been marked complete.
+
+Reload verification after Magic Missile retained1/2 rank1 slots and the spent action. The updated dice-history screenshot no longer covers the YOUR PARTY heading; it occupies unused lower-left space. The same screenshot shows a downed goblinoid pose remaining above the floor. Treat this as a remaining asset/retargeting defect for the A audit, not a passed death-animation check.
