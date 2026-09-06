@@ -1,3 +1,4 @@
+import {courierActions,resolveCourier} from './courier-inquiry.js';
 import {infirmaryActions,resolveInfirmary,infirmaryPrepared,projectInfirmary,PREPARED_RESCUE} from './infirmary.js';
 import {indexActions,resolveIndex} from './bell-index.js';
 import {bellIndexState} from '../shared/bell-index.js';
@@ -458,7 +459,7 @@ function approachTarget(s: Save, option: ActionOption) {
     ];
   }
 }
-export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s),...parleyActions(s),...scritActions(s),...indexActions(s),...infirmaryActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
+export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s),...parleyActions(s),...scritActions(s),...indexActions(s),...infirmaryActions(s),...courierActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
 function baseActions(s: Save): ActionOption[] {
   if(s.tactical&&s.mode==="combat")return tacticalActions(s);
   const a: ActionOption[] = [];
@@ -892,7 +893,7 @@ function baseActions(s: Save): ActionOption[] {
           opt(
             "negotiate",
             "Negotiate a seal transfer",
-            `Present the courier’s testimony and Scrit’s explanation. Presence DC${parleyDC(s)}; failure begins combat.`,
+            `Present the courier’s testimony and the evidence about the seal. Presence DC${parleyDC(s)}; failure begins combat.`,
             "persuade",
             "vark",
             "hero",
@@ -1371,6 +1372,7 @@ export function applyAction(original: Save, id: string, dice: Dice): Save {
  return result;
 }
 function resolveAction(original: Save, id: string, dice: Dice): Save {
+  if(id.startsWith("courier:"))return resolveCourier(original,id);
   if(id.startsWith("infirmary:"))return resolveInfirmary(original,id);
   if(id.startsWith("index:"))return resolveIndex(original,id);
   if(id.startsWith("scrit:"))return resolveScrit(original,id);

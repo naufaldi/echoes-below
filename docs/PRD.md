@@ -397,3 +397,6 @@ Completed, declined and previously missed records remain durable. Reading an old
 
 ### Local checkpoint: peaceful cookfire ordering
 Curated adventures preserve Scrit’s introduction, remaining questions, and a one-time food offer after negotiated passage. Players may feed the camp before introducing themselves or offer food after persuasion. Successful distraction still represents leaving the conversation behind. A failed distraction followed by peace must not close dialogue. Text acknowledges food and key ownership; the cook label and scene objective reflect the peaceful outcome.
+
+### Local checkpoint: prisoner testimony investigation
+Curated prison exploration offers three saved conversations: the reason for detention, a witnessed brace transfer, and comparison with the supply ledger. The first two can happen through the bars. Comparison requires the courier to be free and the ledger to have been read. Corroboration supplies an alternative seal-knowledge route for players who missed Scrit, allowing Vark negotiation without fabricating a prior conversation. The courier distinguishes observed events from the unseen force. Conversations spend no resources and grant no dialogue XP.

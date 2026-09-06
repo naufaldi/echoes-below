@@ -246,3 +246,10 @@ Fixed impossible active objectives caused by main quests never expiring, generic
 - Verification: 242 automated tests pass; server, client, hosted type checks and production build pass. Asset build gate verifies 45 models / 51 files.
 - Local Chrome: controlled `Scrit Order QA` save offered food first, then successfully introduced Scrit; remaining questions appeared. Reload/Continue retained the dialogue and updated `Scrit, camp cook` label. No paid AI calls or deployment in this checkpoint.
 - Goal remains in progress. Campaign duration, full human playtesting, remaining content depth and release QA are not established by these checks.
+
+### Local checkpoint: courier investigation playable
+- Added staged prison testimony and ledger corroboration, supplying an alternate route to prepared Vark negotiation. No invented Scrit exchange or repeat interview rewards.
+- 245 automated tests pass; client/server/hosted type checks and production build pass. Asset bundle verifies 45 models and 51 files.
+- Local Chrome `Scrit Order QA`: continued to prison, asked both questions through bars, read ledger, used guard key, and compared testimony successfully. Screenshot inspected: Courier attribution, rescued NPC/open gate labels, remaining actions, and scrollable dialogue visible.
+- Visual follow-up: world labels still cover portions of the party in the default prison framing despite avoiding mutual overlap. This requires a separate layout improvement.
+- No deployment or paid AI calls. Campaign duration and full release readiness remain unproven; goal stays active.
