@@ -15,9 +15,9 @@ for(const adventure of SIDE_ADVENTURES)for(const choice of [0,1])test(`${adventu
  s.sceneId=adventure.investigate;s=applyAction(s,command('investigate'),n=>n);s=JSON.parse(JSON.stringify(s));s.sceneId=adventure.finish;
  const potions=s.party.reduce((n,a)=>n+a.potions,0);s=applyAction(s,command('choose-'+choice),n=>n);
  assert.equal(s.quests?.find(q=>q.id===adventure.questId)?.status,'completed');
- assert.equal(s.party.reduce((n,a)=>n+a.potions,0),potions+(choice===0?3:0));
+ assert.equal(s.party.reduce((n,a)=>n+a.potions,0),potions+(adventure.choices[choice].potions??0));
  assert.throws(()=>applyAction(s,command('choose-'+choice),n=>n));assert.equal(s.facts.filter(f=>f.id===`side:${adventure.id}:outcome`).length,1);
- if(choice===1){s.sceneId=adventure.choices[1].preparation as typeof s.sceneId;const room=expeditionRoom(s.sceneId)!;assert.equal(legalActions(s).find(a=>a.id==='exp_choice:0')?.check?.dc,room.dc-3);s=applyAction(s,'exp_choice:0',n=>n);assert.ok(s.logs.some(l=>l.text.includes(`vs DC ${room.dc-3}`)));}
+ if(adventure.choices[choice].preparation){s.sceneId=adventure.choices[choice].preparation as typeof s.sceneId;const room=expeditionRoom(s.sceneId)!;assert.equal(legalActions(s).find(a=>a.id==='exp_choice:0')?.check?.dc,room.dc-3);s=applyAction(s,'exp_choice:0',n=>n);assert.ok(s.logs.some(l=>l.text.includes(`vs DC ${room.dc-3}`)));}
 });
 test('declining or missing a meeting cannot leak a later NPC or complete the request',()=>{
  let s=fresh();s.sceneId='archive-1';s=applyAction(s,'quest:decline:chapter-2-side-1',n=>n);assert.ok(!legalActions(s).some(a=>a.id.startsWith('side:water-names:')));assert.ok(!publicSave(s).scene.entities.some(e=>e.id==='side:water-names'));
@@ -28,3 +28,9 @@ test('old checklist progress cannot masquerade as newly authored evidence, while
  assert.equal(publicSave(s).quests?.find(q=>q.id==='chapter-2-side-1')?.steps[0].done,false);
  s.quests[0].status='completed';assert.equal(publicSave(s).quests?.find(q=>q.id==='chapter-2-side-1')?.status,'completed');assert.ok(!legalActions(s).some(a=>a.id.startsWith('side:water-names:')));
 });
+
+test('resource-dependent choices disappear with empty supplies while free alternatives remain legal',()=>{
+ for(const adventure of SIDE_ADVENTURES.filter(a=>a.choices.some(c=>c.costRations))){let s=fresh();s.sceneId=adventure.start;s=applyAction(s,`side:${adventure.id}:accept`,n=>n);s.sceneId=adventure.investigate;s=applyAction(s,`side:${adventure.id}:investigate`,n=>n);s.sceneId=adventure.finish;s.party.forEach(p=>p.rations=0);const costly=adventure.choices.findIndex(c=>c.costRations),free=adventure.choices.findIndex(c=>!c.costRations);assert.throws(()=>applyAction(s,`side:${adventure.id}:choose-${costly}`,n=>n));assert.ok(legalActions(s).some(a=>a.id===`side:${adventure.id}:choose-${free}`));s=applyAction(s,`side:${adventure.id}:choose-${free}`,n=>n);assert.ok(s.party.every(p=>p.rations>=0));}
+});
+
+test('preparation is not offered after its target decision has already been resolved',()=>{for(const a of SIDE_ADVENTURES.filter(a=>a.choices.some(c=>c.preparation===a.finish))){let s=fresh();s.sceneId=a.start;s=applyAction(s,`side:${a.id}:accept`,n=>n);s.sceneId=a.investigate;s=applyAction(s,`side:${a.id}:investigate`,n=>n);s.sceneId=a.finish;s.flags[`${a.finish}:resolved`]=true;const i=a.choices.findIndex(c=>c.preparation===a.finish);assert.ok(!legalActions(s).some(action=>action.id===`side:${a.id}:choose-${i}`));assert.ok(legalActions(s).some(action=>action.id.startsWith(`side:${a.id}:choose-`)));}});

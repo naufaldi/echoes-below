@@ -77,3 +77,9 @@ Validation for this checkpoint: 110 automated tests pass; client/server/hosted t
 Replaced the two Chapter II investigation checklists with Elian's passenger identity request and Sera's witness-mask request. Acceptance, cross-room evidence and alternative outcomes are validated and persistent. Healing-potion and testimony routes differ mechanically; testimony lowers the real related DC, not only narration. Added conditional named NPCs and friendly presentation. Eight later optional records remain to be deepened.
 
 116 automated tests pass, including all four new outcome routes, duplicate rejection, missing evidence, refusal, compatibility with old checklist progress, and full peaceful campaign traversal. Client/server/hosted type checks and build pass before the final NPC-friendly presentation change. These new meetings still need browser visual/playthrough validation; no deployment or duration claim is made.
+
+### Eight further side requests (local, not deployed)
+
+Added eight authored requests across Market, Prison, Choir and Depths, replacing the remaining later investigation checklists. Both outcomes for all ten later requests pass tests. Resource-dependent routes reject zero-ration input and retain a free alternative. Already-resolved preparation targets cannot collect meaningless aid.
+
+Validation: 134 tests, all three TypeScript checks and production build pass. Browser Side Adventure QA (curated Cleric/Envoy) reached Vark through the ledge, ration offer and courier rescue. Negotiation failed and correctly entered individual tactical combat, paused at Mira’s first turn. This ongoing browser save is the next playthrough starting point; later NPC visual checks remain outstanding. Existing public deployment remains unchanged.

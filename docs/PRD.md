@@ -190,3 +190,9 @@ The existing compact story is mapped to 18 main quest records and 12 optional re
 Two optional investigations now have distinct authored meetings. Elian's passenger-register request spans the Sluice Stair, Ink Garden and Bell Index; Sera's witness-mask request spans the Witness Vault, Glass Causeway and Keeper of Debts. Each requires accepting the request, investigating elsewhere, then returning to choose an outcome. One route grants three healing potions, the other authenticates testimony that reduces a related check by three. Both retain the once-only camp-ration quest reward. Refusal or leaving without the evidence does not block the main story.
 
 Eight later optional records remain investigation checklists and still require distinct content. These two additions do not establish the two-hour slice or 24-hour campaign timing gates.
+
+### Remaining side-adventure content revision
+
+All ten later optional records now have authored cross-room requests instead of read-all-evidence checklists. New requests concern altered water measures, unpaid theatre workers, copied voices, evacuation counts, an erased novice name, an expired work oath, shelter access and a keeper’s parcel. Each has two outcomes with supplies or preparation consequences. Some aid choices cost a shared ration; a free alternative remains available. Preparation is not offered after its target decision has already resolved.
+
+This supplies authored content for all 12 optional records, including the two opening objectives. It does not prove sufficient variety or 24-hour duration: the later requests still share an accept/investigate/return structure and need visual playthroughs and pacing evaluation.
