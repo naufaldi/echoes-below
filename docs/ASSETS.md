@@ -32,3 +32,10 @@ Party rendering now uses KayKit Adventurers CC0 Knight, Mage and Rogue_Hooded; B
 The rotation-only death adaptation left the pelvis at standing height. `prepare-monsters.py` now retains/rebases that channel for Death only. Geometry audit `check-monster-ground.mjs` evaluates skinned vertices at the end of Death and compares their minimum Y with the standing ground plane. The corrected difference is approximately -0.000000005 source-model units (2cm tolerance); texture pixels are stubbed only for this geometry audit. A real browser screenshot of the same saved goblin encounter verifies the rendered body rests on the floor. This does not certify every other model/clip.
 
 Tactical movement now carries an ordered waypoint list to presentation. The renderer no longer reapplies final actor coordinates as a changing root-group prop; it advances along the path and faces the next waypoint. Reload mounts at the saved final position instead of replaying old movement.
+
+
+### Local production asset package gate
+
+The production build now runs `scripts/verify-asset-bundle.mjs` after Vite and before worker assembly. It checks every shipped GLB/glTF, literal character/scenery model references, external buffers and image dependencies. Source and bundled files must have identical SHA-256 hashes; glTF buffers/views must fit their declared data. Remote dependencies and references outside public assets fail the gate.
+
+Local result: 45 models and 51 bundled files verified, including six external `.bin` dependencies. Detailed per-model hash, byte size, mesh/skin/clip/image counts are written to ignored `data/asset-bundle-verification.json`. The regression test omits Bookcase_2.bin and separately changes Knight.glb in temporary copies; both fail with the specific dependency/model identified. This guard proves bundle completeness and structural bounds, not rendered appearance, rig compatibility or every animation pose. Production build was checked locally; no Sites deployment occurred.
