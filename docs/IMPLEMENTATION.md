@@ -1,3 +1,5 @@
+> Historical planning/reference document. Release 1 scope is frozen; PRD.md, RFC.md and EXECUTION_STATUS.md supersede expansion promises here. This file does not authorize autonomous follow-up work.
+
 # Echoes Below opening adventure implementation
 
 Goal: implement the first complete playable adventure defined in PRD.md and RFC.md, then verify it in the browser. Full campaign expansion remains a later milestone. Work directly in this new project directory.

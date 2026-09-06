@@ -1,3 +1,5 @@
+> Historical planning/reference document. Release 1 scope is frozen; PRD.md, RFC.md and EXECUTION_STATUS.md supersede expansion promises here. This file does not authorize autonomous follow-up work.
+
 # Release verification handoff
 
 The goal is incomplete. The Mac’s locked state has prevented computer-use/browser QA across more than three consecutive goal turns. Independent engine, content, hosted integration and measurement work has continued; further release acceptance now needs an unlocked interactive browser. Do not call HTTP traversal a browser playthrough.
