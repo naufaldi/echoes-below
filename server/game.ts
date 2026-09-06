@@ -1,3 +1,4 @@
+import {expeditionSupplyReward,collectExpeditionSupplies} from './expedition-supplies.js';
 import {inkActions,resolveInk,inkPrepared,projectInk,INK_RESCUE} from './ink-garden.js';
 import {courierActions,resolveCourier} from './courier-inquiry.js';
 import {infirmaryActions,resolveInfirmary,infirmaryPrepared,projectInfirmary,PREPARED_RESCUE} from './infirmary.js';
@@ -658,7 +659,7 @@ function baseActions(s: Save): ActionOption[] {
     if(!f[`${prefix}:resolved`])for(const help of availableConsequences(prefix,f))a.push(opt('exp_ally:'+help.id,help.label,help.arrival,'interact',help.name==='Mira'?'mira':'ally:'+help.id));
     if(!f[`${prefix}:evidence`])a.push(opt('exp_evidence','Examine the evidence','Record an observable clue before committing to a choice.','inspect','evidence'));
     if(!f[`${prefix}:talk`])a.push(opt('exp_talk','Hear your companions','Listen to the party’s personal response.','interact','encounter'));
-    if(!f[`${prefix}:supplies`])a.push(opt('exp_supplies','Search the supplies','Recover one potion for each party member. One cache per location.','inspect','supplies'));
+    if(!f[`${prefix}:supplies`])a.push(opt('exp_supplies','Search the supplies',expeditionSupplyReward(s).description,'inspect','supplies'));
     if(!f[`${prefix}:resolved`]){
       const named=prefix==='archive-3'&&!!f['index:solved'],prepared=infirmaryPrepared(s),garden=inkPrepared(s),certain=defeated||named||prepared||garden;
       if(defeated||(h.hp>0&&(named||prepared||garden||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',prepared?'Help the medic from the lowered cot':garden?'Leave with the apprentice and protected pages':expedition.choice[0],garden?'The lantern burns steadily and the pages are protected. Leave together without a check or destroying records.':prepared?'The cot is secured and the pocket drained. Rescue the medic without a check; his medicine remains with him.':named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`, 'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:'hero',certain?undefined:dc,certain?undefined:expedition.challenge,!certain));
@@ -1442,7 +1443,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
     }
     else if(kind==='exp_evidence'){f[`${prefix}:evidence`]=true;fact(s,`evidence:${prefix}`,room.clue);}
     else if(kind==='exp_talk'){f[`${prefix}:talk`]=true;log(s,room.voice,room.voice.startsWith('Mira')?'mira':'oren',[],'authored');}
-    else if(kind==='exp_supplies'){f[`${prefix}:supplies`]=true;s.party.forEach(member=>member.potions++);log(s,'The cache contains three healing potions. Each party member takes one.');}
+    else if(kind==='exp_supplies'){f[`${prefix}:supplies`]=true;collectExpeditionSupplies(s);}
     else if(kind==='exp_rest'){f[`${prefix}:rest`]=true;s.party.forEach(member=>{member.hp=member.maxHp;member.focus=member.maxFocus;});log(s,'The party shares a sheltered rest. Health and focus are restored.');}
     else if(kind==='exp_fight')startCombat(s,dice);
     else if(kind==='exp_choice'){

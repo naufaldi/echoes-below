@@ -1,0 +1,7001 @@
+{
+  "kind": "Continuous controlled combat-route simulation, not human playtime or balance acceptance",
+  "assumptions": "No injected HP, XP, levels, inventory or resources. All authored combats; all room evidence and supply caches; no side quests. Existing Rogue/Fighter companions, greedy legal-action hero policy, automatic companions. Short/extra Hit Dice rests for injuries, long rest for remaining injuries or half-depleted slots when legal. First available ability improvements. JSON save round-trip at room boundaries. Failure stops that run; no retries or checkpoint resets. In-game rest hours are not player hours. No paid AI.",
+  "seedCount": 1,
+  "runs": [
+    {
+      "classId": "guardian",
+      "seed": 1,
+      "actions": 956,
+      "final": {
+        "scene": "depth-8",
+        "mode": "complete",
+        "level": 8,
+        "xp": 38830,
+        "party": [
+          {
+            "id": "hero",
+            "hp": 68,
+            "maxHp": 68,
+            "potions": 38,
+            "rations": 0,
+            "dead": false,
+            "slots": [],
+            "hitDice": 4
+          },
+          {
+            "id": "mira",
+            "hp": 59,
+            "maxHp": 59,
+            "potions": 42,
+            "rations": 0,
+            "dead": false,
+            "slots": [],
+            "hitDice": 6
+          },
+          {
+            "id": "oren",
+            "hp": 68,
+            "maxHp": 68,
+            "potions": 42,
+            "rations": 0,
+            "dead": false,
+            "slots": [],
+            "hitDice": 8
+          }
+        ]
+      },
+      "rooms": [
+        {
+          "scene": "cookfire",
+          "mode": "explore",
+          "level": 1,
+          "xp": 270,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 12,
+              "maxHp": 12,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 6,
+              "maxHp": 10,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 12,
+              "maxHp": 12,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "aftermath",
+          "mode": "explore",
+          "level": 2,
+          "xp": 740,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 20,
+              "potions": 0,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 9,
+              "maxHp": 17,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 13,
+              "maxHp": 20,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "archive-1",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1085,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 0,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 3,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 3,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "archive-2",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1295,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 1,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 4,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 4,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "archive-3",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1640,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 5,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 5,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "archive-4",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1850,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 3,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 6,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 6,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "archive-5",
+          "mode": "explore",
+          "level": 3,
+          "xp": 2060,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 4,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 7,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 7,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "archive-6",
+          "mode": "explore",
+          "level": 3,
+          "xp": 2405,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 5,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 8,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 8,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "archive-7",
+          "mode": "explore",
+          "level": 4,
+          "xp": 2750,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 6,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 9,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 9,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "archive-8",
+          "mode": "explore",
+          "level": 4,
+          "xp": 2960,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 7,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 10,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 10,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "market-1",
+          "mode": "explore",
+          "level": 4,
+          "xp": 3395,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 8,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 11,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 11,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "market-2",
+          "mode": "explore",
+          "level": 4,
+          "xp": 3695,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 9,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 12,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 12,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "market-3",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4130,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 10,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 13,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 13,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "market-4",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4430,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 11,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 14,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 14,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "market-5",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4730,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 12,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 15,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 15,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "market-6",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5165,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 13,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 16,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 16,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-7",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5600,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 17,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 17,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "market-8",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5900,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 18,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 18,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "roots-1",
+          "mode": "explore",
+          "level": 5,
+          "xp": 6575,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 19,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 19,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "roots-2",
+          "mode": "explore",
+          "level": 5,
+          "xp": 7115,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 20,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 20,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "roots-3",
+          "mode": "explore",
+          "level": 5,
+          "xp": 7790,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 17,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 21,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 21,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "roots-4",
+          "mode": "explore",
+          "level": 5,
+          "xp": 8330,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 18,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 22,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 22,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "roots-5",
+          "mode": "explore",
+          "level": 5,
+          "xp": 8870,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 19,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "roots-6",
+          "mode": "explore",
+          "level": 5,
+          "xp": 9545,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 20,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 35,
+              "maxHp": 44,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "roots-7",
+          "mode": "explore",
+          "level": 5,
+          "xp": 10220,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 21,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 35,
+              "maxHp": 44,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "roots-8",
+          "mode": "explore",
+          "level": 5,
+          "xp": 10760,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 22,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 26,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 35,
+              "maxHp": 44,
+              "potions": 26,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "choir-1",
+          "mode": "explore",
+          "level": 5,
+          "xp": 11815,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 27,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 35,
+              "maxHp": 44,
+              "potions": 27,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "choir-2",
+          "mode": "explore",
+          "level": 5,
+          "xp": 12735,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 28,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 35,
+              "maxHp": 44,
+              "potions": 28,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "choir-3",
+          "mode": "explore",
+          "level": 5,
+          "xp": 13655,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 29,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 35,
+              "maxHp": 44,
+              "potions": 29,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "choir-4",
+          "mode": "explore",
+          "level": 6,
+          "xp": 14710,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 26,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 30,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 30,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "choir-5",
+          "mode": "explore",
+          "level": 6,
+          "xp": 15630,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 27,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 31,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 31,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "choir-6",
+          "mode": "explore",
+          "level": 6,
+          "xp": 16685,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 28,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 32,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 32,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "choir-7",
+          "mode": "explore",
+          "level": 6,
+          "xp": 17740,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 29,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 33,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 33,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "choir-8",
+          "mode": "explore",
+          "level": 6,
+          "xp": 18660,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 30,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 34,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 34,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "depth-1",
+          "mode": "explore",
+          "level": 6,
+          "xp": 21215,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 31,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 33,
+              "maxHp": 45,
+              "potions": 35,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 35,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "depth-2",
+          "mode": "explore",
+          "level": 7,
+          "xp": 23770,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 32,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 36,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 36,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-3",
+          "mode": "explore",
+          "level": 7,
+          "xp": 26325,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 33,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 37,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 37,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-4",
+          "mode": "explore",
+          "level": 7,
+          "xp": 28880,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 34,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 38,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 38,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-5",
+          "mode": "explore",
+          "level": 7,
+          "xp": 31300,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 35,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 39,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 39,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-6",
+          "mode": "explore",
+          "level": 7,
+          "xp": 33855,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 36,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 50,
+              "maxHp": 52,
+              "potions": 40,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 40,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-7",
+          "mode": "explore",
+          "level": 8,
+          "xp": 36410,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 68,
+              "maxHp": 68,
+              "potions": 37,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 41,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 68,
+              "maxHp": 68,
+              "potions": 41,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 8
+            }
+          ]
+        },
+        {
+          "scene": "depth-8",
+          "mode": "explore",
+          "level": 8,
+          "xp": 38830,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 68,
+              "maxHp": 68,
+              "potions": 38,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 42,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 68,
+              "maxHp": 68,
+              "potions": 42,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "classId": "scout",
+      "seed": 1,
+      "actions": 1444,
+      "final": {
+        "scene": "depth-8",
+        "mode": "complete",
+        "level": 8,
+        "xp": 38830,
+        "party": [
+          {
+            "id": "hero",
+            "hp": 59,
+            "maxHp": 59,
+            "potions": 15,
+            "rations": 0,
+            "dead": false,
+            "slots": [],
+            "hitDice": 2
+          },
+          {
+            "id": "mira",
+            "hp": 59,
+            "maxHp": 59,
+            "potions": 24,
+            "rations": 0,
+            "dead": false,
+            "slots": [],
+            "hitDice": 7
+          },
+          {
+            "id": "oren",
+            "hp": 68,
+            "maxHp": 68,
+            "potions": 16,
+            "rations": 0,
+            "dead": false,
+            "slots": [],
+            "hitDice": 8
+          }
+        ]
+      },
+      "rooms": [
+        {
+          "scene": "cookfire",
+          "mode": "explore",
+          "level": 1,
+          "xp": 270,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 6,
+              "maxHp": 10,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 10,
+              "maxHp": 10,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 12,
+              "maxHp": 12,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "aftermath",
+          "mode": "explore",
+          "level": 2,
+          "xp": 740,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 10,
+              "maxHp": 17,
+              "potions": 0,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 17,
+              "maxHp": 17,
+              "potions": 0,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 17,
+              "maxHp": 20,
+              "potions": 0,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "archive-1",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1085,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 0,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 0,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 0,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-2",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1295,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 1,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 1,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 1,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-3",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1640,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-4",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1850,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 3,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 3,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 3,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-5",
+          "mode": "explore",
+          "level": 3,
+          "xp": 2060,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 4,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 4,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 4,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-6",
+          "mode": "explore",
+          "level": 3,
+          "xp": 2405,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 5,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 5,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 5,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-7",
+          "mode": "explore",
+          "level": 4,
+          "xp": 2750,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 0,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 5,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 0,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "archive-8",
+          "mode": "explore",
+          "level": 4,
+          "xp": 2960,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 1,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 6,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 1,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "market-1",
+          "mode": "explore",
+          "level": 4,
+          "xp": 3395,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 2,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 7,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 1,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "market-2",
+          "mode": "explore",
+          "level": 4,
+          "xp": 3695,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 3,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 8,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 2,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "market-3",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4130,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 4,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 9,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 3,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "market-4",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4430,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 5,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 10,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 4,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "market-5",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4730,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 6,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 5,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "market-6",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5165,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 7,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 6,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "market-7",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5600,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 28,
+              "maxHp": 31,
+              "potions": 3,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 7,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "market-8",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5900,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 28,
+              "maxHp": 31,
+              "potions": 4,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 8,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "roots-1",
+          "mode": "explore",
+          "level": 5,
+          "xp": 6575,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 5,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 7,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 0,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "roots-2",
+          "mode": "explore",
+          "level": 5,
+          "xp": 7115,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 6,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 8,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 1,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "roots-3",
+          "mode": "explore",
+          "level": 5,
+          "xp": 7790,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 38,
+              "potions": 6,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 9,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 2,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "roots-4",
+          "mode": "explore",
+          "level": 5,
+          "xp": 8330,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 38,
+              "potions": 7,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 10,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 3,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "roots-5",
+          "mode": "explore",
+          "level": 5,
+          "xp": 8870,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 38,
+              "potions": 8,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 4,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "roots-6",
+          "mode": "explore",
+          "level": 5,
+          "xp": 9545,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 19,
+              "maxHp": 38,
+              "potions": 6,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 9,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 3,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "roots-7",
+          "mode": "explore",
+          "level": 5,
+          "xp": 10220,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 38,
+              "potions": 4,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 8,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 4,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "roots-8",
+          "mode": "explore",
+          "level": 5,
+          "xp": 10760,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 38,
+              "potions": 5,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 9,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 5,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "choir-1",
+          "mode": "explore",
+          "level": 5,
+          "xp": 11815,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 26,
+              "maxHp": 38,
+              "potions": 5,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 9,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 4,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "choir-2",
+          "mode": "explore",
+          "level": 5,
+          "xp": 12735,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 26,
+              "maxHp": 38,
+              "potions": 6,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 10,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 5,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "choir-3",
+          "mode": "explore",
+          "level": 5,
+          "xp": 13655,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 26,
+              "maxHp": 38,
+              "potions": 7,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 6,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "choir-4",
+          "mode": "explore",
+          "level": 6,
+          "xp": 14710,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 8,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 7,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "choir-5",
+          "mode": "explore",
+          "level": 6,
+          "xp": 15630,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 9,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 8,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "choir-6",
+          "mode": "explore",
+          "level": 6,
+          "xp": 16685,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 10,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 9,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "choir-7",
+          "mode": "explore",
+          "level": 6,
+          "xp": 17740,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 10,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "choir-8",
+          "mode": "explore",
+          "level": 6,
+          "xp": 18660,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "depth-1",
+          "mode": "explore",
+          "level": 6,
+          "xp": 21215,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 28,
+              "maxHp": 45,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 17,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "depth-2",
+          "mode": "explore",
+          "level": 7,
+          "xp": 23770,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 18,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 10,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-3",
+          "mode": "explore",
+          "level": 7,
+          "xp": 26325,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 19,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "depth-4",
+          "mode": "explore",
+          "level": 7,
+          "xp": 28880,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 49,
+              "maxHp": 52,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 20,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "depth-5",
+          "mode": "explore",
+          "level": 7,
+          "xp": 31300,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 49,
+              "maxHp": 52,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 21,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "depth-6",
+          "mode": "explore",
+          "level": 7,
+          "xp": 33855,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 37,
+              "maxHp": 52,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 22,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "depth-7",
+          "mode": "explore",
+          "level": 8,
+          "xp": 36410,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            },
+            {
+              "id": "oren",
+              "hp": 68,
+              "maxHp": 68,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 8
+            }
+          ]
+        },
+        {
+          "scene": "depth-8",
+          "mode": "explore",
+          "level": 8,
+          "xp": 38830,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            },
+            {
+              "id": "oren",
+              "hp": 68,
+              "maxHp": 68,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "classId": "adept",
+      "seed": 1,
+      "actions": 1118,
+      "final": {
+        "scene": "depth-8",
+        "mode": "complete",
+        "level": 8,
+        "xp": 38830,
+        "party": [
+          {
+            "id": "hero",
+            "hp": 50,
+            "maxHp": 50,
+            "potions": 16,
+            "rations": 0,
+            "dead": false,
+            "slots": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "hitDice": 3
+          },
+          {
+            "id": "mira",
+            "hp": 59,
+            "maxHp": 59,
+            "potions": 36,
+            "rations": 0,
+            "dead": false,
+            "slots": [],
+            "hitDice": 7
+          },
+          {
+            "id": "oren",
+            "hp": 68,
+            "maxHp": 68,
+            "potions": 25,
+            "rations": 0,
+            "dead": false,
+            "slots": [],
+            "hitDice": 8
+          }
+        ]
+      },
+      "rooms": [
+        {
+          "scene": "cookfire",
+          "mode": "explore",
+          "level": 1,
+          "xp": 270,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 4,
+              "maxHp": 8,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                2,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 10,
+              "maxHp": 10,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 12,
+              "maxHp": 12,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "aftermath",
+          "mode": "explore",
+          "level": 2,
+          "xp": 740,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 10,
+              "maxHp": 14,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 17,
+              "maxHp": 17,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 14,
+              "maxHp": 20,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "archive-1",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1085,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 20,
+              "potions": 3,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                3,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 3,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 1,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-2",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1295,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 20,
+              "potions": 4,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                3,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 4,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-3",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1640,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 20,
+              "potions": 5,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 5,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 3,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-4",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1850,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 20,
+              "potions": 6,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 6,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 4,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-5",
+          "mode": "explore",
+          "level": 3,
+          "xp": 2060,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 20,
+              "potions": 7,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 7,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 5,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-6",
+          "mode": "explore",
+          "level": 3,
+          "xp": 2405,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 20,
+              "maxHp": 20,
+              "potions": 8,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 8,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 6,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-7",
+          "mode": "explore",
+          "level": 4,
+          "xp": 2750,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 26,
+              "maxHp": 26,
+              "potions": 7,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                2,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 9,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 7,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "archive-8",
+          "mode": "explore",
+          "level": 4,
+          "xp": 2960,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 26,
+              "maxHp": 26,
+              "potions": 8,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                2,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 10,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 8,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "market-1",
+          "mode": "explore",
+          "level": 4,
+          "xp": 3395,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 26,
+              "maxHp": 26,
+              "potions": 9,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 9,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-2",
+          "mode": "explore",
+          "level": 4,
+          "xp": 3695,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 26,
+              "maxHp": 26,
+              "potions": 10,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 10,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-3",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4130,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 26,
+              "maxHp": 26,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-4",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4430,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 26,
+              "maxHp": 26,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-5",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4730,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 26,
+              "maxHp": 26,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-6",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5165,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 26,
+              "maxHp": 26,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                1,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "market-7",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5600,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 15,
+              "maxHp": 26,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 17,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 25,
+              "maxHp": 36,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "market-8",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5900,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 15,
+              "maxHp": 26,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 18,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 25,
+              "maxHp": 36,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "roots-1",
+          "mode": "explore",
+          "level": 5,
+          "xp": 6575,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 32,
+              "maxHp": 32,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                2,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 19,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 10,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "roots-2",
+          "mode": "explore",
+          "level": 5,
+          "xp": 7115,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 32,
+              "maxHp": 32,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                2,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 20,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "roots-3",
+          "mode": "explore",
+          "level": 5,
+          "xp": 7790,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 32,
+              "maxHp": 32,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 21,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "roots-4",
+          "mode": "explore",
+          "level": 5,
+          "xp": 8330,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 32,
+              "maxHp": 32,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 22,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "roots-5",
+          "mode": "explore",
+          "level": 5,
+          "xp": 8870,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 32,
+              "maxHp": 32,
+              "potions": 17,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "roots-6",
+          "mode": "explore",
+          "level": 5,
+          "xp": 9545,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 23,
+              "maxHp": 32,
+              "potions": 18,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "roots-7",
+          "mode": "explore",
+          "level": 5,
+          "xp": 10220,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 19,
+              "maxHp": 32,
+              "potions": 19,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "roots-8",
+          "mode": "explore",
+          "level": 5,
+          "xp": 10760,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 19,
+              "maxHp": 32,
+              "potions": 20,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 17,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "choir-1",
+          "mode": "explore",
+          "level": 5,
+          "xp": 11815,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 21,
+              "maxHp": 32,
+              "potions": 21,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 17,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "choir-2",
+          "mode": "explore",
+          "level": 5,
+          "xp": 12735,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 21,
+              "maxHp": 32,
+              "potions": 22,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 18,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "choir-3",
+          "mode": "explore",
+          "level": 5,
+          "xp": 13655,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 21,
+              "maxHp": 32,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 26,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 19,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 0
+            }
+          ]
+        },
+        {
+          "scene": "choir-4",
+          "mode": "explore",
+          "level": 6,
+          "xp": 14710,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                1,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 20,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "choir-5",
+          "mode": "explore",
+          "level": 6,
+          "xp": 15630,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                1,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 21,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "choir-6",
+          "mode": "explore",
+          "level": 6,
+          "xp": 16685,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 26,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 22,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "choir-7",
+          "mode": "explore",
+          "level": 6,
+          "xp": 17740,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 26,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 27,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "choir-8",
+          "mode": "explore",
+          "level": 6,
+          "xp": 18660,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 27,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 28,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "depth-1",
+          "mode": "explore",
+          "level": 6,
+          "xp": 21215,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 19,
+              "maxHp": 38,
+              "potions": 27,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 29,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "depth-2",
+          "mode": "explore",
+          "level": 7,
+          "xp": 23770,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 30,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-3",
+          "mode": "explore",
+          "level": 7,
+          "xp": 26325,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 26,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 31,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 26,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-4",
+          "mode": "explore",
+          "level": 7,
+          "xp": 28880,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 42,
+              "maxHp": 44,
+              "potions": 27,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 32,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 27,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-5",
+          "mode": "explore",
+          "level": 7,
+          "xp": 31300,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 42,
+              "maxHp": 44,
+              "potions": 28,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 33,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 28,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-6",
+          "mode": "explore",
+          "level": 7,
+          "xp": 33855,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 22,
+              "maxHp": 44,
+              "potions": 20,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 34,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-7",
+          "mode": "explore",
+          "level": 8,
+          "xp": 36410,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 50,
+              "maxHp": 50,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 35,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            },
+            {
+              "id": "oren",
+              "hp": 68,
+              "maxHp": 68,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 8
+            }
+          ]
+        },
+        {
+          "scene": "depth-8",
+          "mode": "explore",
+          "level": 8,
+          "xp": 38830,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 50,
+              "maxHp": 50,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 36,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            },
+            {
+              "id": "oren",
+              "hp": 68,
+              "maxHp": 68,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "classId": "cleric",
+      "seed": 1,
+      "actions": 1243,
+      "final": {
+        "scene": "depth-8",
+        "mode": "complete",
+        "level": 8,
+        "xp": 38830,
+        "party": [
+          {
+            "id": "hero",
+            "hp": 59,
+            "maxHp": 59,
+            "potions": 34,
+            "rations": 0,
+            "dead": false,
+            "slots": [
+              2,
+              3,
+              3,
+              2
+            ],
+            "hitDice": 4
+          },
+          {
+            "id": "mira",
+            "hp": 59,
+            "maxHp": 59,
+            "potions": 38,
+            "rations": 0,
+            "dead": false,
+            "slots": [],
+            "hitDice": 8
+          },
+          {
+            "id": "oren",
+            "hp": 68,
+            "maxHp": 68,
+            "potions": 34,
+            "rations": 0,
+            "dead": false,
+            "slots": [],
+            "hitDice": 8
+          }
+        ]
+      },
+      "rooms": [
+        {
+          "scene": "cookfire",
+          "mode": "explore",
+          "level": 1,
+          "xp": 270,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 6,
+              "maxHp": 10,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                2,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 10,
+              "maxHp": 10,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 12,
+              "maxHp": 12,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "aftermath",
+          "mode": "explore",
+          "level": 2,
+          "xp": 740,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 13,
+              "maxHp": 17,
+              "potions": 0,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                3,
+                0,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 17,
+              "maxHp": 17,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 13,
+              "maxHp": 20,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "archive-1",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1085,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 1,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                4,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 1,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-2",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1295,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                4,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 2,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 3,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "archive-3",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1640,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 3,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                4,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 3,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 4,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "archive-4",
+          "mode": "explore",
+          "level": 3,
+          "xp": 1850,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 4,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                4,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 4,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 5,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "archive-5",
+          "mode": "explore",
+          "level": 3,
+          "xp": 2060,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 5,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                4,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 5,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 6,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "archive-6",
+          "mode": "explore",
+          "level": 3,
+          "xp": 2405,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 6,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                4,
+                2,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 24,
+              "maxHp": 24,
+              "potions": 6,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 28,
+              "maxHp": 28,
+              "potions": 7,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "archive-7",
+          "mode": "explore",
+          "level": 4,
+          "xp": 2750,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 7,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 7,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 8,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "archive-8",
+          "mode": "explore",
+          "level": 4,
+          "xp": 2960,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 8,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 8,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 9,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-1",
+          "mode": "explore",
+          "level": 4,
+          "xp": 3395,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 9,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 9,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 10,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-2",
+          "mode": "explore",
+          "level": 4,
+          "xp": 3695,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 10,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 10,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 11,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-3",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4130,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 8,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 11,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 11,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-4",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4430,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 9,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 12,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 12,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-5",
+          "mode": "explore",
+          "level": 4,
+          "xp": 4730,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 10,
+              "rations": 1,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 13,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 13,
+              "rations": 1,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            }
+          ]
+        },
+        {
+          "scene": "market-6",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5165,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 11,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "market-7",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5600,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 12,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "market-8",
+          "mode": "explore",
+          "level": 4,
+          "xp": 5900,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                0,
+                0
+              ],
+              "hitDice": 2
+            },
+            {
+              "id": "mira",
+              "hp": 31,
+              "maxHp": 31,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 36,
+              "maxHp": 36,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "roots-1",
+          "mode": "explore",
+          "level": 5,
+          "xp": 6575,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 13,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                2,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 17,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "roots-2",
+          "mode": "explore",
+          "level": 5,
+          "xp": 7115,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 14,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                2,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 18,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            }
+          ]
+        },
+        {
+          "scene": "roots-3",
+          "mode": "explore",
+          "level": 5,
+          "xp": 7790,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 15,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                2,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 19,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "roots-4",
+          "mode": "explore",
+          "level": 5,
+          "xp": 8330,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 16,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                2,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 20,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 17,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "roots-5",
+          "mode": "explore",
+          "level": 5,
+          "xp": 8870,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 17,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                2,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 21,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 18,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            }
+          ]
+        },
+        {
+          "scene": "roots-6",
+          "mode": "explore",
+          "level": 5,
+          "xp": 9545,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 18,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                2,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 22,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 19,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "roots-7",
+          "mode": "explore",
+          "level": 5,
+          "xp": 10220,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 19,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                2,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 20,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "roots-8",
+          "mode": "explore",
+          "level": 5,
+          "xp": 10760,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 20,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                2,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 21,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "choir-1",
+          "mode": "explore",
+          "level": 5,
+          "xp": 11815,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 21,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                2,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 21,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "choir-2",
+          "mode": "explore",
+          "level": 5,
+          "xp": 12735,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 22,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                2,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 26,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 22,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "choir-3",
+          "mode": "explore",
+          "level": 5,
+          "xp": 13655,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                2,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 38,
+              "maxHp": 38,
+              "potions": 27,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 44,
+              "maxHp": 44,
+              "potions": 23,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            }
+          ]
+        },
+        {
+          "scene": "choir-4",
+          "mode": "explore",
+          "level": 6,
+          "xp": 14710,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                3,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 28,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 24,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "choir-5",
+          "mode": "explore",
+          "level": 6,
+          "xp": 15630,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                3,
+                0
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 29,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 25,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "choir-6",
+          "mode": "explore",
+          "level": 6,
+          "xp": 16685,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 26,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                4,
+                3,
+                3,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 30,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 26,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "choir-7",
+          "mode": "explore",
+          "level": 6,
+          "xp": 17740,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 27,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                3,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 29,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 27,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "choir-8",
+          "mode": "explore",
+          "level": 6,
+          "xp": 18660,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 28,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                3,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 30,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 3
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 28,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "depth-1",
+          "mode": "explore",
+          "level": 6,
+          "xp": 21215,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 30,
+              "maxHp": 45,
+              "potions": 29,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                3,
+                0
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 45,
+              "maxHp": 45,
+              "potions": 31,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 29,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 5
+            }
+          ]
+        },
+        {
+          "scene": "depth-2",
+          "mode": "explore",
+          "level": 7,
+          "xp": 23770,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 29,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                3,
+                1
+              ],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 32,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 4
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 30,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-3",
+          "mode": "explore",
+          "level": 7,
+          "xp": 26325,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 30,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                3,
+                1
+              ],
+              "hitDice": 3
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 33,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 31,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 7
+            }
+          ]
+        },
+        {
+          "scene": "depth-4",
+          "mode": "explore",
+          "level": 7,
+          "xp": 28880,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 31,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                3,
+                1
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 34,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 32,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "depth-5",
+          "mode": "explore",
+          "level": 7,
+          "xp": 31300,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 32,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                3,
+                1
+              ],
+              "hitDice": 1
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 35,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 2
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 33,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "depth-6",
+          "mode": "explore",
+          "level": 7,
+          "xp": 33855,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 41,
+              "maxHp": 52,
+              "potions": 33,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                3,
+                3,
+                3,
+                1
+              ],
+              "hitDice": 0
+            },
+            {
+              "id": "mira",
+              "hp": 52,
+              "maxHp": 52,
+              "potions": 36,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 1
+            },
+            {
+              "id": "oren",
+              "hp": 60,
+              "maxHp": 60,
+              "potions": 34,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 6
+            }
+          ]
+        },
+        {
+          "scene": "depth-7",
+          "mode": "explore",
+          "level": 8,
+          "xp": 36410,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 33,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                2,
+                3,
+                3,
+                2
+              ],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 37,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 8
+            },
+            {
+              "id": "oren",
+              "hp": 68,
+              "maxHp": 68,
+              "potions": 33,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 8
+            }
+          ]
+        },
+        {
+          "scene": "depth-8",
+          "mode": "explore",
+          "level": 8,
+          "xp": 38830,
+          "party": [
+            {
+              "id": "hero",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 34,
+              "rations": 0,
+              "dead": false,
+              "slots": [
+                2,
+                3,
+                3,
+                2
+              ],
+              "hitDice": 4
+            },
+            {
+              "id": "mira",
+              "hp": 59,
+              "maxHp": 59,
+              "potions": 38,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 8
+            },
+            {
+              "id": "oren",
+              "hp": 68,
+              "maxHp": 68,
+              "potions": 34,
+              "rations": 0,
+              "dead": false,
+              "slots": [],
+              "hitDice": 8
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

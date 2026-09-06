@@ -485,3 +485,8 @@ Verified against [SRD 5.2.1, Help, printed page 183](https://media.dndbeyond.com
 
 ### Correction: NPC body protection
 NPC characters previously received `preview`, which suppressed both duplicate character labels and body-volume registration. `CharacterModel.labelMode` now separates `actor` (party/enemy character label), `entity` (NPC uses its entity marker but registers body protection), and `none` (creation preview). Extra cookfire guards use entity mode too. This corrects the earlier assumption that all rendered NPCs were already protected by the silhouette registry.
+
+### Local checkpoint: continuous attrition audit and supply policy
+`expeditionSupplyReward` shares the cache policy between action preview and resolution. The curated policy uses authored encounter membership and chapter-ending room suffixes; `collectExpeditionSupplies` assigns individual items to the lowest-stock surviving carrier with stable party-order tie breaking. Existing `scene:supplies` flags enforce collection idempotency. No existing inventory is migrated.
+
+`scripts/audit-campaign-attrition.ts` traverses the opening and all 40 expedition rooms using legal actions, ordinary XP, all authored combats, cache collection, and legal rest/advancement decisions. It never injects stats or resets defeated runs. Room boundaries serialize and restore the save. Reports retain HP, inventory, slots and Hit Dice per actor. The baseline uses the old cache policy with one seed per class; the current report uses three seeds per class. Loot/rest changes alter later random-number consumption, so this is not a statistically paired damage comparison. It establishes controlled reachability and resource trends, not human difficulty or duration.

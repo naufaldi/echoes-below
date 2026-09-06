@@ -412,3 +412,6 @@ Every conscious combatant with a main action may distract a visible enemy within
 
 ### Local checkpoint: Ink Garden preparation
 The curated Ink Garden adds an apprentice NPC, living-page reeds and a lantern. Inspecting the lantern and hearing the apprentice unlocks protective sleeves; adjusting the wick then opens a prepared departure with the apprentice and surviving pages. Preparation is optional, grants no XP, persists through saves, and can recover a failed initial attempt. The final choice grants existing encounter rewards once and preserves the apprentice’s later contract testimony. Unprepared choices retain their authored consequences.
+
+### Local checkpoint: varied expedition supplies
+Curated expedition caches now provide two healing potions in authored combat rooms, one in other exploration rooms, and three camp rations at chapter-ending landings. Items go first to surviving party members carrying the least of that resource. Previews state the actual reward. Collection remains once per room; already collected saves are not refilled or reduced. Legacy caches retain one potion per party member. The aim is to support camp decisions while reducing uniform potion accumulation.

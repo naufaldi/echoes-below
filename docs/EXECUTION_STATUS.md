@@ -283,3 +283,10 @@ Fixed impossible active objectives caused by main quests never expiring, generic
 - Seven label-layout regression tests pass; client type check and production build pass. Asset build gate verifies 45 models / 51 files. Full backend suite last passed at 260 before this client-only change; it was not rerun for this checkpoint.
 - Local Chrome `NPC Label QA`: inspected apprentice unselected and selected. One entity label remains beside the body with a leader line; selecting it shows the three applicable actions and no duplicate HP label.
 - No deployment or paid AI calls. Campaign completion and duration gates remain open.
+
+### Local checkpoint: continuous campaign attrition verified
+- Added a no-reset campaign combat audit. Baseline: all four classes completed, with excessive potion accumulation (Fighter party 122 remaining).
+- Varied curated caches between combat medicine, smaller exploration medicine and chapter-landing rations. Existing inventory and legacy cache behavior preserved.
+- Current audit: 12/12 full runs completed at level 8, 13,768 legal actions total. Fixed Rogue/Fighter companions, three seeds per hero class, all authored combats, no side quests, no injected resources. Baseline/current evidence: `CAMPAIGN_ATTRITION_BASELINE.json` and `CAMPAIGN_ATTRITION.json`. This is not measured player time or balance acceptance.
+- 264 tests pass; client/server/hosted type checks and production build pass. Asset gate verifies 45 models / 51 files. Local Chrome cache preview promised one potion; collection changed total 6 to 7 and removed the action.
+- No deployment or paid AI. Campaign content depth and human playtime acceptance remain outstanding.
