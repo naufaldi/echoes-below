@@ -89,3 +89,9 @@ Validation: 134 tests, all three TypeScript checks and production build pass. Br
 Side Adventure QA won the curated Vark encounter through UI actions: independent Mira/Oren/enemy turns, Cleric Sacred Flame and visible dice presentations. The party reached the aftermath, gained level 2, secured the seal and entered Chapter II. Elian's named NPC and label rendered in the Sluice Stair without a missing-asset warning; the request is available in the action panel. The current browser save remains at archive-1 before accepting Elian's request. Full later quest playthrough is still pending.
 
 The browser exposed an incorrect Fighter healing action after combat. Fixed the legacy exploration action leak by adding resource-correct curated recovery. 138 automated tests pass. Further observed follow-ups: creation health cards still display Echo Rules health when curated preview is selected; later rooms use similar generic dressing despite distinct story descriptions; NPC turns currently require repeated confirmation even just to finish an already-used turn. These remain actionable work, alongside broader rules, AI/voice, campaign and deployment gates.
+
+### NPC interaction polish and corrected QA finding
+
+Removed redundant confirmation for each `tactical:auto` step. Browser verified one click immediately produced a single Goblin guard movement playback, leaving its attack/turn boundary intact. Retry IDs and revision handling use the existing commit path. Hidden party-only Fighter resource labels on enemy turns.
+
+Correction to the prior creation observation: source and browser both show curated HP correctly after selecting curated rules (Fighter12, Rogue10, Wizard8, Cleric10). The earlier screenshot displayed Echo Rules before that selection, so no HP implementation fix was needed. Current browser tab is Spell Browser QA at the goblin movement playback; Side Adventure QA remains saved at archive-1.

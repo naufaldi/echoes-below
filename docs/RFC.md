@@ -255,3 +255,7 @@ Side choices declare ration costs, potion/ration rewards and optional preparatio
 ### Exploration healing boundary fix
 
 Browser QA exposed legacy `campheal` on a curated Fighter after combat. The curated legal-action wrapper now excludes old camp healing and personal-potion commands and delegates to `server/exploration-healing.ts`. Validation uses tactical HP, death status, class, slot and inventory state before any dice or mutation. Resolution consumes the correct resource, projects mechanics before recording presentation, and preserves existing action revision/idempotency behavior. Tests cover slot use instead of focus, Fighter self-only recovery, 2d4+2 potion healing, downed/dead targets, exhausted resources and serialized state.
+
+### Direct NPC step dispatch
+
+`App.choose` dispatches only `tactical:auto` directly through the existing confirmation/commit implementation with an explicit action argument. It clears unrelated previews; the synchronous action lock, expected revision, retained retry command ID and single-step presentation remain shared. Other actions use the existing confirmation dialog. Browser validation resumed Spell Browser QA, ended the hero turn, selected Let Goblin guard act once and received exactly one 20-foot movement playback with the guard still active. No confirmation dialog was inserted. Enemy class-resource labels are hidden in TacticalControls; engine special-feature guards were already party-only.

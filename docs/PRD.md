@@ -200,3 +200,7 @@ This supplies authored content for all 12 optional records, including the two op
 ### Exploration recovery parity
 
 Curated exploration recovery now uses class resources: Cleric Cure Wounds consumes one rank-1 slot, Fighter Second Wind is self-only and consumes its limited use, and a potion heals 2d4+2. Any conscious party member can give their potion to an injured living ally after regrouping. Downed allies can recover; dead actors cannot. Echo Rules retains its original healing rules.
+
+### Individual NPC turn controls
+
+Selecting “Let [actor] act” now directly commits one NPC step, using the same saved-command boundary. Presentation still pauses before another step and before another actor; player attacks, choices and takeover retain confirmation. Enemy turn UI no longer displays party-only Second Wind/Action Surge labels.
