@@ -249,3 +249,8 @@ The public scene now projects only observable pawl, weight and lock states. A lo
 ### Tactical AI proposal integration
 
 Paid AI modes can propose one legal action for the currently active tactical companion. The player still advances each visible step. Human turns, enemy turns and manual companion takeover do not request an AI decision. Free mode keeps deterministic tactics. Invalid or stale proposals never grant movement, resources, targets or extra turns; the companion uses validated fallback tactics instead.
+
+
+### Sponsored tactical retry boundary
+
+Retrying a sponsored companion action must not buy the same decision twice. While its decision is pending, the player receives a retry message and the action remains uncommitted. A failed or abandoned paid decision falls back to legal game tactics without another provider purchase for that command. Free mode never invokes a provider.

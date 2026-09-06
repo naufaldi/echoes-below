@@ -5,3 +5,5 @@ export const checkpoints=sqliteTable('checkpoints',{id:text('id').primaryKey(),o
 export const previews=sqliteTable('previews',{id:text('id').primaryKey(),owner:text('owner').notNull(),body:text('body').notNull()});
 export const dialogues=sqliteTable('dialogues',{id:text('id').primaryKey(),owner:text('owner').notNull(),saveId:text('save_id').notNull(),speaker:text('speaker').notNull(),playerText:text('player_text').notNull(),replyText:text('reply_text').notNull(),createdAt:text('created_at').notNull()},t=>[index('dialogues_owner_save_time').on(t.owner,t.saveId,t.createdAt)]);
 export const budgets=sqliteTable('budgets',{id:text('id').primaryKey(),reserved:real('reserved').notNull().default(0)});
+
+export const planningRequests=sqliteTable('planning_requests',{owner:text('owner').notNull(),id:text('id').notNull(),hash:text('hash').notNull(),startedAt:integer('started_at').notNull(),result:text('result')},t=>[primaryKey({columns:[t.owner,t.id]})]);

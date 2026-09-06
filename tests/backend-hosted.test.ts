@@ -1,12 +1,13 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
-import {readFileSync} from 'node:fs';
+import {readFileSync,readdirSync} from 'node:fs';
+import {planningOnce} from '../hosted/planning-once.js';
 import worker from '../hosted/worker.js';
 import {Store,type Database,type Statement} from '../hosted/db.js';
 import {reserve} from '../hosted/ai.js';
 class DB implements Database{
- sql=new DatabaseSync(':memory:');constructor(){this.sql.exec(readFileSync('drizzle/0000_late_steve_rogers.sql','utf8'));}
+ sql=new DatabaseSync(':memory:');constructor(){for(const file of readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())this.sql.exec(readFileSync('drizzle/'+file,'utf8'));}
  prepare(query:string):Statement{let values:unknown[]=[];const self=this;return {bind(...args){values=args;return this;},async first<T>(){return (self.sql.prepare(query).get(...values as never[])??null) as T|null;},async all<T>(){return{results:self.sql.prepare(query).all(...values as never[]) as T[]};},async run(){const result=self.sql.prepare(query).run(...values as never[]);return{meta:{changes:Number(result.changes)}};}};}
  async batch(statements:Statement[]){this.sql.exec('BEGIN');try{const r=[];for(const s of statements)r.push(await s.run());this.sql.exec('COMMIT');return r;}catch(e){this.sql.exec('ROLLBACK');throw e;}}
 }
@@ -21,3 +22,27 @@ test('a duplicate concurrent resolution cannot create a checkpoint with an uncom
 test('hosted free mode cannot reserve owner budget even when a key is configured',async()=>{const db=new DB(),a=await client(db,'test-key-never-sent');await a.request('/api/session');const save=(await a.request('/api/saves',input)).data;const result=await a.request(`/api/saves/${save.id}/dialogue`,{speaker:'mira',text:'Hello'});assert.equal(result.status,503);assert.equal(db.sql.prepare('SELECT count(*) AS n FROM budgets').get()!.n,0);db.sql.close();});
 
 test('personal dialogue history stays scoped to the addressed companion',async()=>{const db=new DB(),a=await client(db);try{await a.request('/api/session');const save=(await a.request('/api/saves',input)).data;for(const speaker of ['mira','oren'])await a.request(`/api/saves/${save.id}/dialogue/local`,{speaker,text:'Hello',reply:`I am ${speaker}.`});const result=await a.request(`/api/saves/${save.id}/dialogue?speaker=mira`);assert.equal(result.status,200);assert.equal(result.data.history.length,1);assert.equal(result.data.history[0].speaker,'mira');assert.equal((await a.request(`/api/saves/${save.id}/dialogues`)).data.history.length,2);}finally{db.sql.close();}});
+
+
+test('durable planning claim shares results and prevents cross-Worker duplicate provider calls',async()=>{
+ const db=new DB(),a=new Store(db,'owner'),b=new Store(db,'owner');let calls=0,release!:()=>void;
+ const gate=new Promise<void>(r=>{release=r;});
+ const produce=async()=>{calls++;await gate;return {oren:'tactical:dodge'};};
+ try{
+  const first=planningOnce(a,'decision','digest',produce);
+  await assert.rejects(planningOnce(b,'decision','digest',produce),/still being prepared/);
+  release();assert.deepEqual(await first,{oren:'tactical:dodge'});
+  assert.deepEqual(await planningOnce(b,'decision','digest',produce),{oren:'tactical:dodge'});assert.equal(calls,1);
+  await assert.rejects(planningOnce(b,'decision','changed',produce),/another request/);
+ }finally{release();db.sql.close();}
+});
+test('failed and abandoned planning claims never buy a second provider attempt',async()=>{
+ const db=new DB(),store=new Store(db,'owner');let calls=0;
+ try{
+  const fail=async()=>{calls++;throw Error('Provider timeout');};
+  await assert.rejects(planningOnce(store,'failure','digest',fail),/Provider timeout/);
+  assert.deepEqual(await planningOnce(store,'failure','digest',fail),{});assert.equal(calls,1);
+  db.sql.prepare('INSERT INTO planning_requests(owner,id,hash,started_at) VALUES(?,?,?,?)').run('owner','abandoned','digest',Date.now()-91000);
+  assert.deepEqual(await planningOnce(store,'abandoned','digest',fail),{});assert.equal(calls,1);
+ }finally{db.sql.close();}
+});

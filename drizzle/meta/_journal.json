@@ -8,6 +8,13 @@
       "when": 1788635238892,
       "tag": "0000_late_steve_rogers",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1788682193061,
+      "tag": "0001_chunky_patriot",
+      "breakpoints": true
     }
   ]
 }

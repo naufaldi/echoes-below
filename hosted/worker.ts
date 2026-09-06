@@ -1,3 +1,4 @@
+import {planningOnce} from './planning-once.js';
 import {creation} from '../shared/character-creation.js';
 import {z} from 'zod';
 import {Store,hash,type Database} from './db.js';
@@ -16,7 +17,7 @@ async function execute(env:Env,store:Store,id:string,input:unknown){
  const before=await store.read(id);if(before.revision!==body.expectedRevision)throw new GameError(409,'STALE','Reload the latest saved adventure.');
  if(!legalActions(before).some(a=>a.id===body.actionId))throw new GameError(422,'ACTION','That action is not available.');
  if(body.companionPlans)before.plans=body.companionPlans;
- if(!body.companionPlans&&env.OPENAI_API_KEY&&before.mode==='combat'&&!before.flags.retreatRequested&&['end_turn','continue','tactical:auto'].includes(body.actionId))try{before.plans=await plans(env,store,before);}catch{log(before,'Companion AI is unavailable. The party uses protective tactical rules.');}
+ if(!body.companionPlans&&env.OPENAI_API_KEY&&before.mode==='combat'&&(!before.tactical||before.party.some(a=>a.id===before.turn?.actorId&&a.id!=='hero'&&a.hp>0))&&!before.flags.retreatRequested&&['end_turn','continue','tactical:auto'].includes(body.actionId))try{before.plans=await planningOnce(store,body.commandId,digest,()=>plans(env,store,before));}catch(error){if(error instanceof GameError&&['AI_PENDING','COMMAND_REUSED'].includes(error.code))throw error;log(before,'Companion AI is unavailable. The party uses protective tactical rules.');}
  const after=applyAction(before,body.actionId,cryptoDice);delete after.plans;return store.commit(before,after,body.commandId,digest);
 }
 export default {async fetch(request:Request,env:Env):Promise<Response>{

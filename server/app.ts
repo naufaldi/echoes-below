@@ -167,6 +167,7 @@ export async function buildApp(
       if (
         allowAI && !plans && ai.configured &&
         before.mode === "combat" &&
+        (!before.tactical || before.party.some(a=>a.id===before.turn?.actorId&&a.id!=="hero"&&a.hp>0)) &&
         !before.flags.retreatRequested &&
         ["end_turn", "continue", "tactical:auto"].includes(body.actionId)
       ) {
