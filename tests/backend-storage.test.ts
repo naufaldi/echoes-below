@@ -85,14 +85,17 @@ test("reservations enforce hourly and campaign caps and survive checkpoint branc
   );
   storage.close();
 });
-test("same in-flight command shares AI work, stale AI work cannot overwrite newer state", async () => {
+test("same in-flight command shares AI work, stale AI work cannot overwrite newer state", {timeout:5000}, async () => {
   let release!: () => void;
   let plansCalls = 0;
+  let notifyStarted!: () => void;
+  const started = new Promise<void>(resolve => { notifyStarted = resolve; });
   const barrier = new Promise<void>((resolve) => (release = resolve));
   const ai = {
     configured: true,
     plans: async () => {
       plansCalls++;
+      notifyStarted();
       await barrier;
       return { mira: "guard", oren: "guard" };
     },
@@ -127,7 +130,7 @@ test("same in-flight command shares AI work, stale AI work cannot overwrite newe
   const url = `/api/saves/${s.id}/actions`;
   const first = post(url, body);
   const second = post(url, body);
-  await new Promise((r) => setTimeout(r, 20));
+  await started;
   assert.equal(plansCalls, 1);
   const changed = await post(url, {
     commandId: randomUUID(),

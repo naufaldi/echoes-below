@@ -209,3 +209,15 @@ A separate Bell Index Visual QA fixture tested the room directly. The browser re
 The inspection found that the described librarian and sentinel lacked exploration entities. The room now projects a bronze adaptation of the shipped KayKit Knight and the shipped skeleton, with name-restoration decisions targeting the librarian and combat targeting the sentinel. Both models were visually observed. Combat suppresses these exploration duplicates. Once resolved, the sentinel disappears and the restored librarian is named Ilyra; the scene description reflects the chosen outcome instead of describing the earlier captive drawer. Scene projection regression and client/server type checks pass. No deployment.
 
 Verification checkpoint: 214 automated tests pass; client, server and hosted typechecks pass. Local build verifies 45 models and 51 bundled files. Settled browser state confirms Ilyra’s restored name and removal of the sentinel after the decision. Librarian placement was moved away from the exit label; final placement still needs a fresh screenshot. Sites remains unchanged.
+
+
+## Infirmary rescue expansion: local checkpoint
+
+- Added a saved inspection / optional medic reply / cot bracing / slow-drain route and a separately confirmed safe rescue. Room rewards and later medic assistance retain their existing IDs. No new paid asset or AI request.
+- Added original cot, valve, tether, medicine case and transparent water geometry; reused a shipped character for the medic. Public state controls NPC height, water visibility, names and resolved description.
+- Browser on localhost completed the sequence in Bell Index Visual QA, reloading after bracing. The rescue raised the existing fixture from 175 to 300 XP / level 2. This exposed a three-log truncation that hid the rescue under rewards; a failing regression reproduced it and the narration selector now retains the full committed action.
+- Browser also exposed stale scenery during action playback. A separate Infirmary Playback QA fixture verified that the lowered cot, absent water and waiting medic now appear while the drainage outcome panel is open. This is focused fixture evidence, not an end-to-end campaign or human duration test.
+- Bell Index follow-up screenshot verified the librarian's moved placement away from the exit marker.
+- Public Sites remains unchanged. Campaign content density, broader visual coverage, balance, voice input and duration gates remain open.
+
+Verification: 220 tests pass; client, server and hosted typechecks pass; local build verifies 45 models and 51 bundled files. The concurrency test now waits for the provider-start signal instead of a fixed 20 ms delay, after that timing assumption failed under parallel validation load. No deployment.

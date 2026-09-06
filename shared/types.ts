@@ -80,6 +80,7 @@ export interface ActionOption {
   check?: { dc: number; attribute: string };
 }
 export interface Entity {
+  elevation?: number;
   appearanceId?: string;
   modelClassId?: Actor['classId'];
   id: string;
@@ -90,6 +91,7 @@ export interface Entity {
   kind: "clue" | "door" | "npc" | "trap" | "exit" | "camp" | "seal";
 }
 export interface Scene {
+  infirmary?: {braced:boolean;drained:boolean;rescued:boolean};
   bellIndex?: {read:boolean;solved:boolean;sequence:import("./bell-index.js").IndexPlate[]};
   counterweight?:{pawlReleased:boolean;weightSeated:boolean;locked:boolean};
   id: SceneId;

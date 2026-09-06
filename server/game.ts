@@ -1,3 +1,4 @@
+import {infirmaryActions,resolveInfirmary,infirmaryPrepared,projectInfirmary,PREPARED_RESCUE} from './infirmary.js';
 import {indexActions,resolveIndex} from './bell-index.js';
 import {bellIndexState} from '../shared/bell-index.js';
 import {scritActions,resolveScrit} from './scrit-inquiry.js';
@@ -455,7 +456,7 @@ function approachTarget(s: Save, option: ActionOption) {
     ];
   }
 }
-export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s),...parleyActions(s),...scritActions(s),...indexActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
+export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s),...parleyActions(s),...scritActions(s),...indexActions(s),...infirmaryActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
 function baseActions(s: Save): ActionOption[] {
   if(s.tactical&&s.mode==="combat")return tacticalActions(s);
   const a: ActionOption[] = [];
@@ -645,9 +646,9 @@ function baseActions(s: Save): ActionOption[] {
     if(!f[`${prefix}:talk`])a.push(opt('exp_talk','Hear your companions','Listen to the party’s personal response.','interact','encounter'));
     if(!f[`${prefix}:supplies`])a.push(opt('exp_supplies','Search the supplies','Recover one potion for each party member. One cache per location.','inspect','supplies'));
     if(!f[`${prefix}:resolved`]){
-      const named=prefix==='archive-3'&&!!f['index:solved'],certain=defeated||named;
-      if(defeated||(h.hp>0&&(named||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',expedition.choice[0],named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`, 'interact',s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:'hero',certain?undefined:dc,certain?undefined:expedition.challenge,!certain));
-      a.push(opt('exp_choice:1',expedition.choice[1],'Commit to this alternative and its consequences without a check.','interact',s.tactical&&prefix==='archive-3'?'index-librarian':'encounter'));
+      const named=prefix==='archive-3'&&!!f['index:solved'],prepared=infirmaryPrepared(s),certain=defeated||named||prepared;
+      if(defeated||(h.hp>0&&(named||prepared||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',prepared?'Help the medic from the lowered cot':expedition.choice[0],prepared?'The cot is secured and the pocket drained. Rescue the medic without a check; his medicine remains with him.':named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`, 'interact',s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:'hero',certain?undefined:dc,certain?undefined:expedition.challenge,!certain));
+      if(!prepared)a.push(opt('exp_choice:1',expedition.choice[1],'Commit to this alternative and its consequences without a check.','interact',s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter'));
       if(!defeated&&(!s.tactical||CURATED_ENCOUNTERS[s.sceneId]))a.push(opt('exp_fight','Confront the chamber’s defenders','Resolve the obstruction in turn-based combat, then choose the outcome.','attack',s.tactical&&prefix==='archive-3'?'index-sentinel':'encounter',undefined,undefined,undefined,true));
     }else{
       if(!f[`${prefix}:rest`])a.push(opt('exp_rest','Rest with your companions','Recover health and focus; the sheltered rest is available once.','rest','camp'));
@@ -968,6 +969,8 @@ export function publicSave(s: Save): PublicSave {
    scene.entities.push({id:'index-librarian',name:flags['archive-3:choice:0']?'Ilyra, restored librarian':'Bronze librarian',kind:'npc',modelClassId:'guardian',appearanceId:'bronze',position:[-2.4,3],description:'The keeper of the catalogue waits beside the suspended chains.'});
    if(!flags['archive-3:resolved']&&!flags['archive-3:defendersDefeated'])scene.entities.push({id:'index-sentinel',name:'Catalogue sentinel',kind:'npc',modelClassId:'skeleton',position:[2.3,3],description:'A bound skeleton guards the missing catalogue drawer.'});
   }
+  if(s.tactical&&sceneId==='archive-4'&&flags['archive-4:resolved'])scene.description=expeditionRoom(sceneId)!.outcomes[flags['archive-4:choice:0']?0:1];
+  projectInfirmary(s,scene);
   if(sceneId==='hall'){
     const locked=!!flags['counterweight:solved'];
     scene.counterweight={pawlReleased:locked||!!flags['counterweight:pawl'],weightSeated:locked||!!flags['counterweight:weight'],locked};
@@ -1359,6 +1362,7 @@ export function applyAction(original: Save, id: string, dice: Dice): Save {
  return result;
 }
 function resolveAction(original: Save, id: string, dice: Dice): Save {
+  if(id.startsWith("infirmary:"))return resolveInfirmary(original,id);
   if(id.startsWith("index:"))return resolveIndex(original,id);
   if(id.startsWith("scrit:"))return resolveScrit(original,id);
   if(id.startsWith("parley:"))return resolveParley(original,id);
@@ -1419,8 +1423,8 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
     else if(kind==='exp_choice'){
       const choice=Number(actorId) as 0|1;
       let success=true;
-      if(choice===0&&!f[`${prefix}:defendersDefeated`]&&!(prefix==='archive-3'&&f['index:solved'])){f[`${prefix}:tried`]=true;const r=rollD20(dice,h.attributes[room.challenge]+Math.floor((s.level??1)/2),room.choice[0],!!f[`${prefix}:evidence`]);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${h.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,'hero',[r]);}
-      if(success){f[`${prefix}:resolved`]=true;f[`${prefix}:choice:${choice}`]=true;fact(s,`decision:${prefix}`,room.outcomes[choice]);awardExperience(s,`room:${prefix}`,room.xp);s.relationships[choice===0?'mira':'oren']=Math.min(20,s.relationships[choice===0?'mira':'oren']+1);}
+      if(choice===0&&!f[`${prefix}:defendersDefeated`]&&!(prefix==='archive-3'&&f['index:solved'])&&!infirmaryPrepared(s)){f[`${prefix}:tried`]=true;const r=rollD20(dice,h.attributes[room.challenge]+Math.floor((s.level??1)/2),room.choice[0],!!f[`${prefix}:evidence`]);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${h.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,'hero',[r]);}
+      if(success){f[`${prefix}:resolved`]=true;f[`${prefix}:choice:${choice}`]=true;fact(s,`decision:${prefix}`,choice===0&&infirmaryPrepared(s)?PREPARED_RESCUE:room.outcomes[choice]);awardExperience(s,`room:${prefix}`,room.xp);s.relationships[choice===0?'mira':'oren']=Math.min(20,s.relationships[choice===0?'mira':'oren']+1);}
       else{const r=damageRoll(dice,6,0,'Setback');h.hp=Math.max(1,h.hp-r.total);log(s,`The attempt costs ${r.total} health. You can choose the alternative or confront the defenders.`,'hero',[r]);}
     }else if(kind==='exp_next'){
       const next=EXPEDITION[EXPEDITION.findIndex(r=>r.id===s.sceneId)+1];
