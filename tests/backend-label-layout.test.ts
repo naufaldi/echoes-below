@@ -12,3 +12,17 @@ test('labels anchored under the interface cannot relocate beside an unrelated vi
 test('zero-size or invalid label dimensions are never placed',()=>{
  for(const width of [0,-20,Infinity])assert.deepEqual(placeLabels([{id:'invalid',x:400,y:300,width,height:40,priority:1}],view,[]),[]);
 });
+
+test('labels move outside character silhouettes even when the anchor is inside one',()=>{
+ const actor={x:540,y:250,width:100,height:180};
+ const labels=[{id:'gate',x:590,y:330,width:160,height:40,priority:20},{id:'selected',x:590,y:260,width:160,height:48,priority:100}];
+ const result=placeLabels(labels,view,[],[actor]);
+ assert.ok(result.some(x=>x.id==='selected'));assert.ok(result.length>0);
+ for(const label of result)assert.ok(!overlaps(label,actor));
+});
+test('crowded actor silhouettes never force labels over characters or HUD',()=>{
+ const actors=[{x:300,y:180,width:150,height:220},{x:450,y:200,width:150,height:220},{x:600,y:180,width:150,height:220}];
+ const hud=[{x:0,y:450,width:1280,height:270}];
+ const labels=actors.map((a,i)=>({id:String(i),x:a.x+75,y:300,width:180,height:48,priority:100-i}));
+ for(const label of placeLabels(labels,view,hud,actors))assert.ok(![...actors,...hud].some(x=>overlaps(label,x)));
+});

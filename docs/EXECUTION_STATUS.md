@@ -253,3 +253,9 @@ Fixed impossible active objectives caused by main quests never expiring, generic
 - Local Chrome `Scrit Order QA`: continued to prison, asked both questions through bars, read ledger, used guard key, and compared testimony successfully. Screenshot inspected: Courier attribution, rescued NPC/open gate labels, remaining actions, and scrollable dialogue visible.
 - Visual follow-up: world labels still cover portions of the party in the default prison framing despite avoiding mutual overlap. This requires a separate layout improvement.
 - No deployment or paid AI calls. Campaign duration and full release readiness remain unproven; goal stays active.
+
+### Local checkpoint: prison label obstruction repaired
+- World labels now avoid model-sized projected body volumes. Registrations follow character movement and camera projection, independently of selected/hovered labels.
+- 247 tests pass, including priority labels anchored inside silhouettes and crowded bodies near HUD. Server/client/hosted type checks and production build pass; bundle gate verifies 45 models / 51 files.
+- Local Chrome screenshots inspected at prison default framing and with hero selected: gate label moved beside the party, courier label above the group, selected hero label to the right with leader line. Bodies are no longer covered by these labels. This is local visual evidence, not an exhaustive camera/animation sweep.
+- PRD/RFC updated. No deployment or paid AI calls. Full campaign and duration validation remain outstanding.

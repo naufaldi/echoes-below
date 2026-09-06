@@ -400,3 +400,6 @@ Curated adventures preserve Scrit’s introduction, remaining questions, and a o
 
 ### Local checkpoint: prisoner testimony investigation
 Curated prison exploration offers three saved conversations: the reason for detention, a witnessed brace transfer, and comparison with the supply ledger. The first two can happen through the bars. Comparison requires the courier to be free and the ledger to have been read. Corroboration supplies an alternative seal-knowledge route for players who missed Scrit, allowing Vark negotiation without fabricating a prior conversation. The courier distinguishes observed events from the unseen force. Conversations spend no resources and grant no dialogue XP.
+
+### Local checkpoint: labels preserve character visibility
+World labels must avoid projected character bodies as well as HUD panels and other labels. This applies to party members, enemies, and rendered NPCs, including characters without a visible name label. Selected labels retain priority but cannot cover bodies. Crowded labels may hide; their targets remain selectable in the action focus menu. Leader lines associate displaced labels with the original target.
