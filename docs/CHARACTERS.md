@@ -248,11 +248,11 @@ Characters speak through the story box, which has a name plate and a portrait (R
 ### 6.1 Rendered portraits (default, no extra art)
 - **How.** The game renders a head-and-shoulders snapshot of the in-game model, using the same canvas and offscreen target, then caches it as an image. It renders again only when the class, race, palette or model changes. Today this works with the KayKit models and with the Tripo models after #11.
 - **Framing.**
-  - The camera aims at the `Head` node, from slightly above eye level, about 20° to the character's left.
-  - The head fills about 45% of the frame height, with the eyes at about 40% from the top.
+  - The camera aims at the `Head` node, from slightly above eye level, about 20° to the character's right, so the character faces three-quarters toward the text box (§6.2). `SIDE` in `client/PortraitStudio.tsx` flips this.
+  - The eyes sit at about 40% from the top. KayKit heads are about half the body's height, so today's frame shows most of the upper body. A Tripo model (#11) with realistic proportions gets true head-and-shoulders framing from the same rule.
   - The background is transparent.
   - Output is 512×512 and is shown at 96–128 px.
-- **Pose.** The pose is the first frame of `Talk` if the model has it, otherwise `Idle`. Expressions use the dialogue clips in §4.4 when present.
+- **Pose.** The neutral portrait uses the first frame of `Idle`. `Talk` was rejected because its first frame can cover the face (the goblin model holds its mace there). Expressions use the dialogue clips in §4.4 when present.
 - **What a model needs.** A correct `Head` node (§4.3), a face toward +Z (§4.1), and a face and hair that read at 128 px. Big, simple shapes beat fine detail here too.
 
 ### 6.2 Painted portraits (optional override, later)
