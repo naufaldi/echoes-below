@@ -1,6 +1,6 @@
 import {ITEMS,initialLogistics,usedCopies,type ItemId} from '../shared/logistics.js';
 import {modifier,classResources,restoreClassResources,heal} from '../shared/curated-rules.js';
-import {GameError,log,type Save} from './game.js';
+import {GameError,log,closes,rationLoss,type Save} from './game.js';
 import {projectTactical} from './tactical.js';
 import {damageRoll,type Dice} from './rules.js';
 import type {ActionOption} from '../shared/types.js';
@@ -19,7 +19,8 @@ export function logisticsActions(s:Save):ActionOption[]{
   if(l.shortRestScene===s.sceneId)for(const a of s.party){const c=s.tactical.actors[a.id];if(!c.dead&&c.hp>0&&c.hp<c.maxHp&&c.hitDice>0)actions.push(option(`camp:hitdie:${a.id}`,`Spend another Hit Die · ${a.name}`,'camp',`Continue this short rest: spend one d${c.hitDie} + Constitution modifier to heal ${a.name}. ${c.hitDice} Hit Dice remain. No additional class recovery. Other actions end this rest window.`,a.id));}
   if(!l.shortRests.includes(s.sceneId))actions.push(option('camp:short','Take a short rest','camp','One hour at this cleared campsite. Injured conscious allies spend one Hit Die, then may spend more before resuming exploration. Fighters recover one Second Wind and Action Surge; Wizards can recover a limited number of spell slots once per long rest.'));
   const living=s.party.filter(a=>!s.tactical!.actors[a.id].dead).length;
-  if(!l.longRests.includes(s.sceneId)&&s.party.reduce((n,a)=>n+a.rations,0)>=living)actions.push(option('camp:long','Share supplies and take a long rest','camp',`Eight hours at this cleared campsite. Spend ${living} rations. Living allies regain health, spell slots, Hit Dice and class resources. Available once at this campsite.`));
+  const lost=rationLoss(s,living);
+  if(!l.longRests.includes(s.sceneId)&&s.party.reduce((n,a)=>n+a.rations,0)>=living)actions.push({...option('camp:long','Share supplies and take a long rest','camp',closes(`Eight hours at this cleared campsite. Spend ${living} rations. Living allies regain health, spell slots, Hit Dice and class resources. Available once at this campsite.`,lost)),...(lost.length?{dangerous:true}:{})});
  }
  return actions;
 }

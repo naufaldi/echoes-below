@@ -52,7 +52,7 @@ for(const model of models){
  report.push({path:relative(source,model),bytes:bytes.length,sha256:digest(bytes),meshes:document.meshes?.length??0,skins:document.skins?.length??0,animations:document.animations?.length??0,images:document.images?.length??0});
 }
 // Verify literal model references too: scanning existing files alone cannot catch a typo in rendering code.
-for(const name of ['shared/visual-identity.ts','client/DungeonDressing.tsx']){
+for(const name of ['shared/visual-identity.ts','client/DungeonDressing.tsx','client/ChapterOneRooms.tsx']){
  const text=readFileSync(resolve(root,name),'utf8');
  for(const match of text.matchAll(/['"]([^'"\n]+\.(?:glb|gltf))['"]/g)){
   const path=match[1];verifyCopy(resolve(source,path.startsWith('/assets/')?path.slice(1):'assets/expansion/'+path));
