@@ -1,0 +1,112 @@
+{
+ "kit": "kenney-fantasy-town",
+ "title": "Fantasy Town Kit (2.0)",
+ "author": "Kenney (www.kenney.nl)",
+ "storePage": "https://kenney.nl/assets/fantasy-town-kit",
+ "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip",
+ "licence": "CC0-1.0",
+ "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+ "licenceEvidence": "License.txt inside kenney_fantasy-town-kit_2.0.zip (sha256 fb8e4817197ef9f62215e95b4451a0f09c769c8e03e416e3a2ce108dfa6117e4, creation date 03-08-2025) reads \"License: (Creative Commons Zero, CC0)\". Crediting Kenney is requested but not required.",
+ "notes": "Ash Market rooms (#48): stalls, benches, carts, lamp posts, posts, planks and a fountain used as the well. Every GLB references the shared Textures/colormap.png; AshMarket.tsx renders them with a darkened copy of that texture.",
+ "files": [
+  {
+   "file": "cart-high.glb",
+   "sha256": "4b0bce37e8645f3719a9032bf4d49048b7779ac891758ae6e2693238911c5eec",
+   "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip#Models/GLB format/cart-high.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/cart-high.glb\" in the zip."
+  },
+  {
+   "file": "cart.glb",
+   "sha256": "63503cd0a7398310e01aabc8e3663f711a7517394d23d179d0695157fee99d40",
+   "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip#Models/GLB format/cart.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/cart.glb\" in the zip."
+  },
+  {
+   "file": "fountain-round.glb",
+   "sha256": "8d19741e2cca6cbdce114b950b4aa12af625979bbc17b2910ef2366834af5565",
+   "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip#Models/GLB format/fountain-round.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/fountain-round.glb\" in the zip."
+  },
+  {
+   "file": "lantern.glb",
+   "sha256": "f270637e3083d6e84a30626ee05df2b09597a642985a7f5c3e4ab5bb1c7a8d55",
+   "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip#Models/GLB format/lantern.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/lantern.glb\" in the zip."
+  },
+  {
+   "file": "pillar-wood.glb",
+   "sha256": "569c83dade6063399576640e80db35c34e422817ec132419fc2e2695189be5cf",
+   "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip#Models/GLB format/pillar-wood.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/pillar-wood.glb\" in the zip."
+  },
+  {
+   "file": "planks.glb",
+   "sha256": "619705afa7ad290bfa499a701fd7ea07210ad535126cb3abc245b6f16e1420ab",
+   "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip#Models/GLB format/planks.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/planks.glb\" in the zip."
+  },
+  {
+   "file": "stall-bench.glb",
+   "sha256": "5a4b379488241394916991c4b482ec4863c05bb548ca8751f5c3935f1f6e5b9c",
+   "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip#Models/GLB format/stall-bench.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/stall-bench.glb\" in the zip."
+  },
+  {
+   "file": "stall-green.glb",
+   "sha256": "2da2f7b31cde5d943d7c08c457bbb39797ef0a607921fde0b8455f338ce40205",
+   "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip#Models/GLB format/stall-green.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/stall-green.glb\" in the zip."
+  },
+  {
+   "file": "stall-red.glb",
+   "sha256": "aa20a630f417032c46aaefbc779fd2b3355b451bf05d31acc36fd664146866b1",
+   "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip#Models/GLB format/stall-red.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/stall-red.glb\" in the zip."
+  },
+  {
+   "file": "stall.glb",
+   "sha256": "f0a636fccb7d57c38f5acd58881c468f4872f1bcda1e9fd9b1118e76110565a1",
+   "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip#Models/GLB format/stall.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/stall.glb\" in the zip."
+  },
+  {
+   "file": "Textures/colormap.png",
+   "sha256": "4aac939dc33195e35caf8c382ee3cb170054da763577f22d3c22692ec6afccdf",
+   "source": "https://kenney.nl/media/pages/assets/fantasy-town-kit/efe948d309-1754222374/kenney_fantasy-town-kit_2.0.zip#Models/GLB format/Textures/colormap.png",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/Textures/colormap.png\" in the zip."
+  }
+ ]
+}
