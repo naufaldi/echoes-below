@@ -1,11 +1,12 @@
 import {useEffect,useMemo,type ReactElement,type ReactNode} from 'react';
+import {useFrame} from '@react-three/fiber';
 import * as THREE from 'three';
 import {Instances,KitInstances,Flame,chain,mat,decal,geo,noRaycast,rand,useSolidParts,type Part,type MoodOverride,type RoomProps} from './kit';
 
 // Drowned Archive rooms (archive-1 … archive-8), #47: a flooded library. Each room is an island of floor in black water.
 // The play footprint (±5.4 m) carries only floors and decals; every solid piece stands outside it, tall pieces at −x/−z, and the
 // camera side (+x/+z) stays low. Contract, helpers and budget: ./README.md. Kit files: kaykit-dungeon (starter) and kaykit-archive.
-// Local helpers (not in kit.tsx): Tint (instanced pieces from a colour palette), Lamps (lanterns over the water) and Boat.
+// Local helpers (not in kit.tsx): Tint (instanced pieces from a colour palette), Water (the dark water surface, #82), Lamps (lanterns over the water) and Boat.
 const PI=Math.PI,WATER=-.45;
 const plane=new THREE.PlaneGeometry(1,1).rotateX(-PI/2),ball=new THREE.SphereGeometry(1,10,7),arc=new THREE.TorusGeometry(1,.05,5,20,PI),gem=new THREE.OctahedronGeometry(1),wheel=new THREE.TorusGeometry(.8,.07,6,20);
 const extra=new Map<string,THREE.Material>();
@@ -39,9 +40,27 @@ function Solid({p,parts,r=.4,...rest}:{p:P;parts:Part[];r?:number}&Omit<Paramete
 /** Thin floor marks (no shadow, not raycast). Opaque marks use a depth-writing unlit material: an opaque kit decal (depthWrite off) can be painted over by whichever mesh three.js sorts after it. */
 function Marks({parts,color,opacity=1,material,geometry=plane}:{parts:Part[];color:string;opacity?:number;material?:THREE.Material;geometry?:THREE.BufferGeometry}){return <Instances parts={parts} geometry={geometry} color={color} jitter={0} shadow={false} material={material??(opacity<1?decal(color,opacity):glow(color))}/>;}
 
-/** Black water around the island and the plinth the floor sits on. */
-function Basin({plinth,color='#3a4140',water='#04090c',level=WATER}:{plinth:Part[];color?:string;water?:string;level?:number}){
- return <><mesh position={[0,level,0]} scale={[90,1,90]} geometry={plane} material={mat(water,.08,.6)} receiveShadow raycast={noRaycast}/><Instances parts={plinth} color={color} jitter={.06} shadow={false}/></>;
+// ── Water (#82): one opaque plane per room. Tiling ripple normals, generated in code, break the lamps into glints; they drift unless reduced. ──
+let ripples:THREE.DataTexture|undefined;
+/** Ripple normals: a sum of waves with whole-number frequencies, so the 128 px tile wraps without a seam. Built once. */
+function rippleMap(){
+ if(ripples)return ripples;const N=128,data=new Uint8Array(N*N*4),waves=[[3,1,1,.3],[-2,4,.8,1.1],[5,-3,.5,2],[1,6,.45,.7],[7,2,.3,4],[-6,5,.25,3],[9,-7,.15,5.2]];
+ for(let y=0;y<N;y++)for(let x=0;x<N;x++){let dx=0,dy=0;for(const [kx,ky,a,f] of waves){const c=a*2*PI*Math.cos(2*PI*(kx*x+ky*y)/N+f);dx+=c*kx;dy+=c*ky;}const n=new THREE.Vector3(-dx*.02,-dy*.02,1).normalize(),i=(y*N+x)*4;data[i]=(n.x*.5+.5)*255;data[i+1]=(n.y*.5+.5)*255;data[i+2]=(n.z*.5+.5)*255;data[i+3]=255;}
+ ripples=new THREE.DataTexture(data,N,N);ripples.wrapS=ripples.wrapT=THREE.RepeatWrapping;ripples.repeat.set(12,12);ripples.magFilter=THREE.LinearFilter;ripples.minFilter=THREE.LinearMipmapLinearFilter;ripples.generateMipmaps=true;ripples.needsUpdate=true;return ripples;
+}
+/** Water: low metalness (with no environment map, metal reads black) and a soft roughness so each lamp spreads into a sheen. Shared per colour. */
+function waterMat(color:string){const key='water'+color;let m=extra.get(key);if(!m){m=new THREE.MeshStandardMaterial({color,roughness:.32,metalness:.15,normalMap:rippleMap(),normalScale:new THREE.Vector2(.3,.3)});extra.set(key,m);}return m;}
+function Water({level=WATER,color='#0b171c',reduced}:{level?:number;color?:string;reduced:boolean}){
+ useFrame((_,dt)=>{if(reduced)return;const t=rippleMap().offset;t.set((t.x+dt*.012)%1,(t.y+dt*.007)%1);});
+ return <mesh position={[0,level,0]} scale={[90,1,90]} geometry={plane} material={waterMat(color)} receiveShadow raycast={noRaycast}/>;
+}
+/** Where water meets stone: flat strips of width w hugging each face of the plinth blocks, just above the surface. */
+const lap=(blocks:Part[],w:number,level=WATER+.004):Part[]=>blocks.flatMap(([x,,z,sx,,sz])=>[[x,level,z-sz/2-w/2,sx+w*2,1,w],[x,level,z+sz/2+w/2,sx+w*2,1,w],[x-sx/2-w/2,level,z,w,1,sz],[x+sx/2+w/2,level,z,w,1,sz]] as Part[]);
+/** Dark water around the island and the plinth the floor sits on, with a pale wet line and a lighter band (three stacked strips) at the stone. */
+function Basin({plinth,color='#3a4140',water,edge='#8fb1ae',reduced}:{plinth:Part[];color?:string;water?:string;edge?:string;reduced:boolean}){
+ const {line,band}=useMemo(()=>({line:lap(plinth,.09),band:[.35,.9,1.8].flatMap(w=>lap(plinth,w))}),[plinth]);
+ return <><Water color={water} reduced={reduced}/><Instances parts={plinth} color={color} jitter={.06} shadow={false}/>
+  <Marks parts={band} color={edge} material={decal(edge,.035)}/><Marks parts={line} color={edge} material={decal(edge,.38)}/></>;
 }
 // Lanterns over the water: [x, lantern y, z, hanging?]. Posts rise from the water; hanging lanterns ride a chain up into the dark.
 type Lamp=[number,number,number,boolean?];
@@ -87,7 +106,7 @@ const s1Lamps:Lamp[]=[[7.8,1.6,2.6],[2.8,1.4,7.6],[-3.8,1.5,7.2],[9.6,1.9,-6.2]]
 function SluiceStair({p}:{p:P}){
  const force=!!p.save?.scene.description.includes('gaff');
  return <>
-  <Basin plinth={s1Plinth}/>
+  <Basin plinth={s1Plinth} reduced={p.reduced}/>
   <KitInstances url={K.tile} parts={s1Tiles} shadow={false}/><KitInstances url={K.tileBroken} parts={s1Broken} shadow={false}/>
   <Instances parts={s1Steps} color="#4f5753" jitter={.1} shadow={false}/>
   <group><Marks parts={s1Current} color="#2f6f80" material={sheen('#2f6f80',.72)}/><Marks parts={s1Spill} color="#123039" material={sheen('#16404b',.6)}/><Marks parts={s1Bridge} color="#7a807a"/><Marks parts={s1Pages} color="#8f8a74" opacity={.6}/></group>
@@ -124,7 +143,7 @@ const inkBed:Part[]=current(1.1),inkStubble:Part[]=Array.from({length:70},(_,i)=
 const inkLamps:Lamp[]=[[-6.9,1.7,5.6],[6.9,1.3,-5.2],[-2.8,3.4,-6.6,true],[2.8,3.2,-6.6,true]];
 function InkGarden({p}:{p:P}){
  return <>
-  <Basin plinth={inkPlinth} color="#2e2a22" water="#03080a"/>
+  <Basin plinth={inkPlinth} color="#2e2a22" water="#09130f" edge="#93a98c" reduced={p.reduced}/>
   <Tint parts={inkFloor} colors={['#3b3326','#342d22','#40372a','#2f2a20','#3a3a2a']} roughness={1}/>
   <group><Marks parts={inkBed} color="#141c17" opacity={.92}/><Marks parts={inkStubble} color="#0b100d"/><Marks parts={inkPages} color="#8f8a74" opacity={.6}/></group>
   <group userData={{blocksLabels:true}}>
@@ -152,7 +171,7 @@ const idxLamps:Lamp[]=[[7.4,1.5,-1.8],[3.2,1.4,7.4],[-7.6,1.6,5.6]];
 function BellIndex({p}:{p:P}){
  const bronze=mat('#8a6a3c',.35,.75);
  return <>
-  <Basin plinth={idxPlinth} color="#38352e"/>
+  <Basin plinth={idxPlinth} color="#38352e" reduced={p.reduced}/>
   <KitInstances url={K.tileLarge} parts={idxFloor} shadow={false}/>
   <group><Marks parts={idxInlay} color="#9a7a45" opacity={.55}/><Marks parts={idxGutter} color="#6b5531" material={sheen('#5a4528',.9)}/>
    {[[2.15,2.25],[3.9,3.97]].map(([a,b])=><mesh key={a} position={[0,.005,0]} rotation={[-PI/2,0,0]} material={decal('#a88a52',.5)} raycast={noRaycast}><ringGeometry args={[a,b,48]}/></mesh>)}
@@ -183,7 +202,7 @@ const infBottles:Part[]=[...books(5.3,-6.45,7,-6.45,.9,11),...books(5.3,-6.45,7,
 const infLamps:Lamp[]=[[7.6,1.6,3.8],[2.6,1.5,7.6]];
 function FloodedInfirmary({p}:{p:P}){
  return <>
-  <Basin plinth={infPlinth} color="#46524f" water="#051014"/>
+  <Basin plinth={infPlinth} color="#46524f" water="#0a1b20" edge="#9fcfcf" reduced={p.reduced}/>
   <Instances parts={infA} color="#a9b8ab" jitter={.08} roughness={.5} shadow={false}/><Instances parts={infB} color="#c9d0c2" jitter={.08} roughness={.5} shadow={false}/>
   <KitInstances url={K.grate} parts={infGrates} shadow={false}/>
   <group><Marks parts={infPuddles} color="#2b5560" material={sheen('#24505b',.55)}/><Marks parts={current(1.05,.003)} color="#2b5560" material={sheen('#1f4650',.45)}/></group>
@@ -212,7 +231,7 @@ const vaultInlay:Part[]=[[-2.4,.004,0,3.6,1,.12],[2.4,.004,0,3.6,1,.12],...span(
 const vaultRibs:Part[]=[-4,0,4].map(x=>[x,4.1,-6.5,2.1,2.1,2.1,0] as Part),vaultStands:Part[]=[[-6.1,0,-6.1,1.3,1.3,1.3],[6.1,0,-6.1,1.3,1.3,1.3]];
 function WitnessVault({p}:{p:P}){
  return <>
-  <Basin plinth={vaultPlinth} color="#24282e"/>
+  <Basin plinth={vaultPlinth} color="#24282e" water="#0b1219" edge="#a9b6c6" reduced={p.reduced}/>
   <KitInstances url={K.tileLarge} parts={vaultFloor} shadow={false} material={mat('#3a404a',.22,.3)}/>
   <group><Marks parts={vaultInlay} color="#c9d2dc" opacity={.4}/>{[[3.3,3.36],[4.9,4.94]].map(([a,b])=><mesh key={a} position={[0,.005,0]} rotation={[-PI/2,0,0]} material={decal('#aeb9c6',.35)} raycast={noRaycast}><ringGeometry args={[a,b,48]}/></mesh>)}</group>
   <group userData={{blocksLabels:true}}>
@@ -239,10 +258,12 @@ const glassShadows:Part[]=[[2,.004,3.2,.28,1,.5,.2],[3.1,.004,3.4,.28,1,.5,.1],[
 const glassDeep:Part[]=[[-7.6,GLASS_WATER+.05,-.8,1.4,.2,.7,.3],[7.2,GLASS_WATER+.05,2.2,1.2,.2,.6,-.5],[3.6,GLASS_WATER+.05,-8.8,1.5,.2,.7,1],[-3.2,GLASS_WATER+.05,-7.8,1.3,.2,.6,.8]];
 const glassRails:Part[]=[...span(-16,-6.4,1.6).flatMap(z=>[[-1.95,.5,z,.07,1,.07],[1.95,.5,z,.07,1,.07]] as Part[]),[-5.9,.5,-5.9,.09,1,.09],[5.9,.5,-5.9,.09,1,.09],[-5.9,.5,5.9,.09,1,.09],[-1.95,.5,5.9,.09,1,.09],[1.95,.5,5.9,.09,1,.09]];
 const glassRope:Part[]=[[-1.95,.95,-11.2,.025,.025,9.7],[1.95,.95,-11.2,.025,.025,9.7],[-5.9,.95,0,.025,.025,11.8],[-3.92,.95,-5.9,3.95,.025,.025],[3.92,.95,-5.9,3.95,.025,.025]];
+/** Pale wet rings where the piers and the drowned pillars break the surface. */
+const lapRing=new THREE.RingGeometry(1,1.18,24).rotateX(-PI/2),glassLap:Part[]=[...glassPiers.map(([x,,z])=>[x,GLASS_WATER+.004,z,.52,1,.52] as Part),...glassRuins.map(([x,,z])=>[x,GLASS_WATER+.004,z,.62,1,.62] as Part)];
 const glassArch:Part[]=[[0,0,-16.8,1,1,1]],glassLamps:Lamp[]=[[-1.95,1.3,-8,false],[1.95,1.3,-12.8,false],[-5.9,1.4,5.9],[5.9,1.4,-5.9]];
 function GlassCauseway({p}:{p:P}){
  return <>
-  <mesh position={[0,GLASS_WATER,0]} scale={[90,1,90]} geometry={plane} material={mat('#02060a',.06,.65)} receiveShadow raycast={noRaycast}/>
+  <Water level={GLASS_WATER} color="#06111a" reduced={p.reduced}/><Instances parts={glassLap} geometry={lapRing} color="#9cc8d8" material={decal('#9cc8d8',.3)} shadow={false}/>
   <Instances parts={glassPanes} color="#8cc4c9" jitter={.14} roughness={.06} metalness={.35} shadow={false}/>
   <Instances parts={glassFrame} color="#3d4a4f" metalness={.5} roughness={.4} shadow={false}/><Instances parts={glassGirders} color="#2e383c" metalness={.5} shadow={false}/><Instances parts={glassPiers} geometry={geo.cyl} color="#3a4448" shadow={false}/>
   <group><Marks parts={glassSeams} color="#cdf6ff" opacity={.35}/><Marks parts={glassShadows} geometry={geo.disc} color="#0a1a22" opacity={.28}/><Marks parts={glassHeads} geometry={geo.disc} color="#0a1a22" opacity={.28}/><Marks parts={current(1.05,.003)} color="#bff0f6" opacity={.12}/></group>
@@ -270,7 +291,7 @@ const debtLectern:Part[]=[[6.3,.55,-5.9,.12,1.1,.12],[6.3,1.12,-5.9,.8,.05,.6,0,
 function KeeperOfDebts({p}:{p:P}){
  const bronze=mat('#b08a4c',.3,.85);
  return <>
-  <Basin plinth={debtPlinth} color="#2d241b"/>
+  <Basin plinth={debtPlinth} color="#2d241b" water="#11130f" edge="#b9aa86" reduced={p.reduced}/>
   <KitInstances url={K.woodDark} parts={debtFloor} shadow={false}/>
   <group><Marks parts={debtGilt} color="#c9a45c" opacity={.7}/><Marks parts={debtLedger} color="#d7ccb0" opacity={.9}/>{[[1.55,1.62]].map(([a,b])=><mesh key={a} position={[0,.005,0]} rotation={[-PI/2,0,0]} material={decal('#c9a45c',.6)} raycast={noRaycast}><ringGeometry args={[a,b,40]}/></mesh>)}</group>
   <group userData={{blocksLabels:true}}>
@@ -309,7 +330,7 @@ function PaintedSky(){
 const skyStars:Part[]=Array.from({length:90},(_,i)=>{const a=PI*.74+rand(i)*PI*.94,y=5+rand(i+300)*7.5,r=13.4;return [Math.sin(a)*r,y,Math.cos(a)*r-.5,.05+rand(i+9)*.06,.05+rand(i+9)*.06,.05] as Part;}),skyStrokes:Part[]=Array.from({length:9},(_,i)=>{const a=PI*.8+rand(i+50)*PI*.8,y=3+rand(i+60)*3.4,r=13.35;return [Math.sin(a)*r,y,Math.cos(a)*r-.5,2.4+rand(i+70)*2.6,.22,.05,a] as Part;}),skyMoon:Part[]=[[Math.sin(PI*1.12)*13.3,9.4,Math.cos(PI*1.12)*13.3-.5,.9,.9,.1]];
 function FerryOfNames({p}:{p:P}){
  return <>
-  <Basin plinth={ferryPlinth} color="#2f2820" water="#060a10"/>
+  <Basin plinth={ferryPlinth} color="#2f2820" water="#0b1120" edge="#a6aec6" reduced={p.reduced}/>
   <Tint parts={ferryFloor} colors={['#5b4a3a','#4f4033','#62503e','#463a2f','#6b5a47','#54473b']} roughness={.8}/>
   <Instances parts={ferryPilings} geometry={geo.cyl} color="#3b2d20" shadow={false}/><Instances parts={ferryWalk} color="#6a5137" jitter={.2} shadow={false}/><Instances parts={ferryWalkPosts} geometry={geo.cyl} color="#3b2d20" shadow={false}/>
   <group><Marks parts={ferryCurrent} color="#1d2b33" material={sheen('#1b2a33',.55)}/>{[[1.15,1.2],[2.3,2.34]].map(([a,b])=><mesh key={a} position={[0,.005,0]} rotation={[-PI/2,0,0]} material={decal('#82e2cc',.32)} raycast={noRaycast}><ringGeometry args={[a,b,40]}/></mesh>)}</group>

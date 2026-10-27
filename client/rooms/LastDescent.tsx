@@ -25,7 +25,7 @@ const grave=(tint:string)=>cached('grave'+tint,()=>{colormap??=Object.assign(new
 const glow=(color:string,emissive:string,intensity=1,opacity=1)=>cached(['glow',color,emissive,intensity,opacity].join(),()=>new THREE.MeshStandardMaterial({color,emissive,emissiveIntensity:intensity,roughness:.3,metalness:.1,transparent:opacity<1,opacity,depthWrite:opacity>=1}));
 const lit=(color:string,opacity=1)=>cached(['lit',color,opacity].join(),()=>new THREE.MeshBasicMaterial({color,transparent:opacity<1,opacity,depthWrite:opacity>=1}));
 const beam=(color:string,opacity:number)=>cached(['beam',color,opacity].join(),()=>new THREE.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending}));
-const darkGlass=new THREE.MeshStandardMaterial({color:'#07060c',emissive:'#1c0d33',emissiveIntensity:.8,roughness:.06,metalness:.9});
+const darkGlass=new THREE.MeshStandardMaterial({color:'#0c0505',emissive:'#3a0c0a',emissiveIntensity:.8,roughness:.06,metalness:.9});
 const bronze=new THREE.MeshStandardMaterial({color:'#8a6a3c',roughness:.38,metalness:.75,side:THREE.DoubleSide});
 
 // ── Shared geometry: built once, instanced or reused by every placement ──
@@ -110,25 +110,25 @@ const fdSeams=lines([...crack(0,-5.5,0,3.4,5,11),...crack(-2,-5.5,-.45,2.8,4,21)
 const fdRock=cavern(101,{back:-10.5,gap:[-5,5],tall:1.3,west:-8.6});
 function FoundersDescent({room}:{room:Ctx;reduced:boolean}){
  return <>
-  <Floor parts={slabs(1.2)} color="#2b2832" seam="#4a3a80"/>
+  <Floor parts={slabs(1.2)} color="#36383e" seam="#3c4858" base="#0b0c0f"/>
   <group>
-   <Instances parts={fdSeams} color="#b9a7ff" material={lit('#a693ff',.85)} shadow={false}/><Instances parts={fdNosing} color="#9f8cff" material={lit('#8f7ae8',.9)} shadow={false}/>
+   <Instances parts={fdSeams} color="#d8e2ee" material={lit('#c9d6e6',.7)} shadow={false}/><Instances parts={fdNosing} color="#c4d0de" material={lit('#b8c6d8',.85)} shadow={false}/>
    <Instances parts={fdArrows} color="#d6cfb6" material={decal('#cfc8b0',.5)} shadow={false}/>
-   <Instances parts={fdScars} color="#7c7488" material={decal('#7a7286',.9)} shadow={false}/><Instances parts={fdNumbers} color="#c4b6ff" material={lit('#c4b6ff')} shadow={false}/>
+   <Instances parts={fdScars} color="#83868d" material={decal('#80838a',.9)} shadow={false}/><Instances parts={fdNumbers} color="#e8e4d6" material={lit('#e8e4d6')} shadow={false}/>
    {/* The way back up: pale light at the head of the stair, and the dark mouth of the emergency passage. */}
-   <mesh position={[0,6.4,-15.15]} geometry={wallPlane} scale={[3.2,4.2,1]} material={lit('#5c5384')} raycast={noRaycast}/>
+   <mesh position={[0,6.4,-15.15]} geometry={wallPlane} scale={[3.2,4.2,1]} material={lit('#93a2b6')} raycast={noRaycast}/>
    <mesh position={[-8.62,1.6,-1.3]} rotation={[0,Math.PI/2,0]} geometry={wallPlane} scale={[2.4,3.2,1]} material={lit('#0a120e')} raycast={noRaycast}/>
   </group>
   <group userData={{blocksLabels:true}}>
-   <Cavern room={room} parts={fdRock} color="#2e2a33"/>
-   <Solid room={room} parts={fdSteps} color="#211f28" jitter={.06} roughness={.4} metalness={.15}/>
-   <Solid room={room} parts={[...fdCheeks,...fdNameWalls]} color="#1a181f" jitter={.05} roughness={.45} metalness={.1}/>
-   <KitInstances url={G.plaque} parts={fdPlaques} material={grave('#4a4458')} shadow={false}/>
-   <SolidKit room={room} url={G.obelisk} parts={fdObelisks} size={.17} material={grave('#3a3546')}/>
-   <Tinted room={room} url={K.arched} parts={[[-8.9,0,-1.3,.8,.85,.8,Math.PI/2]]} tint="#4c4858"/>
+   <Cavern room={room} parts={fdRock} color="#2d2f34"/>
+   <Solid room={room} parts={fdSteps} color="#131417" jitter={.06} roughness={.25} metalness={.2}/>
+   <Solid room={room} parts={[...fdCheeks,...fdNameWalls]} color="#191a1e" jitter={.05} roughness={.45} metalness={.1}/>
+   <KitInstances url={G.plaque} parts={fdPlaques} material={grave('#5c5e64')} shadow={false}/>
+   <SolidKit room={room} url={G.obelisk} parts={fdObelisks} size={.17} material={grave('#3e4046')}/>
+   <Tinted room={room} url={K.arched} parts={[[-8.9,0,-1.3,.8,.85,.8,Math.PI/2]]} tint="#56585f"/>
   </group>
-  <Light position={[0,5,-10]} color="#9d8cff" intensity={20} distance={14}/><Light position={[-7,3,-5.4]} color="#b0a3ff" intensity={6} distance={7}/><Light position={[7,3,-5.4]} color="#b0a3ff" intensity={6} distance={7}/>
-  <Light position={[-7.6,1.6,-1.3]} color="#8fe0b0" intensity={6} distance={6}/><Light position={[2,3.4,2]} color="#a8a0c8" intensity={4} distance={10}/>
+  <Light position={[0,5,-10]} color="#d2def2" intensity={20} distance={14}/><Light position={[-7,3,-5.4]} color="#d8dde6" intensity={6} distance={7}/><Light position={[7,3,-5.4]} color="#d8dde6" intensity={6} distance={7}/>
+  <Light position={[-7.6,1.6,-1.3]} color="#8fe0b0" intensity={6} distance={6}/><Light position={[2,3.4,2]} color="#b6bec9" intensity={4} distance={10}/>
  </>;
 }
 
@@ -191,9 +191,9 @@ const ehRock=cavern(301,{back:-9.4,gap:[-9,9],west:-8});
 const ehGears:[number,number,number,number][]=[[-6,5.85,1.25,.22],[-8.15,4.55,.85,-.33],[6,5.85,1.25,-.22],[8.15,4.55,.85,.33]];
 function EngineOfHunger({room,reduced}:{room:Ctx;reduced:boolean}){
  return <>
-  <Floor parts={slabs(1.2)} color="#2c2a33" seam="#3c2068" roughness={.55} metalness={.45} jitter={.1}/>
+  <Floor parts={slabs(1.2)} color="#30272a" seam="#5c1612" base="#0e0808" roughness={.55} metalness={.45} jitter={.1}/>
   <group>
-   <Instances parts={ehCracks} color="#9b6cff" material={lit('#8a5cf0',.85)} shadow={false}/>
+   <Instances parts={ehCracks} color="#ff6a4a" material={lit('#ff5236',.85)} shadow={false}/>
    <mesh position={[0,3,-7.86]} geometry={discZ} scale={2.62} material={darkGlass} raycast={noRaycast}/>
    {[[.5,.9],[1.3,1.65],[2,2.25]].map(([a,b])=><mesh key={a} position={[0,3,-7.84]} material={lit('#000000',.55)} raycast={noRaycast}><ringGeometry args={[a,b,40]}/></mesh>)}
    {ehVisions.map(([c,e,p])=><Instances key={c} parts={p} geometry={capsule} color={c} material={glow(c,e,.9,.42)} shadow={false}/>)}
@@ -201,15 +201,15 @@ function EngineOfHunger({room,reduced}:{room:Ctx;reduced:boolean}){
    <Instances parts={ehCloth} color="#5a5040" jitter={.2} shadow={false}/>
   </group>
   <group userData={{blocksLabels:true}}>
-   <Cavern room={room} parts={ehRock} color="#25222b"/>
-   <Solid room={room} parts={ehWall} color="#1c1a22" jitter={0} roughness={.7}/><Solid room={room} parts={ehButtress} color="#34313a" roughness={.5} metalness={.6} jitter={.05}/>
-   <mesh position={[0,3,-7.78]} scale={2.78} geometry={ring} material={iron} castShadow raycast={noRaycast}/><Instances parts={ehRivets} geometry={geo.rock} color="#6a6470" roughness={.4} metalness={.7} shadow={false}/>
-   <Instances parts={ehPanes} color="#3b3640" roughness={.45} metalness={.7} shadow={false}/><Instances parts={ehPipes} geometry={geo.cyl} color="#5a4c3c" roughness={.4} metalness={.7} shadow={false}/>
-   <Solid room={room} parts={ehPistons} geometry={geo.cyl} r={fixed(.25)} color="#4a4550" roughness={.4} metalness={.7}/>
+   <Cavern room={room} parts={ehRock} color="#2a2221"/>
+   <Solid room={room} parts={ehWall} color="#221918" jitter={0} roughness={.7}/><Solid room={room} parts={ehButtress} color="#3c302c" roughness={.5} metalness={.6} jitter={.05}/>
+   <mesh position={[0,3,-7.78]} scale={2.78} geometry={ring} material={iron} castShadow raycast={noRaycast}/><Instances parts={ehRivets} geometry={geo.rock} color="#7c665a" roughness={.4} metalness={.7} shadow={false}/>
+   <Instances parts={ehPanes} color="#40332d" roughness={.45} metalness={.7} shadow={false}/><Instances parts={ehPipes} geometry={geo.cyl} color="#5a4c3c" roughness={.4} metalness={.7} shadow={false}/>
+   <Solid room={room} parts={ehPistons} geometry={geo.cyl} r={fixed(.25)} color="#504139" roughness={.4} metalness={.7}/>
    <Solid room={room} parts={ehHeap} geometry={geo.rock} color="#5a5040" flat r={fixed(.45)}/>
    {ehGears.map(([x,y,r,v])=><Spin key={x+':'+y} position={[x,y,-7.82]} speed={v} reduced={reduced}><mesh geometry={GEAR} scale={[r,r,1]} material={iron} castShadow raycast={noRaycast}/></Spin>)}
   </group>
-  <Light position={[0,3,-6.4]} color="#8a5cff" intensity={18} distance={11}/><Light position={[5,5,-2]} color="#b8c4ff" intensity={8} distance={14}/><Light position={[0,6.4,-5.6]} color="#9d8cff" intensity={10} distance={10}/><Light position={[-6.4,2.6,-1.6]} color="#7f6fd0" intensity={4} distance={7}/>
+  <Light position={[0,3,-6.4]} color="#ff3a26" intensity={18} distance={11}/><Light position={[5,5,-2]} color="#ffb27a" intensity={8} distance={14}/><Light position={[0,6.4,-5.6]} color="#ff6236" intensity={10} distance={10}/><Light position={[-6.4,2.6,-1.6]} color="#c4503a" intensity={4} distance={7}/>
  </>;
 }
 
@@ -430,14 +430,14 @@ const ROOMS:Record<number,(p:{room:Ctx;reduced:boolean})=>ReactNode>={1:Founders
 /** The eight Last Descent rooms, chosen by scene id. */
 export default function LastDescent({scene,save,reduced}:RoomProps){const Room=ROOMS[Number(scene.split('-')[1])]??FoundersDescent;return <Room key={scene} room={{save,scene}} reduced={reduced}/>;}
 const MOODS:Record<number,MoodOverride>={
- 1:{background:'#0f0c16',ambient:'#a39cc4',sun:'#c9c0ff',fog:[18,44]},
+ 1:{background:'#0c0e12',ambient:'#aab2bf',sun:'#dfe5ee',fog:[18,44]},
  2:{background:'#16100c',ambient:'#c4ad92',sun:'#f0c494',fog:[16,40]},
- 3:{background:'#0b0812',ambient:'#aca2cc',sun:'#cfc4f6',fog:[16,40]},
+ 3:{background:'#150807',ambient:'#c6a69e',sun:'#f2bea6',fog:[16,40]},
  4:{background:'#14120e',ambient:'#cbbd9a',sun:'#f4dca8',fog:[18,44]},
  5:{background:'#070a10',ambient:'#9fb2c8',sun:'#cfe2ff',fog:[18,60]},
  6:{background:'#140c08',ambient:'#c2a080',sun:'#ffcf96',fog:[16,42]},
  7:{background:'#0c0510',ambient:'#a68cb8',sun:'#e3b0ff',fog:[18,50]},
  8:{background:'#3a3340',ambient:'#e6d2bf',sun:'#ffe0b4',fog:[22,62]},
 };
-/** Per-room light: violet stone, a guard fire, the hungry glass, the keeper's candles, a chasm, the blade forge, the core, and dawn. */
+/** Per-room light: cold grey stone, a guard fire, the red hungry glass, the keeper's candles, a chasm, the blade forge, the core, and dawn. */
 export const mood=(scene:string):MoodOverride=>MOODS[Number(scene.split('-')[1])]??{};
