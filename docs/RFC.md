@@ -1,5 +1,7 @@
 # Echoes Below — Release 1 technical contract
 
+> Superseded for scope: the Release 1 freeze below no longer stops work. [PRD](PRD.md) now defines Presentation v2; the Release 1 product contract is archived in [PRD-release1-archive.md](PRD-release1-archive.md).
+
 Release freeze: 6 September 2026. [PRD](PRD.md) owns scope. Historical expansion checkpoints are archived and superseded. Keep the current application architecture and additive save compatibility; no new schema, assets or large features are required for this release.
 
 ## Architecture and ownership
