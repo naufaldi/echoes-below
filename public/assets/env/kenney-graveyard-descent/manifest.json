@@ -1,0 +1,112 @@
+{
+ "kit": "kenney-graveyard-descent",
+ "title": "Kenney Graveyard Kit (5.0)",
+ "author": "Kenney (www.kenney.nl)",
+ "storePage": "https://kenney.nl/assets/graveyard-kit",
+ "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip",
+ "licence": "CC0-1.0",
+ "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+ "licenceEvidence": "License.txt inside kenney_graveyard-kit_5.0.zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062, creation date 17-10-2025) reads \"License: (Creative Commons Zero, CC0)\" and \"You can use this content for personal, educational, and commercial purposes.\" Crediting Kenney is requested but not required.",
+ "notes": "Last Descent rooms (#51): obelisks, name plaques, standing stones, columns, an altar, lanterns, braziers, urns and debris. Every GLB references the shared Textures/colormap.png (this kit's own copy; it differs from kenney-fantasy-town's). LastDescent.tsx renders them with tinted copies of that texture.",
+ "files": [
+  {
+   "file": "Textures/colormap.png",
+   "sha256": "a94b4dc4f77a4b8aec96bde94f63912a1ce12aa98eec2c1e9a37c89e20a5f091",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/Textures/colormap.png",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from \"Models/GLB format/Textures/colormap.png\" in the Graveyard Kit 5.0 zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062). Every GLB in this folder references it by relative URI; LastDescent.tsx also loads it for its shared tinted material."
+  },
+  {
+   "file": "altar-stone.glb",
+   "sha256": "6cdcdc19c2d979fc0fafa073bc31db9a45ddc76390bfef366f23e92768d7dde9",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/altar-stone.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from \"Models/GLB format/altar-stone.glb\" in the Graveyard Kit 5.0 zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062). Tinted at runtime through a shared material in client/rooms/LastDescent.tsx."
+  },
+  {
+   "file": "column-large.glb",
+   "sha256": "1665820bc039aced692d15cb763dc73ca6c67515044b9d2106134e2951a33fd2",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/column-large.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from \"Models/GLB format/column-large.glb\" in the Graveyard Kit 5.0 zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062). Tinted at runtime through a shared material in client/rooms/LastDescent.tsx."
+  },
+  {
+   "file": "debris.glb",
+   "sha256": "bf584bb5a4c1a7d4b7aed9ced00473a8678e9d402db1cfafc17e84e46aa2d42a",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/debris.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from \"Models/GLB format/debris.glb\" in the Graveyard Kit 5.0 zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062). Tinted at runtime through a shared material in client/rooms/LastDescent.tsx."
+  },
+  {
+   "file": "fire-basket.glb",
+   "sha256": "f72e5a3f69711b30055219961d16824fe6d1ac5a8240d456d7f1a1a2cb7d5433",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/fire-basket.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from \"Models/GLB format/fire-basket.glb\" in the Graveyard Kit 5.0 zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062). Tinted at runtime through a shared material in client/rooms/LastDescent.tsx."
+  },
+  {
+   "file": "gravestone-broken.glb",
+   "sha256": "67693974f6b30d49da8c56a436b78de4f49007be68d985bfb42d433119cc527a",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/gravestone-broken.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from \"Models/GLB format/gravestone-broken.glb\" in the Graveyard Kit 5.0 zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062). Tinted at runtime through a shared material in client/rooms/LastDescent.tsx."
+  },
+  {
+   "file": "gravestone-wide.glb",
+   "sha256": "ddbdd815905b3365a991b9b264997c81f2d38235e11ab88a0b594700c34455c3",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/gravestone-wide.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from \"Models/GLB format/gravestone-wide.glb\" in the Graveyard Kit 5.0 zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062). Tinted at runtime through a shared material in client/rooms/LastDescent.tsx."
+  },
+  {
+   "file": "lantern-candle.glb",
+   "sha256": "c78da0717e38ea019617a39a2ad263c54ecc3b0efbdcd3da124db6550657e90e",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/lantern-candle.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from \"Models/GLB format/lantern-candle.glb\" in the Graveyard Kit 5.0 zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062). Tinted at runtime through a shared material in client/rooms/LastDescent.tsx."
+  },
+  {
+   "file": "pillar-obelisk.glb",
+   "sha256": "f7a9d985522d8bb1eef765ce2b841588b43c8607b32c87056945696a172b3bf1",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/pillar-obelisk.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from \"Models/GLB format/pillar-obelisk.glb\" in the Graveyard Kit 5.0 zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062). Tinted at runtime through a shared material in client/rooms/LastDescent.tsx."
+  },
+  {
+   "file": "pillar-square.glb",
+   "sha256": "130befbc898123302bf3b114f60629d3f950bcfab9759b484bdd49541b8c2846",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/pillar-square.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from \"Models/GLB format/pillar-square.glb\" in the Graveyard Kit 5.0 zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062). Tinted at runtime through a shared material in client/rooms/LastDescent.tsx."
+  },
+  {
+   "file": "urn-round.glb",
+   "sha256": "9a80d295c1c2124435eea72166fc16d7a4fe54e538950aa320dfb63a704b5e37",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/urn-round.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from \"Models/GLB format/urn-round.glb\" in the Graveyard Kit 5.0 zip (sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062). Tinted at runtime through a shared material in client/rooms/LastDescent.tsx."
+  }
+ ]
+}
