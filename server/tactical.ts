@@ -10,6 +10,7 @@ import {actorDisplayName} from '../shared/visual-identity.js';
 import type {CompanionDirective} from '../shared/tactical-state.js';
 import {GameError,log,finishCheck,type Save} from './game.js';
 import {rollD20,damageRoll,type Dice} from './rules.js';
+import {outcomeCheck,attackProse,sacredFlameProse,type Outcome} from './outcome.js';
 const classes=CURATED_CLASS_IDS;
 const members=(s:Save)=>[...s.party,...s.enemies];
 const option=(id:string,label:string,kind='interact',actorId?:string,targetId?:string,description=label):ActionOption=>({id,label,kind,actorId,targetId,description});
@@ -88,7 +89,7 @@ function savingRoll(s:Save,id:string,dice:Dice,ability:'dexterity'|'constitution
 function resolve(s:Save,id:string,dice:Dice){
  const t=s.tactical!,actorId=s.turn!.actorId,a=members(s).find(a=>a.id===actorId)!;let c=t.actors[actorId];const [,kind,targetId,rankText]=id.split(':');const rank=Number((kind==='bless'?targetId:rankText)??1);
  const animation:AnimationCue|undefined=['missile','bless','cure','healing_word'].includes(kind)?'spell':['potion','second_wind'].includes(kind)?'item':kind==='dodge'?'dodge':kind==='attack'?(a.side==='party'?(['wizard','cleric'].includes(c.classId)?'spell':c.classId==='rogue'?'ranged':'melee'):(enemyRole(a)?.range??5)>10?'ranged':'melee'):undefined;
- const record=(state:Save,text:string,speaker:string,rolls:Roll[]=[])=>{projectTactical(state);log(state,text,speaker,rolls,'rules',animation);};
+ const record=(state:Save,text:string,speaker:string,rolls:Roll[]=[],outcome?:Outcome)=>{projectTactical(state);log(state,text,speaker,rolls,'rules',animation,undefined,outcome);};
 
  if(kind==='end'){record(s,`${a.name} ends their turn.`,actorId);nextTurn(s);return;}
  if(kind==='death'){const r=rollD20(dice,0,'Death save');t.actors[actorId]=deathSave(c,r.kept);projectTactical(s);record(s,`${a.name} makes a death save: ${r.kept}.`,actorId,[r]);nextTurn(s);return;}
@@ -100,7 +101,7 @@ function resolve(s:Save,id:string,dice:Dice){
   for(const next of path.cells.slice(1)){
    const reactors=opportunityAttackers(s,actorId,t.cells[actorId],next);
    if(reactors.length)flush();
-   for(const reactor of reactors){if(t.actors[actorId].hp<=0)break;const reaction=resolveOpportunity(s,reactor.id,actorId,dice);projectTactical(s);log(s,reaction.text,reactor.id,reaction.rolls,'rules','melee','reaction');}
+   for(const reactor of reactors){if(t.actors[actorId].hp<=0)break;const reaction=resolveOpportunity(s,reactor.id,actorId,dice);projectTactical(s);log(s,reaction.text,reactor.id,reaction.rolls,'rules','melee','reaction',{prose:reaction.prose,check:reaction.check});}
    if(t.actors[actorId].hp<=0){record(s,`${a.name} falls before leaving reach. The remaining movement is cancelled.`,actorId);break;}
    const cost=(t.grid.difficult??[]).some(p=>p[0]===next[0]&&p[1]===next[1])?10:5;
    t.cells[actorId]=next;t.actors[actorId].economy.movementFeet-=cost;segment.push(next);segmentCost+=cost;
@@ -121,12 +122,12 @@ function resolve(s:Save,id:string,dice:Dice){
  }else if(kind==='attack'&&a.side==='party'&&c.classId==='cleric'){
   t.actors[actorId]=spendAction(c,'action');const target=members(s).find(x=>x.id===targetId)!,victim=t.actors[targetId],r=savingRoll(s,targetId,dice,'dexterity','Sacred Flame · Dexterity save');const rolls=[r],dc=8+c.proficiency+modifier(c.abilities.wisdom);let damage=0;
   if(r.total<dc){for(let i=0;i<(c.level>=5?2:1);i++){const d=damageRoll(dice,8,0,'Radiant damage');rolls.push(d);damage+=d.total;}let saveTotal:number|undefined;if(victim.concentration){const cr=savingRoll(s,targetId,dice,'constitution','Concentration');rolls.push(cr);saveTotal=cr.total;}t.actors[targetId]=takeDamage(victim,damage,false,saveTotal);if(target.side==='enemy'&&t.actors[targetId].hp===0)t.actors[targetId].dead=true;}
-  record(s,`${a.name} casts Sacred Flame: ${actorDisplayName(target,s.enemies)} ${r.total>=dc?'saves':'fails'} (${r.total} vs DC ${dc}), ${damage} radiant damage.`,actorId,rolls);
+  record(s,`${a.name} casts Sacred Flame: ${actorDisplayName(target,s.enemies)} ${r.total>=dc?'saves':'fails'} (${r.total} vs DC ${dc}), ${damage} radiant damage.`,actorId,rolls,{prose:sacredFlameProse(actorDisplayName(target,s.enemies),r.total>=dc,t.actors[targetId].hp===0),check:outcomeCheck('save',targetId,'dexterity',r,dc,r.total>=dc)});
  }else if(kind==='attack'){
   const features=classResources(c);if(features.attacksRemaining>0)c.features={...features,attacksRemaining:features.attacksRemaining-1};else{t.actors[actorId]=spendAction(c,'action');t.actors[actorId].features={...features,attacksRemaining:a.side==='party'&&c.classId==='fighter'&&c.level>=5?1:0};}const target=members(s).find(x=>x.id===targetId)!;const enemyProfile=enemyRole(a);const ranged=a.side==='party'?c.classId!=='fighter':(enemyProfile?.range??5)>10;const ability=c.classId==='wizard'?'intelligence':c.classId==='cleric'?'wisdom':c.classId==='rogue'?'dexterity':'strength';const mod=enemyProfile?.bonus??modifier(c.abilities[ability]);
   const threatened=ranged&&members(s).some(x=>x.side!==a.side&&x.hp>0&&range(s,actorId,x.id)<=5);const disadvantage=target.guard||threatened;const blessing=(t.effects??[]).some(e=>e.kind==='bless'&&e.targets.includes(actorId)&&t.actors[e.sourceId].concentration===e.id)?damageRoll(dice,4,0,'Bless'):null;const advantage=consumeAttackHelp(s,actorId,targetId);const r=rollD20(dice,mod+c.proficiency+(blessing?.total??0),advantage?'Attack · Help':'Attack',advantage,disadvantage);const critical=r.kept===20||(a.side==='party'&&c.classId==='fighter'&&c.level>=3&&r.kept===19);const hit=critical||(r.kept!==1&&r.total>=target.defense);const rolls=blessing?[r,blessing]:[r];let damage=0;
   if(hit){const d=damageRoll(dice,enemyProfile?.die??(ranged?(c.classId==='wizard'?10:6):8),['wizard','cleric'].includes(c.classId)&&a.side==='party'?0:mod,'Damage',critical);damage=d.total;rolls.push(d);if(a.side==='party'&&c.classId==='wizard'&&c.level>=5){const extra=damageRoll(dice,10,0,'Fire Bolt scaling',critical);rolls.push(extra);damage+=extra.total;}if(a.side==='party'&&c.classId==='rogue'&&!classResources(t.actors[actorId]).sneakUsed&&(!disadvantage||advantage)&&((advantage&&!disadvantage)||s.party.some(ally=>ally.id!==actorId&&ally.hp>0&&range(s,ally.id,targetId)<=5))){for(let i=0;i<Math.ceil(c.level/2);i++){const sneak=damageRoll(dice,6,0,'Sneak Attack',critical);rolls.push(sneak);damage+=sneak.total;}t.actors[actorId].features={...classResources(t.actors[actorId]),sneakUsed:true};}let saveTotal:number|undefined;const victim=t.actors[targetId];if(victim.concentration){const cr=savingRoll(s,targetId,dice,'constitution','Concentration');rolls.push(cr);saveTotal=cr.total;}t.actors[targetId]=takeDamage(victim,damage,critical,saveTotal);if(target.side==='enemy'&&t.actors[targetId].hp===0)t.actors[targetId].dead=true;}
-  record(s,`${a.name} attacks ${actorDisplayName(target,s.enemies)}${enemyProfile?` with ${enemyProfile.attack}`:''}: ${hit?`${damage} damage`:'miss'}.`,actorId,rolls);
+  record(s,`${a.name} attacks ${actorDisplayName(target,s.enemies)}${enemyProfile?` with ${enemyProfile.attack}`:''}: ${hit?`${damage} damage`:'miss'}.`,actorId,rolls,{prose:attackProse(a.name,actorDisplayName(target,s.enemies),hit,hit&&t.actors[targetId].hp===0),check:outcomeCheck('attack',actorId,'attack',r,target.defense,hit,{targetId,critical,advantage,disadvantage})});
  }
  projectTactical(s);finishCheck(s);
 }
