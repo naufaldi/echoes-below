@@ -67,15 +67,16 @@ Track A (this contract): no new chapters, quests, monster types, rules, classes 
 
 ## Approach
 
-Keep the engine and rebuild the client with a strangler pattern: the new client runs beside the old one against the same API until it reaches parity.
+Keep the engine and improve the existing client **in place**, one issue and one pull request at a time. Each PR must pass every existing gate and stay playable.
+
+Revised 27 October 2026: an earlier draft planned a parallel `/v2` client. The playtest showed the main problems are local (`client/TurnPlayback.tsx`, `client/World.tsx`, the `client/App.tsx` layout, `client/style.css`). A parallel client would rebuild creation, journal, settings, keys and voice before anything visible improved.
 
 | Phase | Output | Exit criteria |
 |---|---|---|
 | 0 Baseline | Frame-time and draw-call measurement of the current build in a headed browser | Recorded numbers for Broken Approach and goblin combat. Sets the V2-08 floor |
-| 1 Parallel client | Separate entry (`/v2` or second Vite entry) using the existing API and `shared/` types | Old client unchanged and still passes all gates |
 | 2 Play-feel slice | Creation → Broken Approach → Counterweight Hall → goblin combat with current models: in-world combat feedback, in-scene dice, single canvas, HUD that leaves the scene visible, grouped actions, fewer initiative clicks, per-room layouts, first audio pass | V2-02…V2-07, V2-11, V2-12 |
 | 3 Characters (parallel, owner-paced) | Owner delivers one spike model first, then the four class models per [CHARACTERS.md](CHARACTERS.md); asset gate extended with budgets and clips; models integrated | CHARACTERS.md C-01…C-10, V2-01, V2-10 |
-| 4 Rollout | Remaining rooms and chapters, then retire the old client | Parity with the Release 1 journey (archive §Playable journey) |
+| 4 Rollout | Remaining rooms and chapters | Parity with the Release 1 journey (archive §Playable journey) |
 
 ## Vertical slice acceptance
 
@@ -93,6 +94,30 @@ Keep the engine and rebuild the client with a strangler pattern: the new client 
 | V2-10 Asset tests updated deliberately | `backend-asset-bundle`, `backend-visual-identity` and `backend-monster-animation` tests are rewritten to the new manifest in the same change that replaces assets, never deleted to go green | Diff review + asset gate |
 | V2-11 Audio | Free mode has exploration and combat ambience/music, and SFX for dice, hit, miss, footsteps, doors and UI. Master/music/SFX volume and mute persist. Audio starts only after a user gesture. Reduced-motion players still get sound. All audio is licensed and listed in a manifest | Browser + manifest check |
 | V2-12 Pacing | Combat starts after at most one confirmation (initiative summary, not one modal per combatant). Repeated per-member checks are grouped into one action with a member picker. No action list needs scrolling in the slice rooms at 1440×900 | Browser |
+
+## Audio sourcing policy
+
+- **Allowed licences:** CC0 first. CC-BY 4.0 only with credit in the in-game credits, the README and the manifest. CC-BY 3.0 is case by case, with the same credit.
+- **Excluded:** NonCommercial (NC), NoDerivatives (ND; looping, trimming or transcoding counts as a derivative), GPL/LGPL audio, custom "royalty-free" licences, AI-generated audio with unclear rights, anything ripped from games or videos. FreePD is excluded because it is permanently closed and its terms cannot be re-verified.
+- **Per file, not per page.** OpenGameArt pages can list several licences or bundle tracks from different authors. Each shipped file records `file`, `sha256`, `title`, `author`, `source` (page URL), `licence`, `licenceUrl`, `retrieved` (date) and `changes` (trim, loop point, transcode) in `public/assets/audio/manifest.json`. `scripts/verify-asset-bundle.mjs` fails the build when an audio file has no manifest entry, the hash differs, or the licence is not on the allow-list.
+- **Format and size.** Ship a format with broad desktop browser support (MP3, or AAC in M4A). Ship OGG only after Safari playback is verified in the target versions. Music loops are 64–128 kbps. Total audio budget is ≤ 15 MB, loaded on demand: no music before the title screen. `ffmpeg` is not installed in the current environment, so transcoding needs it installed first.
+- **Owner approves music by ear.** Tone fit cannot be judged from metadata. Candidate tracks stay "pending owner approval" until the owner has listened.
+- **Downloads** go into a new empty directory and are checked as real audio files before being copied into `public/`.
+
+### Candidate sources (licence checked on the source page, 27 October 2026)
+
+| Use | Candidate | Author / source | Licence | Notes |
+|---|---|---|---|---|
+| SFX: footsteps, weapons, doors, foley | RPG Audio (50 files) | Kenney, kenney.nl/assets/rpg-audio | CC0 | Format to confirm after download |
+| SFX: hits, impacts | Impact Sounds (130 files) | Kenney, kenney.nl/assets/impact-sounds | CC0 | |
+| SFX: dice | Casino Audio (50 files, dice tag) | Kenney, kenney.nl/assets/casino-audio | CC0 | Confirm the dice clips exist |
+| SFX: UI clicks | Interface Sounds (100 files) | Kenney, kenney.nl/assets/interface-sounds | CC0 | |
+| Ambience: dungeon | Loopable Dungeon Ambience | JaggedStone, opengameart.org/content/loopable-dungeon-ambience | CC0 | OGG, loopable, wind + drips |
+| Music: combat | Determined Pursuit (epic orchestra loop) | Emma_MA, opengameart.org/content/determined-pursuit-epic-orchestra-loop | CC0 | 19.1 MB WAV, needs transcoding |
+| Music: tension / dungeon | Trance Dungeon | MintoDog, opengameart.org/content/trance-dungeon | CC0 | Loopable MP3/OGG; tone may not fit, owner to judge |
+| Music: exploration (alternative) | In Darkness; Fantasy Music and Drum Loops Pack | Of Far Different Nature; NorthFantasyMusic (OpenGameArt) | CC-BY 4.0 | Needs attribution; verify per file |
+
+Kenney packs say CC0 on the source page; a credit "Kenney.nl" is courteous but not required. Credits are listed in-game anyway.
 
 ## Owner decisions (27 October 2026)
 
