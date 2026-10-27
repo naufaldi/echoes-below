@@ -4,6 +4,7 @@ import BellIndexConsole from './BellIndexConsole';
 import {latestAnimation,animationClip} from '../shared/animation-cues';
 import type {AnimationCue} from '../shared/types';
 import TacticalTerrain from './TacticalTerrain';
+import TacticalOverlay from './TacticalOverlay';
 import ChapterAtmosphere,{chapterMood} from './ChapterAtmosphere';
 import CounterweightMechanism from './CounterweightMechanism';
 import {advanceMovement,type Point} from '../shared/movement';
@@ -85,7 +86,7 @@ function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroA
  return <><color attach="background" args={[mood.background]}/><fog attach="fog" args={[mood.background,24,50]}/><ambientLight intensity={.65} color={mood.ambient}/><hemisphereLight args={['#b9cec5','#64553b',1.1]}/><directionalLight position={[3,12,5]} intensity={2.5} color={mood.sun} castShadow shadow-mapSize={[1024,1024]} shadow-camera-left={-10} shadow-camera-right={10} shadow-camera-top={10} shadow-camera-bottom={-10}/><Architecture scene={save?.scene.id??'approach'} gateOpen={save?.scene.entities.find(e=>e.id==='gate')?.open}/><SetDressing scene={save?.scene.id??'approach'}/>
 
  {save?.tactical&&save.mode==='combat'&&<TacticalTerrain grid={save.tactical.grid}/>}
- {save?.tactical&&save.mode==='combat'&&save.actions.filter(a=>a.kind==='move').map(a=>{const [x,y]=a.id.split(':')[2].split(',').map(Number);return <mesh key={a.id} rotation={[-Math.PI/2,0,0]} position={[(x-4)*1.2,.035,-(y-4)*1.2]} onClick={e=>{e.stopPropagation();onAction?.(a);}}><planeGeometry args={[1.1,1.1]}/><meshBasicMaterial color="#7aaed2" transparent opacity={.3} depthWrite={false}/></mesh>;})}
+ {save?.tactical&&save.mode==='combat'&&<TacticalOverlay save={save} onAction={onAction}/>}
  <DungeonDressing scene={save?.scene.id??'approach'}/><ChapterAtmosphere scene={save?.scene.id??'approach'}/>
  {save?.scene.inkGarden&&save.mode!=='combat'&&<InkGarden state={save.scene.inkGarden}/>}
  {save?.scene.infirmary&&save.mode!=='combat'&&<InfirmaryMechanism state={save.scene.infirmary}/>}
