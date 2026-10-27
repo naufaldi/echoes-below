@@ -102,8 +102,9 @@ const fdCheeks:Part[]=[[-4.1,2.9,-9.7,1.6,5.8,7.8],[4.1,2.9,-9.7,1.6,5.8,7.8]],f
 const fdPlaques:Part[]=[-1,1].flatMap(s=>[5.7,6.9,8.1].flatMap(x=>[.6,1.6,2.6,3.6].map(y=>[s*x,y,-6.92,1.25,1.25,.6] as Part)));
 const fdScars:Part[]=fdPlaques.map(([x,y,z],i)=>[x+(rand(i)-.5)*.1,y+.38,z+.1,.66+rand(i+3)*.12,.2,.01,0,0,(rand(i+7)-.5)*.08]);
 const fdNumbers:Part[]=fdPlaques.flatMap(([x,y,z],i)=>Array.from({length:1+i%3},(_,k)=>[x-.12+k*.12,y+.38,z+.112,.035,.15,.01] as Part));
-const fdObelisks:Part[]=[[-4.1,5.8,-6.4,3,3.4,3],[4.1,5.8,-6.4,3,3.4,3],[-4.1,5.8,-12.8,2.4,2.6,2.4],[4.1,5.8,-12.8,2.4,2.6,2.4]];
-const fdExitPosts:Part[]=[[-7.4,0,-3.4,3.4,3.6,3.4],[-7.4,0,.8,3.4,3.6,3.4]];
+/** Obelisks crown the stair cheeks and flank the marked emergency exit in the west wall. */
+const fdObelisks:Part[]=[[-4.1,5.8,-6.4,3,3.4,3],[4.1,5.8,-6.4,3,3.4,3],[-4.1,5.8,-12.8,2.4,2.6,2.4],[4.1,5.8,-12.8,2.4,2.6,2.4],[-7.4,0,-3.4,3.4,3.6,3.4],[-7.4,0,.8,3.4,3.6,3.4]];
+
 const fdArrows:Part[]=[-3.6,-4.6,-5.6,-6.6].flatMap(x=>[[x+.18,.005,-1.45,.06,.002,.5,.75],[x+.18,.005,-1.15,.06,.002,.5,-.75]] as Part[]);
 const fdSeams=lines([...crack(0,-5.5,0,3.4,5,11),...crack(-2,-5.5,-.45,2.8,4,21),...crack(2.1,-5.5,.4,2.6,4,31)],.006);
 const fdRock=cavern(101,{back:-10.5,gap:[-5,5],tall:1.3,west:-8.6});
@@ -123,8 +124,7 @@ function FoundersDescent({room}:{room:Ctx;reduced:boolean}){
    <Solid room={room} parts={fdSteps} color="#211f28" jitter={.06} roughness={.4} metalness={.15}/>
    <Solid room={room} parts={[...fdCheeks,...fdNameWalls]} color="#1a181f" jitter={.05} roughness={.45} metalness={.1}/>
    <KitInstances url={G.plaque} parts={fdPlaques} material={grave('#4a4458')} shadow={false}/>
-   <KitInstances url={G.obelisk} parts={fdObelisks} material={grave('#3a3546')}/>
-   <SolidKit room={room} url={G.obelisk} parts={fdExitPosts} size={.17} material={grave('#3a3546')}/>
+   <SolidKit room={room} url={G.obelisk} parts={fdObelisks} size={.17} material={grave('#3a3546')}/>
    <Tinted room={room} url={K.arched} parts={[[-8.9,0,-1.3,.8,.85,.8,Math.PI/2]]} tint="#4c4858"/>
   </group>
   <Light position={[0,5,-10]} color="#9d8cff" intensity={20} distance={14}/><Light position={[-7,3,-5.4]} color="#b0a3ff" intensity={6} distance={7}/><Light position={[7,3,-5.4]} color="#b0a3ff" intensity={6} distance={7}/>
