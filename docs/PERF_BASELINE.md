@@ -54,3 +54,12 @@ agent-browser --session perf --headed eval 'window.__ebSample(6000).then(JSON.st
 ```
 
 Follow the route in Method, sample each scene, and add a dated table to the PR description.
+
+## Re-check after the first presentation PRs (27 October 2026, `main` at `cd58039`)
+
+Same machine, browser and method. Covers goblin combat, Echo Rules, from initiative through four playback beats.
+
+- Capped: median 16.7 ms, p95 17.6 ms, 558 draw calls per frame. Zero WebGL context losses.
+- **Playback hitch:** the 100–150 ms frames at playback beats no longer reproduce. Three instrumented runs found no frame over 40 ms and no WebGL compile or link call over 2 ms during combat playback. One separate run recorded a single 983 ms frame. Three later instrumented runs, including one watching from before combat started, did not reproduce it. It is recorded here as unexplained, not fixed.
+- **Bundle:** the single 1.35 MB script is now split into game code (140 kB, 45 kB gzip) and separately cached library chunks: three 740 kB, React Three Fiber and helpers 278 kB, React 190 kB. The local asset-review page loads on demand. Total bytes are about the same. The gain is caching: a game-only change no longer invalidates the library download.
+- Still open in #10: draw calls (shadow casters, cloned dressing materials, instancing). That work waits for the room-layout change (#8), which edits the same dressing code.
