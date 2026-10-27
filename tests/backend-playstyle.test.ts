@@ -5,7 +5,7 @@ import {mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {Storage} from '../server/storage.js';
-import {ENDINGS,ROOM_FORKS,playstyleLedger,roomFork,selectEnding} from '../server/playstyle.js';
+import {CHOICE_TRUST,ENDINGS,ROOM_FORKS,playstyleLedger,roomFork,selectEnding} from '../server/playstyle.js';
 import {EXPEDITION,expeditionRoom} from '../shared/campaign.js';
 import {CURATED_RULES_VERSION} from '../shared/curated-rules.js';
 import {runProfile,type ProfileRun} from '../scripts/playstyle-profiles.js';
@@ -91,8 +91,11 @@ test('Release 1 saves load from storage, map into the ledger and continue to a c
  }finally{storage.close();await rm(dir,{recursive:true,force:true});}
 });
 
+/** A full profile run takes seconds, so the B-01/B-02 and #57 checks share one run per profile and rule set. */
+const runs=new Map<string,ProfileRun>();
+const profile=(p:Parameters<typeof runProfile>[0],rules:Parameters<typeof runProfile>[1])=>{const key=`${p}:${rules}`;if(!runs.has(key))runs.set(key,runProfile(p,rules));return runs.get(key)!;};
 for(const rules of ['echo-v1',CURATED_RULES_VERSION] as const)test(`B-01/B-02 diplomatic and aggressive ${rules} runs reach different endings through different rooms`,()=>{
- const a:ProfileRun=runProfile('diplomatic',rules),b:ProfileRun=runProfile('aggressive',rules);
+ const a:ProfileRun=profile('diplomatic',rules),b:ProfileRun=profile('aggressive',rules);
  for(const run of [a,b]){assert.equal(run.mode,'complete',`${run.profile} reaches the ending`);assert.ok(run.ending);}
  assert.notEqual(a.ending,b.ending);assert.notEqual(a.endingId,b.endingId);
  assert.equal(a.fights,0);assert.ok(b.fights>=20);
@@ -100,4 +103,43 @@ for(const rules of ['echo-v1',CURATED_RULES_VERSION] as const)test(`B-01/B-02 di
   const fa=a.forks.find(f=>expeditionRoom(f.room)!.chapter===chapter)!,fb=b.forks.find(f=>expeditionRoom(f.room)!.chapter===chapter)!;
   assert.equal(fa.room,fb.room);assert.notEqual(fa.description,fb.description,`chapter ${chapter} description`);assert.notDeepEqual(fa.choices,fb.choices,`chapter ${chapter} options`);
  }
+});
+
+test('#57 room choices raise Mira or Oren trust by what the choice means, not by its index',()=>{
+ assert.deepEqual(Object.keys(CHOICE_TRUST).sort(),EXPEDITION.map(r=>r.id).sort(),'every room is tagged');
+ const after=(id:string,choice:0|1)=>{const l=playstyleLedger(at(newSave(),'depth-8',{[`${id}:resolved`]:true,[`${id}:choice:${choice}`]:true}));return {mira:l.mira,oren:l.oren};};
+ assert.deepEqual(after('archive-2',0),{mira:1,oren:0},'sharing the lantern is mercy');
+ assert.deepEqual(after('archive-6',1),{mira:0,oren:1},'Oren securing the line is protection');
+ assert.deepEqual(after('market-1',0),{mira:0,oren:1},'sponsoring the refugees is protection, though it is the first option');
+ assert.deepEqual(after('market-3',0),{mira:0,oren:1},'returning the fallen soldier’s shield is Oren’s duty');
+ assert.deepEqual(after('market-7',1),{mira:1,oren:0},'restitution instead of a public accounting is mercy, though it is the second option');
+ assert.deepEqual(after('archive-3',1),{mira:0,oren:0},'leaving the vigil intact earns neither');
+ assert.deepEqual(after('roots-1',1),{mira:0,oren:0},'cutting the irrigation line earns neither');
+ // Index-only counting would send Mira in here: every earlier pick is a first option, but each one protects or keeps a duty.
+ const guarded=at(newSave(),'roots-4',Object.fromEntries(['archive-4','market-1','market-3','market-7','roots-3'].flatMap(id=>[[`${id}:resolved`,true],[`${id}:choice:0`,true]])));
+ assert.deepEqual([playstyleLedger(guarded,'roots-4').mira,playstyleLedger(guarded,'roots-4').oren],[0,5]);
+ assert.equal(roomFork(guarded,'roots-4')!.key,'oren');
+});
+
+for(const rules of ['echo-v1',CURATED_RULES_VERSION] as const)test(`#57 diplomatic and aggressive ${rules} runs earn different companions and reach roots-4 with them`,()=>{
+ const a=profile('diplomatic',rules),b=profile('aggressive',rules);
+ assert.equal(a.finalLedger.companion,'mira');assert.equal(b.finalLedger.companion,'oren');
+ assert.ok(a.finalLedger.mira>b.finalLedger.mira,'the diplomatic run earns more of Mira’s trust');assert.ok(b.finalLedger.oren>a.finalLedger.oren,'the aggressive run earns more of Oren’s trust');
+ const roots=(run:ProfileRun)=>run.forks.find(f=>f.room==='roots-4')!;
+ assert.equal(roots(a).variant,'mira');assert.equal(roots(b).variant,'oren');assert.notEqual(roots(a).description,roots(b).description);
+});
+
+test('#57 Release 1 saves standing at roots-4 load and meet the same companion they did before',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'echoes-trust-'));const storage=new Storage(join(dir,'save.sqlite'));
+ try{
+  // Release 1 shape: Chapter I flags and room choice flags only, with no trust written for any room.
+  const kind=at(newSave(),'roots-4',{...DIPLOMATIC,...resolved('roots-4','mercy',0)});kind.inventory.seal=false;storage.put(kind);
+  const harsh=at(newSave(),'roots-4',{...AGGRESSIVE,...resolved('roots-4','force',1)});harsh.inventory.seal=true;storage.put(harsh);
+  for(const [save,companion] of [[kind,'mira'],[harsh,'oren']] as const){
+   const s=storage.read(save.id),before=JSON.stringify(s);
+   assert.equal(roomFork(s,'roots-4')!.key,companion);assert.equal(publicSave(s).scene.description,roomFork(s,'roots-4')!.variant.description);
+   assert.equal(JSON.stringify(s),before,'reading trust writes nothing to the save');
+   const done=applyAction(s,'exp_choice:0',dice);assert.equal(done.facts.find(f=>f.id==='decision:roots-4')!.text,roomFork(s,'roots-4')!.variant.outcomes[0]);
+  }
+ }finally{storage.close();await rm(dir,{recursive:true,force:true});}
 });

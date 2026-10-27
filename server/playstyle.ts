@@ -3,12 +3,73 @@ import {CURATED_ENCOUNTERS} from './encounters.js';
 import type {Save} from './game.js';
 
 /** Derived from flags every Release 1 save already records; nothing here is persisted. */
-export interface PlaystyleLedger {mercy:number;force:number;stance:'mercy'|'force';mira:number;oren:number;companion:'mira'|'oren';scrit:'guardian'|'friend'|'scattered'|'stranger';}
+export interface PlaystyleLedger {mercy:number;force:number;stance:'mercy'|'force';mira:number;oren:number;companion:Companion;scrit:'guardian'|'friend'|'scattered'|'stranger';}
 type Axis = 'stance'|'scrit'|'companion';
 export type ForkVariant = 'mercy'|'force'|'ally'|'wary'|'mira'|'oren';
 interface RoomVariant {description:string;choice:[string,string];outcomes:[string,string];dc:number;ally?:{name:string;description:string};}
 interface RoomFork {room:ExpeditionId;axis:Axis;variants:Partial<Record<ForkVariant,RoomVariant>>;}
+/** Chapter I trust that game.ts already writes as `trust:<key>` flags. */
 const MIRA_TRUST=['trap','warning'],OREN_TRUST=['rescue','scrit','vark'];
+type Companion = 'mira'|'oren';
+/**
+ * Issue #57: which companion each room's options win over, read from the `<room>:choice:<n>` flags every save already
+ * records. Mercy (sparing, releasing, comforting) and insight (naming, exposing, seeing through) raise Mira's trust;
+ * protection (rescuing, guarding, securing a route) and duty (oaths, records owed to families, accountability) raise
+ * Oren's. A pragmatic or forceful option raises neither (—). Fork variants reword the options but keep this meaning.
+ *
+ * | Room      | Option 0                                   | Option 1                                       |
+ * |-----------|--------------------------------------------|------------------------------------------------|
+ * | archive-1 | Mira: raise the sluice for the ferryman    | Oren: divert the current, keep the records     |
+ * | archive-2 | Mira: share the lantern                    | Oren: preserve the living pages                |
+ * | archive-3 | Mira: restore the librarian's name         | —: take the drawer, leave the vigil            |
+ * | archive-4 | Oren: break the pocket, rescue the medic   | —: open the drain first                        |
+ * | archive-5 | Mira: release the copied witnesses         | Oren: keep the testimony for the families      |
+ * | archive-6 | Mira: trust Mira to lead                   | Oren: Oren secures a line                      |
+ * | archive-7 | Mira: challenge the altered contract       | —: pay with the false history                  |
+ * | archive-8 | Mira: send the names home                  | Oren: hold the council to account              |
+ * | market-1  | Oren: sponsor the refugees                 | Mira: expose the altered tally                 |
+ * | market-2  | Mira: repair the refugee lanterns          | —: finish Tavin's map first                    |
+ * | market-3  | Oren: return the fallen soldier's shield   | —: buy the record as evidence                  |
+ * | market-4  | Mira: close the council's pipe             | Oren: build a filter for everyone              |
+ * | market-5  | Mira: perform the true testimony           | Oren: keep the route secret                    |
+ * | market-6  | —: convert the furnace to coal             | Mira: shut it until the prisoners are free     |
+ * | market-7  | Oren: demand a public accounting           | Mira: negotiate restitution                    |
+ * | market-8  | Mira: carry the letters into the prison    | Oren: keep the letters safe with a courier     |
+ * | roots-1   | Mira: teach the prisoners shared silence   | —: cut the irrigation line                     |
+ * | roots-2   | Mira: quiet the copied voices              | Oren: keep one recording as evidence           |
+ * | roots-3   | Oren: organise a shared evacuation         | Mira: let the healer leave with the injured    |
+ * | roots-4   | Mira: open the channel with Tavin          | Oren: have Tavin guide the evacuation          |
+ * | roots-5   | Mira: open the valves in sequence          | —: shatter the reservoir                       |
+ * | roots-6   | Oren: refuse the bargain before everyone   | Mira: offer Ys a place                         |
+ * | roots-7   | Mira: relieve the guard of its duty        | Oren: break the seal, open the gate for all    |
+ * | roots-8   | Mira: stay for the reunion meal            | Oren: send the captives up first               |
+ * | choir-1   | Mira: let the novice enter on her terms    | Mira: expose the false trial                   |
+ * | choir-2   | Mira: teach the missing rest               | Oren: keep the score for the machine           |
+ * | choir-3   | Mira: tell the child's joke                | Oren: ask the elders to lift the rule for all  |
+ * | choir-4   | Mira: demonstrate the complete circuit     | Oren: refuse the conductor another sacrifice   |
+ * | choir-5   | Oren: name the dead, renew Oren's oath     | Oren: carry the record to the families         |
+ * | choir-6   | Mira: let each singer speak apart          | —: cooperate without forgiving                 |
+ * | choir-7   | Mira: perform the rest, release Aras       | —: break the cage by force                     |
+ * | choir-8   | Oren: keep the evacuation route manned     | —: prepare the circuit                         |
+ * | depth-1   | Mira: recover the founders' names          | Oren: map the emergency exits                  |
+ * | depth-2   | Mira: offer the guards safe passage        | Oren: hold the escape route                    |
+ * | depth-3   | Mira: name the contradictions together     | —: cover the glass                             |
+ * | depth-4   | Mira: explain the release to Neris         | Oren: secure Neris's escape first              |
+ * | depth-5   | Mira: read the maintenance anchors         | Oren: hold the bridge while the party crosses  |
+ * | depth-6   | Mira: speak the release command            | —: dismantle the guardian                      |
+ * | depth-7   | Mira: free every keeper                    | Oren: seal the core under a shared watch       |
+ * | depth-8   | —: go home together                        | Oren: stay to help the settlements             |
+ */
+/** Every room must appear; tests/backend-playstyle.test.ts checks that, because ExpeditionId is too wide for the compiler to. */
+export const CHOICE_TRUST:Record<string,readonly [Companion|null,Companion|null]>={
+ 'archive-1':['mira','oren'],'archive-2':['mira','oren'],'archive-3':['mira',null],'archive-4':['oren',null],'archive-5':['mira','oren'],'archive-6':['mira','oren'],'archive-7':['mira',null],'archive-8':['mira','oren'],
+ 'market-1':['oren','mira'],'market-2':['mira',null],'market-3':['oren',null],'market-4':['mira','oren'],'market-5':['mira','oren'],'market-6':[null,'mira'],'market-7':['oren','mira'],'market-8':['mira','oren'],
+ 'roots-1':['mira',null],'roots-2':['mira','oren'],'roots-3':['oren','mira'],'roots-4':['mira','oren'],'roots-5':['mira',null],'roots-6':['oren','mira'],'roots-7':['mira','oren'],'roots-8':['mira','oren'],
+ 'choir-1':['mira','mira'],'choir-2':['mira','oren'],'choir-3':['mira','oren'],'choir-4':['mira','oren'],'choir-5':['oren','oren'],'choir-6':['mira',null],'choir-7':['mira',null],'choir-8':['oren',null],
+ 'depth-1':['mira','oren'],'depth-2':['mira','oren'],'depth-3':['mira',null],'depth-4':['mira','oren'],'depth-5':['mira','oren'],'depth-6':['mira',null],'depth-7':['mira','oren'],'depth-8':[null,'oren'],
+};
+/** Rooms before the cut-off whose saved choice won this companion over. */
+const earned=(f:Save['flags'],rooms:string[],who:Companion)=>rooms.filter(id=>(CHOICE_TRUST[id]??[]).some((c,i)=>c===who&&f[`${id}:choice:${i}`])).length;
 const chapterOneDone=(s:Save)=>!!expeditionRoom(s.sceneId)||s.sceneId==='aftermath'&&s.mode==='complete';
 /** A room only counts toward Mercy when a fight was actually on offer there; Curated rooms without an authored encounter count for neither side. */
 const fightOffered=(s:Save,id:string)=>!s.tactical||!!CURATED_ENCOUNTERS[id];
@@ -18,15 +79,15 @@ export function playstyleLedger(s:Save,before?:string):PlaystyleLedger{
  const varkFought=chapterOneDone(s)&&!f.negotiated;
  const mercy=+!!f.fed+ +!!f.negotiated+ +(!!f.passage&&!f.guardsDefeated&&!f.fed)+rooms.filter(id=>f[`${id}:resolved`]&&!f[`${id}:defendersDefeated`]&&fightOffered(s,id)).length;
  const force=+!!f.guardsDefeated+ +varkFought+rooms.filter(id=>f[`${id}:defendersDefeated`]).length;
- const mira=MIRA_TRUST.filter(k=>f[`trust:${k}`]).length+rooms.filter(id=>f[`${id}:choice:0`]).length;
- const oren=OREN_TRUST.filter(k=>f[`trust:${k}`]).length+rooms.filter(id=>f[`${id}:choice:1`]).length;
+ const mira=MIRA_TRUST.filter(k=>f[`trust:${k}`]).length+earned(f,rooms,'mira');
+ const oren=OREN_TRUST.filter(k=>f[`trust:${k}`]).length+earned(f,rooms,'oren');
  const scrit=f.guardsDefeated?'scattered':f.fed?(chapterOneDone(s)&&!s.inventory.seal?'guardian':'friend'):'stranger';
  return {mercy,force,stance:force>mercy?'force':'mercy',mira,oren,companion:oren>mira?'oren':'mira',scrit};
 }
 const scritAlly=(l:PlaystyleLedger)=>l.scrit==='guardian'||l.scrit==='friend';
 const axisVariant=(axis:Axis,l:PlaystyleLedger):ForkVariant=>axis==='stance'?l.stance:axis==='companion'?l.companion:scritAlly(l)?'ally':'wary';
 
-/** One ledger-driven room per chapter. Choice indices keep their original meaning, so trust, XP and cross-room consequences are unchanged. */
+/** One ledger-driven room per chapter. Choice indices keep their original meaning, so CHOICE_TRUST, XP and cross-room consequences are unchanged. */
 export const ROOM_FORKS:RoomFork[]=[
  {room:'archive-1',axis:'stance',variants:{
   mercy:{description:'Black water laps at the steps below Briarwatch. Word has come down from the relay that your party chose talk over steel wherever it could. The ferryman has already loosened his chain and holds a lantern high for you. The seal still makes his boat list.',choice:['Raise the sluice with the ferryman’s help','Divert the current through the empty crypt'],outcomes:['The ferryman works the far wheel while you raise the sluice. His boat rides level, and he promises to carry future refugees. The lower records are soaked.','The ferryman helps you divert the current, then lets his boat go. The records survive. He says the relay’s peace was worth one boat; you are not sure he means it.'],dc:-2,ally:{name:'The ferryman',description:'He heard how you left the relay and has come to the steps to help.'}},
