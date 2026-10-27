@@ -82,3 +82,7 @@
 .member-action{cursor:default}.member-action>span:nth-child(2){flex:1;min-width:0}.member-choices{display:flex;flex-wrap:wrap;gap:3px;margin-top:2px}.member-choices button{padding:4px 10px;border:1px solid #c9aa6866;border-radius:12px;background:#17251b;color:#f0dfb8;font-size:12px}.member-choices button:hover:not(:disabled),.member-choices button:focus-visible{border-color:#efcb7d;background:#2d3a2c}
 @media(max-height:1000px){.action{padding:5px 8px;margin-bottom:3px}.member-choices button{padding:1px 8px;line-height:1.2}.custom-intent textarea{min-height:38px;height:38px;padding:9px 12px}.custom-intent textarea:focus,.custom-intent textarea:not(:placeholder-shown){height:80px}}
 .action-list>:last-child{margin-bottom:0}
+/* Keep the begin action in view while the creation options scroll. */
+.creation .primary.start{position:sticky;bottom:0;z-index:2;box-shadow:0 -14px 22px 6px #0f1a1a}
+/* In combat the turn tracker names the room context; keep the heading small so it does not sit on the fight. */
+.app:has(.initiative-strip) .scene-heading .eyebrow,.app:has(.initiative-strip) .scene-heading p{display:none}.app:has(.initiative-strip) .scene-heading h1{font-size:22px;margin:0;opacity:.85}
