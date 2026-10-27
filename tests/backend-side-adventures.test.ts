@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {createSave,applyAction,legalActions,publicSave} from '../server/game.js';
 import {CURATED_RULES_VERSION} from '../shared/curated-rules.js';
 import {SIDE_ADVENTURES} from '../server/side-adventures.js';
-import {expeditionRoom} from '../shared/campaign.js';
+import {playedRoom} from '../server/playstyle.js';
 const fresh=()=>createSave({name:'Side QA',classId:'guardian',backgroundId:'delver',appearanceId:'ember',rulesVersion:CURATED_RULES_VERSION});
 for(const adventure of SIDE_ADVENTURES)for(const choice of [0,1])test(`${adventure.id} route ${choice} requires witnessed evidence and grants its distinct outcome once`,()=>{
  let s=fresh();s.sceneId=adventure.start;
@@ -17,7 +17,7 @@ for(const adventure of SIDE_ADVENTURES)for(const choice of [0,1])test(`${adventu
  assert.equal(s.quests?.find(q=>q.id===adventure.questId)?.status,'completed');
  assert.equal(s.party.reduce((n,a)=>n+a.potions,0),potions+(adventure.choices[choice].potions??0));
  assert.throws(()=>applyAction(s,command('choose-'+choice),n=>n));assert.equal(s.facts.filter(f=>f.id===`side:${adventure.id}:outcome`).length,1);
- if(adventure.choices[choice].preparation){s.sceneId=adventure.choices[choice].preparation as typeof s.sceneId;const room=expeditionRoom(s.sceneId)!;assert.equal(legalActions(s).find(a=>a.id==='exp_choice:0')?.check?.dc,room.dc-3);s=applyAction(s,'exp_choice:0',n=>n);assert.ok(s.logs.some(l=>l.text.includes(`vs DC ${room.dc-3}`)));}
+ if(adventure.choices[choice].preparation){s.sceneId=adventure.choices[choice].preparation as typeof s.sceneId;const room=playedRoom(s,s.sceneId)!;assert.equal(legalActions(s).find(a=>a.id==='exp_choice:0')?.check?.dc,room.dc-3);s=applyAction(s,'exp_choice:0',n=>n);assert.ok(s.logs.some(l=>l.text.includes(`vs DC ${room.dc-3}`)));}
 });
 test('declining or missing a meeting cannot leak a later NPC or complete the request',()=>{
  let s=fresh();s.sceneId='archive-1';s=applyAction(s,'quest:decline:chapter-2-side-1',n=>n);assert.ok(!legalActions(s).some(a=>a.id.startsWith('side:water-names:')));assert.ok(!publicSave(s).scene.entities.some(e=>e.id==='side:water-names'));

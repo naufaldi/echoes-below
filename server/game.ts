@@ -18,6 +18,7 @@ import {logisticsFor,logisticsActions,applyLogistics,grantLogisticsLoot} from '.
 import {makeCharacter,restoreClassResources,classResources} from '../shared/curated-rules.js';
 import {projectTactical,initializeTactical,startTacticalCombat,tacticalActions,applyTactical,tacticalProposal} from './tactical.js';
 import {availableConsequences,campaignEffects} from './campaign-consequences.js';
+import {playedRoom,projectFork,endingText} from './playstyle.js';
 import {COMPANION_STORIES} from '../shared/companion-stories.js';
 import {EXPEDITION,expeditionRoom,expeditionScene} from "../shared/campaign.js";
 import { randomUUID } from "node:crypto";
@@ -650,7 +651,7 @@ function baseActions(s: Save): ActionOption[] {
           ),
         );
   };
-  const expedition=expeditionRoom(s.sceneId);
+  const expedition=playedRoom(s,s.sceneId);
   if(expedition){
     const prefix=s.sceneId;
     const effects=campaignEffects(prefix,f);
@@ -980,6 +981,7 @@ export function publicSave(s: Save): PublicSave {
     ...visible
   } = s;
   const scene=structuredClone(baseScenes[sceneId]);
+  projectFork(s,scene);
   if(s.tactical&&sceneId==='archive-3'){scene.bellIndex=bellIndexState(flags);scene.entities.push({id:'index-console',name:scene.bellIndex.solved?'Catalogue · name recovered':'Catalogue plates',kind:'clue',position:[-3,-2],description:'Three bronze plates preserve the librarian’s identity.'});}
   if(s.tactical&&sceneId==='archive-3'&&s.mode!=='combat'){
    if(flags['archive-3:resolved'])scene.description=expeditionRoom(sceneId)!.outcomes[flags['archive-3:choice:0']?0:1];
@@ -1433,7 +1435,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
   if(kind==='continue_campaign'){
     s.ending=null;enterScene(s,'archive-1');s.party.forEach(member=>{member.hp=member.maxHp;member.focus=member.maxFocus;});
   } else if(kind.startsWith('exp_')) {
-    const room=expeditionRoom(s.sceneId)!;const prefix=s.sceneId;
+    const room=playedRoom(s,s.sceneId)!;const prefix=s.sceneId;
     approachTarget(s,option);
     if(kind==='exp_ally'){
       const help=availableConsequences(prefix,f).find(c=>c.id===actorId)!;f[`aid:${help.id}`]=true;
@@ -1454,7 +1456,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
       else{const r=damageRoll(dice,6,0,'Setback');h.hp=Math.max(1,h.hp-r.total);log(s,`The attempt costs ${r.total} health. You can choose the alternative or confront the defenders.`,'hero',[r]);}
     }else if(kind==='exp_next'){
       const next=EXPEDITION[EXPEDITION.findIndex(r=>r.id===s.sceneId)+1];
-      if(next)enterScene(s,next.id);else{s.mode='complete';s.ending=room.outcomes[f[`${prefix}:choice:0`]?0:1];log(s,'The descent is complete. Your choices remain in the journal.','dm',[],'authored');}
+      if(next)enterScene(s,next.id);else{s.mode='complete';s.ending=endingText(s);log(s,'The descent is complete. Your choices remain in the journal.','dm',[],'authored');}
     }
     s.revision++;s.updatedAt=new Date().toISOString();return s;
   } else if (s.mode === "explore") approachTarget(s, option);
