@@ -205,6 +205,8 @@ h1,h2,h3,h4,legend{text-wrap:balance}
 .panel-label>.turn-chip{margin:-4px 0;font-size:var(--fs-sm);letter-spacing:normal;color:var(--text-primary)}
 .tactical-controls .turn-state{margin:8px 0 0;gap:5px}.tactical-controls .turn-chip{padding:3px 8px;font-size:var(--fs-xs)}.tactical-controls small{font-size:var(--fs-xs)}
 .initiative-strip small{font-size:var(--fs-xs)}
+/* Without AI, free-text actions cannot run, so one live link to Settings replaces a block of disabled controls. */
+.custom-intent .intent-off{display:block;width:100%;padding:8px 0 2px;text-align:left;font-size:var(--fs-sm);line-height:1.4;color:var(--text-secondary)}.intent-off span{color:var(--accent);white-space:nowrap}
 /* The top bar names the chapter; the heading names the room on its own plate, with a mood line only when it adds something. */
 .app:not(.title-mode) .top-center{font-size:var(--fs-xs)}
 .scene-title{display:inline-block;max-width:100%;padding:6px 24px 8px;background:var(--glass-0);border:1px solid var(--border-subtle);border-radius:5px;box-shadow:0 10px 24px var(--shadow)}
