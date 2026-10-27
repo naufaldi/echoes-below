@@ -4,6 +4,7 @@ import {createSave,applyAction,legalActions,type Save} from '../server/game.js';
 import {EXPEDITION} from '../shared/campaign.js';
 import {CURATED_RULES_VERSION} from '../shared/curated-rules.js';
 import type {ClassId} from '../shared/types.js';
+import {runProfile} from './playstyle-profiles.js';
 const runs=[];
 for(const classId of ['guardian','scout','adept','cleric'] as ClassId[]){
  let s=createSave({name:'Progression audit',classId,backgroundId:'envoy',appearanceId:'moon',rulesVersion:CURATED_RULES_VERSION});
@@ -22,5 +23,14 @@ for(const classId of ['guardian','scout','adept','cleric'] as ClassId[]){
  for(const actor of s.party){const c=s.tactical!.actors[actor.id];assert.equal(c.improvements?.length,c.classId==='fighter'?3:2);assert.ok(c.abilities.strength<=20);}
  runs.push({classId,mode:s.mode,level:s.level,xp:s.xp,revisions:s.revision,milestones,choices,rooms});
 }
-writeFileSync('docs/CAMPAIGN_PROGRESSION.json',JSON.stringify({kind:'Deterministic legal-action traversal, not measured player duration or combat balance',assumptions:'Four classes, existing starting party, maximum dice, peaceful main route, all room evidence and supplies, no injected XP/levels/resources, serialized reload after every action, oldest available ability choices.',runs},null,2)+'\n');
+// Track B (B-01, B-02): a diplomatic and an aggressive run must reach different endings through a different room state in every expedition chapter.
+const playstyles=(['echo-v1',CURATED_RULES_VERSION] as const).map(rules=>{
+ const [a,b]=(['diplomatic','aggressive'] as const).map(profile=>runProfile(profile,rules));
+ for(const run of [a!,b!])assert.equal(run.mode,'complete',`${run.profile} ${rules} reaches an ending`);
+ assert.notEqual(a!.endingId,b!.endingId,`${rules} endings differ`);
+ const chapters=a!.forks.map((fork,i)=>{const other=b!.forks[i]!;assert.equal(fork.room,other.room);assert.notEqual(fork.description,other.description,`${rules} ${fork.room}`);assert.notDeepEqual(fork.choices,other.choices,`${rules} ${fork.room} options`);return {room:fork.room,title:fork.title,diplomatic:fork.variant,aggressive:other.variant};});
+ return {rules,endings:{diplomatic:a!.endingId,aggressive:b!.endingId},chapters,runs:[a!,b!].map(({profile,classId,mode,ending,endingId,finalLedger,fights,actions,forks})=>({profile,classId,mode,endingId,ending,finalLedger,fights,actions,forks:forks.map(({room,variant,ledger})=>({room,variant,ledger}))}))};
+});
+writeFileSync('docs/CAMPAIGN_PROGRESSION.json',JSON.stringify({kind:'Deterministic legal-action traversal, not measured player duration or combat balance',assumptions:'Four classes, existing starting party, maximum dice, peaceful main route, all room evidence and supplies, no injected XP/levels/resources, serialized reload after every action, oldest available ability choices.',runs,playstyleAssumptions:'Guardian hero in both rule sets. Diplomatic: feed Scrit, negotiate, entrust the seal, no fights, first room option with maximum dice. Aggressive: fight every offered battle, force the gate, secure the seal, then the second room option; seeded dice (Curated 733 as in the attrition audit, Echo 2199 because Echo seeds 733 and 1466 lose a Chapter II fight).',playstyles},null,2)+'\n');
+console.log(JSON.stringify(playstyles.map(({rules,endings,chapters})=>({rules,endings,chapters})),null,2));
 console.log(JSON.stringify(runs.map(({classId,level,xp,revisions,milestones,choices})=>({classId,level,xp,revisions,milestones,improvements:choices.length})),null,2));
