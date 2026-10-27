@@ -1,0 +1,112 @@
+{
+ "kit": "kenney-nature-kit",
+ "title": "Kenney Nature Kit (2.1)",
+ "author": "Kenney (www.kenney.nl)",
+ "storePage": "https://kenney.nl/assets/nature-kit",
+ "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip",
+ "licence": "CC0-1.0",
+ "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+ "licenceEvidence": "License.txt inside kenney_nature-kit.zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d) reads \"License: (Creative Commons Zero, CC0)\" and \"This content is free to use in personal, educational and commercial projects. Support us by crediting Kenney or www.kenney.nl (this is not mandatory)\".",
+ "notes": "Roots, stones, fungus and plants for the Rootbound Prison rooms (#49). Untextured GLBs with flat material colours; rooms override them with shared tinted materials.",
+ "files": [
+  {
+   "file": "lily_large.glb",
+   "sha256": "c8f7080df0ae3166e9d33f523b66360c2ac7556dff36cc9c8ee78b6a676c7db2",
+   "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip#Models/GLTF%20format/lily_large.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from the Nature Kit 2.1 zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d). Tinted at runtime through a shared material in client/rooms/RootboundPrison.tsx."
+  },
+  {
+   "file": "log_large.glb",
+   "sha256": "e7a92369062d491e5a31a163d390e07db04ee573605bbfa84c00660d18896b4c",
+   "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip#Models/GLTF%20format/log_large.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from the Nature Kit 2.1 zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d). Tinted at runtime through a shared material in client/rooms/RootboundPrison.tsx."
+  },
+  {
+   "file": "mushroom_redGroup.glb",
+   "sha256": "29f02df0589dd2b09e8d2aff6a4662394dac5cfcf1fec701640dcbd6127e0802",
+   "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip#Models/GLTF%20format/mushroom_redGroup.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from the Nature Kit 2.1 zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d). Tinted at runtime through a shared material in client/rooms/RootboundPrison.tsx."
+  },
+  {
+   "file": "mushroom_tanGroup.glb",
+   "sha256": "2dc979485f164d7dce34329096271f44e0c9ea329c104251d94bcfbc8f8fe05e",
+   "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip#Models/GLTF%20format/mushroom_tanGroup.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from the Nature Kit 2.1 zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d). Tinted at runtime through a shared material in client/rooms/RootboundPrison.tsx."
+  },
+  {
+   "file": "plant_bushLarge.glb",
+   "sha256": "10e1d9fbf29d96d1d1a56fb2ce25ae66537505101759229afe01ae22c6c45e02",
+   "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip#Models/GLTF%20format/plant_bushLarge.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from the Nature Kit 2.1 zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d). Tinted at runtime through a shared material in client/rooms/RootboundPrison.tsx."
+  },
+  {
+   "file": "plant_flatTall.glb",
+   "sha256": "b192523736f32754788de4dc7a5dcf30a58322b260ec8969120c91432a10b633",
+   "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip#Models/GLTF%20format/plant_flatTall.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from the Nature Kit 2.1 zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d). Tinted at runtime through a shared material in client/rooms/RootboundPrison.tsx."
+  },
+  {
+   "file": "stone_largeA.glb",
+   "sha256": "fe486a13775e833b1aca99413a89e013f300841de80f42ecd44ceaf43720f17b",
+   "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip#Models/GLTF%20format/stone_largeA.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from the Nature Kit 2.1 zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d). Tinted at runtime through a shared material in client/rooms/RootboundPrison.tsx."
+  },
+  {
+   "file": "stone_largeC.glb",
+   "sha256": "f78e984f04f2c9d3a242d42b1c8f65b8a095b9ccf9f74ac55a97b7cdd1c4668c",
+   "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip#Models/GLTF%20format/stone_largeC.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from the Nature Kit 2.1 zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d). Tinted at runtime through a shared material in client/rooms/RootboundPrison.tsx."
+  },
+  {
+   "file": "stone_tallA.glb",
+   "sha256": "3070bd574104abce19f5e3c82c917cb7f52801720377beba7aad76058408d5db",
+   "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip#Models/GLTF%20format/stone_tallA.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from the Nature Kit 2.1 zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d). Tinted at runtime through a shared material in client/rooms/RootboundPrison.tsx."
+  },
+  {
+   "file": "stone_tallB.glb",
+   "sha256": "4dc2798870b56fe4028f47418994c8b7c336baf7045bf034fe8117cb7e635ba1",
+   "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip#Models/GLTF%20format/stone_tallB.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from the Nature Kit 2.1 zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d). Tinted at runtime through a shared material in client/rooms/RootboundPrison.tsx."
+  },
+  {
+   "file": "stump_oldTall.glb",
+   "sha256": "8606cbd41c2a11143f083e796668cc413d58ab90cf5e53450fd93e6fcfde48e0",
+   "source": "https://kenney.nl/media/pages/assets/nature-kit/37ac38a37b-1677698939/kenney_nature-kit.zip#Models/GLTF%20format/stump_oldTall.glb",
+   "author": "Kenney (www.kenney.nl)",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged from the Nature Kit 2.1 zip (sha256 fa7974a0d342bfe63c38664ba9f8ec1a4aab8ea25f099bdc56870e33588c4d9d). Tinted at runtime through a shared material in client/rooms/RootboundPrison.tsx."
+  }
+ ]
+}
