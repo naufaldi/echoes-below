@@ -63,3 +63,19 @@ Same machine, browser and method. Covers goblin combat, Echo Rules, from initiat
 - **Playback hitch:** the 100–150 ms frames at playback beats no longer reproduce. Three instrumented runs found no frame over 40 ms and no WebGL compile or link call over 2 ms during combat playback. One separate run recorded a single 983 ms frame. Three later instrumented runs, including one watching from before combat started, did not reproduce it. It is recorded here as unexplained, not fixed.
 - **Bundle:** the single 1.35 MB script is now split into game code (140 kB, 45 kB gzip) and separately cached library chunks: three 740 kB, React Three Fiber and helpers 278 kB, React 190 kB. The local asset-review page loads on demand. Total bytes are about the same. The gain is caching: a game-only change no longer invalidates the library download.
 - Still open in #10: draw calls (shadow casters, cloned dressing materials, instancing). That work waits for the room-layout change (#8), which edits the same dressing code.
+
+## Re-check after the Chapter I room layouts (27 October 2026, `main` at `2d19cf2`)
+
+Same machine, browser, viewport and route, capped at 60 Hz. The room-layout change (#26) replaced the shared dungeon shell with per-room layouts built from fewer, shared pieces.
+
+| Scene | Draw calls before (Phase 0) | Draw calls now | Triangles now | p95 ms now |
+|---|---|---|---|---|
+| Title / creation | 503 | 265 | 143,522 | 18.6 |
+| Broken Approach | 545 | 293 | 144,724 | 18.7 |
+| Counterweight Hall | 529 | 273 | 108,224 | 18.6 |
+| Goblin Cookfire | 553 | 345 | 329,964 | 18.6 |
+| Goblin combat, idle turn | 541 | 351 | 329,434 | 18.6 |
+
+- Draw calls are down 35–50% in every measured scene. Frame rate stays at the 60 Hz cap, with zero WebGL context losses.
+- The remaining triangle spike in Cookfire comes from the goblin models (the Quaternius imp). The owner chose to keep the enemy models for now, so decimating or replacing them belongs with the character work (#11), not here.
+- WebGPU is still not justified: no measured scene is GPU-bound on this machine.
