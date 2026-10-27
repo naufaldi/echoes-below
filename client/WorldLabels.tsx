@@ -36,7 +36,7 @@ function Layer({registry,muteActors}:{registry:Map<string,Entry>;muteActors:bool
  useFrame((_,dt)=>{elapsed.current+=dt;if(elapsed.current<.08)return;elapsed.current=0;setErrors([...registry.values()].filter(e=>e.error));
   if(document.querySelector('[aria-modal="true"],.modal-backdrop,.ending')){setLabels(old=>old.length?[]:old);return;}
   const canvas=gl.domElement.getBoundingClientRect();const sx=size.width/canvas.width,sy=size.height/canvas.height;
-  const blocked=Array.from(document.querySelectorAll('.topbar,.party-panel,.actions-panel,.narration-panel,.chapter-track,.initiative-strip,.scene-heading,.dice-result,.asset-issues')).map(e=>{const b=e.getBoundingClientRect();return{x:(b.x-canvas.x)*sx,y:(b.y-canvas.y)*sy,width:b.width*sx,height:b.height*sy};});
+  const blocked=Array.from(document.querySelectorAll('.topbar,.party-panel,.actions-panel,.narration-panel,.chapter-track,.initiative-strip,.scene-heading,.asset-issues')).map(e=>{const b=e.getBoundingClientRect();return{x:(b.x-canvas.x)*sx,y:(b.y-canvas.y)*sy,width:b.width*sx,height:b.height*sy};});
   const bodies:Rect[]=[];
   for(const body of silhouettes?.values()??[]){
    body.anchor.updateWorldMatrix(true,false);
