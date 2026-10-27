@@ -9,12 +9,19 @@ import type {ClassId} from '../shared/types.js';
 export type Profile = 'diplomatic'|'aggressive';
 export type Rules = 'echo-v1'|typeof CURATED_RULES_VERSION;
 export interface ForkSighting {room:string;variant:string;title:string;description:string;choices:string[];ledger:PlaystyleLedger;}
-export interface ProfileRun {profile:Profile;rules:Rules;classId:ClassId;mode:string;ending:string|null;endingId:string;finalLedger:PlaystyleLedger;forks:ForkSighting[];fights:number;actions:number;}
+export interface ProfileRun {profile:Profile;rules:Rules;classId:ClassId;mode:string;ending:string|null;endingId:string;finalLedger:PlaystyleLedger;forks:ForkSighting[];fights:number;actions:number;seed?:number;}
 
+/** Seeds tried in order for the aggressive run. Curated starts with the attrition audit's seed. Echo Rules fights three defenders in every room and only some seeds survive all 42 fights (733 and 1466 fall in Chapter II); this audit is about routes and endings, not balance, so a later seed may stand in when a rules or XP change moves the survivable one. */
+const SEEDS:Record<Rules,number[]>={'echo-v1':[2199,3665,733,1466,2932,4398],[CURATED_RULES_VERSION]:[733,1466,2199,2932,3665]};
 export function runProfile(profile:Profile,rules:Rules,classId:ClassId='guardian'):ProfileRun{
- // Curated reuses the attrition audit's seed. Echo Rules fights three defenders in every room; only some seeds survive all 42 fights (733 and 1466 fall in Chapter II), so the profile fixes one that does.
- let rng=rules===CURATED_RULES_VERSION?733:2199;const seeded=(sides:number)=>{rng=(Math.imul(rng,1664525)+1013904223)>>>0;return 1+Math.floor(rng/4294967296*sides);};
- // The diplomatic run rolls high so its checks succeed; the aggressive run uses the attrition audit's seeded dice for honest combat.
+ if(profile==='diplomatic')return playProfile(profile,rules,classId);
+ const failures:string[]=[];
+ for(const seed of SEEDS[rules]){try{return playProfile(profile,rules,classId,seed);}catch(e){failures.push(`seed ${seed}: ${e instanceof Error?e.message:String(e)}`);}}
+ throw Error(failures.join('; '));
+}
+function playProfile(profile:Profile,rules:Rules,classId:ClassId,seed?:number):ProfileRun{
+ let rng=seed??0;const seeded=(sides:number)=>{rng=(Math.imul(rng,1664525)+1013904223)>>>0;return 1+Math.floor(rng/4294967296*sides);};
+ // The diplomatic run rolls high so its checks succeed; the aggressive run uses seeded dice for honest combat.
  const dice=profile==='diplomatic'?(n:number)=>n:seeded;
  let s=createSave({name:`${profile} audit`,classId,backgroundId:'envoy',appearanceId:'moon',rulesVersion:rules});
  const tactical=rules===CURATED_RULES_VERSION;let actions=0,fights=0;const forks:ForkSighting[]=[];
@@ -55,6 +62,6 @@ export function runProfile(profile:Profile,rules:Rules,classId:ClassId='guardian
   if(has('exp_rest'))act('exp_rest');if(tactical)recover();advance();
   act('exp_next');
  }
- return {profile,rules,classId,mode:s.mode,ending:s.ending,endingId:selectEnding(s).id,finalLedger:playstyleLedger(s),forks,fights,actions};
+ return {profile,rules,classId,mode:s.mode,ending:s.ending,endingId:selectEnding(s).id,finalLedger:playstyleLedger(s),forks,fights,actions,seed};
 }
 export const FORK_ROOMS=ROOM_FORKS.map(f=>f.room);
