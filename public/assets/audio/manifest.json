@@ -156,7 +156,7 @@
    "retrieved": "2026-10-27",
    "changes": "Transcoded the 320 kbps MP3 to stereo AAC-LC 96 kbps M4A with macOS afconvert; renamed. No edits to the music.",
    "use": "exploration music",
-   "status": "pending-owner-approval",
+   "status": "owner-approved-2026-10-27",
    "credit": "\"In Darkness\" by Of Far Different Nature (opengameart.org/content/in-darkness), CC-BY 4.0, transcoded to AAC."
   },
   {
@@ -170,7 +170,7 @@
    "retrieved": "2026-10-27",
    "changes": "Transcoded determined_pursuit_loop.wav (19.1 MB PCM) to stereo AAC-LC 96 kbps M4A with macOS afconvert; renamed.",
    "use": "combat music",
-   "status": "pending-owner-approval"
+   "status": "owner-approved-2026-10-27"
   }
  ]
 }

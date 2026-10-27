@@ -35,4 +35,4 @@ Every shipped audio file is listed with its source, author, licence, retrieval d
 - Combat music: “Determined Pursuit (epic orchestra loop)” by Emma_MA, [OpenGameArt](https://opengameart.org/content/determined-pursuit-epic-orchestra-loop) (CC0).
 - Exploration music: “In Darkness” by Of Far Different Nature, [OpenGameArt](https://opengameart.org/content/in-darkness), licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/); transcoded from MP3 to AAC.
 
-Both music tracks are pending the owner's approval by ear.
+The owner approved both music tracks by ear on 27 October 2026.

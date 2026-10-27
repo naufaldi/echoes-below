@@ -30,7 +30,7 @@ test('audio gate rejects an unlisted file, changed bytes and a licence outside t
   fails(/Audio hash differs from manifest: assets\/audio\/sfx\/miss.m4a/);writeFileSync(clip,original);
   const manifestPath=join(folder,'assets/audio/manifest.json'),manifest=JSON.parse(readFileSync(manifestPath,'utf8'));
   assert.ok(manifest.files.every((f:any)=>['CC0-1.0','CC-BY-4.0'].includes(f.licence)&&f.sha256&&f.source&&f.retrieved&&f.changes));
-  assert.ok(manifest.files.filter((f:any)=>f.file.startsWith('music/')).every((f:any)=>f.status==='pending-owner-approval'));
+  assert.ok(manifest.files.filter((f:any)=>f.file.startsWith('music/')).every((f:any)=>f.status==='owner-approved-2026-10-27'));
   manifest.files.find((f:any)=>f.file==='sfx/miss.m4a').licence='CC-BY-NC-4.0';writeFileSync(manifestPath,JSON.stringify(manifest));
   fails(/Audio licence not allowed: assets\/audio\/sfx\/miss.m4a \(CC-BY-NC-4.0\)/);
  }finally{rmSync(folder,{recursive:true,force:true});}
