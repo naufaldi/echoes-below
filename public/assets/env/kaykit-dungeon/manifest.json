@@ -1,0 +1,220 @@
+{
+ "kit": "kaykit-dungeon",
+ "title": "KayKit : Dungeon Remastered (1.0)",
+ "author": "Kay Lousberg (www.kaylousberg.com)",
+ "storePage": "https://kaylousberg.itch.io/kaykit-dungeon-remastered",
+ "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/tree/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07",
+ "licence": "CC0-1.0",
+ "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+ "licenceEvidence": "LICENSE.txt and addons/kaykit_dungeon_remastered/Assets/LICENSE.txt at commit b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07 are identical and read \"License: (Creative Commons Zero, CC0)\". Crediting Kay Lousberg is requested but not mandatory.",
+ "notes": "Starter set from #46: generic walls, floors, a doorway, stairs and a few props shared by Chapters II-VI. Every GLB embeds the same 15 KB dungeon_texture.png atlas.",
+ "files": [
+  {
+   "file": "banner_thin_brown.glb",
+   "sha256": "b3706a8606ae595cfce78a85923251a998e3262f340c2c666e7b20e38e68e4fe",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/banner_thin_brown.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from banner_thin_brown.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "barrel_large.glb",
+   "sha256": "9fae6a79056241baf253fe9272dc7a7ddb174e1caf153eb5013c58a596722148",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/barrel_large.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from barrel_large.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "box_large.glb",
+   "sha256": "6dacda267f04769f8ebbb7e991885785054923ea3d5eb19e833768a911d5b661",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/box_large.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from box_large.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "candle_lit.glb",
+   "sha256": "a884f27540b8b91e3d47914453cbf2c4d48f4ca8504ace9960a8d9b4e79a6c48",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/candle_lit.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from candle_lit.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "column.glb",
+   "sha256": "761adf0fcc1a86ab1c42740b7a8ad340d73982f94257e7892b2c7998f98c304e",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/column.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from column.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "crates_stacked.glb",
+   "sha256": "43182b077ead9b033804300ef453b7402bdc979f00cfce2d7f0c91dcf6bb5d3c",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/crates_stacked.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from crates_stacked.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "floor_dirt_large.glb",
+   "sha256": "48cc8018237fbdca3f7fccef95c93ef32e877d8fc59f481b9369fed71fec895b",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/floor_dirt_large.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from floor_dirt_large.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "floor_tile_large.glb",
+   "sha256": "5b6bbbc683f6729d094732056f157a928435de97ec3cf94c341c7465907fe17b",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/floor_tile_large.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from floor_tile_large.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "floor_tile_small.glb",
+   "sha256": "645f02c82d1fa15e3e1daa7892b70c8a9d44f44d0e520d76ae6afd08633c5b34",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/floor_tile_small.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from floor_tile_small.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "floor_tile_small_broken_A.glb",
+   "sha256": "d1acc3407f941623b3b01ec9a1751c36a5ca82bb14721fc8f28e5559317edad4",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/floor_tile_small_broken_A.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from floor_tile_small_broken_A.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "pillar.glb",
+   "sha256": "e31da496461921475384c62ce761cd23924892bd6f32aeea68bd913545caee33",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/pillar.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from pillar.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "rubble_large.glb",
+   "sha256": "0292da1b5788a5a52b616d5d27d3270c676a5fbf9e921b6dd3dc30364d355b54",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/rubble_large.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from rubble_large.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "shelves.glb",
+   "sha256": "8df148ae0f4909512295302491f2b40dc3ae84d072f2cacdfd929c7848d7062e",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/shelves.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from shelves.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "stairs.glb",
+   "sha256": "5ba16e5d919aaa8958435c4b73c1f8a94c98febeacf716faa1359f24e6b27d70",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/stairs.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from stairs.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "table_medium.glb",
+   "sha256": "9686a202ea2f825062dfab02d89cded25d7acc07847b88c1e39f0e09e085872a",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/table_medium.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from table_medium.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "torch_mounted.glb",
+   "sha256": "a617c159e02932db48ca81ec46f1f100acc8904fb6ece43e919d2f93c13950e9",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/torch_mounted.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from torch_mounted.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "wall.glb",
+   "sha256": "f2f343a7bdf2d45947e3f354494e16095a923485e05637e3804e3b81ce11d921",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/wall.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from wall.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "wall_arched.glb",
+   "sha256": "916a7d81b8d6ebddb069440a0f9ecb14c9c2a1e5cd7769acf2218d630bd56cb8",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/wall_arched.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from wall_arched.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "wall_broken.glb",
+   "sha256": "ee7598ef2b88aaeb7b61e46d5f1da1a059de3860b080b38b7a507ca2f461302c",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/wall_broken.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from wall_broken.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "wall_corner.glb",
+   "sha256": "3c8cbcbf3abf78c9dc49f440b152340ef681fee9cccf9ca6ed27b6670a34eb81",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/wall_corner.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from wall_corner.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "wall_doorway.glb",
+   "sha256": "2be5369a2d1d1d8795150b2156d8343b3e37620d78de256cb03276c54ea70c97",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/wall_doorway.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "None; bytes unchanged."
+  },
+  {
+   "file": "wall_gated.glb",
+   "sha256": "68e766c2b4eb05c4bf2c0fcd908ea5dc5192dda56cfdd5d56b7cbf446063220c",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/wall_gated.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from wall_gated.gltf.glb; bytes unchanged."
+  },
+  {
+   "file": "wall_half.glb",
+   "sha256": "9e65c438f55d96cbcd554489bf2dec236feb575a8192c709d3bf6886599339a8",
+   "source": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/blob/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/wall_half.gltf.glb",
+   "author": "Kay Lousberg",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Renamed from wall_half.gltf.glb; bytes unchanged."
+  }
+ ]
+}

@@ -1,29 +1,11 @@
-import {useEffect,useMemo,useRef} from 'react';
+import {useEffect,useMemo} from 'react';
 import {useFrame} from '@react-three/fiber';
 import * as THREE from 'three';
-import {Prop} from './DungeonDressing';
+import {Prop,Instances,Flame,WallTorch,chain,mat,decal,geo,noRaycast,rand,smooth,type Part} from './rooms/kit';
 
 // Each Chapter I room owns its layout. Server anchors map to world (x,0,-y); the curated
 // tactical footprint is ±5.4 (nine 1.2 m cells), so solid shells stay outside it and floors
 // stay at or below y=0. The camera sits in +x/+z, so that side stays low.
-type Part=[number,number,number,number,number,number,number?,number?,number?];// x,y,z,sx,sy,sz,ry,rx,rz
-const smooth=THREE.MathUtils.smoothstep,rand=(i:number)=>{const v=Math.sin(i*12.9898)*43758.5453;return v-Math.floor(v);};
-const materials=new Map<string,THREE.Material>();
-function mat(color:string,roughness=.95,metalness=0,flat=false){const key=[color,roughness,metalness,flat].join();let m=materials.get(key);if(!m){m=new THREE.MeshStandardMaterial({color,roughness,metalness,flatShading:flat});materials.set(key,m);}return m;}
-function decal(color:string,opacity=1){const key='decal'+color+opacity;let m=materials.get(key);if(!m){m=new THREE.MeshBasicMaterial({color,transparent:opacity<1,opacity,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});materials.set(key,m);}return m;}
-const geo={box:new THREE.BoxGeometry(1,1,1),rock:new THREE.DodecahedronGeometry(1,0),cyl:new THREE.CylinderGeometry(1,1,1,8),cone:new THREE.ConeGeometry(1,1,7),tent:new THREE.ConeGeometry(1,1,4),link:new THREE.TorusGeometry(.16,.045,5,10),disc:new THREE.CircleGeometry(1,16).rotateX(-Math.PI/2),bell:new THREE.CylinderGeometry(.55,.95,1.3,12,1,true),flame:new THREE.ConeGeometry(.2,.55,5)};
-const noRaycast=()=>{};
-
-/** One draw call per list: walls, rocks, slabs and chain links are instanced, not separate meshes. */
-function Instances({parts,geometry=geo.box,color,jitter=.12,roughness=.95,metalness=0,flat=false,shadow=true,material}:{parts:Part[];geometry?:THREE.BufferGeometry;color:string;jitter?:number;roughness?:number;metalness?:number;flat?:boolean;shadow?:boolean;material?:THREE.Material}){
- const mesh=useMemo(()=>{const m=new THREE.InstancedMesh(geometry,material??mat('#ffffff',roughness,metalness,flat),parts.length);const o=new THREE.Object3D(),c=new THREE.Color();
-  parts.forEach(([x,y,z,sx,sy,sz,ry=0,rx=0,rz=0],i)=>{o.position.set(x,y,z);o.rotation.set(rx,ry,rz);o.scale.set(sx,sy,sz);o.updateMatrix();m.setMatrixAt(i,o.matrix);if(!material)m.setColorAt(i,c.set(color).multiplyScalar(1-jitter/2+rand(i+x*3.1+z*7.7)*jitter));});
-  m.castShadow=shadow;m.receiveShadow=true;m.computeBoundingSphere();if(!shadow)m.raycast=noRaycast;return m;},[parts,geometry,color,jitter,roughness,metalness,flat,shadow,material]);
- useEffect(()=>()=>{mesh.dispose();},[mesh]);return <primitive object={mesh}/>;
-}
-function chain(x:number,z:number,from:number,to:number):Part[]{return Array.from({length:Math.floor((to-from)/.3)},(_,i)=>[x,from+i*.3,z,1,1,1,i%2?Math.PI/2:0]);}
-function Flame({position,size=1,reduced}:{position:[number,number,number];size?:number;reduced:boolean}){const fire=useRef<THREE.Mesh>(null);useFrame(({clock})=>{if(fire.current&&!reduced)fire.current.scale.set(size*(1+Math.sin(clock.elapsedTime*7+position[0])*.13),size*(1+Math.sin(clock.elapsedTime*11+position[2])*.15),size);});return <mesh ref={fire} position={position} scale={size} geometry={geo.flame} raycast={noRaycast}><meshBasicMaterial color="#ffc070"/></mesh>;}
-function WallTorch({position,reduced,color='#ffb46b'}:{position:[number,number,number];reduced:boolean;color?:string}){return <><Prop file="Torch_Gq38E7hFZw.glb" position={position} height={1.3}/><Flame position={[position[0],position[1]+1.45,position[2]]} size={.6} reduced={reduced}/><pointLight position={[position[0],position[1]+1.9,position[2]]} color={color} intensity={10} distance={8} decay={2}/></>;}
 function Chest(){return <Prop file="Chest_O72u4Drp8k.glb" position={[4.6,0,.7]} height={.8}/>;}
 
 // ── Broken Approach: an exterior hillside in rain ──

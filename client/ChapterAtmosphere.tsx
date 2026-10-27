@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {useMemo} from 'react';
-type Mood={kind:string;background:string;ambient:string;sun:string;floor:string;fog:[number,number]};
+export type Mood={kind:string;background:string;ambient:string;sun:string;floor:string;fog:[number,number]};
 const CHAPTER_ONE=['approach','hall','cookfire','prison','bell','aftermath'];
 /** Chapter I rooms each own a layout (ChapterOneRooms); later chapters still share the dungeon shell. */
 export const chapterOneRoom=(scene:string)=>CHAPTER_ONE.includes(scene);

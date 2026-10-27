@@ -37,6 +37,25 @@ for(const entry of audioEntries.values()){
 }
 if(audioManifest)verifyCopy(resolve(source,'assets/audio/manifest.json'));
 if(audioBytes>AUDIO_BUDGET)throw Error(`Audio exceeds the ${AUDIO_BUDGET/1024/1024} MB budget: ${(audioBytes/1024/1024).toFixed(1)} MB`);
+// Environment kit gate (#46): every file under assets/env/<kit>/ is listed in that kit's manifest.json with a matching hash and a CC0 licence, and env/ stays within one shared budget.
+// Listing, licence, hash and budget run on the built copy before byte comparison, so each failure names its own reason.
+const ENV_LICENCES=new Set(['CC0-1.0']),ENV_FIELDS=['file','sha256','source','author','licence','retrieved','changes'],ENV_BUDGET=20*1024*1024,envRoot=resolve(built,'assets/env');
+const envFiles=existsSync(envRoot)?files(envRoot).map(p=>relative(envRoot,p).split(sep).join('/')):[],envKits=new Map();let envBytes=0;
+for(const name of envFiles){
+ const [kit,...rest]=name.split('/');if(!rest.length)throw Error(`Environment file outside a kit folder: assets/env/${name}`);
+ if(!envKits.has(kit)){const path=resolve(envRoot,kit,'manifest.json');if(!existsSync(path))throw Error(`Environment kit ships without a manifest: assets/env/${kit}/manifest.json`);envKits.set(kit,new Map((JSON.parse(readFileSync(path,'utf8')).files??[]).map(entry=>[entry.file,entry])));}
+ envBytes+=statSync(resolve(envRoot,name)).size;const file=rest.join('/');
+ if(file!=='manifest.json'&&!envKits.get(kit).has(file))throw Error(`Environment file has no manifest entry: assets/env/${name}`);
+}
+for(const [kit,entries] of envKits)for(const entry of entries.values()){
+ const missing=ENV_FIELDS.find(field=>typeof entry[field]!=='string'||!entry[field].trim());if(missing)throw Error(`Environment manifest entry lacks ${missing}: assets/env/${kit}/${entry.file}`);
+ if(!ENV_LICENCES.has(entry.licence))throw Error(`Environment licence not allowed: assets/env/${kit}/${entry.file} (${entry.licence})`);
+ const path=resolve(envRoot,kit,entry.file);if(!path.startsWith(resolve(envRoot,kit)+sep))throw Error(`Environment manifest entry escapes its kit: ${kit}/${entry.file}`);
+ if(!existsSync(path))throw Error(`Environment manifest entry has no file: assets/env/${kit}/${entry.file}`);
+ if(digest(readFileSync(path))!==entry.sha256)throw Error(`Environment hash differs from manifest: assets/env/${kit}/${entry.file}`);
+}
+if(envBytes>ENV_BUDGET)throw Error(`Environment assets exceed the ${ENV_BUDGET/1024/1024} MB budget: ${(envBytes/1024/1024).toFixed(1)} MB`);
+for(const [kit,entries] of envKits){for(const entry of entries.values())verifyCopy(resolve(source,'assets/env',kit,entry.file));verifyCopy(resolve(source,'assets/env',kit,'manifest.json'));}
 const models=files(resolve(source,'assets')).filter(p=>['.glb','.gltf'].includes(extname(p)));
 const report=[];
 for(const model of models){
@@ -52,12 +71,13 @@ for(const model of models){
  report.push({path:relative(source,model),bytes:bytes.length,sha256:digest(bytes),meshes:document.meshes?.length??0,skins:document.skins?.length??0,animations:document.animations?.length??0,images:document.images?.length??0});
 }
 // Verify literal model references too: scanning existing files alone cannot catch a typo in rendering code.
-for(const name of ['shared/visual-identity.ts','client/DungeonDressing.tsx','client/ChapterOneRooms.tsx']){
+// Chapter room files (client/rooms/) must name env models as full '/assets/env/<kit>/<file>' literals so this scan can follow them.
+for(const name of ['shared/visual-identity.ts','client/DungeonDressing.tsx','client/ChapterOneRooms.tsx',...readdirSync(resolve(root,'client/rooms')).filter(f=>/\.tsx?$/.test(f)).map(f=>'client/rooms/'+f)]){
  const text=readFileSync(resolve(root,name),'utf8');
  for(const match of text.matchAll(/['"]([^'"\n]+\.(?:glb|gltf))['"]/g)){
   const path=match[1];verifyCopy(resolve(source,path.startsWith('/assets/')?path.slice(1):'assets/expansion/'+path));
  }
 }
 mkdirSync(resolve(root,'data'),{recursive:true});
-writeFileSync(resolve(root,'data/asset-bundle-verification.json'),JSON.stringify({scope:'Bundled bytes, model references and glTF dependencies; not visual pose or shader acceptance',models:report,audio:{files:audioEntries.size,bytes:audioBytes},verifiedFiles:verified.size},null,2)+'\n');
-console.log(`Verified ${models.length} models, ${audioEntries.size} licensed audio files (${(audioBytes/1024/1024).toFixed(1)} MB) and ${verified.size} bundled files, including external glTF dependencies.`);
+writeFileSync(resolve(root,'data/asset-bundle-verification.json'),JSON.stringify({scope:'Bundled bytes, model references and glTF dependencies; not visual pose or shader acceptance',models:report,audio:{files:audioEntries.size,bytes:audioBytes},environment:{kits:[...envKits.keys()],files:[...envKits.values()].reduce((n,e)=>n+e.size,0),bytes:envBytes},verifiedFiles:verified.size},null,2)+'\n');
+console.log(`Verified ${models.length} models, ${audioEntries.size} licensed audio files (${(audioBytes/1024/1024).toFixed(1)} MB), ${[...envKits.values()].reduce((n,e)=>n+e.size,0)} CC0 environment files (${(envBytes/1024/1024).toFixed(1)} MB) and ${verified.size} bundled files, including external glTF dependencies.`);
