@@ -11,6 +11,7 @@ import {WorldLabel,WorldLabelProvider,WorldLabelSilhouette} from './WorldLabels'
 import IsolatedAsset from './IsolatedAsset';
 import {characterAsset,actorHeight,actorDisplayName} from '../shared/visual-identity';
 import DungeonDressing from './DungeonDressing';
+import WorldDie,{type WorldRoll} from './WorldDie';
 import {useEffect,useMemo,useRef,useState,type ElementRef} from 'react';
 import {Canvas,useFrame,useThree} from '@react-three/fiber';
 import {OrbitControls,useGLTF,useAnimations,ContactShadows} from '@react-three/drei';
@@ -70,7 +71,7 @@ function Marker({entity,selected,onSelect}:{entity:Entity,selected:boolean,onSel
  <WorldLabel id={'entity:'+entity.id} text={entity.name} priority={selected?100:20} position={[0,(entity.elevation??0)+(entity.kind==='npc'?2.2:entity.kind==='camp'?1.9:1.1),0]} onSelect={onSelect}/>
  </group>;}
 const demoActor=(id:string,classId:Actor['classId'],position:[number,number]):Actor=>({id,name:id==='hero'?'Your character':id==='mira'?'Mira':id==='oren'?'Oren':'Goblin guard',classId,backgroundId:'delver',appearanceId:'ember',side:'party',hp:24,maxHp:24,defense:14,focus:2,maxFocus:2,potions:2,rations:1,attributes:{might:3,agility:1,insight:0,presence:1},position,guard:false,aim:false});
-function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroAppearance,companions,focus,onFrameTime}:{onAction?:(a:ActionOption)=>void;save:PublicSave|null,selected:string,onSelect:(id:string)=>void,reduced:boolean,heroClass:Actor['classId'],heroRace:Actor['raceId'],heroAppearance:string,companions:{mira:CompanionSetup;oren:CompanionSetup},focus:Speaker|null,onFrameTime:(ms:number)=>void}){
+function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroAppearance,companions,focus,onFrameTime,roll}:{onAction?:(a:ActionOption)=>void;save:PublicSave|null,selected:string,onSelect:(id:string)=>void,reduced:boolean,heroClass:Actor['classId'],heroRace:Actor['raceId'],heroAppearance:string,companions:{mira:CompanionSetup;oren:CompanionSetup},focus:Speaker|null,onFrameTime:(ms:number)=>void,roll?:WorldRoll|null}){
  const frameSamples=useRef<number[]>([]);useFrame((_,delta)=>{if(document.hidden||delta>.5)return;frameSamples.current.push(delta*1000);if(frameSamples.current.length>=180){const sorted=frameSamples.current.slice().sort((a,b)=>a-b);onFrameTime(sorted[Math.floor(sorted.length*.95)]);frameSamples.current=[];}});
  const {camera}=useThree();const orbit=useRef<ElementRef<typeof OrbitControls>>(null);const cameraMotion=useRef(false);const cameraTarget=useRef(new THREE.Vector3(9,12,15));useEffect(()=>{cameraTarget.current.copy(!save?new THREE.Vector3(5,5,8):focus?new THREE.Vector3(6,7,10):new THREE.Vector3(9,12,15));cameraMotion.current=true;},[focus,save?.scene.id]);useFrame((_,delta)=>{if(!cameraMotion.current)return;if(reduced)camera.position.copy(cameraTarget.current);else camera.position.lerp(cameraTarget.current,Math.min(1,delta*3));orbit.current?.update();if(camera.position.distanceTo(cameraTarget.current)<.05)cameraMotion.current=false;});
  const party=save?.party??[{...demoActor('hero',heroClass,[0,1]),raceId:heroRace,appearanceId:heroAppearance},{...demoActor('mira',companions.mira.classId,[-2,2]),...companions.mira},{...demoActor('oren',companions.oren.classId,[2,2]),...companions.oren}];
@@ -90,8 +91,9 @@ function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroA
  {save?.enemies.map(a=><Character key={(save?.scene.id??'creation')+a.id} actor={{...a,name:actorDisplayName(a,save?.enemies??[])}} attackId={latestAnimation(save?.logs??[],a)?.id} attackCue={latestAnimation(save?.logs??[],a)?.cue} selected={a.id===selected||save?.turn?.actorId===a.id} onSelect={()=>onSelect(a.id)} reduced={reduced}/>)}
 
  {save?.mode!=='combat'&&save?.scene.entities.map(e=><Marker key={save.scene.id+e.id} entity={e} selected={e.id===selected} onSelect={()=>onSelect(e.id)}/>)}
+ {save&&roll&&<WorldDie key={roll.key} roll={roll} save={save} reduced={reduced}/>}
  <ContactShadows opacity={.3} scale={20} blur={2} far={5} resolution={256} color="#050d0b"/>
  <OrbitControls ref={orbit} onStart={()=>{cameraMotion.current=false;}} makeDefault target={save?[0,.4,-.5]:[0,1,-1]} enablePan={false} minDistance={save?12:7} maxDistance={25} minPolarAngle={.45} maxPolarAngle={1.15} enableDamping={!reduced} maxAzimuthAngle={Math.PI*.6} minAzimuthAngle={-Math.PI*.6}/>
  </>;
 }
-export default function World(props:{onAction?:(a:ActionOption)=>void;save:PublicSave|null,selected:string,onSelect:(id:string)=>void,reduced:boolean,heroClass:Actor['classId'],heroRace:Actor['raceId'],heroAppearance:string,companions:{mira:CompanionSetup;oren:CompanionSetup},focus:Speaker|null,onFrameTime:(ms:number)=>void}){return <Canvas shadows dpr={[1,1.5]} camera={{position:[9,12,15],fov:43}} gl={{antialias:true}}><WorldLabelProvider><Scene {...props}/></WorldLabelProvider></Canvas>;}
+export default function World(props:{onAction?:(a:ActionOption)=>void;save:PublicSave|null,selected:string,onSelect:(id:string)=>void,reduced:boolean,heroClass:Actor['classId'],heroRace:Actor['raceId'],heroAppearance:string,companions:{mira:CompanionSetup;oren:CompanionSetup},focus:Speaker|null,onFrameTime:(ms:number)=>void,roll?:WorldRoll|null}){return <Canvas shadows dpr={[1,1.5]} camera={{position:[9,12,15],fov:43}} gl={{antialias:true}}><WorldLabelProvider><Scene {...props}/></WorldLabelProvider></Canvas>;}
