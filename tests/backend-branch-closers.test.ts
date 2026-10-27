@@ -30,6 +30,18 @@ test('resting stays quiet when a ration would remain for Scrit or Scrit is alrea
  const long=tactical();long.party[0].rations=4;quiet(long,'camp:long');
  const after=at(tactical(),'aftermath');quiet(after,'camp:long');
 });
+test('after resting has spent the rations, later actions do not repeat a closure that already happened',()=>{
+ let e=applyAction(applyAction(applyAction(echo(),'rest',win),'enter',win),'ledge',win);e.flags.tracks=true;
+ for(const id of ['fight','persuade','distract'])quiet(e,id);
+ let t=at(applyAction(tactical(),'camp:long',win),'cookfire');t.flags.tracks=true;
+ quiet(t,'fight');quiet(t,'distract');t=applyAction(t,'persuade',win);quiet(t,'prison');assert.ok(!action(t,'prison')!.dangerous);
+});
+test('prison: forcing the gate names the alarm it makes permanent, once',()=>{
+ for(const make of [echo,tactical]){
+  const s=at(make(),'prison');warns(s,'force',/Closes: a quiet approach to Vark.*extra sentry/);
+  s.flags.alarm=true;assert.doesNotMatch(action(s,'force')!.description,/closes:/i);
+ }
+});
 test('Echo cookfire: force, persuasion and distraction all warn that Scrit cannot be fed afterwards',()=>{
  const s=at(echo(),'cookfire');s.flags.tracks=true;
  for(const id of ['fight','persuade','distract'])warns(s,id,/[Cc]loses: .*ration to Scrit.*seal negotiation with Vark/);
@@ -65,6 +77,7 @@ test('bell: fighting or using the maintenance entrance warns only while negotiat
 test('aftermath: securing the seal warns when Scrit could guard it, without naming endings',()=>{
  for(const make of [echo,tactical]){
   const fed=at(make(),'aftermath');fed.flags.fed=true;warns(fed,'secure',/Closes: .*Scrit/);assert.doesNotMatch(action(fed,'secure')!.description,/Promise|Keepers/);
+  warns(fed,'entrust',/Closes: keeping the seal with your party/);assert.doesNotMatch(action(fed,'entrust')!.description,/Promise|Keepers/);
   const done=applyAction(fed,'secure',win);assert.ok(!has(done,'entrust'));
   quiet(at(make(),'aftermath'),'secure');
  }

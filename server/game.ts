@@ -435,7 +435,7 @@ function attempted(s: Save, key: string) {
 const listed=(items:string[])=>items.length>1?`${items.slice(0,-1).join(', ')} and ${items.at(-1)}`:items[0]??'';
 export function closes(text:string,lost:string[],when=''){return lost.length?`${text} ${when?`${when} closes`:'Closes'}: ${lost.join('; ')}.`:text;}
 // Echo Rules learns about the seal only from Scrit's meal; Curated tactics can also learn it from Scrit's or the courier's account.
-export function scritLoss(s:Save){return s.flags.fed?[]:[listed(['the ration to Scrit','his offer to guard the seal',...(s.tactical?[]:['the seal negotiation with Vark'])])];}
+export function scritLoss(s:Save){return s.flags.fed||!s.party.some(a=>a.rations>0)?[]:[listed(['the ration to Scrit','his offer to guard the seal',...(s.tactical?[]:['the seal negotiation with Vark'])])];}
 export function rationLoss(s:Save,cost:number){return ['approach','hall','cookfire'].includes(s.sceneId)&&s.party.reduce((n,a)=>n+a.rations,0)-cost<1?scritLoss(s):[];}
 const ROOM_ENCOUNTER_XP=100;
 // Keep a broad triangle within the authored approach area. Tactical cells are
@@ -787,17 +787,18 @@ function baseActions(s: Save): ActionOption[] {
           );
       }
       if (f.passage) {
+        const leaving = s.tactical && canSpeakToScrit(s) ? scritLoss(s) : [];
         a.push(
           opt(
             "prison",
             "Continue to the prison",
-            closes("Follow the passage beyond the cookfire.", s.tactical && canSpeakToScrit(s) ? scritLoss(s) : []),
+            closes("Follow the passage beyond the cookfire.", leaving),
             "move",
             "passage",
             undefined,
             undefined,
             undefined,
-            !!s.tactical && canSpeakToScrit(s) && !f.fed,
+            leaving.length > 0,
           ),
         );
         break;
@@ -873,7 +874,7 @@ function baseActions(s: Save): ActionOption[] {
           opt(
             "force",
             "Break open the gate",
-            "Free the courier without a roll. One tick; noise raises alarm.",
+            closes("Free the courier without a roll. One tick; noise raises alarm.", f.alarm ? [] : ["a quiet approach to Vark (an extra sentry joins him, and the alarm can no longer be called off)"]),
             "force",
             "gate",
             undefined,
@@ -973,9 +974,13 @@ function baseActions(s: Save): ActionOption[] {
           opt(
             "entrust",
             "Entrust Scrit with its guard",
-            "Let Scrit guard the seal while you investigate the deeper door. Finish the adventure.",
+            closes("Let Scrit guard the seal while you investigate the deeper door. Finish the adventure.", ["keeping the seal with your party"]),
             "interact",
             "seal",
+            undefined,
+            undefined,
+            undefined,
+            true,
           ),
         );
       break;
