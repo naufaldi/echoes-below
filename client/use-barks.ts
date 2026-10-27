@@ -7,6 +7,8 @@ import {barkBeats} from './bark-beats.js';
  * Companion barks for one committed turn (`before` → `after`), for the story box to show at each playback step
  * (`step: null` once playback ends). Rate-limit state carries across turns and resets when another save is loaded.
  * Selection reads the state committed by the previous turn, so a repeated render picks the same lines.
+ * Call it for every committed transition (the save before the action, the adopted save after it), not only turns with
+ * playback: entering a fork room records no frame. The in-between saves TurnPlayback shows through `onFrame` are not turns.
  */
 export function useBarks(before:PublicSave|null,after:PublicSave|null):BarkEvent[]{
  const committed=useRef<{saveId:string|null;state:BarkState}>({saveId:null,state:INITIAL_BARK_STATE});

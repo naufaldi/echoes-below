@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {BARKS,COOLDOWN_BEATS,FORK_ROOMS,INITIAL_BARK_STATE,selectBarks,type BarkBeat,type BarkMember,type BarkMoment,type Companion,type Trust} from '../shared/companion-barks.js';
 import {ROOM_FORKS} from '../server/playstyle.js';
 import {createSave,applyAction,legalActions,publicSave} from '../server/game.js';
+import {CURATED_RULES_VERSION} from '../shared/curated-rules.js';
 import {barkBeats} from '../client/bark-beats.js';
 import {playbackSteps} from '../client/playback-steps.js';
 
@@ -91,6 +92,16 @@ test('a real Echo fight becomes one beat per playback step, and the winning step
  }
  assert.equal(s.mode,'explore');assert.ok(won.at(-1)?.won,'the last step of the winning turn');
  assert.equal(selectBarks(won,{...INITIAL_BARK_STATE,beat:1,lastBarkBeat:0},s.relationships).barks.at(-1)?.moment,'victory','even inside the cooldown');
+});
+test('a Curated fight won keeps its fallen enemies, so the winning step carries the fight won',()=>{
+ let s=createSave({name:'Ash',classId:'adept',backgroundId:'delver',appearanceId:'ember',rulesVersion:CURATED_RULES_VERSION});for(const id of ['enter','ledge','fight'])s=applyAction(s,id,n=>n);
+ let won:BarkBeat[]=[];
+ for(let i=0;i<60&&s.mode==='combat';i++){
+  const options=legalActions(s),action=options.find(a=>a.id==='tactical:auto')??options.find(a=>a.kind==='attack')??options.find(a=>a.id==='tactical:end')!,ours=s.party.some(a=>a.id===s.turn!.actorId);
+  const before=publicSave(s);s=applyAction(s,action.id,n=>ours?n:1);const after=publicSave(s),beats=barkBeats(before,after);if(beats.some(b=>b.won))won=beats;
+  if(after.mode==='explore'){assert.ok(after.enemies.length>0);assert.ok(after.enemies.every(e=>e.hp===0));}
+ }
+ assert.equal(s.mode,'explore');assert.ok(won.at(-1)?.won);assert.equal(won.filter(b=>b.won).length,1);
 });
 test('entering a fork room records no frame, so the arrival is a settled beat with its own bark',()=>{
  let s=createSave({name:'Ash',classId:'guardian',backgroundId:'delver',appearanceId:'moon'});s.sceneId='aftermath';s.mode='complete';

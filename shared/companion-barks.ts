@@ -3,7 +3,7 @@ import type {OutcomeCheck} from './types.js';
 /**
  * Issue #67: short authored companion reactions. Client presentation only: barks read committed outcomes and never
  * change them, never roll and never call AI. Every line is ≤ 90 characters, holds no numbers and speaks to whoever the
- * moment is about ("you" is the hero or the other companion).
+ * moment is about ("you" is the hero or the other companion). Natural-roll lines fit an attack, a check or a save alike.
  */
 export type Companion = 'mira'|'oren';
 export type BarkMoment = 'fork'|'victory'|'down'|'natural20'|'natural1'|'heal';
@@ -19,15 +19,15 @@ const BYPASS:ReadonlySet<BarkMoment>=new Set(['fork','victory']);
 export const BARKS:Record<Companion,Record<BarkMoment,readonly string[]>>={
  mira:{
   natural20:['Clean. I’d have told you to do it that way, if you’d asked.','Well. Someone’s been practising when I wasn’t looking.','Remember that one. You’ll want to tell it later.'],
-  natural1:['I’ll pretend I didn’t see that. Mostly.','Bad luck or bad footing. Either way, step back.','That went somewhere. Not where you meant it to.'],
+  natural1:['I’ll pretend I didn’t see that. Mostly.','Not your finest moment. We’ll live.','Well. That could have gone worse. Not much worse.'],
   down:['Get up. I’m not mapping the rest of this alone.','Someone cover that gap before they notice it.','Hold on. I’ll make them pay for that.'],
   heal:['Better. Try not to spend it all at once.','There’s colour back in your face. Good.','Patched. Not pretty, but it’ll hold.'],
   fork:['Something here has been waiting for us. Look before you speak.','Our road caught up with us here. Watch what they expect of you.','Quiet. Whatever we did up above, this place remembers it.'],
   victory:['Done. Anyone bleeding, speak up before we move.','Quiet again. I was starting to miss it.','Nobody’s chasing us. Let’s keep it that way.'],
  },
  oren:{
-  natural20:['That is how it’s done. Steady hands, clear head.','Good. Don’t let it make you careless.','A strike like that ends fights. Well done.'],
-  natural1:['Breathe. Reset your feet. Go again.','It happens to all of us. Stay behind me a moment.','Nothing that can’t be mended. Keep your guard up.'],
+  natural20:['That is how it’s done. Steady hands, clear head.','Good. Don’t let it make you careless.','Exactly right. Remember how that felt.'],
+  natural1:['Breathe. One bad moment doesn’t make the day.','It happens to all of us. Stay behind me a moment.','Nothing that can’t be mended. Keep your guard up.'],
   down:['I see you. Stay still, I’m coming.','Hold on. Nobody gets left on this floor.','Keep breathing. I’ll stand over you until it’s done.'],
   heal:['There. Slow breaths. You’re still with us.','Take a moment. I’ll watch the front.','Good. Lean on me if you need to.'],
   fork:['Slow down. What we did before matters in this room.','Stay close. The choices we made above are waiting here.','Careful. This is where the road we chose shows itself.'],
