@@ -1609,7 +1609,9 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
           }
         } else {
           s.ticks += kind === "quick" ? 1 : 2;
-          if (!f.trapSpent) trap(s, leader, dice);
+          // Only an unobserved plate fires on a careful crossing; a marked one is stepped around.
+          if (kind === "cautious" && f.plate && !f.trapSpent) log(s, "You step around the marked pressure plate and cross the hall.");
+          else if (!f.trapSpent) trap(s, leader, dice);
           if(s.party.some(x=>x.hp>0))enterScene(s, "cookfire");
         }
         break;

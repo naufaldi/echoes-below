@@ -1,23 +1,18 @@
 import {revealedScene} from './playback-scene';
-import {createDieGeometry} from './die-geometry';
+import {playFrameCues} from './audio';
+import {playbackSteps} from './playback-steps';
 import {useEffect,useMemo,useRef,useState} from 'react';
-import {Canvas,useFrame} from '@react-three/fiber';
-import {Edges} from '@react-three/drei';
-import type {Mesh} from 'three';
 import type {PublicSave} from '../shared/types';
-
-function Die({rolling,sides}:{rolling:boolean;sides:number}) {
- const mesh=useRef<Mesh>(null);const geometry=useMemo(()=>createDieGeometry(sides),[sides]);useEffect(()=>()=>geometry.dispose(),[geometry]);
- useFrame((_,delta)=>{if(!mesh.current)return;if(rolling){mesh.current.rotation.x+=delta*7;mesh.current.rotation.y+=delta*9;}else {mesh.current.rotation.x*=Math.exp(-delta*9);mesh.current.rotation.y*=Math.exp(-delta*9);}});
- return <mesh ref={mesh} geometry={geometry}><meshStandardMaterial color="#173a34" metalness={.75} roughness={.23}/><Edges color="#efcb7d"/></mesh>;
-}
+import type {WorldRoll} from './WorldDie';
+import {cueFor,type WorldCue} from './combat-cue';
 
 /** Presentation never rolls dice or writes game state. Its frames are committed server outcomes. */
-export function TurnPlayback({before,after,reduced,onFrame,onDone}:{before:PublicSave;after:PublicSave;reduced:boolean;onFrame:(save:PublicSave)=>void;onDone:()=>void}) {
+export function TurnPlayback({before,after,reduced,onFrame,onRoll,onCue,onDone}:{before:PublicSave;after:PublicSave;reduced:boolean;onFrame:(save:PublicSave)=>void;onRoll:(roll:WorldRoll|null)=>void;onCue:(cue:WorldCue|null)=>void;onDone:()=>void}) {
  const panel=useRef<HTMLElement>(null);
- const [index,setIndex]=useState(0),[revealed,setRevealed]=useState(false);
- const frames=after.presentation??[],frame=frames[index],done=useRef(onDone),show=useRef(onFrame);
- done.current=onDone;show.current=onFrame;
+ const [step,setStep]=useState(0),[revealed,setRevealed]=useState(false);
+ const frames=after.presentation??[],steps=useMemo(()=>playbackSteps(frames),[frames]),[index,last]=steps[step]??[frames.length,frames.length],group=frames.slice(index,last+1),frame=frames[index],final=frames[last],done=useRef(onDone),show=useRef(onFrame),rolled=useRef(onRoll),cued=useRef(onCue);
+ done.current=onDone;show.current=onFrame;rolled.current=onRoll;cued.current=onCue;
+ useEffect(()=>()=>{rolled.current(null);cued.current(null);},[]);
  useEffect(()=>{
   if(!frame){done.current();return;}
   setRevealed(false);panel.current?.focus();
@@ -25,18 +20,18 @@ export function TurnPlayback({before,after,reduced,onFrame,onDone}:{before:Publi
   const room=frame.sceneId===before.scene.id?before:after;
   const turn=frame.turn??after.turn??before.turn;
   const visible={...room,activeReaction:frame.log.actionKind==='reaction'?frame.actorId:undefined,mode:frame.mode??room.mode,actions:[],party:previous?.party??before.party,enemies:previous?.enemies.length?previous.enemies:frame.enemies,logs:before.logs,turn:turn?{...turn,actorId:frame.actorId}:null};
-  show.current(visible);
-  const t=setTimeout(()=>{setRevealed(true);show.current({...visible,scene:revealedScene(before,after,frame,index===frames.length-1),tactical:frame.tactical??visible.tactical,party:frame.party,enemies:frame.enemies,logs:[...before.logs,frame.log]});},reduced?100:frame.log.rolls.length?1250:300);
+  show.current(visible);playFrameCues('start',frame,previous??before);
+  const first=group.length===1?frame.log.rolls[0]:undefined,roll=first?{key:frame.log.id,actorId:frame.actorId,sides:first.sides,rolling:true,kept:null}:null;rolled.current(roll);
+  const t=setTimeout(()=>{setRevealed(true);rolled.current(roll&&{...roll,rolling:false,kept:first!.kept});cued.current(group.length===1?cueFor(frame.log.id,frame.actorId,frame.log.animation,frame.log.text,[...visible.party,...(previous?.enemies??before.enemies)],[...frame.party,...frame.enemies]):null);show.current({...visible,scene:revealedScene(before,after,final,last===frames.length-1),tactical:final.tactical??visible.tactical,party:final.party,enemies:final.enemies,turn:turn?{...turn,actorId:group.length>1?(final.turn??after.turn)?.actorId??final.actorId:final.actorId}:null,logs:[...before.logs,...group.map(f=>f.log)]});playFrameCues('reveal',final,previous??before);},reduced?100:frame.log.rolls.length?1250:300);
   return()=>clearTimeout(t);
- },[index,frame,before,after,reduced,frames]);
+ },[index,last,frame,final,before,after,reduced,frames]);
  if(!frame)return null;
- const roll=frame.log.rolls[0],actor=[...frame.party,...frame.enemies].find(a=>a.id===frame.actorId);
- return <section ref={panel} tabIndex={-1} onKeyDown={event=>{if(event.key!=='Tab')return;const buttons=Array.from(panel.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)')??[]);if(!buttons.length)return;const index=buttons.indexOf(document.activeElement as HTMLButtonElement);event.preventDefault();buttons[(index+(event.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}} className={'turn-playback '+(roll?'with-roll':'')} role="dialog" aria-modal="true" aria-label="Action playback">
-  <div className="eyebrow">{actor?.name??'FATE'} · {index+1} / {frames.length}</div>
-  <h2>{roll?`D${roll.sides} · ${roll.purpose}`:'Taking action'}</h2>
-  {roll&&<div className="rolling-die"><Canvas camera={{position:[0,0,5]}}><ambientLight intensity={2}/><directionalLight position={[3,4,5]} intensity={6}/><Die sides={roll.sides} rolling={!revealed&&!reduced}/></Canvas><strong className={revealed?'revealed':''}>{revealed?roll.kept:'?'}</strong></div>}
-  <div className="turn-outcome" aria-live="polite">{revealed?<>{roll&&<div className="roll-equation">{roll.values.length>1?`[${roll.values.join(', ')}] → `:''}{roll.kept} {roll.modifier<0?'−':'+'} {Math.abs(roll.modifier)} <b>= {roll.total}</b></div>}<p>{frame.log.text}</p>{frame.log.rolls.slice(1).map((r,i)=><small key={i}>{r.purpose}: {r.values.join(' + ')} + {r.modifier} = {r.total}</small>)}</>:<p>{roll?'The dice are in motion…':`${actor?.name??'The party'} acts…`}</p>}</div>
-  <button className="primary" autoFocus disabled={!revealed} onClick={()=>index+1<frames.length?setIndex(index+1):done.current()}>{index+1<frames.length?'Next action':'Continue adventure'} →</button>
+ const roll=group.length===1?frame.log.rolls[0]:undefined,actor=[...frame.party,...frame.enemies].find(a=>a.id===frame.actorId),order=group.length>1?group.map(f=>({name:[...f.party,...f.enemies].find(a=>a.id===f.actorId)?.name??f.actorId,roll:f.log.rolls[0]})).sort((a,b)=>b.roll.total-a.roll.total):[];
+ return <section ref={panel} tabIndex={-1} onKeyDown={event=>{if(event.key!=='Tab')return;const buttons=Array.from(panel.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)')??[]);if(!buttons.length)return;const index=buttons.indexOf(document.activeElement as HTMLButtonElement);event.preventDefault();buttons[(index+(event.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}} className={'turn-playback '+(roll?'with-roll':'')} role="dialog" aria-modal="false" aria-label="Action playback">
+  <div className="eyebrow">{order.length?`${order.length} combatants`:actor?.name??'FATE'} · {step+1} / {steps.length}</div>
+  <div className="roll-head">{roll&&<strong className={'roll-badge'+(revealed?' revealed':'')} aria-label={revealed?`Rolled ${roll.kept}`:'Rolling'}>{revealed?roll.kept:'?'}</strong>}<h2>{order.length?'D20 · Initiative':roll?`D${roll.sides} · ${roll.purpose}`:'Taking action'}</h2></div>
+  <div className="turn-outcome" aria-live="polite">{order.length?revealed?<ol className="initiative-order">{order.map((o,i)=><li key={i}><span>{o.name}</span><b>{o.roll.total}</b><small>{o.roll.kept} {o.roll.modifier<0?'−':'+'} {Math.abs(o.roll.modifier)}</small></li>)}</ol>:<p>Everyone rolls for initiative…</p>:revealed?<>{roll&&<div className="roll-equation">{roll.values.length>1?`[${roll.values.join(', ')}] → `:''}{roll.kept} {roll.modifier<0?'−':'+'} {Math.abs(roll.modifier)} <b>= {roll.total}</b></div>}<p>{frame.log.text}</p>{frame.log.rolls.slice(1).map((r,i)=><small key={i}>{r.purpose}: {r.values.join(' + ')} + {r.modifier} = {r.total}</small>)}</>:<p>{roll?'The dice are in motion…':`${actor?.name??'The party'} acts…`}</p>}</div>
+  <button className="primary" autoFocus disabled={!revealed} onClick={()=>step+1<steps.length?setStep(step+1):done.current()}>{step+1<steps.length?'Next action':'Continue adventure'} →</button>
   <button className="skip-playback" onClick={()=>done.current()}>Skip presentation · outcomes are already saved</button>
  </section>;
 }
