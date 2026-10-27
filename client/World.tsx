@@ -5,14 +5,14 @@ import {latestAnimation,animationClip} from '../shared/animation-cues';
 import type {AnimationCue} from '../shared/types';
 import TacticalTerrain from './TacticalTerrain';
 import TacticalOverlay from './TacticalOverlay';
-import ChapterAtmosphere,{chapterMood,chapterOneRoom} from './ChapterAtmosphere';
-import ChapterOneRoom from './ChapterOneRooms';
+import {chapterMood} from './ChapterAtmosphere';
+import {roomFor} from './rooms/registry';
+import {Torch} from './rooms/LegacyShell';
 import CounterweightMechanism from './CounterweightMechanism';
 import {advanceMovement,type Point} from '../shared/movement';
 import {WorldLabel,WorldLabelProvider,WorldLabelSilhouette} from './WorldLabels';
 import IsolatedAsset from './IsolatedAsset';
 import {characterAsset,actorHeight,actorDisplayName} from '../shared/visual-identity';
-import DungeonDressing from './DungeonDressing';
 import WorldDie,{type WorldRoll} from './WorldDie';
 import CombatCues,{type WorldCue} from './CombatCues';
 import SceneFraming from './SceneFraming';
@@ -49,24 +49,6 @@ function CharacterModel({actor,selected,onSelect,reduced,labelMode='actor',attac
   </group>;
 }
 function Character(props:Parameters<typeof CharacterModel>[0]){return <IsolatedAsset url={characterAsset(props.actor)} id={props.actor.id} name={props.actor.name} position={[props.actor.position[0],actorHeight(props.actor)+.2,-props.actor.position[1]]}><CharacterModel {...props}/></IsolatedAsset>;}
-function Tiles({color}:{color:string}){const mesh=useRef<THREE.InstancedMesh>(null);useEffect(()=>{if(!mesh.current)return;let i=0;const dummy=new THREE.Object3D();for(let x=-7;x<=7;x++)for(let z=-7;z<=7;z++){dummy.position.set(x, -.13+Math.sin(x*23+z)*.012,z);dummy.updateMatrix();mesh.current.setMatrixAt(i,dummy.matrix);mesh.current.setColorAt(i,new THREE.Color(color).multiplyScalar(.7+((x*13+z*7+98)%5)*.035));i++;}mesh.current.instanceMatrix.needsUpdate=true;if(mesh.current.instanceColor)mesh.current.instanceColor.needsUpdate=true;},[color]);return <instancedMesh ref={mesh} args={[undefined,undefined,225]} receiveShadow><boxGeometry args={[.96,.22,.96]}/><meshStandardMaterial roughness={.96}/></instancedMesh>;}
-function Torch({position}:{position:[number,number,number]}){const fire=useRef<THREE.Mesh>(null);useFrame(({clock})=>{if(fire.current)fire.current.scale.set(1+Math.sin(clock.elapsedTime*7+position[0])*.13,1+Math.sin(clock.elapsedTime*11)*.15,1);});return <group position={position}><mesh position={[0,.65,0]}><cylinderGeometry args={[.07,.1,1.3,6]}/><meshStandardMaterial color="#58412b"/></mesh><mesh position={[0,1.22,0]}><cylinderGeometry args={[.19,.12,.15,6]}/><meshStandardMaterial color="#34302a"/></mesh><mesh ref={fire} position={[0,1.55,0]}><coneGeometry args={[.14,.48,5]}/><meshBasicMaterial color="#ffd287"/></mesh><pointLight position={[0,1.8,0]} color="#ffc27b" intensity={12} distance={9} decay={2}/></group>;}
-function Architecture({scene,gateOpen=false,reduced=false}:{scene:string,gateOpen?:boolean,reduced?:boolean}){if(chapterOneRoom(scene))return <ChapterOneRoom scene={scene} gateOpen={gateOpen} reduced={reduced}/>;return <group userData={{blocksLabels:true}}><Tiles color={chapterMood(scene).floor}/>
- <mesh position={[0,-.4,0]} receiveShadow><boxGeometry args={[16,.5,16]}/><meshStandardMaterial color="#1e2626" roughness={1}/></mesh>
- {[-6,-3,3,6].map(x=><group key={x} position={[x,0,-6.5]}><mesh position={[0,1.9,0]} castShadow><boxGeometry args={[.8,3.8,.9]}/><meshStandardMaterial color="#646860" roughness={1}/></mesh><mesh position={[0,3.65,0]}><boxGeometry args={[1.1,.3,1.15]}/><meshStandardMaterial color="#7c7d6e"/></mesh><mesh position={[0,.15,0]}><boxGeometry args={[1.1,.3,1.15]}/><meshStandardMaterial color="#555b56"/></mesh></group>)}
- {[-5,-4,-2,-1,1,2,4,5].map(x=><mesh key={x} position={[x,1.25,-6.7]} receiveShadow castShadow><boxGeometry args={[.98,2.5,.55]}/><meshStandardMaterial color={x%2?'#50574f':'#575d56'} roughness={1}/></mesh>)}
- <mesh position={[0,3.7,-6.6]} castShadow><boxGeometry args={[13.5,.55,.9]}/><meshStandardMaterial color="#636a60"/></mesh>
- <mesh position={[0,1.4,-7]}><planeGeometry args={[1.9,2.8]}/><meshBasicMaterial color="#0c1616"/></mesh>
- {[-1,1].map(s=><group key={s}><mesh position={[s*7.3,.7,-1]} receiveShadow><boxGeometry args={[.5,1.4,12]}/><meshStandardMaterial color="#454e48"/></mesh><Torch position={[s*5.5,0,-4.8]}/><Torch position={[s*6,0,3.8]}/></group>)}
- {Array.from({length:14},(_,i)=><mesh key={i} position={[Math.sin(i*45)*6.5,.1,Math.cos(i*15)*6.4]} rotation={[.1,i,.2]} castShadow><dodecahedronGeometry args={[.12+(i%3)*.06,0]}/><meshStandardMaterial color="#686b5d" roughness={1}/></mesh>)}
- </group>;}
-function Crate({position,scale=1}:{position:[number,number,number],scale?:number}){return <group position={position} scale={scale}><mesh position={[0,.45,0]} castShadow receiveShadow><boxGeometry args={[.95,.9,.8]}/><meshStandardMaterial color="#675039" roughness={1}/></mesh>{[-1,1].map(n=><mesh key={n} position={[n*.34,.46,.415]}><boxGeometry args={[.065,.86,.035]}/><meshStandardMaterial color="#a08053"/></mesh>)}<mesh position={[0,.46,.42]} rotation={[0,0,.8]}><boxGeometry args={[.06,1.13,.04]}/><meshStandardMaterial color="#a08053"/></mesh></group>;}
-function SetDressing({scene}:{scene:string}){if(chapterOneRoom(scene))return null;return <group>
- {/* Dressing stays outside movement anchors, so it never invents a blocked path. */}
- <Crate position={[-5.8,0,-5.6]}/><Crate position={[-4.7,0,-5.7]} scale={.8}/><Crate position={[-5.7,.9,-5.6]} scale={.7}/>
- {[4.8,5.6].map((x,i)=><group key={x} position={[x,0,-5.5+i*.4]}><mesh position={[0,.45,0]} castShadow><cylinderGeometry args={[.35,.3,.9,10]}/><meshStandardMaterial color="#786344"/></mesh>{[.18,.7].map(y=><mesh key={y} position={[0,y,0]}><cylinderGeometry args={[.357,.357,.08,10]}/><meshStandardMaterial color="#383d33" metalness={.5}/></mesh>)}</group>)}
- {[-3,3].map(x=><group key={x} position={[x,0,-6.12]}><mesh position={[0,2.5,0]}><boxGeometry args={[.85,1.6,.03]}/><meshStandardMaterial color="#36534a" roughness={1}/></mesh><mesh position={[0,2.5,.025]} rotation={[0,0,Math.PI/4]}><planeGeometry args={[.26,.26]}/><meshStandardMaterial color="#c0a975"/></mesh><mesh position={[0,3.4,0]}><boxGeometry args={[1.08,.055,.06]}/><meshStandardMaterial color="#ae9160" metalness={.5}/></mesh></group>)}
- </group>;}
 function Marker({entity,selected,onSelect}:{entity:Entity,selected:boolean,onSelect:()=>void}){const ring=useRef<THREE.Mesh>(null);useFrame(({clock})=>{if(ring.current)ring.current.rotation.z=clock.elapsedTime*.15;});return <group position={[entity.position[0],0,-entity.position[1]]} onClick={e=>{e.stopPropagation();onSelect();}}>
  {entity.kind==='npc'||entity.id==='index-console'||entity.id.startsWith('infirmary-')||entity.id.startsWith('ink-')?null:entity.kind==='camp'?<><mesh position={[0,.2,0]}><coneGeometry args={[.6,.45,7]}/><meshStandardMaterial color="#735744"/></mesh><Torch position={[0,0,0]}/></>:entity.kind==='trap'?<mesh position={[0,.03,0]}><boxGeometry args={[1.2,.08,1.2]}/><meshStandardMaterial color="#89917a" metalness={.4}/></mesh>:entity.kind==='seal'?<mesh position={[0,.65,0]} rotation={[Math.PI/4,0,Math.PI/4]}><octahedronGeometry args={[.35]}/><meshStandardMaterial color="#87ead3" emissive="#3db499" emissiveIntensity={1.5}/></mesh>:entity.kind==='clue'?<mesh position={[0,.3,0]} castShadow><boxGeometry args={[.75,.6,.55]}/><meshStandardMaterial color="#746047"/></mesh>:entity.kind==='door'||entity.kind==='exit'?<mesh rotation={[-Math.PI/2,0,0]} position={[0,.03,0]}><circleGeometry args={[.5,5]}/><meshBasicMaterial color="#bca26c" transparent opacity={.35}/></mesh>:<mesh position={[0,.5,0]}><cylinderGeometry args={[.22,.3,1,7]}/><meshStandardMaterial color="#6b8067"/></mesh>}
  <mesh ref={ring} rotation={[-Math.PI/2,0,0]} position={[0,.04,0]}><ringGeometry args={[.68,.7,32]}/><meshBasicMaterial color={selected?'#f7d691':'#aca07c'} transparent opacity={selected?1:.35}/></mesh>
@@ -77,12 +59,11 @@ function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroA
  const frameSamples=useRef<number[]>([]);useFrame((_,delta)=>{if(document.hidden||delta>.5)return;frameSamples.current.push(delta*1000);if(frameSamples.current.length>=180){const sorted=frameSamples.current.slice().sort((a,b)=>a-b);onFrameTime(sorted[Math.floor(sorted.length*.95)]);frameSamples.current=[];}});
  const {camera}=useThree();const orbit=useRef<ElementRef<typeof OrbitControls>>(null);const cameraMotion=useRef(false),userMoved=useRef(false);const cameraTarget=useRef(new THREE.Vector3(9,12,15));useEffect(()=>{cameraTarget.current.copy(!save?new THREE.Vector3(5,5,8):focus?new THREE.Vector3(6,7,10):new THREE.Vector3(9,12,15));cameraMotion.current=true;},[focus,save?.scene.id]);useFrame((_,delta)=>{if(!cameraMotion.current)return;if(reduced)camera.position.copy(cameraTarget.current);else camera.position.lerp(cameraTarget.current,Math.min(1,delta*3));orbit.current?.update();if(camera.position.distanceTo(cameraTarget.current)<.05)cameraMotion.current=false;});
  const party=save?.party??[{...demoActor('hero',heroClass,[0,1]),raceId:heroRace,appearanceId:heroAppearance},{...demoActor('mira',companions.mira.classId,[-2,2]),...companions.mira},{...demoActor('oren',companions.oren.classId,[2,2]),...companions.oren}];
- const mood=chapterMood(save?.scene.id??'approach');
- return <><color attach="background" args={[mood.background]}/><fog attach="fog" args={[mood.background,...mood.fog]}/><ambientLight intensity={.65} color={mood.ambient}/><hemisphereLight args={['#b9cec5','#64553b',1.1]}/><directionalLight position={[3,12,5]} intensity={2.5} color={mood.sun} castShadow shadow-mapSize={[1024,1024]} shadow-camera-left={-10} shadow-camera-right={10} shadow-camera-top={10} shadow-camera-bottom={-10}/><Architecture scene={save?.scene.id??'approach'} gateOpen={save?.scene.entities.find(e=>e.id==='gate')?.open} reduced={reduced}/><SetDressing scene={save?.scene.id??'approach'}/>
+ const sceneId=save?.scene.id??'approach',room=roomFor(sceneId),mood={...chapterMood(sceneId),...room.mood?.(sceneId)};
+ return <><color attach="background" args={[mood.background]}/><fog attach="fog" args={[mood.background,...mood.fog]}/><ambientLight intensity={.65} color={mood.ambient}/><hemisphereLight args={['#b9cec5','#64553b',1.1]}/><directionalLight position={[3,12,5]} intensity={2.5} color={mood.sun} castShadow shadow-mapSize={[1024,1024]} shadow-camera-left={-10} shadow-camera-right={10} shadow-camera-top={10} shadow-camera-bottom={-10}/><room.Room scene={sceneId} save={save} reduced={reduced}/>
 
  {save?.tactical&&save.mode==='combat'&&<TacticalTerrain grid={save.tactical.grid}/>}
  {save?.tactical&&save.mode==='combat'&&<TacticalOverlay save={save} onAction={onAction}/>}
- <DungeonDressing scene={save?.scene.id??'approach'}/><ChapterAtmosphere scene={save?.scene.id??'approach'}/>
  {save?.scene.inkGarden&&save.mode!=='combat'&&<InkGarden state={save.scene.inkGarden}/>}
  {save?.scene.infirmary&&save.mode!=='combat'&&<InfirmaryMechanism state={save.scene.infirmary}/>}
  {save?.scene.bellIndex&&save.mode!=='combat'&&<BellIndexConsole state={save.scene.bellIndex}/>}

@@ -46,3 +46,7 @@ test('failed and abandoned planning claims never buy a second provider attempt',
   assert.deepEqual(await planningOnce(store,'abandoned','digest',fail),{});assert.equal(calls,1);
  }finally{db.sql.close();}
 });
+test('hosted Worker does not expose the local scene preview',async()=>{
+ const db=new DB(),a=await client(db);
+ try{await a.request('/api/session');for(const body of [{},undefined]){const r=await a.request('/api/dev/preview/archive-1?rules=curated',body);assert.equal(r.status,404);assert.equal(r.data.error,'NOT_FOUND');}assert.equal(db.sql.prepare('SELECT count(*) AS n FROM saves').get()!.n,0);}finally{db.sql.close();}
+});

@@ -16,6 +16,7 @@ import {
 import { cryptoDice, type Dice } from "./rules.js";
 import { Storage } from "./storage.js";
 import { OpenAIProvider, type AIProvider } from "./ai.js";
+import { registerDevPreview } from "./dev-preview.js";
 import type { Preview, PublicSave } from "../shared/types.js";
 const id = z.string().uuid();
 const actionSchema = z
@@ -357,6 +358,7 @@ export async function buildApp(
     storage.read(query.saveId);
     return storage.usage(query.saveId);
   });
+  registerDevPreview(app, storage);
   app.post("/api/saves/:id/checkpoints/:checkpointId/restore", async (req) => {
     const params = z.object({ id, checkpointId: id }).parse(req.params);
     z.object({})

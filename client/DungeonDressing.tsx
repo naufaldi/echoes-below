@@ -1,15 +1,6 @@
-import IsolatedAsset from './IsolatedAsset';
 import {chapterOneRoom} from './ChapterAtmosphere';
-import {useMemo} from 'react';
-import {useGLTF} from '@react-three/drei';
-import * as THREE from 'three';
+import {Prop} from './rooms/kit';
 
-function LoadedProp({file,position,height=1,rotation=0}:{file:string;position:[number,number,number];height?:number;rotation?:number}){
- const {scene}=useGLTF('/assets/expansion/'+file);
- const {object,scale,offset}=useMemo(()=>{const object=scene.clone(true);object.traverse(n=>{if((n as THREE.Mesh).isMesh){n.castShadow=true;n.receiveShadow=true;}});const box=new THREE.Box3().setFromObject(object),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());const scale=height/Math.max(size.y,.01);return{object,scale,offset:[-center.x*scale,-box.min.y*scale,-center.z*scale] as [number,number,number]};},[scene,height]);
- return <group userData={{blocksLabels:true}} position={position} rotation={[0,rotation,0]}><group position={offset} scale={scale}><primitive object={object}/></group></group>;
-}
-export function Prop(props:Parameters<typeof LoadedProp>[0]){return <IsolatedAsset url={'/assets/expansion/'+props.file} id={props.file+props.position.join(',')} name="Scenery" position={[props.position[0],props.position[1]+(props.height??1),props.position[2]]}><LoadedProp {...props}/></IsolatedAsset>;}
 export default function DungeonDressing({scene}:{scene:string}){
  if(chapterOneRoom(scene))return null;
  const roots=scene.startsWith('roots'),archive=scene.startsWith('archive'),market=scene.startsWith('market'),choir=scene.startsWith('choir'),final=scene.startsWith('depth');
