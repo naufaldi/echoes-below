@@ -1,9 +1,11 @@
 import type {Actor,AnimationCue,GameLog} from './types.js';
+/** How an attack without a saved cue is presented: adepts and clerics cast, scouts shoot, everyone else strikes. */
+export const attackCue=(classId:Actor['classId']):AnimationCue=>classId==='adept'||classId==='cleric'?'spell':classId==='scout'?'ranged':'melee';
 export function latestAnimation(logs:GameLog[],actor:Pick<Actor,'id'|'classId'>):{id:string;cue:AnimationCue}|undefined{
  for(let i=logs.length-1;i>=0;i--){const log=logs[i];if(log.speaker!==actor.id||log.source==='ai')continue;
   if(log.animation)return{id:log.id,cue:log.animation};
-  // Older saves have no cue; their existing attacks remain presentable.
-  if(log.text.includes(' attacks '))return{id:log.id,cue:actor.classId==='adept'||actor.classId==='cleric'?'spell':actor.classId==='scout'?'ranged':'melee'};
+  // Echo attacks and older saves have no cue; their attacks remain presentable.
+  if(log.text.includes(' attacks '))return{id:log.id,cue:attackCue(actor.classId)};
  }
 }
 export function animationClip(names:string[],state:AnimationCue|'idle'|'walk'|'hit'|'death',actor:Pick<Actor,'classId'|'assetId'>):string|undefined{
