@@ -14,3 +14,14 @@ test('quest completion belongs to the action that earned it, never the next conv
  assert.equal(narrationSpeakerFor(publicSave(spoken)),'Scrit');
  assert.deepEqual(s.logs.filter(l=>priorIds.has(l.id)),previous.logs);
 });
+test('combat panel shows only the newest events, led by the actor, while the log keeps every entry',async()=>{
+ const {combatEventsFor}=await import('../client/session.js');
+ let s=createSave({name:'Panel QA',classId:'guardian',backgroundId:'delver',appearanceId:'ember',rulesVersion:CURATED_RULES_VERSION});
+ for(const id of ['enter','ledge','fight'])s=applyAction(s,id,n=>n);
+ const view=publicSave(s);assert.equal(view.mode,'combat');
+ const events=combatEventsFor(view),current=view.logs.filter(l=>l.revision===view.revision);
+ assert.ok(events.length>0&&events.length<=2);assert.ok(current.length>events.length);
+ assert.deepEqual(events.map(e=>e.id),current.filter(l=>l.source!=='ai').slice(-events.length).map(l=>l.id));
+ for(const e of events)if(e.lead)assert.ok(e.text.startsWith(e.lead));
+ assert.ok(events.every(e=>e.lead!=='Dungeon Master'));
+});

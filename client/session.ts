@@ -1,4 +1,5 @@
 import type {PublicSave} from '../shared/types.js';
+import {speakerLabel} from '../shared/speaker-label.js';
 
 function narrationEntries(save:PublicSave) {
   if(save.revision===0)return [];
@@ -12,6 +13,10 @@ function narrationEntries(save:PublicSave) {
 }
 
 export function narrationFor(save:PublicSave):string{return narrationEntries(save).map(l=>l.text).join(' ')||save.scene.description;}
+/** Combat shows only the newest events as lines; the journal keeps the full log. `lead` is the actor's name when the line opens with it. */
+export function combatEventsFor(save:PublicSave,count=2){
+ return narrationEntries(save).slice(-count).map(l=>{const name=l.speaker==='dm'?null:speakerLabel(l,save.party,save.enemies);return {id:l.id,text:l.text,lead:name&&l.text.startsWith(name)?name:null,enemy:save.enemies.some(a=>a.id===l.speaker)};});
+}
 export function narrationSpeakerFor(save:PublicSave):string|null{
  const entries=narrationEntries(save),first=entries[0];
  if(!first||first.speaker==='dm'||entries.some(l=>l.source!=='authored'||l.speaker!==first.speaker))return null;

@@ -41,6 +41,7 @@
   --fs-sm:13px;
   --fs-md:14px; /* body */
   --fs-lg:16px;
+  --fs-narration:18px; /* story panel passage: Cormorant reads small, so it sits between lg and xl */
   --fs-xl:20px;
   --fs-2xl:24px;
   --fs-3xl:28px;
@@ -124,6 +125,14 @@
 .turn-playback h2{font-size:var(--fs-2xl);margin:5px 0}.turn-playback .turn-outcome{min-height:0;font-size:var(--fs-lg)}.turn-playback .turn-outcome p{margin:6px 0}.turn-playback .roll-equation{font-size:var(--fs-xl)}.turn-playback .primary{width:auto;margin-top:8px;padding:8px 14px}.turn-playback .skip-playback{display:block;margin:8px 0 0;font-size:var(--fs-2xs)}
 .app:has(.turn-playback) .narration-panel{visibility:hidden}
 @media(max-width:1100px){.turn-playback{width:calc(100% - 465px)}}
+/* #29 Story panel. The scene leads: the story panel and the playback card share one compact bottom slot. Exploration shows the latest passage, combat the newest two events; the journal keeps everything. No transitions, so reduced motion has nothing to stop. */
+.app:not(.title-mode) .narration-panel,.turn-playback{padding:12px 18px;border:1px solid var(--border-strong);border-radius:5px;background:linear-gradient(125deg,var(--glass-1),var(--glass-0));box-shadow:0 10px 35px var(--shadow)}
+.narration-heading{flex-wrap:wrap;row-gap:4px}.narration-title{flex:1;min-width:0}.narration-heading small{margin-left:0}
+.narration-link{font-size:var(--fs-2xs);letter-spacing:0;white-space:nowrap;color:var(--text-muted);padding:0}.narration-link:hover:not(:disabled){color:var(--text-primary)}.narration-link span{color:var(--accent);margin-left:5px}
+.app:not(.title-mode) .narration-panel p{margin:6px 0 0;font-size:var(--fs-narration);line-height:1.4;max-height:calc(3 * 1.4em)}.app:not(.title-mode) .narration-panel.combat p{max-height:calc(2 * 1.4em)}.narration-panel .passage-scroll-hint{margin:3px 0 0}
+.event-lines{list-style:none;margin:6px 0 0;padding:0;font-size:var(--fs-md);line-height:1.5;color:var(--text-secondary);font-variant-numeric:tabular-nums}.event-lines li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.event-lines li:last-child{color:var(--text-primary)}.event-lines b{font-weight:600;color:var(--accent-strong)}.event-lines b.enemy{color:var(--enemy)}
+.turn-playback .eyebrow{margin:0}.turn-playback .roll-head{gap:10px}.turn-playback .roll-badge{width:38px;height:38px;border-radius:7px;font-size:var(--fs-3xl)}.turn-playback h2{font-size:var(--fs-xl);margin:4px 0}.turn-playback .turn-outcome p{margin:4px 0}.turn-playback .roll-equation{font-size:var(--fs-lg)}.turn-playback .initiative-order{margin:4px 0}.turn-playback .initiative-order li{padding:3px 8px}.turn-playback .initiative-order li b{font-size:var(--fs-lg)}
+.turn-playback{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:16px}.turn-playback>:not(.primary,.skip-playback){grid-column:1/-1}.turn-playback .primary{margin-top:6px}.turn-playback .skip-playback{justify-self:start;margin:6px 0 0}
 
 .party-panel .dice-result{position:static;display:flex;width:100%;max-width:100%;margin:12px 0;padding:10px 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);transform:none}.party-panel .dice-result p{overflow-wrap:anywhere}.party-panel .dice-result .die{flex-shrink:0}
 
