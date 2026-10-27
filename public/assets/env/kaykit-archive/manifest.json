@@ -7,7 +7,7 @@
  "licence": "CC0-1.0",
  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
  "licenceEvidence": "LICENSE.txt and addons/kaykit_dungeon_remastered/Assets/LICENSE.txt at commit b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07 are identical and read \"License: (Creative Commons Zero, CC0)\". Crediting Kay Lousberg is requested but not mandatory.",
- "notes": "Drowned Archive (#47): library walls, catalogue pillars, infirmary beds, drain grates, office and dock floors. The starter walls, floors and props stay in kaykit-dungeon and are referenced from there. Every GLB embeds the same 15 KB dungeon_texture.png atlas.",
+ "notes": "Drowned Archive (#47): catalogue wall pillars, infirmary windows, beds, drain grates and low walls, the vault pillars, and the floor, desk, chair, candles and coins of Sel’s office. The starter walls, floors and props stay in kaykit-dungeon and are referenced from there. Every GLB embeds the same 15 KB dungeon_texture.png atlas.",
  "files": [
   {
    "file": "barrier_column.glb",
