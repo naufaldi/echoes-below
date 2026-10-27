@@ -1,0 +1,121 @@
+{
+ "kit": "kenney-graveyard-kit",
+ "title": "Graveyard Kit (5.0)",
+ "author": "Kenney (www.kenney.nl)",
+ "storePage": "https://kenney.nl/assets/graveyard-kit",
+ "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip",
+ "licence": "CC0-1.0",
+ "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+ "licenceEvidence": "License.txt inside kenney_graveyard-kit_5.0.zip (sha256 a48e274258386c6bcb5302f17eaab40304cd805cc68be2754e2452179418c70e, creation date 17-10-2025) reads \"License: (Creative Commons Zero, CC0)\". Crediting Kenney is requested but not required. Zip sha256 1a93613f2e5675f3310acf49ec9ef13ae7adeb756ac3b205bfb6cc9311a81062.",
+ "notes": "Hollow Choir rooms (#50): cathedral pillars, pews, the memorial and final doors, obelisk statues, candles, lanterns, plates, chalices, the iron rail and debris. Every GLB references the shared Textures/colormap.png; HollowChoir.tsx renders them with a cold-tinted copy of that texture (the iron rail uses a plain iron material).",
+ "files": [
+  {
+   "file": "Textures/colormap.png",
+   "sha256": "a94b4dc4f77a4b8aec96bde94f63912a1ce12aa98eec2c1e9a37c89e20a5f091",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/Textures/colormap.png",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/Textures/colormap.png\" in the zip."
+  },
+  {
+   "file": "bench.glb",
+   "sha256": "2fd1ed7a06e8b2a9a6e81896eb96f08103ba6d9d705f6643504ea82d8280d213",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/bench.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/bench.glb\" in the zip."
+  },
+  {
+   "file": "candle-multiple.glb",
+   "sha256": "e747e04390e8f431e0d80b17696ef01cfa935dd8efff44f7008de6408236b547",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/candle-multiple.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/candle-multiple.glb\" in the zip."
+  },
+  {
+   "file": "crypt-large-door.glb",
+   "sha256": "04ccdafcca9207f6dc1b1897f96066286f7336ca81fdef55eedf5fd998bd0f1c",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/crypt-large-door.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/crypt-large-door.glb\" in the zip."
+  },
+  {
+   "file": "debris.glb",
+   "sha256": "bf584bb5a4c1a7d4b7aed9ced00473a8678e9d402db1cfafc17e84e46aa2d42a",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/debris.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/debris.glb\" in the zip."
+  },
+  {
+   "file": "detail-chalice.glb",
+   "sha256": "e7eeba55e5f1881095a3da159fc0a275ea4b59cc1cdce574d54662160ccdcc41",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/detail-chalice.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/detail-chalice.glb\" in the zip."
+  },
+  {
+   "file": "detail-plate.glb",
+   "sha256": "466938a567c52a237386b4586a15da479c869fff28c2e39669b327f5a9fccf8a",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/detail-plate.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/detail-plate.glb\" in the zip."
+  },
+  {
+   "file": "gravestone-decorative.glb",
+   "sha256": "3011f6c20c7a3a26b2a9968ceabdede5a36374683817c84dff4ec334b4fe9708",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/gravestone-decorative.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/gravestone-decorative.glb\" in the zip."
+  },
+  {
+   "file": "iron-fence.glb",
+   "sha256": "6ea3e334d97348d8ad9de5a8c77cdd07fb798a23f56971186c8f9edb85689cd9",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/iron-fence.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/iron-fence.glb\" in the zip."
+  },
+  {
+   "file": "lantern-candle.glb",
+   "sha256": "c78da0717e38ea019617a39a2ad263c54ecc3b0efbdcd3da124db6550657e90e",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/lantern-candle.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/lantern-candle.glb\" in the zip."
+  },
+  {
+   "file": "pillar-obelisk.glb",
+   "sha256": "f7a9d985522d8bb1eef765ce2b841588b43c8607b32c87056945696a172b3bf1",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/pillar-obelisk.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/pillar-obelisk.glb\" in the zip."
+  },
+  {
+   "file": "pillar-square.glb",
+   "sha256": "130befbc898123302bf3b114f60629d3f950bcfab9759b484bdd49541b8c2846",
+   "source": "https://kenney.nl/media/pages/assets/graveyard-kit/ba8d4b4517-1760691807/kenney_graveyard-kit_5.0.zip#Models/GLB format/pillar-square.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/pillar-square.glb\" in the zip."
+  }
+ ]
+}

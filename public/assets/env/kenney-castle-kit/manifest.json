@@ -1,0 +1,31 @@
+{
+ "kit": "kenney-castle-kit",
+ "title": "Castle Kit (2.0)",
+ "author": "Kenney (www.kenney.nl)",
+ "storePage": "https://kenney.nl/assets/castle-kit",
+ "source": "https://kenney.nl/media/pages/assets/castle-kit/a395102d20-1711543616/kenney_castle-kit.zip",
+ "licence": "CC0-1.0",
+ "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/",
+ "licenceEvidence": "License.txt inside kenney_castle-kit.zip (sha256 aac944f18106b3a3e29c6fdeec02523d4cab4c735abc01f5a8fa88a79ae173ef, creation date 27-03-2024 13:37) reads \"License: (Creative Commons Zero, CC0)\". Crediting Kenney is requested but not required. Zip sha256 921f3f73927bb23106cae34bc21d5ab4b033a9fc120475e96f714a406e3169df.",
+ "notes": "Hollow Choir rooms (#50): long banners for the refectory and the duet hall. The GLB references the shared Textures/colormap.png; HollowChoir.tsx renders it with a tinted copy of that texture.",
+ "files": [
+  {
+   "file": "Textures/colormap.png",
+   "sha256": "66fd49be148f32e88f6c8cace67120250d1943a7856601158ad0ff24651db0b0",
+   "source": "https://kenney.nl/media/pages/assets/castle-kit/a395102d20-1711543616/kenney_castle-kit.zip#Models/GLB format/Textures/colormap.png",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/Textures/colormap.png\" in the zip."
+  },
+  {
+   "file": "flag-banner-long.glb",
+   "sha256": "e6a4433f5770b9fc31bf67d72424a877d5c010486d5b7373ce7af900566827e4",
+   "source": "https://kenney.nl/media/pages/assets/castle-kit/a395102d20-1711543616/kenney_castle-kit.zip#Models/GLB format/flag-banner-long.glb",
+   "author": "Kenney",
+   "licence": "CC0-1.0",
+   "retrieved": "2026-10-27",
+   "changes": "Bytes unchanged; copied from \"Models/GLB format/flag-banner-long.glb\" in the zip."
+  }
+ ]
+}
