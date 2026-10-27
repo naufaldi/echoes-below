@@ -1,6 +1,15 @@
 # Echoes Below — Character model contract (v2)
 
-Status: ready for production. Owner: Naufaldi. Parent: [PRD](PRD.md) (Presentation v2).
+Status: ready for production (v2.1, 27 October 2026). Owner: Naufaldi. Parents: [PRD](PRD.md) (Presentation v2) and [ROADMAP](ROADMAP.md) (v1.0).
+
+What v2.1 adds:
+- the art direction now matches the KayKit environments (§3);
+- the `Head` node rule (§4.3);
+- dialogue clips (§4.4);
+- an NPC priority list (§2);
+- portraits and dialogue presence (§6).
+
+KayKit placeholder characters are acceptable at v1.0 (ROADMAP D11), so these models never block a release.
 
 This document says what 3D characters the game needs, how they must be built, and how they plug into the code. It has two audiences:
 
@@ -11,10 +20,13 @@ Rule for both parts: the engine (`server/`, rules in `shared/`, saves, API) does
 
 ## 1. How characters appear in the game
 
-- Desktop browser, 1440×900 baseline. Isometric-style camera at about `[9, 12, 15]`, FOV 43°, looking at the room centre. Players can orbit and zoom (`client/World.tsx:97`).
+- Desktop browser, 1440×900 baseline. Isometric-style camera at about `[9, 12, 15]`, FOV 43°, looking at the room centre. Players can orbit and zoom. See the `Canvas` camera and `OrbitControls` in `client/World.tsx`.
 - On screen a character is small, roughly 80–140 px tall. **Silhouette and colour blocks matter more than face or texture detail.** Fine detail will not be seen.
 - Three party members stand close together. They must be told apart with name labels hidden.
-- Lighting is warm torchlight with cool shadows. The dungeon kit is low-poly Quaternius with flat colour (stays for now, PRD decision 3).
+- Lighting is warm torchlight with cool shadows.
+- Chapter I is built from low-poly Quaternius props with flat colour.
+- Chapters II–VI are moving to **KayKit Dungeon Remastered** (CC0): chunky stylised pieces with one small hand-painted texture atlas (#46–#51).
+- Characters must sit naturally in both.
 - Rendering is three.js r180 via React Three Fiber, WebGL2, shadows on, device pixel ratio 1–1.5.
 
 ## 2. Roster
@@ -34,9 +46,19 @@ The Fighter and the Cleric currently share one knight model. They must now have 
 
 ### Phase B — later, not now
 
-- **Race variants.** Human/Elf/Dwarf/Halfling. For now race is applied in code as a height and breadth scale (`actorHeight`, `shared/visual-identity.ts:7`; `breadth`, `client/World.tsx:28`). Build Phase A models with **human** proportions.
+- **Race variants.** Human/Elf/Dwarf/Halfling. For now race is applied in code as a height and breadth scale (`actorHeight` in `shared/visual-identity.ts`; `breadth` in `CharacterModel`, `client/World.tsx`). Build Phase A models with **human** proportions.
 - **Companion signatures.** Optional named meshes so Mira and Oren stay recognisable whatever class they take (see §4.5).
-- **Named NPCs.** The courier (now uses the rogue model), Ilyra the librarian (fighter model in bronze), Scrit and Vark.
+- **Named NPCs**, in order of how often they appear (mentions across `shared/campaign.ts` and `server/`; speaker names from `shared/speaker-label.ts`):
+
+  | Priority | NPC | Mentions | Today |
+  |---|---|---|---|
+  | 1 | **Scrit**, the goblin who may become an ally | ~115 | Goblin model |
+  | 2 | **Commander Vark** | ~85 | Vark model |
+  | 3 | **The Courier** | ~69 | Rogue model |
+  | 4 | **Archive apprentice / Ilyra** the librarian | ~34 | Fighter model in bronze |
+  | 5 | **The Ferryman** (Drowned Archive) | ~20 | Entity marker only |
+
+  Scrit and Vark speak most, so they are the first NPCs worth a model and a portrait after the four classes.
 - **Enemies.** Goblins and other monsters stay unchanged (PRD decision 5).
 
 ## 3. Art direction
@@ -44,7 +66,8 @@ The Fighter and the Cleric currently share one knight model. They must now have 
 - **Style:** stylized fantasy, chunky and readable. Head about 1/4–1/3 of body height (slightly heroic chibi, close to the current party scale). Not realistic and not anime.
 - **Shapes:** one strong silhouette feature per class: Fighter shield + pauldrons, Rogue hood + bow, Wizard hat/hood + staff, Cleric tabard + holy symbol.
 - **Colour:** muted base materials (leather, steel, cloth) plus one **accent area** (cape, tabard, hood or sash) that the game recolours by palette. Keep the accent area large and visible from above.
-- **Texture:** simple hand-painted or flat-shaded look that sits next to low-poly Quaternius props. Avoid photo-real noise, strong baked lighting and baked shadows.
+- **Texture:** a simple hand-painted or flat-shaded look that sits next to KayKit Dungeon Remastered walls and Quaternius props. Avoid photo-real noise, PBR grain, strong baked lighting and baked shadows.
+- **Match the environment.** Put a candidate next to a KayKit wall and the current KayKit party in `?asset-review` before you finish it. Realistic proportions or a realistic texture will clash with both and are a reason to regenerate.
 - **Pose:** neutral A-pose or T-pose for rigging. Weapons in hands or holstered, below head height in the rest pose (the game measures the model's bounding box to scale it; a raised weapon makes the character smaller).
 - **Tone:** heroic and slightly worn. These are people going into a dangerous dungeon, not parade knights.
 
@@ -78,6 +101,7 @@ The Fighter and the Cleric currently share one knight model. They must now have 
 | Palette material | `Accent` | Only this material is recoloured by `ember` / `moss` / `moon` |
 | All other materials | anything except `Accent` | Never recoloured |
 | Companion signature mesh (Phase B) | `Sig_Mira`, `Sig_Oren` | Hidden unless that companion uses the model |
+| Head bone | `Head` (case-insensitive; the KayKit rigs use `head`) | Portrait framing (§6) and look-at. Required |
 
 Put the accent colour as near-white/light grey in the `Accent` base colour or texture, because the game multiplies the palette colour into it. Dark accents cannot be recoloured.
 
@@ -95,7 +119,17 @@ Put the accent colour as near-white/light grey in the `Accent` base colour or te
 | `Hit` | took damage | no | 0.6 s | Code holds the hit state 0.7 s |
 | `Death` | hp ≤ 0 | no, holds last frame | 1.5 s | Ends lying on the ground |
 
-Required in every model: `Idle`, `Walk`, `Hit`, `Death`, `Use_Item`, `Dodge`, plus the class attack clips from the roster table. `Run`, `Talk` and `Victory` are optional extras. Bake at 30 fps.
+Required in every model: `Idle`, `Walk`, `Hit`, `Death`, `Use_Item`, `Dodge`, plus the class attack clips from the roster table. Bake at 30 fps. `Run` is an optional extra.
+
+**Dialogue clips (optional, recommended).** The story box (ROADMAP D2/D6) plays these while a character speaks, and the portrait snapshot uses their pose:
+
+| Clip name | Used when | Loop | Max length | KayKit fallback |
+|---|---|---|---|---|
+| `Talk` | The character's line is on screen | yes | — | `Interact` |
+| `Nod` | Agreeing or trust going up | no | 1.0 s | `Interact` |
+| `Shake` | Refusing or trust going down | no | 1.0 s | `Idle` |
+| `Victory` | A natural 20, or a fight won | no | 1.5 s | `Cheer` |
+| `Worried` | Low HP, or bad news | yes | — | `Idle` |
 
 If the tool cannot produce a clip, keep the name but use the closest motion. For example, `Dodge` can reuse a short block motion. Record the substitution in the manifest `notes` field.
 
@@ -179,7 +213,12 @@ Tool features vary by plan and version. Verify each step in the tool itself and 
 | C-10 | A Release 1 save created with KayKit models loads and shows the new models | Load an existing local save |
 
 ### 5.3 Out of scope
-Race-specific meshes, companion signature meshes, NPC and enemy models, engine and rules changes, deployment.
+- Race-specific meshes.
+- Companion signature meshes.
+- NPC and enemy models.
+- Engine and rules changes.
+- Deployment.
+- Portraits. They come from the in-game render (§6), which ROADMAP #R6 builds separately. A new model only needs a correct `Head` node.
 
 ### 5.4 Handoff prompt (paste into Codex)
 
@@ -201,3 +240,37 @@ Rules:
 Models delivered in this batch: <list>
 Clip substitutions: <notes>
 ```
+
+## 6. Portraits and dialogue presence
+
+Characters speak through the story box, which has a name plate and a portrait (ROADMAP D2, D6). Portraits come from the 3D model, so **there is one source asset per character**, and the portrait always matches the class, race and palette the player picked.
+
+### 6.1 Rendered portraits (default, no extra art)
+- **How.** The game renders a head-and-shoulders snapshot of the in-game model, using the same canvas and offscreen target, then caches it as an image. It renders again only when the class, race, palette or model changes. Today this works with the KayKit models and with the Tripo models after #11.
+- **Framing.**
+  - The camera aims at the `Head` node, from slightly above eye level, about 20° to the character's left.
+  - The head fills about 45% of the frame height, with the eyes at about 40% from the top.
+  - The background is transparent.
+  - Output is 512×512 and is shown at 96–128 px.
+- **Pose.** The pose is the first frame of `Talk` if the model has it, otherwise `Idle`. Expressions use the dialogue clips in §4.4 when present.
+- **What a model needs.** A correct `Head` node (§4.3), a face toward +Z (§4.1), and a face and hair that read at 128 px. Big, simple shapes beat fine detail here too.
+
+### 6.2 Painted portraits (optional override, later)
+If the owner wants illustrated portraits for named characters, the game prefers these files over the render:
+
+| Rule | Value |
+|---|---|
+| Path | `public/assets/portraits/<characterId>-<expression>.png`. `characterId` is `mira`, `oren`, `scrit`, `vark`, `courier`, `ilyra` or `ferryman`; the hero always uses the render, because the player customises them |
+| Expressions | `neutral` (required), then `smile`, `worried`, `angry`, `hurt` |
+| Size | 512×512 PNG, transparent background, ≤ 200 KB each |
+| Framing | As in §6.1: head and shoulders, eyes at ~40% from the top, facing three-quarters toward the right, so they look into the text box |
+| Style | The same art direction as §3, so painted portraits must not look like a different game from the 3D model |
+| Licence | As in §4.6, with an entry in `public/assets/portraits/manifest.json` |
+
+### 6.3 Acceptance for portraits
+| ID | Check |
+|---|---|
+| P-01 | Mira, Oren and the hero show distinct portraits whatever classes they take |
+| P-02 | Changing a palette at creation changes the portrait accent |
+| P-03 | A painted override, if present, replaces only that character and expression; missing expressions fall back to `neutral`, then to the render |
+| P-04 | Portrait rendering adds no second WebGL canvas and costs < 2 ms per snapshot |

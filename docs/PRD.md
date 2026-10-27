@@ -2,6 +2,8 @@
 
 Status: **approved direction, 27 October 2026** (owner decisions recorded below). Created at source `54909eb`. Character models: [CHARACTERS.md](CHARACTERS.md).
 
+**Next: [ROADMAP.md](ROADMAP.md) (v1.0, 27 October 2026).** It defines the product as a light novel, a D&D table and a dungeon descent, in that pillar order. It records the grill decisions, the issues and the finish line. Its D10 replaces owner decision 1's priority order below.
+
 This document supersedes the Release 1 freeze. The owner has reopened development for a presentation remake. Release 1's product contract is archived in [PRD-release1-archive.md](PRD-release1-archive.md). It remains the reference for shipped gameplay, rules, saves, AI and privacy behavior, and those stay in force unless this document changes them. Freeze statements in [RFC](RFC.md), [execution status](EXECUTION_STATUS.md), [goal prompt](GOAL_PROMPT.md), [implementation](IMPLEMENTATION.md), [expansion status](EXPANSION_STATUS.md) and [playtest handoff](PLAYTEST_HANDOFF.md) describe Release 1 closure only. They do not stop v2 work.
 
 ## Goal
