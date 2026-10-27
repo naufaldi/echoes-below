@@ -21,7 +21,9 @@ import {useEffect,useMemo,useRef,useState,type ElementRef} from 'react';
 import {Canvas,useFrame,useThree} from '@react-three/fiber';
 import {OrbitControls,useGLTF,useAnimations,ContactShadows,Billboard} from '@react-three/drei';
 import * as THREE from 'three';
-import {clone} from 'three/addons/utils/SkeletonUtils.js';
+import {dressCharacter,raceBreadth} from './character-dress';
+import PortraitStudio from './PortraitStudio';
+import {npcModelClass} from './portrait-look';
 import type {Actor,ActionOption,Entity,PublicSave,Speaker,CompanionSetup} from '../shared/types';
 
 /** Compact always-facing HP bar shown over combatants during combat. */
@@ -29,12 +31,12 @@ function HealthBar({hp,maxHp,enemy,height}:{hp:number;maxHp:number;enemy:boolean
 
 function CharacterModel({actor,selected,onSelect,reduced,labelMode='actor',attackId='',attackCue='melee',showHp=false,face}:{face?:Point,actor:Actor,selected:boolean,onSelect:()=>void,reduced:boolean,labelMode?:'actor'|'entity'|'none',attackId?:string,attackCue?:AnimationCue,showHp?:boolean}){
   const gltf=useGLTF(characterAsset(actor));const [hovered,setHovered]=useState(false);
-  const object=useMemo(()=>{const o=clone(gltf.scene);o.traverse(n=>{if((n as THREE.Mesh).isMesh){const m=n as THREE.Mesh;m.castShadow=true;m.receiveShadow=true;const optional=['1H_Sword_Offhand','Rectangle_Shield','Round_Shield','Spike_Shield','2H_Sword','Spellbook','Spellbook_open','1H_Wand','Knife_Offhand','1H_Crossbow','2H_Crossbow','Throwable'];if(optional.includes(n.name)||(actor.appearanceId==='bronze'&&/Sword|Shield|Wand|Crossbow|Knife|Throwable|Spellbook/i.test(n.name)))m.visible=false;if(actor.classId==='cleric'&&n.name==='1H_Sword')m.visible=false;const tint=actor.appearanceId==='moon'?'#b0cbe2':actor.appearanceId==='moss'?'#bdd3ac':'#eed0b0';const multiple=Array.isArray(m.material);const materials=(multiple?m.material as THREE.Material[]:[m.material as THREE.Material]).map(original=>{const material=original.clone();if('color' in material)(material as THREE.MeshStandardMaterial).color.multiply(new THREE.Color(tint));return material;});if(actor.appearanceId==='bronze')for(const material of materials){const bronze=material as THREE.MeshStandardMaterial;if(bronze.color){bronze.map=null;bronze.color.set('#ad8752');bronze.metalness=.65;bronze.roughness=.45;}}m.material=multiple?materials:materials[0];}});return o;},[gltf.scene,actor.appearanceId,actor.classId]);
+  const object=useMemo(()=>dressCharacter(gltf.scene,actor),[gltf.scene,actor.appearanceId,actor.classId]);
   const initialPosition=useRef<[number,number,number]>([actor.position[0],0,-actor.position[1]]);const motionSeen=useRef(actor.motion?.id);const waypoints=useRef<Point[]>([]);useEffect(()=>{if(actor.motion?.id&&actor.motion.id!==motionSeen.current){motionSeen.current=actor.motion.id;waypoints.current=actor.motion.points.map(p=>[...p]);}},[actor.motion?.id]);
   const group=useRef<THREE.Group>(null);const {actions}=useAnimations(gltf.animations,object);
   const originalBounds=useMemo(()=>{const b=new THREE.Box3().setFromObject(gltf.scene);return {height:b.getSize(new THREE.Vector3()).y,size:b.getSize(new THREE.Vector3()),min:b.min.y,center:b.getCenter(new THREE.Vector3())};},[gltf.scene]);
   const modelHeight=actorHeight(actor);
-  const breadth=actor.raceId==='dwarf'?1.25:actor.raceId==='elf'?.88:1;
+  const breadth=raceBreadth(actor.raceId);
   const bounds={scale:modelHeight/Math.max(.001,originalBounds.height),min:originalBounds.min,center:originalBounds.center};
   const [attacking,setAttacking]=useState(false);const attackSeen=useRef(attackId);useEffect(()=>{if(!attackId||attackId===attackSeen.current)return;attackSeen.current=attackId;setAttacking(true);const t=setTimeout(()=>setAttacking(false),1100);return()=>clearTimeout(t);},[attackId]);
   const [moving,setMoving]=useState(false);const [hit,setHit]=useState(false);const hp=useRef(actor.hp);
@@ -71,7 +73,7 @@ function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroA
  {save?.scene.bellIndex&&save.mode!=='combat'&&<BellIndexConsole state={save.scene.bellIndex}/>}
  {save?.scene.counterweight&&<CounterweightMechanism state={save.scene.counterweight} reduced={reduced} onSelect={()=>onSelect('chain')}/>}
  {party.map(a=><Character key={(save?.scene.id??'creation')+a.id} actor={{...a,name:actorDisplayName(a,save?.enemies??[])}} attackId={latestAnimation(save?.logs??[],a)?.id} attackCue={latestAnimation(save?.logs??[],a)?.cue} face={face.get(a.id)} selected={a.id===selected||save?.turn?.actorId===a.id} onSelect={()=>onSelect(a.id)} reduced={reduced} labelMode={save?'actor':'none'} showHp={save?.mode==='combat'}/>)}
- {save?.scene.entities.filter(e=>e.kind==='npc'&&!(save.enemies.length&&['guards','vark'].includes(e.id))).map(e=><group key={'npc-'+e.id} position={[0,e.elevation??0,0]}><Character actor={{...demoActor(e.id,e.modelClassId??(e.id==='courier'?'scout':e.id==='vark'?'vark':'goblin'),e.position),name:e.name,side:e.id.startsWith('ally:')||e.id.startsWith('side:')?'party':'enemy',appearanceId:e.appearanceId??'moss'}} face={face.get('npc:'+e.id)} selected={selected===e.id} onSelect={()=>onSelect(e.id)} reduced={reduced} labelMode="entity"/></group>)}
+ {save?.scene.entities.filter(e=>e.kind==='npc'&&!(save.enemies.length&&['guards','vark'].includes(e.id))).map(e=><group key={'npc-'+e.id} position={[0,e.elevation??0,0]}><Character actor={{...demoActor(e.id,npcModelClass(e),e.position),name:e.name,side:e.id.startsWith('ally:')||e.id.startsWith('side:')?'party':'enemy',appearanceId:e.appearanceId??'moss'}} face={face.get('npc:'+e.id)} selected={selected===e.id} onSelect={()=>onSelect(e.id)} reduced={reduced} labelMode="entity"/></group>)}
  {save?.scene.id==='cookfire'&&save.scene.entities.some(e=>e.id==='guards')&&save.enemies.length===0&&<Character actor={{...demoActor('guard-extra','goblin',[2.4,2.3]),side:'enemy'}} face={face.get('npc:guards')} selected={false} onSelect={()=>onSelect('guards')} reduced={reduced} labelMode="entity"/>}
  {save?.enemies.map(a=><Character key={(save?.scene.id??'creation')+a.id} actor={{...a,name:actorDisplayName(a,save?.enemies??[])}} attackId={latestAnimation(save?.logs??[],a)?.id} attackCue={latestAnimation(save?.logs??[],a)?.cue} face={face.get(a.id)} selected={a.id===selected||save?.turn?.actorId===a.id} onSelect={()=>onSelect(a.id)} reduced={reduced} showHp={save?.mode==='combat'}/>)}
 
@@ -80,6 +82,7 @@ function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroA
  {save&&cue&&<CombatCues key={'cue:'+cue.key} cue={cue} save={save} reduced={reduced}/>}
  <ContactShadows opacity={.3} scale={20} blur={2} far={5} resolution={256} color="#050d0b"/>
  <SceneFraming save={save} orbit={orbit} reduced={reduced} userMoved={userMoved}/>
+ <PortraitStudio paused={!!(roll||cue)}/>
  <OrbitControls ref={orbit} onStart={()=>{cameraMotion.current=false;userMoved.current=true;}} makeDefault target={save?[0,.4,-.5]:[0,1,-1]} enablePan={false} minDistance={save?12:7} maxDistance={25} minPolarAngle={.45} maxPolarAngle={1.15} enableDamping={!reduced} maxAzimuthAngle={Math.PI*.6} minAzimuthAngle={-Math.PI*.6}/>
  </>;
 }
