@@ -78,3 +78,4 @@
 
 .focus-empty{font-size:12px;line-height:1.5;color:var(--muted);margin:10px 0;padding:10px;border:1px solid #c9aa6838;border-radius:5px;background:#c9aa6808}
 .focus-empty button{display:block;margin-top:7px;color:#e1c58b;text-decoration:underline;text-underline-offset:3px}
+.credits a{color:#93a98a}

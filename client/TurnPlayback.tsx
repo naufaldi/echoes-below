@@ -1,4 +1,5 @@
 import {revealedScene} from './playback-scene';
+import {playFrameCues} from './audio';
 import {createDieGeometry} from './die-geometry';
 import {useEffect,useMemo,useRef,useState} from 'react';
 import {Canvas,useFrame} from '@react-three/fiber';
@@ -25,8 +26,8 @@ export function TurnPlayback({before,after,reduced,onFrame,onDone}:{before:Publi
   const room=frame.sceneId===before.scene.id?before:after;
   const turn=frame.turn??after.turn??before.turn;
   const visible={...room,activeReaction:frame.log.actionKind==='reaction'?frame.actorId:undefined,mode:frame.mode??room.mode,actions:[],party:previous?.party??before.party,enemies:previous?.enemies.length?previous.enemies:frame.enemies,logs:before.logs,turn:turn?{...turn,actorId:frame.actorId}:null};
-  show.current(visible);
-  const t=setTimeout(()=>{setRevealed(true);show.current({...visible,scene:revealedScene(before,after,frame,index===frames.length-1),tactical:frame.tactical??visible.tactical,party:frame.party,enemies:frame.enemies,logs:[...before.logs,frame.log]});},reduced?100:frame.log.rolls.length?1250:300);
+  show.current(visible);playFrameCues('start',frame,previous??before);
+  const t=setTimeout(()=>{setRevealed(true);show.current({...visible,scene:revealedScene(before,after,frame,index===frames.length-1),tactical:frame.tactical??visible.tactical,party:frame.party,enemies:frame.enemies,logs:[...before.logs,frame.log]});playFrameCues('reveal',frame,previous??before);},reduced?100:frame.log.rolls.length?1250:300);
   return()=>clearTimeout(t);
  },[index,frame,before,after,reduced,frames]);
  if(!frame)return null;
