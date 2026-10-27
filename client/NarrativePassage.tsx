@@ -5,3 +5,7 @@ export default function NarrativePassage({text}:{text:string}){
  useEffect(()=>{const p=passage.current!;p.scrollTop=0;measure();const observer=new ResizeObserver(measure);observer.observe(p);return()=>observer.disconnect();},[text]);
  return <><p ref={passage} tabIndex={0} aria-label="Narrative passage" aria-describedby={hint?hintId:undefined} onScroll={measure}>{text}</p>{hint&&<small id={hintId} className="passage-scroll-hint">{hint}</small>}</>;
 }
+/** Combat events, oldest first, one line each. The full text stays in the DOM (and the title) when a long line is clipped. */
+export function EventLines({events}:{events:{id:string;text:string;lead:string|null;enemy:boolean}[]}){
+ return <ol className="event-lines" aria-label="Latest events">{events.map(e=><li key={e.id} title={e.text}>{e.lead?<><b className={e.enemy?'enemy':undefined}>{e.lead}</b>{e.text.slice(e.lead.length)}</>:e.text}</li>)}</ol>;
+}
