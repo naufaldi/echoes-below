@@ -17,7 +17,7 @@ import {advancementActions,applyAdvancement} from './advancement.js';
 import {logisticsFor,logisticsActions,applyLogistics,grantLogisticsLoot} from './logistics.js';
 import {makeCharacter,restoreClassResources,classResources} from '../shared/curated-rules.js';
 import {projectTactical,initializeTactical,startTacticalCombat,tacticalActions,applyTactical,tacticalProposal} from './tactical.js';
-import {availableConsequences,campaignEffects} from './campaign-consequences.js';
+import {CAMPAIGN_CONSEQUENCES,availableConsequences,campaignEffects} from './campaign-consequences.js';
 import {COMPANION_STORIES} from '../shared/companion-stories.js';
 import {EXPEDITION,expeditionRoom,expeditionScene} from "../shared/campaign.js";
 import { randomUUID } from "node:crypto";
@@ -431,6 +431,13 @@ function opt(
 function attempted(s: Save, key: string) {
   return s.attempts.includes(key);
 }
+// Branch closers (Track B, B-03): an option that permanently removes a route says so in the confirmation text.
+const listed=(items:string[])=>items.length>1?`${items.slice(0,-1).join(', ')} and ${items.at(-1)}`:items[0]??'';
+export function closes(text:string,lost:string[],when=''){return lost.length?`${text} ${when?`${when} closes`:'Closes'}: ${lost.join('; ')}.`:text;}
+// Echo Rules learns about the seal only from Scrit's meal; Curated tactics can also learn it from Scrit's or the courier's account.
+export function scritLoss(s:Save){return s.flags.fed?[]:[listed(['the ration to Scrit','his offer to guard the seal',...(s.tactical?[]:['the seal negotiation with Vark'])])];}
+export function rationLoss(s:Save,cost:number){return ['approach','hall','cookfire'].includes(s.sceneId)&&s.party.reduce((n,a)=>n+a.rations,0)-cost<1?scritLoss(s):[];}
+const ROOM_ENCOUNTER_XP=100;
 // Keep a broad triangle within the authored approach area. Tactical cells are
 // deliberately untouched: combat establishes its own formation on entry.
 function placeExplorationParty(s:Save,leader:Actor,anchor:[number,number]){
@@ -662,8 +669,10 @@ function baseActions(s: Save): ActionOption[] {
     if(!f[`${prefix}:supplies`])a.push(opt('exp_supplies','Search the supplies',expeditionSupplyReward(s).description,'inspect','supplies'));
     if(!f[`${prefix}:resolved`]){
       const named=prefix==='archive-3'&&!!f['index:solved'],prepared=infirmaryPrepared(s),garden=inkPrepared(s),certain=defeated||named||prepared||garden;
-      if(defeated||(h.hp>0&&(named||prepared||garden||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',prepared?'Help the medic from the lowered cot':garden?'Leave with the apprentice and protected pages':expedition.choice[0],garden?'The lantern burns steadily and the pages are protected. Leave together without a check or destroying records.':prepared?'The cot is secured and the pocket drained. Rescue the medic without a check; his medicine remains with him.':named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`, 'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:'hero',certain?undefined:dc,certain?undefined:expedition.challenge,!certain));
-      if(!prepared&&!garden)a.push(opt('exp_choice:1',expedition.choice[1],'Commit to this alternative and its consequences without a check.','interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter'));
+      const fightable=!defeated&&(!s.tactical||!!CURATED_ENCOUNTERS[s.sceneId]),unused=availableConsequences(prefix,f).map(c=>`help from ${c.name.replace(/^The /,'the ')} offered here`);
+      const forgone=(choice:0|1)=>[...CAMPAIGN_CONSEQUENCES.filter(c=>c.source===prefix&&c.choice!==choice).map(c=>`help from ${c.name.replace(/^The /,'the ')} at ${baseScenes[c.target].title}`),...unused];
+      if(defeated||(h.hp>0&&(named||prepared||garden||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',prepared?'Help the medic from the lowered cot':garden?'Leave with the apprentice and protected pages':expedition.choice[0],closes(garden?'The lantern burns steadily and the pages are protected. Leave together without a check or destroying records.':prepared?'The cot is secured and the pocket drained. Rescue the medic without a check; his medicine remains with him.':named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`,[...(certain?[]:[`this option if the check fails${fightable?', unless you defeat the defenders':''}`]),...forgone(0)]), 'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:'hero',certain?undefined:dc,certain?undefined:expedition.challenge,!certain||forgone(0).length>0));
+      if(!prepared&&!garden)a.push(opt('exp_choice:1',expedition.choice[1],closes('Commit to this alternative and its consequences without a check.',forgone(1)),'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',undefined,undefined,undefined,forgone(1).length>0));
       if(!defeated&&(!s.tactical||CURATED_ENCOUNTERS[s.sceneId]))a.push(opt('exp_fight','Confront the chamber’s defenders','Resolve the obstruction in turn-based combat, then choose the outcome.','attack',s.tactical&&prefix==='archive-3'?'index-sentinel':'encounter',undefined,undefined,undefined,true));
     }else{
       if(!f[`${prefix}:rest`])a.push(opt('exp_rest','Rest with your companions','Recover health and focus; the sheltered rest is available once.','rest','camp'));
@@ -674,16 +683,22 @@ function baseActions(s: Save): ActionOption[] {
   switch (s.sceneId) {
     case "approach":
       if (!f.tracks) inspect("tracks", "tracks", "Inspect tracks", 10);
-      if (!f.rested && s.party.every((x) => x.rations > 0))
+      if (!f.rested && s.party.every((x) => x.rations > 0)) {
+        const lost = rationLoss(s, s.party.length);
         a.push(
           opt(
             "rest",
             "Rest at camp",
-            "Consume one ration per character; fully restore health and focus. Two ticks.",
+            closes("Consume one ration per character; fully restore health and focus. Two ticks.", lost),
             "rest",
             "camp",
+            undefined,
+            undefined,
+            undefined,
+            lost.length > 0,
           ),
         );
+      }
       a.push(
         opt(
           "enter",
@@ -776,9 +791,13 @@ function baseActions(s: Save): ActionOption[] {
           opt(
             "prison",
             "Continue to the prison",
-            "Follow the passage beyond the cookfire.",
+            closes("Follow the passage beyond the cookfire.", s.tactical && canSpeakToScrit(s) ? scritLoss(s) : []),
             "move",
             "passage",
+            undefined,
+            undefined,
+            undefined,
+            !!s.tactical && canSpeakToScrit(s) && !f.fed,
           ),
         );
         break;
@@ -788,7 +807,7 @@ function baseActions(s: Save): ActionOption[] {
           opt(
             "persuade",
             "Mention the captive tracks",
-            "Use your evidence to argue for passage. Presence DC13; failure raises alarm.",
+            closes("Use your evidence to argue for passage. Presence DC13; failure raises alarm.", s.tactical ? [] : scritLoss(s), "Success"),
             "persuade",
             "guards",
             "hero",
@@ -802,7 +821,7 @@ function baseActions(s: Save): ActionOption[] {
           opt(
             "distract",
             "Distract the guards",
-            "Agility DC13. Success gains passage, but no supplies. Failure raises alarm.",
+            closes("Agility DC13. Success gains passage, but no supplies. Failure raises alarm.", scritLoss(s), "Success"),
             "distract",
             "guards",
             "hero",
@@ -815,7 +834,7 @@ function baseActions(s: Save): ActionOption[] {
         opt(
           "fight",
           "Attack the guards",
-          "Begin combat against two goblins.",
+          closes("Begin combat against two goblins. Scrit flees if the guards fall.", scritLoss(s)),
           "attack",
           "guards",
           undefined,
@@ -880,18 +899,23 @@ function baseActions(s: Save): ActionOption[] {
           "Enter the bell chamber",
           f.rescued
             ? "Take the courier’s testimony to Vark."
-            : "Leave the courier behind and confront Vark.",
+            : closes("Leave the courier behind and confront Vark.", ["the courier’s testimony and any negotiated seal transfer with Vark"]),
           "move",
           "bell",
+          undefined,
+          undefined,
+          undefined,
+          !f.rescued,
         ),
       );
       break;
-    case "bell":
+    case "bell": {
+      const parley = h.hp > 0 && f.rescued && f.sealKnowledge ? ["the negotiated seal transfer"] : [];
       a.push(
         opt(
           "fight",
           "Fight Vark",
-          "Begin combat. Alarm may have brought reinforcements.",
+          closes("Begin combat. Alarm may have brought reinforcements.", parley),
           "attack",
           "vark",
           undefined,
@@ -919,7 +943,7 @@ function baseActions(s: Save): ActionOption[] {
           opt(
             "maintenance",
             "Use the maintenance entrance",
-            "Begin combat with advantage on party initiative. No surprise damage.",
+            closes("Begin combat with advantage on party initiative. No surprise damage.", parley),
             "move",
             "maintenance",
             undefined,
@@ -929,14 +953,19 @@ function baseActions(s: Save): ActionOption[] {
           ),
         );
       break;
+    }
     case "aftermath":
       a.push(
         opt(
           "secure",
           "Secure the seal",
-          "Keep the seal under your party’s protection. Finish the opening adventure.",
+          closes("Keep the seal under your party’s protection. Finish the opening adventure.", f.fed ? ["leaving Scrit as the seal’s guardian"] : []),
           "interact",
           "seal",
+          undefined,
+          undefined,
+          undefined,
+          !!f.fed,
         ),
       );
       if (f.fed)
@@ -1186,7 +1215,7 @@ export function finishCheck(s: Save) {
     return true;
   }
   if (s.enemies.every((a) => a.hp === 0)) {
-    awardExperience(s,`encounter:${s.sceneId}`,s.sceneId==='bell'?250:100);
+    awardExperience(s,`encounter:${s.sceneId}`,s.sceneId==='bell'?250:ROOM_ENCOUNTER_XP);
     s.mode = "explore";
     s.turn = null;
     s.party.forEach((a) => {
@@ -1450,7 +1479,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
       const choice=Number(actorId) as 0|1;
       let success=true;
       if(choice===0&&!f[`${prefix}:defendersDefeated`]&&!(prefix==='archive-3'&&f['index:solved'])&&!infirmaryPrepared(s)&&!inkPrepared(s)){f[`${prefix}:tried`]=true;const r=rollD20(dice,h.attributes[room.challenge]+Math.floor((s.level??1)/2),room.choice[0],!!f[`${prefix}:evidence`]);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${h.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,'hero',[r]);}
-      if(success){f[`${prefix}:resolved`]=true;f[`${prefix}:choice:${choice}`]=true;fact(s,`decision:${prefix}`,choice===0&&inkPrepared(s)?INK_RESCUE:choice===0&&infirmaryPrepared(s)?PREPARED_RESCUE:room.outcomes[choice]);awardExperience(s,`room:${prefix}`,room.xp);s.relationships[choice===0?'mira':'oren']=Math.min(20,s.relationships[choice===0?'mira':'oren']+1);}
+      if(success){f[`${prefix}:resolved`]=true;f[`${prefix}:choice:${choice}`]=true;fact(s,`decision:${prefix}`,choice===0&&inkPrepared(s)?INK_RESCUE:choice===0&&infirmaryPrepared(s)?PREPARED_RESCUE:room.outcomes[choice]);awardExperience(s,`room:${prefix}`,room.xp);if(choice===0&&!f[`xp:encounter:${prefix}`]&&(!s.tactical||CURATED_ENCOUNTERS[prefix]))awardExperience(s,`resolution:${prefix}`,ROOM_ENCOUNTER_XP);s.relationships[choice===0?'mira':'oren']=Math.min(20,s.relationships[choice===0?'mira':'oren']+1);}
       else{const r=damageRoll(dice,6,0,'Setback');h.hp=Math.max(1,h.hp-r.total);log(s,`The attempt costs ${r.total} health. You can choose the alternative or confront the defenders.`,'hero',[r]);}
     }else if(kind==='exp_next'){
       const next=EXPEDITION[EXPEDITION.findIndex(r=>r.id===s.sceneId)+1];
