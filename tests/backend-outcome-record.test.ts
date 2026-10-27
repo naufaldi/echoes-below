@@ -45,7 +45,7 @@ test('a natural 20 keeps the natural die separate from the total',()=>{
 test('a trap failure strips the damage number from prose but keeps it in text',()=>{
  const s=echo();s.sceneId='hall';s.flags.plate=true;const next=applyAction(s,'disarm:hero',()=>1),[entry]=rolled(s,next);
  assert.equal(entry.check!.success,false);storyOnly(entry);
- assert.ok(fresh(s,next).some(l=>/A dart strikes Aria for \d+ damage/.test(l.text)));
+ assert.ok(fresh(s,next).some(l=>/A dart strikes Aria for \d+ damage/.test(l.text)));assert.equal(entry.prose,'The plate drops. A dart strikes you. The chain crashes; the mechanism is spent.');
 });
 test('expedition room checks record the challenge and evidence advantage',()=>{
  const room=EXPEDITION[0];let s=echo();s.sceneId=room.id;s=applyAction(s,'exp_evidence',()=>1);
@@ -62,9 +62,9 @@ test('legacy attacks record a hit and a miss against armor class',()=>{
  const hit=applyAction(s,`attack:${target.id}`,()=>20),entry=rolled(s,hit).find(l=>l.check!.actorId==='hero')!;
  assert.match(entry.text,new RegExp(`^Aria attacks ${target.name}: \\d+ damage\\.$`));
  assert.deepEqual({...entry.check,modifier:0,total:0},{kind:'attack',actorId:'hero',targetId:target.id,skill:'attack',sides:20,natural:20,modifier:0,total:0,dc:target.defense+(target.guard?2:0),success:true,critical:true});
- storyOnly(entry);framed(hit,entry);
+ assert.equal(entry.prose,`You land a blow on ${target.name}.`);storyOnly(entry);framed(hit,entry);
  const missed=applyAction(s,`attack:${target.id}`,()=>1),miss=rolled(s,missed).find(l=>l.check!.actorId==='hero')!;
- assert.equal(miss.text,`Aria attacks ${target.name}: miss.`);assert.equal(miss.check!.success,false);assert.equal(miss.check!.critical,undefined);storyOnly(miss);
+ assert.equal(miss.text,`Aria attacks ${target.name}: miss.`);assert.equal(miss.check!.success,false);assert.equal(miss.check!.critical,undefined);assert.equal(miss.prose,`${target.name} evades your attack.`);storyOnly(miss);
 });
 function battle(classId:'guardian'|'cleric'='guardian'){let s=curated(classId);for(const id of ['enter','ledge','fight'])s=applyAction(s,id,n=>n);s.turn!.actorId='hero';s.turnIndex=s.turn!.order.indexOf('hero');s.tactical!.actors.hero=makeCharacter(classId==='cleric'?'cleric':'fighter',1);s.tactical!.cells.hero=[4,3];s.tactical!.cells['guard-1']=[4,4];for(const e of s.enemies){e.hp=e.maxHp=200;s.tactical!.actors[e.id].hp=s.tactical!.actors[e.id].maxHp=200;}projectTactical(s);return s;}
 test('curated attacks record hit, critical and miss with the armor class as the target number',()=>{

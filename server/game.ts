@@ -21,7 +21,7 @@ import {CAMPAIGN_CONSEQUENCES,availableConsequences,campaignEffects} from './cam
 import {playedRoom,projectFork,endingText} from './playstyle.js';
 import {COMPANION_STORIES} from '../shared/companion-stories.js';
 import {EXPEDITION,expeditionRoom,expeditionScene} from "../shared/campaign.js";
-import {outcomeCheck,attackProse,type Outcome} from './outcome.js';
+import {outcomeCheck,attackProse,trapProse,type Outcome} from './outcome.js';
 import { randomUUID } from "node:crypto";
 import type {
   Actor,
@@ -1164,8 +1164,6 @@ const DISTRACTED = "Mira knocks a pot into the fire. You slip past while the gua
 const JAMMED = "The lock jams. You can still break the gate.";
 const COURIER = "The rescued courier testifies that Vark is containing a dangerous force, not ringing the bell to summon an army.";
 const SEAL_TRANSFER = "Vark studies the courier’s testimony, then nods. Together, you transfer the seal without breaking its ward.";
-/** The trap line without its damage number, for story surfaces. */
-const trapProse = (a: Actor) => `The plate drops. A dart strikes ${a.name}. The chain crashes; the mechanism is spent.`;
 function trap(s: Save, a: Actor, dice: Dice) {
   const r = damageRoll(dice, 6, 0, "Pressure plate");
   a.hp = Math.max(0, a.hp - r.total);
@@ -1308,7 +1306,7 @@ function strike(s: Save, a: Actor, b: Actor, dice: Dice) {
     "rules",
     undefined,
     undefined,
-    { prose: attackProse(a.name, b.name, result.hit, result.hit && b.hp === 0), check: outcomeCheck("attack", a.id, "attack", result.rolls[0]!, armorClass, result.hit, { targetId: b.id, critical: result.rolls[0]!.kept === 20, advantage: aimed }) },
+    { prose: attackProse(a, b, result.hit, result.hit && b.hp === 0), check: outcomeCheck("attack", a.id, "attack", result.rolls[0]!, armorClass, result.hit, { targetId: b.id, critical: result.rolls[0]!.kept === 20, advantage: aimed }) },
   );
 }
 function heal(s: Save, a: Actor, b: Actor, dice: Dice, potion = false) {
