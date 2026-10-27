@@ -1,5 +1,7 @@
 # Echoes Below — Release 1 execution status
 
+> Superseded for scope: the Release 1 freeze below no longer stops work. [PRD](PRD.md) now defines Presentation v2; the Release 1 product contract is archived in [PRD-release1-archive.md](PRD-release1-archive.md).
+
 Scope frozen by the owner on 6 September 2026. The current campaign is final for this release. Historical expansion work is archived in EXECUTION_STATUS-pre-release1-archive.md. The previous 24-hour/human-playtest goal is superseded by release closure; those claims are explicitly not made.
 
 ## Source readiness

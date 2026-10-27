@@ -1,60 +1,175 @@
-# Echoes Below — Release 1 product contract
+# Echoes Below — Presentation v2 enhancement contract
 
-Release freeze: 6 September 2026. This document replaces the expansion contract. The existing implementation is the final content of Release 1. [RFC](RFC.md) defines its architecture; [execution status](EXECUTION_STATUS.md) records release gates. Prior checkpoint notes are historical archives, not outstanding release commitments.
+Status: **approved direction, 27 October 2026** (owner decisions recorded below). Created at source `54909eb`. Character models: [CHARACTERS.md](CHARACTERS.md).
 
-## Product and scope
+This document supersedes the Release 1 freeze. The owner has reopened development for a presentation remake. Release 1's product contract is archived in [PRD-release1-archive.md](PRD-release1-archive.md). It remains the reference for shipped gameplay, rules, saves, AI and privacy behavior, and those stay in force unless this document changes them. Freeze statements in [RFC](RFC.md), [execution status](EXECUTION_STATUS.md), [goal prompt](GOAL_PROMPT.md), [implementation](IMPLEMENTATION.md), [expansion status](EXPANSION_STATUS.md) and [playtest handoff](PLAYTEST_HANDOFF.md) describe Release 1 closure only. They do not stop v2 work.
 
-A desktop browser fantasy adventure for one player and two companions. Players choose actions and targets while the engine resolves rules, movement and dice. Original Briarwatch characters and setting draw on the readable choices, party framing and dice anticipation of Baldur’s Gate 3. This is a stylized independent game, not BG3 or a complete tabletop D&D implementation.
+## Goal
 
-Release 1 contains six chapters and 46 locations: the six-location Bell Beneath Briarwatch opening, then eight locations each in Drowned Archive, Ash Market, Rootbound Prison, Hollow Choir and Last Descent. It includes 18 main and 12 side quests, recorded decisions, shared XP, levels 1–8 and a reachable ending. Locations vary in depth; many later rooms use compact authored choices. **No verified 24-hour duration or completed first-time human playtests is claimed.** No duration minimum gates this release.
+Rebuild the presentation layer so the existing adventure looks, sounds and plays like a 3D game rather than a menu over a backdrop. **Play feel comes first**: combat readability, pacing and HUD, using the current assets. Characters are produced separately by the owner with Tripo against [CHARACTERS.md](CHARACTERS.md) and integrated when ready. Goblins and other enemies keep their current models. The engine (`server/`, `shared/` rules and state, API, saves, tests) is kept and not redesigned; story changes that need the engine are a separate track (Track B) and need explicit approval.
 
-Do not add chapters, quests, monsters, art packs or large mechanics during release closure. Multiplayer, full SRD coverage, expanded branching, racial abilities, new subclasses, richer bespoke animation and long-form campaign pacing are future work.
+## Evidence base
 
-## Playable journey
+Local production build of `54909eb` played on 27 October 2026 in headless Chromium at 1440×900. Covered: creation, Broken Approach, Counterweight Hall, Goblin Cookfire, and goblin combat in both Echo Rules and Curated tactics. Screenshots were taken locally and are not committed. Frame rate and memory were **not measured**. Later chapters were **not played**. Story structure, audio and rendering were checked from code (sections below).
 
-1. Name the hero and choose Fighter, Rogue, Wizard or Cleric; Human, Elf, Dwarf or Halfling identity; background and palette. Customize Mira and Oren’s class, race and palette while preserving their authored names and stories. Races alter visual proportions and identity, not full racial ability packages.
-2. Choose Echo Rules (default, preserved for existing saves) or the explicitly labelled curated tactics preview. The latter is a supported playable subset with known omissions, not full SRD certification.
-3. Free story mode is default and supports the complete authored campaign and automatic companion decisions without paid AI. Optional personal-key or configured host allowance enables open-ended AI conversation and generated voice.
-4. Select an object label or its equivalent in the target/action menu. Inspect, converse, solve a puzzle, search supplies or choose a route. Confirm consequential actions; failed checks leave another supported route.
-5. Observe the saved dice and outcome. Continue or skip presentation without rerolling. Combat highlights the current actor and presents action outcomes separately. Curated allies/enemies await explicit automatic-step controls; companion takeover and tactics are available.
-6. Rescue the courier, confront Vark, decide who guards the seal and continue to Chapter II. Later decisions preserve their facts, resources and consequences.
-7. Reload and continue the same saved adventure. Confirmed state survives skipped/interrupted playback. Defeat offers checkpoint recovery into a branch; existing saves are retained.
+## Observed problems
 
-## Rules and companions
+### Characters (P1)
+- Only three hero models exist: `knight`, `mage`, `rogue` (`shared/visual-identity.ts:2`). Fighter and Cleric both map to `knight` (`shared/visual-identity.ts:4`). A Fighter hero beside Oren the Fighter renders as two identical knights. Party members are told apart only by labels.
+- Race is a uniform height scale (`actorHeight`, `shared/visual-identity.ts:7`). An Elf Wizard looks like a Human Wizard.
+- Identity/palette is a material colour multiply (`client/World.tsx`). The three palettes were not compared side by side.
+- Party models are chibi KayKit, while goblins use the Quaternius imp. The styles clash, and goblins render smaller than the heroes they threaten.
 
-Echo Rules keeps its compact four-attribute, movement/action, Defense, Guard/Aim, focus and potion system. Initial HP is Fighter24, Rogue18, Wizard16, Cleric20. Its level-up HP/focus changes are house rules. Internal class identifiers remain compatible with old saves.
+### Combat readability (P1)
+- Every roll and outcome is shown as a centered modal over the scene (`client/TurnPlayback.tsx`, mounted from `client/App.tsx:98`). The world plays the attack/hit cue at the same moment (`client/World.tsx:33`), so it is hidden behind the modal. In practice combat reads as a sequence of dialog boxes.
+- The die is a small 3D mesh inside the modal (`client/die-geometry.ts`), separate from the world, so the roll never happens in the scene. The modal mounts a separate `<Canvas>` per roll (`client/TurnPlayback.tsx:37`). Headless Chromium logged `THREE.WebGLRenderer: Context Lost` three times during one combat. This is not yet confirmed in a real browser.
+- No in-world feedback: no enemy HP bars, no damage numbers, no projectile for ranged/spell attacks (the Wizard "attacks" from distance with no visible effect), no hit reaction readable at scene scale.
+- Curated tactics advertises grid movement, but the grid is not visible: no tile overlay, no movement range, no click-to-move. Movement is chosen from menu text ("Move left", "Approach Goblin guard").
 
-Curated tactics uses a versioned SRD 5.2.1-inspired subset: six combat abilities, grid movement, action/bonus/reaction resources, AC, initiative, advantage/disadvantage, death saves, concentration, selected conditions, opportunity attacks, Help, class actions, selected spells/upcasting, rest resources and ability improvements. Exploration retains the authored four-attribute adapter. Class-specific progression is implemented only for the selected features; complete class/subclass spell lists and racial abilities are excluded. The in-game attribution identifies licensed rules material.
+### Environment (P1)
+- All Chapter I rooms seen share one shell: the same back wall, arched door, pillars and floor tiles. Only dressing changes. Room changes feel like label changes.
+- Broken Approach is written as an outdoor hillside in rain but renders as an indoor tiled room with pine trees placed on the tiles.
+- `client/DungeonDressing.tsx:13` varies dressing by chapter prefix (archive/market/prison/choir/final). Later chapters were not inspected.
 
-Mira and Oren retain authored personalities, witnessed-fact boundaries, trust and private story scenes. Paid AI may propose a currently legal action, but the rules engine validates and resolves it. Free/failure tactics remain available. AI cannot create rewards, decide major bargains, rewrite hidden facts or execute dictated text automatically.
+### HUD and camera (P2)
+- The left party column, right action panel and bottom story panel cover most of the 1440×900 viewport. The 3D scene is a strip in the middle, and the party stands under the story panel.
+- The room title and subtitle overlap the scene and, in combat, the initiative tracker.
+- The creation panel scrolls internally. "Customize your companions", play mode and "Begin your descent" sit below the fold.
+- The default camera (drag to orbit, scroll to zoom) does not auto-frame the active actor or target during combat.
 
-## Existing encounter and resource behavior
+### Audio (P1)
+- The game has **no music, no ambience and no sound effects**. `public/` contains no audio files.
+- The only audio is optional spoken dialogue: OpenAI `gpt-4o-mini-tts` voices (`client/own-ai.ts:9`, `server/ai.ts:351`; Mira `coral`, Oren `onyx`, narrator `ash`) via a personal key or a host allowance. The host allowance is disabled, so **the default free mode is completely silent**.
+- Dice, hits, misses, footsteps, doors and UI have no feedback sound.
 
-The opening supports cart evidence, counterweight puzzle or safe ledge, ration-based peaceful passage or goblin battle, key/pick/force prison rescue, courier/ledger testimony and Vark negotiation/combat. Additional implemented staged encounters include the Bell Index, infirmary and Ink Garden. These are frozen content, not a promise that every room has equivalent depth.
+### Rendering (P2)
+- WebGL2 through React Three Fiber's default `WebGLRenderer` (`client/World.tsx:97`: `shadows`, `dpr={[1,1.5]}`, `antialias`). **WebGPU is not used.** No frame-rate measurement exists.
+- Known costs: a second WebGL context for every dice roll (`client/TurnPlayback.tsx:37`), real-time shadows, and per-object cloned props and materials (`client/DungeonDressing.tsx`, `client/World.tsx:23`).
+- The production bundle is one 1.33 MB JavaScript chunk (373 kB gzip), plus 40 MB of models loaded on demand.
 
-Quest rewards and caches are once-only. Deadlines reflect the next required stage; missed optional objectives do not block the main route. Curated expedition caches supply one potion in ordinary rooms, two in authored combat rooms and three rations at chapter landings; living carriers with the least receive supplies first. Echo Rules retains three potions per expedition cache. No inventory reset or migration accompanies this release.
+### Pacing (P2, gameplay, not visual)
+- Echo Rules initiative needs one click per combatant (5 modals) before the first turn.
+- Exploration lists the same check once per party member ("Inspect floor · Alden / Mira / Oren"). Counterweight Hall shows 13 actions in a list that must be scrolled.
+- During a combat turn the automation harness reported "End turn" covered by the free-text box. A visual check is still needed.
 
-## Presentation, audio and privacy
+### Story structure (P1, engine; Track B)
+- The campaign is complete from start to finish: 6 chapters, 46 locations, a reachable ending. But it is **one fixed line**. Every route converges on the next listed room (`server/game.ts:1456`). There are no alternative rooms or routes.
+- The final ending reads only the last room's binary choice (`server/game.ts:1457`, `shared/campaign.ts:53`). Earlier decisions do not affect it.
+- Earlier choices change texture, not route: Chapter I interim ending (`fed` → "A Promise Shared"), one extra Vark enemy (`alarm`), ten small cross-room payoffs (−3 DC, potions, heal, one fewer enemy; `server/campaign-consequences.ts:11-20`), and companion trust (choice 0 raises Mira, choice 1 raises Oren).
+- Chapters II–VI use one template per room (description, clue, two choices, two outcomes, four objects). Bespoke mechanics exist only in three Drowned Archive rooms, and only in Curated tactics.
+- Combat is optional after Chapter I. Choice 1 is always available without a check (`server/game.ts:666`). In Echo Rules, winning a fight makes choice 0 free and grants XP (`server/game.ts:665`), so the peaceful player is the one who gets pushed onto the fallback choice.
+- Hidden branch closer: resting at camp in Echo Rules uses every ration (`server/game.ts:1535`). That silently removes "Offer a ration", the Scrit ending and the negotiation path.
+- To verify: "Cross cautiously" after the maintenance plate is found may still spring the trap (`server/game.ts:1580-1610`). A continuity slip: archive-8 outcome 0 credits "Scrit's people" even when Scrit fled (`shared/campaign.ts:13`).
 
-Use the existing stylized party and dungeon assets, warm light, cool shadows and gold-accented panels. Canonical game identities drive labels rather than filenames. Label placement avoids HUD, other labels and registered character silhouettes; selected targets remain available through the menu when a label is suppressed. Labels and dressing reflect rescued/departed NPC state. Desktop is the release target; small screens and extreme camera angles are not fully certified.
+## Non-goals
 
-Personal keys live only in page memory and go directly to OpenAI. Check & connect discloses a small paid model-access check and reports checking, success, rejection or disconnect. Reload clears the key. A successful text check does not guarantee speech access. Personal usage is billed by OpenAI and not covered by host allowance limits. Host mode is disabled when unavailable. There is no silent switch from personal/free mode to paid host calls.
+Track A (this contract): no new chapters, quests, monster types, rules, classes or mechanics. Enemy models stay unchanged for now. No rules or save-schema changes. No multiplayer. No mobile certification. AI, key handling and privacy behavior are unchanged (see archive).
 
-Narration and speech are optional. Text remains available after speech failure; stop/cancel prevents stale playback. Microphone denial or unsupported input leaves editable text. Provider timeout, grounding rejection or budget failure must show feedback and release busy state. Keys must never enter saves, game-server requests, logs or browser storage.
+## Approach
 
-## Release acceptance
+Keep the engine and improve the existing client **in place**, one issue and one pull request at a time. Each PR must pass every existing gate and stay playable.
 
-| Requirement | Required observable behavior | Verification owner |
+Revised 27 October 2026: an earlier draft planned a parallel `/v2` client. The playtest showed the main problems are local (`client/TurnPlayback.tsx`, `client/World.tsx`, the `client/App.tsx` layout, `client/style.css`). A parallel client would rebuild creation, journal, settings, keys and voice before anything visible improved.
+
+| Phase | Output | Exit criteria |
 |---|---|---|
-| R1-01 Creation | Selected identity/class/rules persist; legacy creation works | creation/rules tests and browser |
-| R1-02 Authored progression | Trap, both goblin routes, rescue, Vark and later chapter remain reachable | engine tests, traversal audit and browser |
-| R1-03 Combat | Legal resources/turns, separate outcomes, recoverable defeat | rules tests and browser |
-| R1-04 Saves | No rerolls on reload, duplicate/stale rejection, visitor isolation | storage/adapter integration and browser |
-| R1-05 Presentation | No missing bundled models or blocking desktop labels/panels | asset gate, layout tests and browser |
-| R1-06 AI recovery | Explicit mode/key status; free play survives provider failures | AI/session tests and browser feedback |
-| R1-07 Publication | Complete tests, three type checks, build and asset gate pass before one deployment | release checklist |
-| R1-08 Honest handoff | Record limitations, exact release source and local/production evidence | execution status and final handoff |
+| 0 Baseline | Frame-time and draw-call measurement of the current build in a headed browser | Recorded numbers for Broken Approach and goblin combat. Sets the V2-08 floor |
+| 2 Play-feel slice | Creation → Broken Approach → Counterweight Hall → goblin combat with current models: in-world combat feedback, in-scene dice, single canvas, HUD that leaves the scene visible, grouped actions, fewer initiative clicks, per-room layouts, first audio pass | V2-02…V2-07, V2-11, V2-12 |
+| 3 Characters (parallel, owner-paced) | Owner delivers one spike model first, then the four class models per [CHARACTERS.md](CHARACTERS.md); asset gate extended with budgets and clips; models integrated | CHARACTERS.md C-01…C-10, V2-01, V2-10 |
+| 4 Rollout | Remaining rooms and chapters | Parity with the Release 1 journey (archive §Playable journey) |
 
-## Future work outside Release 1
+## Vertical slice acceptance
 
-Measured campaign pacing and first-time human playtests; deeper later encounters; full rules/exploration integration; additional race-specific models and animation polish; broader devices/accessibility/performance testing; account recovery and cross-device saves; complete real-key microphone/dialogue/audio sessions across browsers. These are not autonomous follow-up instructions. Development stops after verified Release 1 publication.
+| ID | Required observable behavior | Verification |
+|---|---|---|
+| V2-01 Distinct party | Hero, Mira and Oren tell apart by silhouette with labels hidden, for every class choice in scope | Browser screenshots per class |
+| V2-02 In-world combat | Attack, hit, miss and death read in the scene. Damage/miss text and HP are visible in world. Rolls do not cover the acting characters | Browser recording of one full goblin combat |
+| V2-03 Visible dice | The roll is visible together with the scene. Result and modifiers stay readable. Skip/continue never rerolls | Browser + existing playback tests |
+| V2-04 Room identity | Each slice room is recognisably different with labels hidden. Broken Approach reads as exterior | Side-by-side screenshots |
+| V2-05 Scene space | At 1440×900 the active actor and target are never covered by HUD. Creation's begin action is visible without scrolling | Layout checks + screenshots |
+| V2-06 Grid (Curated) | Tiles, movement range and target are visible; movement selectable in scene and in menu | Browser |
+| V2-07 Stability | One canvas for the world. Zero WebGL context losses across a full combat | Console capture in headless and headed Chrome |
+| V2-08 Budget | Frame time no worse than the Phase 0 baseline on the same machine; character budgets per CHARACTERS.md §4.5 | Measured frame time + asset gate |
+| V2-09 Engine unchanged | Engine, rules, save and API tests pass unchanged. Three type checks and build pass. Release 1 saves load in v2 | Local run of the full suite |
+| V2-10 Asset tests updated deliberately | `backend-asset-bundle`, `backend-visual-identity` and `backend-monster-animation` tests are rewritten to the new manifest in the same change that replaces assets, never deleted to go green | Diff review + asset gate |
+| V2-11 Audio | Free mode has exploration and combat ambience/music, and SFX for dice, hit, miss, footsteps, doors and UI. Master/music/SFX volume and mute persist. Audio starts only after a user gesture. Reduced-motion players still get sound. All audio is licensed and listed in a manifest | Browser + manifest check |
+| V2-12 Pacing | Combat starts after at most one confirmation (initiative summary, not one modal per combatant). Repeated per-member checks are grouped into one action with a member picker. No action list needs scrolling in the slice rooms at 1440×900 | Browser |
+
+## Audio sourcing policy
+
+- **Allowed licences:** CC0 first. CC-BY 4.0 only with credit in the in-game credits, the README and the manifest. CC-BY 3.0 is case by case, with the same credit.
+- **Excluded:** NonCommercial (NC), NoDerivatives (ND; looping, trimming or transcoding counts as a derivative), GPL/LGPL audio, custom "royalty-free" licences, AI-generated audio with unclear rights, anything ripped from games or videos. FreePD is excluded because it is permanently closed and its terms cannot be re-verified.
+- **Per file, not per page.** OpenGameArt pages can list several licences or bundle tracks from different authors. Each shipped file records `file`, `sha256`, `title`, `author`, `source` (page URL), `licence`, `licenceUrl`, `retrieved` (date) and `changes` (trim, loop point, transcode) in `public/assets/audio/manifest.json`. `scripts/verify-asset-bundle.mjs` fails the build when an audio file has no manifest entry, the hash differs, or the licence is not on the allow-list.
+- **Format and size.** Ship a format with broad desktop browser support (MP3, or AAC in M4A). Ship OGG only after Safari playback is verified in the target versions. Music loops are 64–128 kbps. Total audio budget is ≤ 15 MB, loaded on demand: no music before the title screen. `ffmpeg` is not installed in the current environment, so transcoding needs it installed first.
+- **Owner approves music by ear.** Tone fit cannot be judged from metadata. Candidate tracks stay "pending owner approval" until the owner has listened.
+- **Downloads** go into a new empty directory and are checked as real audio files before being copied into `public/`.
+
+### Candidate sources (licence checked on the source page, 27 October 2026)
+
+| Use | Candidate | Author / source | Licence | Notes |
+|---|---|---|---|---|
+| SFX: footsteps, weapons, doors, foley | RPG Audio (50 files) | Kenney, kenney.nl/assets/rpg-audio | CC0 | Format to confirm after download |
+| SFX: hits, impacts | Impact Sounds (130 files) | Kenney, kenney.nl/assets/impact-sounds | CC0 | |
+| SFX: dice | Casino Audio (50 files, dice tag) | Kenney, kenney.nl/assets/casino-audio | CC0 | Confirm the dice clips exist |
+| SFX: UI clicks | Interface Sounds (100 files) | Kenney, kenney.nl/assets/interface-sounds | CC0 | |
+| Ambience: dungeon | Loopable Dungeon Ambience | JaggedStone, opengameart.org/content/loopable-dungeon-ambience | CC0 | OGG, loopable, wind + drips |
+| Music: combat | Determined Pursuit (epic orchestra loop) | Emma_MA, opengameart.org/content/determined-pursuit-epic-orchestra-loop | CC0 | 19.1 MB WAV, needs transcoding |
+| Music: tension / dungeon | Trance Dungeon | MintoDog, opengameart.org/content/trance-dungeon | CC0 | Loopable MP3/OGG; tone may not fit, owner to judge |
+| Music: exploration (alternative) | In Darkness; Fantasy Music and Drum Loops Pack | Of Far Different Nature; NorthFantasyMusic (OpenGameArt) | CC-BY 4.0 | Needs attribution; verify per file |
+
+Kenney packs say CC0 on the source page; a credit "Kenney.nl" is courteous but not required. Credits are listed in-game anyway.
+
+## Owner decisions (27 October 2026)
+
+1. **Priority:** combat readability → characters → environment → HUD/camera. Play feel is fixed first.
+2. **Characters:** one Tripo spike model, then one model per class (4). Race variants later. The owner produces them; integration follows [CHARACTERS.md](CHARACTERS.md).
+3. **Environment:** keep Quaternius pieces; each slice room gets its own layout, not one shared shell. Replacing the kit is decided after the slice.
+4. **Repository:** same repo, branch and PR per phase, stop before merge.
+5. **Enemies:** goblins and other enemies keep their current models for now.
+
+## Rendering decision: stay on WebGL2 for now
+
+WebGPU now ships in all major browsers, but its maturity differs by platform, and WebGL2 remains the safe baseline. Switching three.js to `WebGPURenderer` also affects materials, post-processing and drei helpers. More importantly, nothing shows the GPU is the bottleneck. Fix the known costs first: one canvas, tuned shadow maps, shared materials, instanced dressing, code-split bundle. Measure in Phase 0. Open a WebGPU spike only if the measured bottleneck is GPU-side and the fixes above are insufficient.
+
+## Track B — story branching (proposal, needs owner approval)
+
+This track changes the engine and content, so it is not part of Track A. Goal: two playstyles produce different journeys and endings, not only different text.
+
+- **Playstyle ledger.** Derive from choices already recorded: *Mercy ↔ Force* (peaceful vs combat resolutions), *Mira ↔ Oren* trust, and *Scrit alliance* (`fed`, entrust).
+- **One fork per chapter.** One room per chapter has two variant states chosen by the ledger (for example allies help vs alarm raised). These are variants of existing rooms, not new chapters.
+- **Endings from the whole run.** Three or four endings computed from the ledger and key decisions, replacing the single last-room choice. Fix the Scrit continuity slip.
+- **Fair rewards.** A peaceful resolution earns comparable XP and unlocks as much as a combat win.
+- **Visible branch closers.** Warn before an action (such as resting) removes a route.
+- **Verification.** Extend `scripts/audit-campaign-progression.ts` to run a diplomatic profile and an aggressive profile to the end, and assert that their routes and endings differ.
+
+### Playstyle A vs B — today and target
+
+Playstyle A is diplomatic/stealthy: feed Scrit, negotiate, avoid fights, choose peaceful room options. Playstyle B is aggressive: fight every offered battle and force gates.
+
+| Aspect | A today | B today | Target (Track B) |
+|---|---|---|---|
+| Route | Same 46 rooms in the same order | Same 46 rooms in the same order | One ledger-driven room variant per chapter, so A and B see at least 5 different room states |
+| Chapter I ending | "A Promise Shared" (if Scrit was fed) or "The Keepers of the Bell" | "The Keepers of the Bell" | Kept, and recorded into the ledger |
+| Vark encounter | Negotiation possible (DC16 Echo / DC13 Curated with evidence) | Fight; one extra enemy if the alarm was raised | Kept |
+| Later rooms | A failed check pushes to the fallback choice | A won fight makes choice 0 free and grants XP | Peaceful success earns comparable XP and access |
+| Companions | Trust follows choice 0/1, not style | Same | Ledger also moves Mira (mercy/insight) and Oren (protection/duty) trust |
+| Final ending | Decided by the last room's choice only | Same | 3–4 endings from ledger + key decisions |
+| Combat | Avoidable after Chapter I | Offered in every room (Echo Rules) | Kept; combat stays a real option, not the only rewarded one |
+
+### Track B acceptance (if approved)
+
+| ID | Check |
+|---|---|
+| B-01 | The diplomatic and aggressive audit profiles both reach an ending, and the endings differ |
+| B-02 | The two profiles see different room states in each of chapters II–VI |
+| B-03 | Every branch-closing action warns before confirmation |
+| B-04 | Release 1 saves load and continue; old flags map into the ledger without data loss |
+| B-05 | Engine, rules and campaign audit tests pass; new tests cover ledger and ending selection |
+
+## Next step
+
+Phase 0 (frame-time baseline) or Phase 2 (play-feel slice) starts on the owner's go. Track B waits for explicit approval. Character integration starts when the owner delivers the first model.
+
+## Delivery
+
+Ordinary branch, commit, push and PR per phase. Stop before merge. No deployment to Sites without explicit owner approval. Reuse the existing Site registration and never create another. Never print or commit `.env`.
