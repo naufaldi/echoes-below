@@ -21,6 +21,7 @@ import {CAMPAIGN_CONSEQUENCES,availableConsequences,campaignEffects} from './cam
 import {playedRoom,projectFork,endingText} from './playstyle.js';
 import {COMPANION_STORIES} from '../shared/companion-stories.js';
 import {EXPEDITION,expeditionRoom,expeditionScene} from "../shared/campaign.js";
+import {outcomeCheck,attackProse,trapProse,type Outcome} from './outcome.js';
 import { randomUUID } from "node:crypto";
 import type {
   Actor,
@@ -331,6 +332,7 @@ export function log(
   source: GameLog["source"] = "rules",
   animation?: GameLog["animation"],
   actionKind?: GameLog["actionKind"],
+  outcome?: Outcome,
 ) {
   s.logs.push({
     id: randomUUID(),
@@ -342,6 +344,8 @@ export function log(
     text,
     source,
     rolls,
+    ...(outcome?.prose?{prose:outcome.prose}:{}),
+    ...(outcome?.check?{check:outcome.check}:{}),
   });
   if (s.logs.length > 250) s.logs.shift();
   if (s.presentation && (animation || rolls.length || /moves|guards|aims|runs|restores/.test(text))) {
@@ -1110,6 +1114,7 @@ function check(
   dc: number,
   training: string,
   purpose: string,
+  prose: { pass: string; fail: string },
 ) {
   if (a.hp <= 0)
     throw new GameError(
@@ -1128,6 +1133,10 @@ function check(
     `${a.name}: ${purpose} ${success ? "succeeded" : "failed"} (${r.total} vs DC ${dc}).`,
     a.id,
     [r],
+    "rules",
+    undefined,
+    undefined,
+    { prose: success ? prose.pass : prose.fail, check: outcomeCheck("check", a.id, attribute, r, dc, success) },
   );
   return success;
 }
@@ -1146,6 +1155,15 @@ function enterScene(s: Save, id: SceneId) {
   if(s.tactical)placeExplorationParty(s,s.party[0],[0,-1.5]);
   log(s, publicSave(s).scene.description, "dm", [], "authored");
 }
+const CAPTIVES = "The tracks show captives were marched alive into the relay.";
+const PLATE = "A pressure plate is connected to the wall slits. The side ledge avoids it.";
+const HALT = "You halt at a hidden pressure plate. The side ledge avoids it.";
+const MAINTENANCE = "A relay diagram marks a maintenance entrance into the bell chamber.";
+const GUARDS_YIELD = "The guards lower their spears and hand over the gate key.";
+const DISTRACTED = "Mira knocks a pot into the fire. You slip past while the guards stamp out the sparks.";
+const JAMMED = "The lock jams. You can still break the gate.";
+const COURIER = "The rescued courier testifies that Vark is containing a dangerous force, not ringing the bell to summon an army.";
+const SEAL_TRANSFER = "Vark studies the courier’s testimony, then nods. Together, you transfer the seal without breaking its ward.";
 function trap(s: Save, a: Actor, dice: Dice) {
   const r = damageRoll(dice, 6, 0, "Pressure plate");
   a.hp = Math.max(0, a.hp - r.total);
@@ -1160,11 +1178,7 @@ function trap(s: Save, a: Actor, dice: Dice) {
 }
 function rescue(s: Save) {
   s.flags.rescued = true;
-  fact(
-    s,
-    "courier",
-    "The rescued courier testifies that Vark is containing a dangerous force, not ringing the bell to summon an army.",
-  );
+  fact(s, "courier", COURIER);
   trust(s, "oren", "rescue");
 }
 function startCombat(s: Save, dice: Dice, advantage = false) {
@@ -1281,6 +1295,7 @@ function strike(s: Save, a: Actor, b: Actor, dice: Dice) {
     a.aim,
     a.classId === "goblin" ? 1 : a.classId === "vark" ? 2 : modifier,
   );
+  const aimed = a.aim, armorClass = b.defense + (b.guard ? 2 : 0);
   a.aim = false;
   b.hp = Math.max(0, b.hp - result.damage);
   log(
@@ -1288,6 +1303,10 @@ function strike(s: Save, a: Actor, b: Actor, dice: Dice) {
     `${a.name} attacks ${b.name}: ${result.hit ? `${result.damage} damage${b.hp === 0 ? "; downed" : ""}` : "miss"}.`,
     a.id,
     result.rolls,
+    "rules",
+    undefined,
+    undefined,
+    { prose: attackProse(a, b, result.hit, result.hit && b.hp === 0), check: outcomeCheck("attack", a.id, "attack", result.rolls[0]!, armorClass, result.hit, { targetId: b.id, critical: result.rolls[0]!.kept === 20, advantage: aimed }) },
   );
 }
 function heal(s: Save, a: Actor, b: Actor, dice: Dice, potion = false) {
@@ -1440,6 +1459,13 @@ function resolveAction(original: Save, id: string, dice: Dice): Save {
   if(result.tactical&&result.mode!=='combat')for(const actor of result.party){const c=result.tactical.actors[actor.id];if(c.dead)actor.hp=0;c.hp=actor.hp;c.maxHp=actor.maxHp;if(c.hp>0)c.death={successes:0,failures:0,stable:false};if(c.hp===0)c.concentration=null;if(id==='rest'||id==='exp_rest'||id==='continue_campaign'){c.slots=[...c.maxSlots];c.hitDice=c.level;restoreClassResources(c);}}
   return result;
 }
+/** A successful skill check is credited with the XP its consequence earned in the same action, on the journal entry and its playback frame. */
+function creditCheckXp(s: Save, original: Save) {
+  const xp = (s.xp ?? 0) - (original.xp ?? 0), existing = new Set(original.logs.map((entry) => entry.id));
+  const checks = s.logs.filter((entry) => entry.check?.kind === "check" && !existing.has(entry.id));
+  if (xp <= 0 || checks.length !== 1 || !checks[0]!.check!.success) return;
+  for (const entry of [checks[0]!, ...(s.presentation ?? []).filter((frame) => frame.log.id === checks[0]!.id).map((frame) => frame.log)]) entry.check!.xp = xp;
+}
 function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
   const s = structuredClone(original);
   s.presentation = [];
@@ -1485,13 +1511,14 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
     else if(kind==='exp_choice'){
       const choice=Number(actorId) as 0|1;
       let success=true;
-      if(choice===0&&!f[`${prefix}:defendersDefeated`]&&!(prefix==='archive-3'&&f['index:solved'])&&!infirmaryPrepared(s)&&!inkPrepared(s)){f[`${prefix}:tried`]=true;const r=rollD20(dice,h.attributes[room.challenge]+Math.floor((s.level??1)/2),room.choice[0],!!f[`${prefix}:evidence`]);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${h.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,'hero',[r]);}
+      if(choice===0&&!f[`${prefix}:defendersDefeated`]&&!(prefix==='archive-3'&&f['index:solved'])&&!infirmaryPrepared(s)&&!inkPrepared(s)){f[`${prefix}:tried`]=true;const r=rollD20(dice,h.attributes[room.challenge]+Math.floor((s.level??1)/2),room.choice[0],!!f[`${prefix}:evidence`]);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${h.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,'hero',[r],'rules',undefined,undefined,{prose:success?room.outcomes[choice]:'The attempt fails and leaves you hurt. You can choose the alternative or confront the defenders.',check:outcomeCheck('check','hero',room.challenge,r,dc,success,{advantage:!!f[`${prefix}:evidence`]})});}
       if(success){f[`${prefix}:resolved`]=true;f[`${prefix}:choice:${choice}`]=true;fact(s,`decision:${prefix}`,choice===0&&inkPrepared(s)?INK_RESCUE:choice===0&&infirmaryPrepared(s)?PREPARED_RESCUE:room.outcomes[choice]);awardExperience(s,`room:${prefix}`,room.xp);if(choice===0&&!f[`xp:encounter:${prefix}`]&&(!s.tactical||CURATED_ENCOUNTERS[prefix]))awardExperience(s,`resolution:${prefix}`,ROOM_ENCOUNTER_XP);s.relationships[choice===0?'mira':'oren']=Math.min(20,s.relationships[choice===0?'mira':'oren']+1);}
       else{const r=damageRoll(dice,6,0,'Setback');h.hp=Math.max(1,h.hp-r.total);log(s,`The attempt costs ${r.total} health. You can choose the alternative or confront the defenders.`,'hero',[r]);}
     }else if(kind==='exp_next'){
       const next=EXPEDITION[EXPEDITION.findIndex(r=>r.id===s.sceneId)+1];
       if(next)enterScene(s,next.id);else{s.mode='complete';s.ending=endingText(s);log(s,'The descent is complete. Your choices remain in the journal.','dm',[],'authored');}
     }
+    creditCheckXp(s,original);
     s.revision++;s.updatedAt=new Date().toISOString();return s;
   } else if (s.mode === "explore") approachTarget(s, option);
   if(kind==="continue_campaign"){s.revision++;s.updatedAt=new Date().toISOString();return s;}
@@ -1558,13 +1585,9 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
       case "approach":
         if (kind === "tracks") {
           s.attempts.push(id);
-          if (check(s, dice, a, "insight", 10, "inspect", "Read the tracks")) {
+          if (check(s, dice, a, "insight", 10, "inspect", "Read the tracks", { pass: CAPTIVES, fail: "The trampled mud keeps its secrets." })) {
             f.tracks = true;
-            fact(
-              s,
-              "captives",
-              "The tracks show captives were marched alive into the relay.",
-            );
+            fact(s, "captives", CAPTIVES);
           }
         } else if (kind === "rest") {
           s.party.forEach((a) => {
@@ -1584,28 +1607,20 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
         if (kind === "inspect") {
           s.attempts.push(id);
           if (
-            check(s, dice, a, "insight", 13, "inspect", "Inspect the floor")
+            check(s, dice, a, "insight", 13, "inspect", "Inspect the floor", { pass: PLATE, fail: "The dusty flagstones give nothing away." })
           ) {
             f.plate = true;
-            fact(
-              s,
-              "plate",
-              "A pressure plate is connected to the wall slits. The side ledge avoids it.",
-            );
+            fact(s, "plate", PLATE);
           }
         } else if (kind === "chain") {
           s.attempts.push(id);
-          if (check(s, dice, a, "insight", 10, "inspect", "Study the chain")) {
+          if (check(s, dice, a, "insight", 10, "inspect", "Study the chain", { pass: MAINTENANCE, fail: "The chain’s purpose stays unclear." })) {
             f.maintenance = true;
-            fact(
-              s,
-              "maintenance",
-              "A relay diagram marks a maintenance entrance into the bell chamber.",
-            );
+            fact(s, "maintenance", MAINTENANCE);
           }
         } else if (kind === "disarm") {
           s.attempts.push(id);
-          if (check(s, dice, a, "agility", 13, "disarm", "Disarm the plate")) {
+          if (check(s, dice, a, "agility", 13, "disarm", "Disarm the plate", { pass: "The counterweight settles. The plate is safe.", fail: trapProse(a) })) {
             f.trapSpent = true;
             trust(s, "mira", "trap");
             log(s, "The counterweight settles. The plate is safe.");
@@ -1631,14 +1646,11 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
               13,
               "inspect",
               "Cautious crossing",
+              { pass: HALT, fail: trapProse(leader) },
             )
           ) {
             f.plate = true;
-            fact(
-              s,
-              "plate",
-              "You halt at a hidden pressure plate. The side ledge avoids it.",
-            );
+            fact(s, "plate", HALT);
           } else {
             trap(s, leader, dice);
             if(s.party.some(x=>x.hp>0))enterScene(s, "cookfire");
@@ -1674,11 +1686,11 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
           trust(s, "oren", "scrit");
         } else if (kind === "persuade") {
           if (
-            check(s, dice, h, "presence", 13, "persuade", "Persuade the guards")
+            check(s, dice, h, "presence", 13, "persuade", "Persuade the guards", { pass: GUARDS_YIELD, fail: "The guards keep their spears level and refuse you." })
           ) {
             f.passage = true;
             s.inventory.guardKey = true;
-            log(s, "The guards lower their spears and hand over the gate key.");
+            log(s, GUARDS_YIELD);
           } else {
             f.persuadeFailed = true;
             f.alarm = true;
@@ -1687,13 +1699,13 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
           f.distractTried = true;
           f.guardsDistracted = false;
           if (
-            check(s, dice, h, "agility", 13, "distract", "Distract the guards")
+            check(s, dice, h, "agility", 13, "distract", "Distract the guards", { pass: DISTRACTED, fail: "The guards do not take the bait." })
           ) {
             f.passage = true;
             f.guardsDistracted = true;
             log(
               s,
-              "Mira knocks a pot into the fire. You slip past while the guards stamp out the sparks.",
+              DISTRACTED,
               "mira",
               [],
               "authored",
@@ -1715,11 +1727,11 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
         if (kind === "unlock") rescue(s);
         else if (kind === "pick") {
           f.pickTried = true;
-          if (check(s, dice, h, "agility", 13, "pick", "Pick the gate"))
+          if (check(s, dice, h, "agility", 13, "pick", "Pick the gate", { pass: COURIER, fail: JAMMED }))
             rescue(s);
           else {
             s.ticks++;
-            log(s, "The lock jams. You can still break the gate.");
+            log(s, JAMMED);
           }
         } else if (kind === "force") {
           s.ticks++;
@@ -1749,13 +1761,14 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
               parleyDC(s),
               "persuade",
               "Negotiate the seal transfer",
+              { pass: SEAL_TRANSFER, fail: "Vark refuses the bargain. Weapons come up." },
             )
           ) {
             f.negotiated = true;
             trust(s, "oren", "vark");
             log(
               s,
-              "Vark studies the courier’s testimony, then nods. Together, you transfer the seal without breaking its ward.",
+              SEAL_TRANSFER,
               "dm",
               [],
               "authored",
@@ -1785,6 +1798,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
     s.turn = null;
     log(s, "The party falls. Restore a checkpoint to continue.");
   }
+  creditCheckXp(s, original);
   s.revision++;
   s.updatedAt = new Date().toISOString();
   return s;

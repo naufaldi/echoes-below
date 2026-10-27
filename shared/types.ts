@@ -49,7 +49,12 @@ export interface Roll {
   purpose: string;
 }
 export type AnimationCue = "melee" | "ranged" | "spell" | "item" | "dodge";
+/** The public numbers of one d20 roll that decided an outcome. `dc` is the armor class for an attack; for a save, `actorId` is the creature saving. */
+export interface OutcomeCheck {kind:"check"|"attack"|"save";actorId:string;targetId?:string;skill:string;sides:number;natural:number;modifier:number;total:number;dc:number;success:boolean;critical?:true;advantage?:true;disadvantage?:true;xp?:number}
 export interface GameLog {
+  /** Story-only consequence of the roll: no numbers, verdicts or XP. Absent on older saves; fall back to `text`. */
+  prose?: string;
+  check?: OutcomeCheck;
   actionKind?: 'reaction';
   animation?: AnimationCue;
   speakerName?: string;

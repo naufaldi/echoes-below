@@ -6,6 +6,7 @@ import {enemyRole} from '../shared/enemy-roles.js';
 import {lineOfSight,type Cell} from '../shared/tactical-grid.js';
 import {actorDisplayName} from '../shared/visual-identity.js';
 import {rollD20,damageRoll,type Dice} from './rules.js';
+import {outcomeCheck,opportunityProse} from './outcome.js';
 const members=(s:Save)=>[...s.party,...s.enemies];
 const distance=(a:Cell,b:Cell)=>Math.max(Math.abs(a[0]-b[0]),Math.abs(a[1]-b[1]))*5;
 /** Curated fixed melee loadouts; ranged weapons and cantrips never become reactions. */
@@ -42,5 +43,5 @@ export function resolveOpportunity(s:Save,attackerId:string,targetId:string,dice
   if(victim.concentration&&damage>0){const bless=(t.effects??[]).some(e=>e.targets.includes(targetId)&&t.actors[e.sourceId]?.concentration===e.id)?dice(4):0;const cr=rollD20(dice,modifier(victim.abilities.constitution)+(victim.classId==='fighter'?victim.proficiency:0)+bless,'Concentration'+(bless?` (Bless +${bless})`:''));rolls.push(cr);saveTotal=cr.total;}
   t.actors[targetId]=takeDamage(victim,damage,critical,saveTotal);if(target.side==='enemy'&&t.actors[targetId].hp===0)t.actors[targetId].dead=true;
  }
- return{text:`${actorDisplayName(a,s.enemies)} makes an opportunity attack with ${profile.name} against ${actorDisplayName(target,s.enemies)}: ${hit?`${damage} damage`:'miss'}.`,rolls};
+ return{text:`${actorDisplayName(a,s.enemies)} makes an opportunity attack with ${profile.name} against ${actorDisplayName(target,s.enemies)}: ${hit?`${damage} damage`:'miss'}.`,rolls,prose:opportunityProse({id:a.id,name:actorDisplayName(a,s.enemies)},{id:targetId,name:actorDisplayName(target,s.enemies)},hit,hit&&t.actors[targetId].hp===0),check:outcomeCheck('attack',attackerId,'attack',r,t.actors[targetId].armorClass,hit,{targetId,critical,advantage,disadvantage})};
 }
