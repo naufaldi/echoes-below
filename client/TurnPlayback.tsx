@@ -2,14 +2,15 @@ import {revealedScene} from './playback-scene';
 import {useEffect,useRef,useState} from 'react';
 import type {PublicSave} from '../shared/types';
 import type {WorldRoll} from './WorldDie';
+import {cueFor,type WorldCue} from './combat-cue';
 
 /** Presentation never rolls dice or writes game state. Its frames are committed server outcomes. */
-export function TurnPlayback({before,after,reduced,onFrame,onRoll,onDone}:{before:PublicSave;after:PublicSave;reduced:boolean;onFrame:(save:PublicSave)=>void;onRoll:(roll:WorldRoll|null)=>void;onDone:()=>void}) {
+export function TurnPlayback({before,after,reduced,onFrame,onRoll,onCue,onDone}:{before:PublicSave;after:PublicSave;reduced:boolean;onFrame:(save:PublicSave)=>void;onRoll:(roll:WorldRoll|null)=>void;onCue:(cue:WorldCue|null)=>void;onDone:()=>void}) {
  const panel=useRef<HTMLElement>(null);
  const [index,setIndex]=useState(0),[revealed,setRevealed]=useState(false);
- const frames=after.presentation??[],frame=frames[index],done=useRef(onDone),show=useRef(onFrame),rolled=useRef(onRoll);
- done.current=onDone;show.current=onFrame;rolled.current=onRoll;
- useEffect(()=>()=>rolled.current(null),[]);
+ const frames=after.presentation??[],frame=frames[index],done=useRef(onDone),show=useRef(onFrame),rolled=useRef(onRoll),cued=useRef(onCue);
+ done.current=onDone;show.current=onFrame;rolled.current=onRoll;cued.current=onCue;
+ useEffect(()=>()=>{rolled.current(null);cued.current(null);},[]);
  useEffect(()=>{
   if(!frame){done.current();return;}
   setRevealed(false);panel.current?.focus();
@@ -19,7 +20,7 @@ export function TurnPlayback({before,after,reduced,onFrame,onRoll,onDone}:{befor
   const visible={...room,activeReaction:frame.log.actionKind==='reaction'?frame.actorId:undefined,mode:frame.mode??room.mode,actions:[],party:previous?.party??before.party,enemies:previous?.enemies.length?previous.enemies:frame.enemies,logs:before.logs,turn:turn?{...turn,actorId:frame.actorId}:null};
   show.current(visible);
   const first=frame.log.rolls[0],roll=first?{key:frame.log.id,actorId:frame.actorId,sides:first.sides,rolling:true,kept:null}:null;rolled.current(roll);
-  const t=setTimeout(()=>{setRevealed(true);rolled.current(roll&&{...roll,rolling:false,kept:first!.kept});show.current({...visible,scene:revealedScene(before,after,frame,index===frames.length-1),tactical:frame.tactical??visible.tactical,party:frame.party,enemies:frame.enemies,logs:[...before.logs,frame.log]});},reduced?100:frame.log.rolls.length?1250:300);
+  const t=setTimeout(()=>{setRevealed(true);rolled.current(roll&&{...roll,rolling:false,kept:first!.kept});cued.current(cueFor(frame.log.id,frame.actorId,frame.log.animation,frame.log.text,[...visible.party,...(previous?.enemies??before.enemies)],[...frame.party,...frame.enemies]));show.current({...visible,scene:revealedScene(before,after,frame,index===frames.length-1),tactical:frame.tactical??visible.tactical,party:frame.party,enemies:frame.enemies,logs:[...before.logs,frame.log]});},reduced?100:frame.log.rolls.length?1250:300);
   return()=>clearTimeout(t);
  },[index,frame,before,after,reduced,frames]);
  if(!frame)return null;

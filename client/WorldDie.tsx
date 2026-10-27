@@ -1,7 +1,8 @@
 import {createDieGeometry} from './die-geometry';
 import {useEffect,useMemo,useRef} from 'react';
 import {useFrame} from '@react-three/fiber';
-import {Edges,Html} from '@react-three/drei';
+import {Edges} from '@react-three/drei';
+import TextSprite from './TextSprite';
 import type {Group,Mesh,MeshStandardMaterial} from 'three';
 import {actorHeight} from '../shared/visual-identity';
 import type {PublicSave} from '../shared/types';
@@ -25,6 +26,6 @@ export default function WorldDie({roll,save,reduced}:{roll:WorldRoll;save:Public
  if(!actor)return null;
  return <group position={[actor.position[0],actorHeight(actor)+.85,-actor.position[1]]}>
   <group ref={group}><mesh ref={mesh} geometry={geometry} scale={.32} castShadow><meshStandardMaterial ref={material} color="#173a34" emissive="#efcb7d" emissiveIntensity={.15} metalness={.75} roughness={.23}/><Edges color="#efcb7d"/></mesh></group>
-  {roll.kept!==null&&<Html center position={[0,.85,0]} zIndexRange={[60,0]} className="world-die-result" aria-hidden="true">{roll.kept}</Html>}
+  {roll.kept!==null&&<TextSprite text={String(roll.kept)} color="#fce6b2" position={[0,.95,0]} height={.95}/>}
  </group>;
 }
