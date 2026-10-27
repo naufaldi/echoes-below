@@ -1,7 +1,7 @@
-import {Suspense} from 'react';
 import {useGLTF} from '@react-three/drei';
 import * as THREE from 'three';
 import {Instances,KitInstances,Prop,Flame,chain,mat,decal,geo,noRaycast,rand,useSolidParts,type MoodOverride,type Part,type RoomProps,type Vec3} from './kit';
+import IsolatedAsset from '../IsolatedAsset';
 import type {PublicSave} from '../../shared/types';
 
 // Rootbound Prison (roots-1 … roots-8): a prison overgrown by giant roots. Contract, helpers and budget: ./README.md.
@@ -63,7 +63,8 @@ function TintedInstances({url,parts,tint,shadow}:{url:string;parts:Part[];tint:s
  if(!material){let base:THREE.Material|undefined;scene.traverse(n=>{const mesh=n as THREE.Mesh;if(mesh.isMesh&&!base)base=mesh.material as THREE.Material;});const tinted=(base as THREE.MeshStandardMaterial).clone();tinted.color.set(tint);tints.set(key,material=tinted);}
  return <KitInstances url={url} parts={parts} shadow={shadow} material={material}/>;
 }
-const Tinted=(props:{url:string;parts:Part[];tint:string;shadow?:boolean})=>props.parts.length?<Suspense fallback={null}><TintedInstances {...props}/></Suspense>:null;
+/** Same loading and retry boundary as KitInstances: TintedInstances reads the GLB itself, above KitInstances' own boundary. */
+const Tinted=(props:{url:string;parts:Part[];tint:string;shadow?:boolean})=>{if(!props.parts.length)return null;const [x,y,z]=props.parts[0];return <IsolatedAsset url={props.url} id={'tinted:'+props.url} name="Scenery" position={[x,y+1,z]}><TintedInstances {...props}/></IsolatedAsset>;};
 const WALL_TINT='#a3a893',TILE_TINT='#8e8a7c',DIRT_TINT='#7b6c56';
 
 type Ctx={save:PublicSave|null;scene:string};
@@ -213,6 +214,7 @@ const tripod:Part[]=[0,1,2].map(i=>{const a=i/3*Math.PI*2;return [5.9+Math.cos(a
 const surveyStakes:Part[]=[[-6,.35,4.6,.04,.7,.04],[-6,.35,-5.8,.04,.7,.04],[6,.35,4.6,.04,.7,.04]];
 const chalk:Part[]=[...Array.from({length:14},(_,i)=>[-2.3+i*.18*.6,.006,-5.6+i*.75,.05,.01,.42,-.14] as Part)];
 const scatteredNotes:Part[]=[[-2.8,.008,-5.1,.3,.01,.22,.4],[-1.6,.008,-4.6,.3,.01,.22,1.1],[-2.2,.008,-4.2,.3,.01,.22,2.3],[-.9,.008,-5,.3,.01,.22,.2]];
+const campBoxes:Part[]=[[-6.4,0,-5.9,.5,.5,.5,.3],[-6.3,.75,-5.9,.36,.36,.36,.9],[6.5,0,-1.4,.42,.42,.42,.3],[6.6,0,.1,.36,.36,.36,1],[6.5,.6,-1.3,.3,.3,.3,.7]];
 const bedroll:Part[]=[[-6.4,.2,-1.4,.22,1.7,.22,0,Math.PI/2]],rolledMaps:Part[]=[[-6.3,.95,-4.4,.05,.8,.05,0,.15],[-6.2,.95,-4.3,.05,.8,.05,0,-.1,.12],[-6.4,.98,-4.25,.05,.85,.05,0,.05,-.15]];
 const campArches:Part[]=[[-5.6,0,-6.7,1,1,1,.2],[4.8,0,-6.7,1,1,1,-.15],[-7.3,0,1.4,.9,1,.9,Math.PI/2]],campDrops:[number,number,number][]=[[-4.2,-6.6,.55],[.6,-6.6,.6],[3.8,-6.6,.5]];
 const campMoss=[...moss(-9,-6.6,9,-6.6,4,30,40,1.2),...moss(-7.2,-6,-7.2,5,4,14,200,1)];
@@ -234,7 +236,6 @@ function SurveyCamp({room,reduced}:{room:Ctx;reduced:boolean}){
   </group>
   <group userData={{blocksLabels:true}}>
    <Walls room={room} url={WALL_BROKEN} parts={[...back(-7.2,[-8,-4,0,8]),...side(-7.8,[-4.7,3.3]),...side(7.8,[-4.7,-.7,3.3],.3)]}/><Walls room={room} url={WALL} parts={[...back(-7.2,[4]),...side(-7.8,[-.7])]}/>
-   <SolidKit room={room} url={BOX} parts={[[6.5,0,-1.4,.42,.42,.42,.3],[6.6,0,.1,.36,.36,.36,1],[6.5,.6,-1.3,.3,.3,.3,.7]]} size={.75}/>
    <mesh position={[2.2,2.2,-6.66]} material={mat('#c9b88e')}><boxGeometry args={[2.4,1.5,.03]}/></mesh>
    <SolidKit room={room} url={TABLE} parts={[[DESK[0],0,DESK[2],1.1,.9,.8]]} size={1}/><Instances parts={deskMap} color="#d8c89c" jitter={.06} shadow={false}/>
    <KitInstances url={CANDLE} parts={[[DESK[0]+.6,.9,DESK[2]-.25,.5,.5,.5]]} shadow={false}/>
@@ -245,7 +246,7 @@ function SurveyCamp({room,reduced}:{room:Ctx;reduced:boolean}){
    <Solid room={room} parts={surveyStakes} geometry={geo.cyl} radius={()=>.1} color="#7a6040"/>
    <Solid room={room} parts={bedroll} geometry={geo.cyl} radius={()=>.25} color="#4f5a64"/>
    <SolidKit room={room} url={BARREL} parts={[[-6.3,0,-4.3,.3,.32,.3]]} size={.9}/><Instances parts={rolledMaps} geometry={geo.cyl} color="#d4c49a" shadow={false}/>
-   <SolidKit room={room} url={BOX} parts={[[-6.4,0,-5.9,.5,.5,.5,.3],[-6.3,.75,-5.9,.36,.36,.36,.9]]} size={.75}/>
+   <SolidKit room={room} url={BOX} parts={campBoxes} size={.75}/>
    <Solid room={room} parts={campArches} radius={()=>.6} geometry={ARCH} color="#54402d"/><WallRoots drops={campDrops}/>
   </group>
   <Flame position={[DESK[0]-.55,1.12,DESK[2]-.2]} size={.3} reduced={reduced}/><Flame position={[DESK[0]+.6,1.42,DESK[2]-.25]} size={.2} reduced={reduced}/>
