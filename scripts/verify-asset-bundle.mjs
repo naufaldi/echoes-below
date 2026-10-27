@@ -56,6 +56,17 @@ for(const [kit,entries] of envKits)for(const entry of entries.values()){
 }
 if(envBytes>ENV_BUDGET)throw Error(`Environment assets exceed the ${ENV_BUDGET/1024/1024} MB budget: ${(envBytes/1024/1024).toFixed(1)} MB`);
 for(const [kit,entries] of envKits){for(const entry of entries.values())verifyCopy(resolve(source,'assets/env',kit,entry.file));verifyCopy(resolve(source,'assets/env',kit,'manifest.json'));}
+// Painted portrait gate (CHARACTERS.md §6.2): every file under assets/portraits/ is listed in its manifest with a hash and a licence, named <characterId>-<expression>.png, within 200 KB. The client reads only the manifest, so a listed file must exist.
+const portraitRoot=resolve(built,'assets/portraits'),portraitManifest=existsSync(resolve(portraitRoot,'manifest.json'))?JSON.parse(readFileSync(resolve(portraitRoot,'manifest.json'),'utf8')):null,portraitEntries=new Map((portraitManifest?.files??[]).map(entry=>[entry.file,entry]));
+for(const name of existsSync(portraitRoot)?files(portraitRoot).map(p=>relative(portraitRoot,p).split(sep).join('/')):[])if(name!=='manifest.json'&&!portraitEntries.has(name))throw Error(`Portrait has no manifest entry: assets/portraits/${name}`);
+for(const entry of portraitEntries.values()){
+ if(!/^[a-z0-9-]+-(neutral|smile|worried|angry|hurt)\.png$/.test(entry.file??''))throw Error(`Portrait name must be <characterId>-<expression>.png: ${entry.file}`);
+ const missing=['sha256','licence'].find(field=>typeof entry[field]!=='string'||!entry[field].trim());if(missing)throw Error(`Portrait manifest entry lacks ${missing}: assets/portraits/${entry.file}`);
+ const path=resolve(portraitRoot,entry.file);if(!existsSync(path))throw Error(`Portrait manifest entry has no file: assets/portraits/${entry.file}`);
+ const bytes=readFileSync(path);if(digest(bytes)!==entry.sha256)throw Error(`Portrait hash differs from manifest: assets/portraits/${entry.file}`);if(bytes.length>200*1024)throw Error(`Portrait exceeds 200 KB: assets/portraits/${entry.file}`);
+ verifyCopy(resolve(source,'assets/portraits',entry.file));
+}
+if(portraitManifest)verifyCopy(resolve(source,'assets/portraits/manifest.json'));
 const models=files(resolve(source,'assets')).filter(p=>['.glb','.gltf'].includes(extname(p)));
 const report=[];
 for(const model of models){
