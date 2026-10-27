@@ -18,5 +18,5 @@ export default function TextSprite({text,color,position,height=.42,rise=0,life=0
   material.current.opacity=t<.7?1:Math.max(0,1-(t-.7)/.3);
  });
  const aspect=texture.image.width/texture.image.height;
- return <sprite ref={sprite} position={position} scale={[height*aspect,height,1]} renderOrder={20}><spriteMaterial ref={material} map={texture} transparent depthTest={false} depthWrite={false} toneMapped={false}/></sprite>;
+ return <sprite ref={sprite} raycast={()=>null} position={position} scale={[height*aspect,height,1]} renderOrder={20}><spriteMaterial ref={material} map={texture} transparent depthTest={false} depthWrite={false} toneMapped={false}/></sprite>;
 }
