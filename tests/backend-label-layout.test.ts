@@ -26,3 +26,14 @@ test('crowded actor silhouettes never force labels over characters or HUD',()=>{
  const labels=actors.map((a,i)=>({id:String(i),x:a.x+75,y:300,width:180,height:48,priority:100-i}));
  for(const label of placeLabels(labels,view,hud,actors))assert.ok(![...actors,...hud].some(x=>overlaps(label,x)));
 });
+test('only labels pushed out of their home slot are marked as offset, so leader lines stay rare',()=>{
+ const [home]=placeLabels([{id:'home',x:400,y:300,width:120,height:24,priority:20}],view,[]);
+ assert.equal(home.offset,false);assert.ok(home.y+home.height<=300);
+ const [moved]=placeLabels([{id:'moved',x:400,y:300,width:120,height:24,priority:20}],view,[],[{x:330,y:240,width:140,height:60}]);
+ assert.equal(moved.offset,true);
+});
+test('compact labels still reach clear of the character they name',()=>{
+ const party=[{x:470,y:220,width:90,height:170},{x:540,y:225,width:90,height:170},{x:610,y:220,width:90,height:170}];
+ const [placed]=placeLabels([{id:'mira',x:585,y:262,width:56,height:24,priority:100}],view,[],party);
+ assert.ok(placed,'selected label was dropped');assert.ok(!party.some(p=>overlaps(placed,p)));assert.equal(placed.offset,true);
+});
