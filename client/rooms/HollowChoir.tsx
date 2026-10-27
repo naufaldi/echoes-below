@@ -147,11 +147,13 @@ function ResonanceLibrary({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
    <SolidKit ctx={ctx} url={DUNGEON.table} parts={readingTables} r={fixed(.8)}/>
   </group>
   <group>
-   <Instances parts={booksRed} color="#7a3135" jitter={.5} shadow={false}/><Instances parts={booksBlue} color="#2f4a78" jitter={.5} shadow={false}/><Instances parts={booksOchre} color="#a07a3c" jitter={.5} shadow={false}/>
-   <Instances parts={strings} geometry={geo.cyl} color="#b9b2a0" shadow={false}/>
+   <group userData={{blocksLabels:true}}>
+    <Solid ctx={ctx} parts={booksRed} color="#7a3135" jitter={.5} r={fixed(.2)} shadow={false}/><Solid ctx={ctx} parts={booksBlue} color="#2f4a78" jitter={.5} r={fixed(.2)} shadow={false}/><Solid ctx={ctx} parts={booksOchre} color="#a07a3c" jitter={.5} r={fixed(.2)} shadow={false}/>
+    <Solid ctx={ctx} parts={strings} geometry={geo.cyl} color="#b9b2a0" r={fixed(.05)} shadow={false}/>
+    <SolidKit ctx={ctx} url={GRAVE.candles} parts={libraryCandles} r={fixed(.3)} shadow={false} material={kenney('grave','#ffffff')}/>
+   </group>
    <Instances parts={scorePages} color="#e6dfcc" material={decal('#e6dfcc')} shadow={false}/><Instances parts={staves} color="#3a3530" material={decal('#3a3530')} shadow={false}/>
    <Instances parts={missingMeasure} color="#9fb6ff" material={glow('#9fb6ff',.6)} shadow={false}/>
-   <KitInstances url={GRAVE.candles} parts={libraryCandles} shadow={false} material={kenney('grave','#ffffff')}/>
    <Instances parts={runner} color="#3b2f4a" material={decal('#3b2f4a',.7)} shadow={false}/>
    <Lancets parts={naveLancets(-10.45,[-2,2],5.2,1.1)} color="#b5c4ff"/>
    <Shafts parts={[shaft(0,-6.2,14,.8,-.25,0),shaft(-3,1.4,14,1),shaft(3.2,-1,14,.9,-.3,.1)]} color="#c2ccff"/>
@@ -181,8 +183,10 @@ function SilentRefectory({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
    <Solid ctx={ctx} parts={slateFrame} color="#4b3a2e" jitter={0} r={fixed(.3)} shadow={false}/>
   </group>
   <group>
-   <KitInstances url={GRAVE.plate} parts={plates} shadow={false} material={kenney('grave','#d9deea')}/><KitInstances url={GRAVE.chalice} parts={chalices} shadow={false} material={kenney('grave','#e8dcc0')}/>
-   <Instances parts={slate} color="#24262c" material={mat('#23252b',.9)} shadow={false}/><Instances parts={chalk} color="#e9ecf2" material={decal('#e9ecf2',.9)} shadow={false}/>
+   <group userData={{blocksLabels:true}}>
+    <SolidKit ctx={ctx} url={GRAVE.plate} parts={plates} r={fixed(.25)} shadow={false} material={kenney('grave','#d9deea')}/><SolidKit ctx={ctx} url={GRAVE.chalice} parts={chalices} r={fixed(.2)} shadow={false} material={kenney('grave','#e8dcc0')}/>
+    <Solid ctx={ctx} parts={slate} color="#24262c" material={mat('#23252b',.9)} r={fixed(.3)} shadow={false}/>
+   </group><Instances parts={chalk} color="#e9ecf2" material={decal('#e9ecf2',.9)} shadow={false}/>
    <Instances parts={hushMarks} color="#b8c3e6" material={decal('#b8c3e6',.25)} shadow={false}/>
    {[[-7.2,.9,-2.2],[-7.2,.9,1.6],[0,.9,-7.2],[7.1,.74,-.4]].map((p,i)=><Flame key={i} position={p as [number,number,number]} size={.28} reduced={reduced}/>)}
    <Lancets parts={naveLancets(-10.45,[-6,-2,2,6],4,1)} color="#a8b8e8"/>
@@ -219,7 +223,7 @@ function ChoirOfStone({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
    <Solid ctx={ctx} parts={kneelStones} color="#5a5e70" r={fixed(.45)} shadow={false}/><SolidKit ctx={ctx} url={GRAVE.candles} parts={stoneCandles} r={fixed(.3)} shadow={false} material={kenney('grave','#ffffff')}/>
   </group>
   <group>
-   <Instances parts={singerBands} geometry={geo.link} color="#4c5058" roughness={.5} metalness={.7} shadow={false}/>
+   <group userData={{blocksLabels:true}}><Solid ctx={ctx} parts={singerBands} geometry={geo.link} color="#4c5058" roughness={.5} metalness={.7} r={fixed(.35)} shadow={false}/></group>
    <Instances parts={bindingChains} color="#2d3038" material={decal('#2b2e36',.8)} shadow={false}/>
    <Instances parts={sockets} geometry={orb} color="#9fe0ff" material={glow('#9fe0ff',.9)} shadow={false}/>
    <Instances parts={spokes} color="#9fc9ff" material={decal('#9fc9ff',.18)} shadow={false}/>
@@ -259,9 +263,9 @@ function PilgrimStair({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
    {/* The blue shaft the stair turns around, rising out of the dark well past the top of the nave. Static. */}
    <mesh position={[WELL[0],7,WELL[1]]} scale={[2,24,2]} geometry={geo.cyl} material={glow('#4f8dff',.16)} raycast={noRaycast}/><mesh position={[WELL[0],7,WELL[1]]} scale={[1.1,24,1.1]} geometry={geo.cyl} material={glow('#a9ceff',.22)} raycast={noRaycast}/>
    <Instances parts={companyMark} geometry={geo.disc} color="#c9a14a" material={mat('#c9a14a',.4,.7)} shadow={false}/><Instances parts={markBars} color="#3b2a1c" material={decal('#3b2a1c')} shadow={false}/>
-   <Instances parts={sealBands} color="#5d5f66" roughness={.5} metalness={.7} shadow={false}/>
+   <group userData={{blocksLabels:true}}><Solid ctx={ctx} parts={sealBands} color="#5d5f66" roughness={.5} metalness={.7} r={fixed(.1)} shadow={false}/></group>
    <Instances parts={worn} geometry={geo.disc} color="#8fa2c8" material={decal('#8fa2c8',.18)} shadow={false}/>
-   <KitInstances url={GRAVE.candles} parts={stairCandles} shadow={false} material={kenney('grave','#ffffff')}/>
+   <group userData={{blocksLabels:true}}><SolidKit ctx={ctx} url={GRAVE.candles} parts={stairCandles} r={fixed(.3)} shadow={false} material={kenney('grave','#ffffff')}/></group>
    <Lancets parts={naveLancets(-16.45,[-8,-4,4,8],6,1.4)} color="#7ea6ff"/>
    <Shafts parts={[shaft(-2.8,.6,15,1,-.3,.25),shaft(2.6,-2,15,.9,-.34,.1)]} color="#8fb4ff"/>
   </group>
@@ -330,7 +334,7 @@ function LastConductor({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
    <SolidKit ctx={ctx} url={GRAVE.debris} parts={shards} r={fixed(.6)} shadow={false} material={kenney('grave','#9aa0b4')}/>
   </group>
   <group>
-   <Instances parts={organMouths} color="#0c0b12" material={decal('#0c0b12')} shadow={false}/><Instances parts={bellRopes} geometry={geo.cyl} color="#8a7a5e" shadow={false}/>
+   <Instances parts={organMouths} color="#0c0b12" material={decal('#0c0b12')} shadow={false}/><group userData={{blocksLabels:true}}><Solid ctx={ctx} parts={bellRopes} geometry={geo.cyl} color="#8a7a5e" r={fixed(.05)} shadow={false}/></group>
    {/* Aras's cage of sound: three rings of brass turning around the bars. Still when motion is reduced. */}
    <group ref={rings} position={[0,2.3,-7.4]}>{soundRings.map(({r,tilt},i)=><mesh key={i} rotation={[Math.PI/2+tilt,0,0]} material={glow('#d9c2ff',.75)} raycast={noRaycast}><torusGeometry args={[r,.035,5,40]}/></mesh>)}</group>
    <mesh position={[0,.52,-7.4]} rotation={[-Math.PI/2,0,0]} material={glow('#b48cff',.5)} raycast={noRaycast}><circleGeometry args={[1.3,24]}/></mesh>
