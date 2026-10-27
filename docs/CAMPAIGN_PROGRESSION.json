@@ -1075,8 +1075,8 @@
             "mercy": 42,
             "force": 0,
             "stance": "mercy",
-            "mira": 41,
-            "oren": 3,
+            "mira": 31,
+            "oren": 11,
             "companion": "mira",
             "scrit": "guardian"
           },
@@ -1103,8 +1103,8 @@
                 "mercy": 14,
                 "force": 0,
                 "stance": "mercy",
-                "mira": 13,
-                "oren": 3,
+                "mira": 10,
+                "oren": 6,
                 "companion": "mira",
                 "scrit": "guardian"
               }
@@ -1116,8 +1116,8 @@
                 "mercy": 21,
                 "force": 0,
                 "stance": "mercy",
-                "mira": 20,
-                "oren": 3,
+                "mira": 14,
+                "oren": 8,
                 "companion": "mira",
                 "scrit": "guardian"
               }
@@ -1129,8 +1129,8 @@
                 "mercy": 29,
                 "force": 0,
                 "stance": "mercy",
-                "mira": 28,
-                "oren": 3,
+                "mira": 21,
+                "oren": 9,
                 "companion": "mira",
                 "scrit": "guardian"
               }
@@ -1142,8 +1142,8 @@
                 "mercy": 35,
                 "force": 0,
                 "stance": "mercy",
-                "mira": 34,
-                "oren": 3,
+                "mira": 25,
+                "oren": 11,
                 "companion": "mira",
                 "scrit": "guardian"
               }
@@ -1161,8 +1161,8 @@
             "mercy": 0,
             "force": 42,
             "stance": "force",
-            "mira": 1,
-            "oren": 41,
+            "mira": 7,
+            "oren": 23,
             "companion": "oren",
             "scrit": "scattered"
           },
@@ -1189,8 +1189,8 @@
                 "mercy": 0,
                 "force": 14,
                 "stance": "force",
-                "mira": 1,
-                "oren": 13,
+                "mira": 2,
+                "oren": 7,
                 "companion": "oren",
                 "scrit": "scattered"
               }
@@ -1202,8 +1202,8 @@
                 "mercy": 0,
                 "force": 21,
                 "stance": "force",
-                "mira": 1,
-                "oren": 20,
+                "mira": 5,
+                "oren": 10,
                 "companion": "oren",
                 "scrit": "scattered"
               }
@@ -1215,8 +1215,8 @@
                 "mercy": 0,
                 "force": 29,
                 "stance": "force",
-                "mira": 1,
-                "oren": 28,
+                "mira": 7,
+                "oren": 15,
                 "companion": "oren",
                 "scrit": "scattered"
               }
@@ -1228,8 +1228,8 @@
                 "mercy": 0,
                 "force": 35,
                 "stance": "force",
-                "mira": 1,
-                "oren": 34,
+                "mira": 7,
+                "oren": 18,
                 "companion": "oren",
                 "scrit": "scattered"
               }
@@ -1287,8 +1287,8 @@
             "mercy": 24,
             "force": 0,
             "stance": "mercy",
-            "mira": 40,
-            "oren": 3,
+            "mira": 30,
+            "oren": 11,
             "companion": "mira",
             "scrit": "guardian"
           },
@@ -1315,8 +1315,8 @@
                 "mercy": 8,
                 "force": 0,
                 "stance": "mercy",
-                "mira": 12,
-                "oren": 3,
+                "mira": 9,
+                "oren": 6,
                 "companion": "mira",
                 "scrit": "guardian"
               }
@@ -1328,8 +1328,8 @@
                 "mercy": 12,
                 "force": 0,
                 "stance": "mercy",
-                "mira": 19,
-                "oren": 3,
+                "mira": 13,
+                "oren": 8,
                 "companion": "mira",
                 "scrit": "guardian"
               }
@@ -1341,8 +1341,8 @@
                 "mercy": 15,
                 "force": 0,
                 "stance": "mercy",
-                "mira": 27,
-                "oren": 3,
+                "mira": 20,
+                "oren": 9,
                 "companion": "mira",
                 "scrit": "guardian"
               }
@@ -1354,8 +1354,8 @@
                 "mercy": 19,
                 "force": 0,
                 "stance": "mercy",
-                "mira": 33,
-                "oren": 3,
+                "mira": 24,
+                "oren": 11,
                 "companion": "mira",
                 "scrit": "guardian"
               }
@@ -1373,8 +1373,8 @@
             "mercy": 0,
             "force": 24,
             "stance": "force",
-            "mira": 0,
-            "oren": 41,
+            "mira": 6,
+            "oren": 23,
             "companion": "oren",
             "scrit": "scattered"
           },
@@ -1401,8 +1401,8 @@
                 "mercy": 0,
                 "force": 8,
                 "stance": "force",
-                "mira": 0,
-                "oren": 13,
+                "mira": 1,
+                "oren": 7,
                 "companion": "oren",
                 "scrit": "scattered"
               }
@@ -1414,8 +1414,8 @@
                 "mercy": 0,
                 "force": 12,
                 "stance": "force",
-                "mira": 0,
-                "oren": 20,
+                "mira": 4,
+                "oren": 10,
                 "companion": "oren",
                 "scrit": "scattered"
               }
@@ -1427,8 +1427,8 @@
                 "mercy": 0,
                 "force": 15,
                 "stance": "force",
-                "mira": 0,
-                "oren": 28,
+                "mira": 6,
+                "oren": 15,
                 "companion": "oren",
                 "scrit": "scattered"
               }
@@ -1440,8 +1440,8 @@
                 "mercy": 0,
                 "force": 19,
                 "stance": "force",
-                "mira": 0,
-                "oren": 34,
+                "mira": 6,
+                "oren": 18,
                 "companion": "oren",
                 "scrit": "scattered"
               }
