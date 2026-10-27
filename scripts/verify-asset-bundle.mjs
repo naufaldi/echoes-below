@@ -1,5 +1,5 @@
 import {readFileSync,readdirSync,statSync,existsSync,writeFileSync,mkdirSync} from 'node:fs';
-import {resolve,relative,dirname,extname} from 'node:path';
+import {resolve,relative,dirname,extname,sep} from 'node:path';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
@@ -19,6 +19,24 @@ function dependency(model,uri){
  if(/^[a-z]+:|^\/\//i.test(uri))throw Error(`Remote dependency requires explicit acquisition: ${relative(source,model)}`);
  return verifyCopy(resolve(dirname(model),decodeURIComponent(uri)));
 }
+// Audio licensing gate (docs/PRD.md, audio sourcing policy). Checked in the built copy before byte comparison, so an unlisted shipped file fails with its own reason.
+const AUDIO_LICENCES=new Set(['CC0-1.0','CC-BY-4.0']),AUDIO_FIELDS=['file','sha256','title','author','source','licence','licenceUrl','retrieved','changes'],AUDIO_BUDGET=15*1024*1024,audioRoot=resolve(built,'assets/audio');
+const audioFiles=existsSync(audioRoot)?files(audioRoot).map(p=>relative(audioRoot,p).split(sep).join('/')).filter(name=>name!=='manifest.json'):[];
+const audioManifest=existsSync(resolve(audioRoot,'manifest.json'))?JSON.parse(readFileSync(resolve(audioRoot,'manifest.json'),'utf8')):null;
+if(audioFiles.length&&!audioManifest)throw Error('Audio files ship without assets/audio/manifest.json');
+const audioEntries=new Map((audioManifest?.files??[]).map(entry=>[entry.file,entry]));let audioBytes=0;
+for(const name of audioFiles)if(!audioEntries.has(name))throw Error(`Audio file has no manifest entry: assets/audio/${name}`);
+for(const entry of audioEntries.values()){
+ const missing=AUDIO_FIELDS.find(field=>typeof entry[field]!=='string'||!entry[field].trim());if(missing)throw Error(`Audio manifest entry lacks ${missing}: ${entry.file}`);
+ if(!AUDIO_LICENCES.has(entry.licence))throw Error(`Audio licence not allowed: assets/audio/${entry.file} (${entry.licence})`);
+ if(entry.licence.startsWith('CC-BY')&&!entry.credit)throw Error(`Attribution licence needs a credit line: assets/audio/${entry.file}`);
+ const path=resolve(audioRoot,entry.file);if(!path.startsWith(audioRoot+sep))throw Error(`Audio manifest entry escapes audio directory: ${entry.file}`);
+ if(!existsSync(path))throw Error(`Audio manifest entry has no file: assets/audio/${entry.file}`);
+ const bytes=readFileSync(path);if(digest(bytes)!==entry.sha256)throw Error(`Audio hash differs from manifest: assets/audio/${entry.file}`);
+ verifyCopy(resolve(source,'assets/audio',entry.file));audioBytes+=bytes.length;
+}
+if(audioManifest)verifyCopy(resolve(source,'assets/audio/manifest.json'));
+if(audioBytes>AUDIO_BUDGET)throw Error(`Audio exceeds the ${AUDIO_BUDGET/1024/1024} MB budget: ${(audioBytes/1024/1024).toFixed(1)} MB`);
 const models=files(resolve(source,'assets')).filter(p=>['.glb','.gltf'].includes(extname(p)));
 const report=[];
 for(const model of models){
@@ -41,5 +59,5 @@ for(const name of ['shared/visual-identity.ts','client/DungeonDressing.tsx']){
  }
 }
 mkdirSync(resolve(root,'data'),{recursive:true});
-writeFileSync(resolve(root,'data/asset-bundle-verification.json'),JSON.stringify({scope:'Bundled bytes, model references and glTF dependencies; not visual pose or shader acceptance',models:report,verifiedFiles:verified.size},null,2)+'\n');
-console.log(`Verified ${models.length} models and ${verified.size} bundled files, including external glTF dependencies.`);
+writeFileSync(resolve(root,'data/asset-bundle-verification.json'),JSON.stringify({scope:'Bundled bytes, model references and glTF dependencies; not visual pose or shader acceptance',models:report,audio:{files:audioEntries.size,bytes:audioBytes},verifiedFiles:verified.size},null,2)+'\n');
+console.log(`Verified ${models.length} models, ${audioEntries.size} licensed audio files (${(audioBytes/1024/1024).toFixed(1)} MB) and ${verified.size} bundled files, including external glTF dependencies.`);

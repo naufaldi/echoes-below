@@ -25,3 +25,14 @@ The production build emits `dist/client`, `dist/server/index.js`, and Sites meta
 [PRD](docs/PRD.md), [RFC](docs/RFC.md), [goal prompt](docs/GOAL_PROMPT.md), [asset audit](docs/ASSETS.md).
 
 Quaternius created the character, monster and environment assets. Most shipped models are CC0. The adapted Bestiary Imp uses the Quaternius Asset License, not CC0. Source/license manifests are included with the assets. Unused restricted models are excluded from the published game. Baldur’s Gate3 and the Crazy Taxi demo are experiential references; their proprietary content is not copied.
+
+### Audio
+
+Every shipped audio file is listed with its source, author, licence, retrieval date, changes and sha256 in [`public/assets/audio/manifest.json`](public/assets/audio/manifest.json). The build fails if a file is unlisted, its bytes change, or its licence is not CC0-1.0 or CC-BY-4.0. All files were transcoded to AAC (M4A).
+
+- Sound effects: [Kenney](https://kenney.nl) — Casino Audio, Impact Sounds, RPG Audio and Interface Sounds (CC0).
+- Dungeon ambience: “Loopable Dungeon Ambience” by JaggedStone, [OpenGameArt](https://opengameart.org/content/loopable-dungeon-ambience) (CC0).
+- Combat music: “Determined Pursuit (epic orchestra loop)” by Emma_MA, [OpenGameArt](https://opengameart.org/content/determined-pursuit-epic-orchestra-loop) (CC0).
+- Exploration music: “In Darkness” by Of Far Different Nature, [OpenGameArt](https://opengameart.org/content/in-darkness), licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/); transcoded from MP3 to AAC.
+
+The owner approved both music tracks by ear on 27 October 2026.

@@ -1,4 +1,5 @@
 import {revealedScene} from './playback-scene';
+import {playFrameCues} from './audio';
 import {playbackSteps} from './playback-steps';
 import {useEffect,useMemo,useRef,useState} from 'react';
 import type {PublicSave} from '../shared/types';
@@ -19,9 +20,9 @@ export function TurnPlayback({before,after,reduced,onFrame,onRoll,onCue,onDone}:
   const room=frame.sceneId===before.scene.id?before:after;
   const turn=frame.turn??after.turn??before.turn;
   const visible={...room,activeReaction:frame.log.actionKind==='reaction'?frame.actorId:undefined,mode:frame.mode??room.mode,actions:[],party:previous?.party??before.party,enemies:previous?.enemies.length?previous.enemies:frame.enemies,logs:before.logs,turn:turn?{...turn,actorId:frame.actorId}:null};
-  show.current(visible);
+  show.current(visible);playFrameCues('start',frame,previous??before);
   const first=group.length===1?frame.log.rolls[0]:undefined,roll=first?{key:frame.log.id,actorId:frame.actorId,sides:first.sides,rolling:true,kept:null}:null;rolled.current(roll);
-  const t=setTimeout(()=>{setRevealed(true);rolled.current(roll&&{...roll,rolling:false,kept:first!.kept});cued.current(group.length===1?cueFor(frame.log.id,frame.actorId,frame.log.animation,frame.log.text,[...visible.party,...(previous?.enemies??before.enemies)],[...frame.party,...frame.enemies]):null);show.current({...visible,scene:revealedScene(before,after,final,last===frames.length-1),tactical:final.tactical??visible.tactical,party:final.party,enemies:final.enemies,turn:turn?{...turn,actorId:group.length>1?(final.turn??after.turn)?.actorId??final.actorId:final.actorId}:null,logs:[...before.logs,...group.map(f=>f.log)]});},reduced?100:frame.log.rolls.length?1250:300);
+  const t=setTimeout(()=>{setRevealed(true);rolled.current(roll&&{...roll,rolling:false,kept:first!.kept});cued.current(group.length===1?cueFor(frame.log.id,frame.actorId,frame.log.animation,frame.log.text,[...visible.party,...(previous?.enemies??before.enemies)],[...frame.party,...frame.enemies]):null);show.current({...visible,scene:revealedScene(before,after,final,last===frames.length-1),tactical:final.tactical??visible.tactical,party:final.party,enemies:final.enemies,turn:turn?{...turn,actorId:group.length>1?(final.turn??after.turn)?.actorId??final.actorId:final.actorId}:null,logs:[...before.logs,...group.map(f=>f.log)]});playFrameCues('reveal',final,previous??before);},reduced?100:frame.log.rolls.length?1250:300);
   return()=>clearTimeout(t);
  },[index,last,frame,final,before,after,reduced,frames]);
  if(!frame)return null;
