@@ -99,7 +99,7 @@ Required in every model: `Idle`, `Walk`, `Hit`, `Death`, `Use_Item`, `Dodge`, pl
 
 If the tool cannot produce a clip, keep the name but use the closest motion. For example, `Dodge` can reuse a short block motion. Record the substitution in the manifest `notes` field.
 
-### 4.5 Budgets (provisional until the Phase 0 spike measures one model)
+### 4.5 Budgets (provisional until the first delivered model is measured)
 
 | Metric | Budget | Current KayKit baseline |
 |---|---|---|
@@ -123,6 +123,30 @@ Shared suffix: *stylized fantasy RPG character, chunky heroic proportions, large
 - **Rogue:** "human rogue in a deep hood and leather armour, light-coloured scarf and hood lining, short bow on the back, dagger at the hip, lean build" + suffix.
 - **Wizard:** "human wizard in layered robes, tall soft pointed hat, light-coloured inner robe, wooden staff with a glowing crystal, book on the belt" + suffix.
 - **Cleric:** "human cleric in chainmail under a light-coloured tabard with a sun emblem, flanged mace, raised holy-symbol amulet, no sword, no helmet" + suffix.
+
+### 4.8 Production checklist (owner)
+
+Tool features vary by plan and version. Verify each step in the tool itself and do not assume a step exists.
+
+1. **Spike first.** Make one model (recommended: Fighter) end to end before making the other three.
+2. **Generate** the model from the prompt in §4.7, optionally with a concept image. Reject results with broken hands, fused weapons or a weak silhouette from above.
+3. **Texture** in the stylized look from §3. Keep a light-coloured accent area.
+4. **Rig** as a humanoid.
+5. **Animate** the clips in §4.4. Note which clips the tool cannot produce.
+6. **Export** GLB.
+7. **Clean up** (for example in Blender):
+   - Decimate to the §4.5 budget.
+   - Split weapons into `Weapon_Main` / `Weapon_Off` / `Shield`.
+   - Name the accent material `Accent`.
+   - Rename clips to the §4.4 names.
+   - Set +Z facing, feet at y=0, in-place animation.
+   - Remove extra objects.
+8. **Self-check**: open the GLB in a glTF viewer. Confirm every clip plays, nothing is missing, and the size and triangle count are within budget.
+9. **Hand over** to Codex:
+   - The GLB files.
+   - Screenshots of each clip.
+   - The substitution notes from step 5.
+   - Licence evidence (plan name, terms URL, date).
 
 ## Part B — Integration task (Codex)
 
@@ -156,3 +180,24 @@ Shared suffix: *stylized fantasy RPG character, chunky heroic proportions, large
 
 ### 5.3 Out of scope
 Race-specific meshes, companion signature meshes, NPC and enemy models, engine and rules changes, deployment.
+
+### 5.4 Handoff prompt (paste into Codex)
+
+```text
+Repository: echoes-below (branch from main). Read docs/CHARACTERS.md and docs/PRD.md first.
+
+Task: integrate the character GLB files I provide into the game, following CHARACTERS.md Part B (§5.1) exactly.
+Files provided: public/assets/characters/{fighter,rogue,wizard,cleric}.glb (or the subset listed below) plus my notes and licence evidence.
+
+Rules:
+- Do not change server/, game rules, save format or API. Only the files listed in §5.1.
+- First inspect each GLB and report: triangle count, file size, joint count, texture sizes, mesh names, material names, clip names. Compare against §4.3–§4.5 and list every mismatch before changing code.
+- If a GLB violates the contract, stop and report. Do not silently rename or work around it in code.
+- Keep the old KayKit models as fallback until every check in §5.2 passes.
+- Rewrite asset tests to the new manifest in the same change; never delete assertions just to pass.
+- Verify with npm test, the three type checks, npm run build, and a browser run of creation → goblin combat. Provide screenshots for C-02, C-03, C-04 and C-06.
+- Deliver as one branch and one pull request. Stop before merge. Do not deploy. Never print or commit .env.
+
+Models delivered in this batch: <list>
+Clip substitutions: <notes>
+```

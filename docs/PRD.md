@@ -74,7 +74,7 @@ Keep the engine and rebuild the client with a strangler pattern: the new client 
 | 0 Baseline | Frame-time and draw-call measurement of the current build in a headed browser | Recorded numbers for Broken Approach and goblin combat. Sets the V2-08 floor |
 | 1 Parallel client | Separate entry (`/v2` or second Vite entry) using the existing API and `shared/` types | Old client unchanged and still passes all gates |
 | 2 Play-feel slice | Creation → Broken Approach → Counterweight Hall → goblin combat with current models: in-world combat feedback, in-scene dice, single canvas, HUD that leaves the scene visible, grouped actions, fewer initiative clicks, per-room layouts, first audio pass | V2-02…V2-07, V2-11, V2-12 |
-| 3 Characters (parallel, owner-paced) | Owner delivers Tripo models per [CHARACTERS.md](CHARACTERS.md); asset gate extended with budgets and clips; models integrated | CHARACTERS.md C-01…C-10, V2-01, V2-10 |
+| 3 Characters (parallel, owner-paced) | Owner delivers one spike model first, then the four class models per [CHARACTERS.md](CHARACTERS.md); asset gate extended with budgets and clips; models integrated | CHARACTERS.md C-01…C-10, V2-01, V2-10 |
 | 4 Rollout | Remaining rooms and chapters, then retire the old client | Parity with the Release 1 journey (archive §Playable journey) |
 
 ## Vertical slice acceptance
@@ -116,6 +116,34 @@ This track changes the engine and content, so it is not part of Track A. Goal: t
 - **Fair rewards.** A peaceful resolution earns comparable XP and unlocks as much as a combat win.
 - **Visible branch closers.** Warn before an action (such as resting) removes a route.
 - **Verification.** Extend `scripts/audit-campaign-progression.ts` to run a diplomatic profile and an aggressive profile to the end, and assert that their routes and endings differ.
+
+### Playstyle A vs B — today and target
+
+Playstyle A is diplomatic/stealthy: feed Scrit, negotiate, avoid fights, choose peaceful room options. Playstyle B is aggressive: fight every offered battle and force gates.
+
+| Aspect | A today | B today | Target (Track B) |
+|---|---|---|---|
+| Route | Same 46 rooms in the same order | Same 46 rooms in the same order | One ledger-driven room variant per chapter, so A and B see at least 5 different room states |
+| Chapter I ending | "A Promise Shared" (if Scrit was fed) or "The Keepers of the Bell" | "The Keepers of the Bell" | Kept, and recorded into the ledger |
+| Vark encounter | Negotiation possible (DC16 Echo / DC13 Curated with evidence) | Fight; one extra enemy if the alarm was raised | Kept |
+| Later rooms | A failed check pushes to the fallback choice | A won fight makes choice 0 free and grants XP | Peaceful success earns comparable XP and access |
+| Companions | Trust follows choice 0/1, not style | Same | Ledger also moves Mira (mercy/insight) and Oren (protection/duty) trust |
+| Final ending | Decided by the last room's choice only | Same | 3–4 endings from ledger + key decisions |
+| Combat | Avoidable after Chapter I | Offered in every room (Echo Rules) | Kept; combat stays a real option, not the only rewarded one |
+
+### Track B acceptance (if approved)
+
+| ID | Check |
+|---|---|
+| B-01 | The diplomatic and aggressive audit profiles both reach an ending, and the endings differ |
+| B-02 | The two profiles see different room states in each of chapters II–VI |
+| B-03 | Every branch-closing action warns before confirmation |
+| B-04 | Release 1 saves load and continue; old flags map into the ledger without data loss |
+| B-05 | Engine, rules and campaign audit tests pass; new tests cover ledger and ending selection |
+
+## Next step
+
+Phase 0 (frame-time baseline) or Phase 2 (play-feel slice) starts on the owner's go. Track B waits for explicit approval. Character integration starts when the owner delivers the first model.
 
 ## Delivery
 
