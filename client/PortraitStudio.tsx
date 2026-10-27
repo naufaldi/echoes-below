@@ -87,7 +87,7 @@ class SnapshotBoundary extends Component<{job:PortraitJob;children:ReactNode},{f
  componentDidCatch(){finishPortrait(this.props.job.key,null);}
  render(){return this.state.failed?null:this.props.children;}
 }
-/** Takes portrait snapshots offscreen in the world's own renderer: one queued look at a time, after an idle callback, never while a roll or combat cue is playing. Mount once inside the Canvas. */
+/** Takes portrait snapshots offscreen in the world's own renderer: one queued look at a time, after idle-time preparation, never while `paused` (the world pauses it for rolls, cues and combat, so turn playback frames are never touched). Mount once inside the Canvas. */
 export default function PortraitStudio({paused=false}:{paused?:boolean}){
  const job=useSyncExternalStore(subscribePortraits,nextPortraitJob);const studio=useMemo(createStudio,[]);
  useEffect(()=>()=>{studio.source.dispose();studio.target.dispose();studio.output.dispose();},[studio]);

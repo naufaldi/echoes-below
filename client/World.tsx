@@ -82,7 +82,7 @@ function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroA
  {save&&cue&&<CombatCues key={'cue:'+cue.key} cue={cue} save={save} reduced={reduced}/>}
  <ContactShadows opacity={.3} scale={20} blur={2} far={5} resolution={256} color="#050d0b"/>
  <SceneFraming save={save} orbit={orbit} reduced={reduced} userMoved={userMoved}/>
- <PortraitStudio paused={!!(roll||cue)}/>
+ <PortraitStudio paused={!!(roll||cue)||save?.mode==='combat'}/>
  <OrbitControls ref={orbit} onStart={()=>{cameraMotion.current=false;userMoved.current=true;}} makeDefault target={save?[0,.4,-.5]:[0,1,-1]} enablePan={false} minDistance={save?12:7} maxDistance={25} minPolarAngle={.45} maxPolarAngle={1.15} enableDamping={!reduced} maxAzimuthAngle={Math.PI*.6} minAzimuthAngle={-Math.PI*.6}/>
  </>;
 }
