@@ -2,10 +2,8 @@ import {createContext,useContext,useEffect,useRef,useState,type ReactNode} from 
 import {useFrame,useThree} from '@react-three/fiber';
 import {Html} from '@react-three/drei';
 import * as THREE from 'three';
-import {placeLabels,type LabelCandidate,type PlacedLabel,type Rect} from './label-layout';
+import {focusPriority,placeLabels,type LabelCandidate,type PlacedLabel,type Rect} from './label-layout';
 type Entry={id:string;text:string;detail?:string;priority:number;error?:boolean;actor?:boolean;anchor:THREE.Object3D;onSelect:()=>void};
-/** Selected (100) and hovered (60) labels register at or above this; quieter labels are dimmed so they guide without dominating. */
-const focusPriority=50;
 let labelFont:{text:string;detail:string}|null=null;let measureContext:CanvasRenderingContext2D|null=null;
 /** Pill size from the label's own font tokens, so overlap avoidance reserves what is actually drawn. */
 function pillSize(text:string,detail:string|undefined,important:boolean){
