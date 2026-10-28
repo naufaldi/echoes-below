@@ -50,7 +50,7 @@ test('#64 G8: the opening camp names nobody the party has not met; the cookfire 
 test('#64 U4: an Echo level-up is its own line with the gains, and the outcome before it stays clean',()=>{
  let s=echo();s.xp=290;s=applyAction(s,'tracks:hero',()=>20);
  const i=s.logs.findIndex(l=>l.levelUp);assert.ok(i>0);const l=s.logs[i]!;
- assert.deepEqual(l.levelUp,{level:2,maxHp:6,focus:1});assert.equal(l.speaker,'dm');assert.match(l.text,/^Level 2!/);
+ assert.deepEqual(l.levelUp,{level:2,maxHp:6,focus:1});assert.deepEqual(publicSave(s).logs.find(x=>x.id===l.id)?.levelUp,l.levelUp,'the client view keeps it');assert.equal(l.speaker,'dm');assert.match(l.text,/^Level 2!/);
  assert.ok(s.logs.slice(0,i).every(x=>!/Level 2/.test(x.text)&&!/Level 2/.test(x.prose??'')));
 });
 test('#64 U7: a companion memory in the journal uses the hero’s name; older facts are left as they were',()=>{
