@@ -79,3 +79,40 @@ Same machine, browser, viewport and route, capped at 60 Hz. The room-layout chan
 - Draw calls are down 35–50% in every measured scene. Frame rate stays at the 60 Hz cap, with zero WebGL context losses.
 - The remaining triangle spike in Cookfire comes from the goblin models (the Quaternius imp). The owner chose to keep the enemy models for now, so decimating or replacing them belongs with the character work (#11), not here.
 - WebGPU is still not justified: no measured scene is GPU-bound on this machine.
+
+## v1.0 release gate, per chapter (28 October 2026, `main` at `3c588bc`)
+
+Measured for #70 ([release gate](RELEASE-GATE-v1.0.md)). Same machine (Apple M1, 8 GB), Chrome for Testing 151 headed through agent-browser, viewport 1440×900, DPR 1, capped at the 60 Hz display. Local production build (`npm run build`, served by `buildApp` from `dist/client`). `frame-sampler.js` ran inside the playthrough driver: `window.__ebSample(5000)` 1.5 s after the room settled, after the chapter title page was turned.
+
+Run B (Echo, aggressive) sampled the first room of each chapter in exploration, then the first combat turn in that chapter. From Chapter II on, the first combat is in the chapter's first room ("Confront the chamber's defenders").
+
+| Chapter | Scene | Mode | Median ms | p95 ms | Max ms | FPS | Draw calls / frame | Triangles / frame |
+|---|---|---|---|---|---|---|---|---|
+| I | Broken Approach | explore | 16.7 | 18.6 | 18.7 | 60 | 295 | 145,272 |
+| I | Goblin Cookfire | combat | 16.7 | 18.6 | 18.7 | 60 | 351 | 329,434 |
+| II | The Sluice Stair | explore | 16.7 | 18.5 | 18.7 | 60 | 231 | 123,460 |
+| II | The Sluice Stair | combat | 16.7 | 18.4 | 18.7 | 60 | 319 | 146,842 |
+| III | The Cinder Gate | explore | 16.7 | 17.9 | 18.7 | 60 | 226 | 88,828 |
+| III | The Cinder Gate | combat | 16.7 | 18.4 | 18.7 | 60 | 289 | 271,186 |
+| IV | The Garden of Locks | explore | 16.7 | 17.9 | 18.8 | 60 | 265 | 128,184 |
+| IV | The Garden of Locks | combat | 16.7 | 18.6 | 18.7 | 60 | 257 | 143,498 |
+| V | The Hall of Breaths | explore | 16.7 | 18.6 | 18.7 | 60 | 203 | 92,880 |
+| V | The Hall of Breaths | combat | 16.7 | 18.5 | 18.7 | 60 | 231 | 263,766 |
+| VI | The Founders' Descent | explore | 16.7 | 18.6 | 18.7 | 60 | 190 | 92,210 |
+| VI | The Founders' Descent | combat | 16.7 | 18.6 | 18.7 | 60 | 218 | 263,096 |
+
+Run A (Echo, diplomatic) repeated the first-room samples. Draw calls depend on the fork variant and which props the save shows:
+
+| Chapter (first room) | p95 ms | Draw calls | Triangles |
+|---|---|---|---|
+| I Broken Approach | 18.6 | 291 | 143,972 |
+| II The Sluice Stair | 18.6 | 263 | 139,052 |
+| III The Cinder Gate | 18.6 | 222 | 87,528 |
+| IV The Garden of Locks | 18.6 | 225 | 109,888 |
+| V The Hall of Breaths | 18.6 | 199 | 91,580 |
+| VI The Founders' Descent | 18.6 | 186 | 90,910 |
+
+- Every sample holds the 60 Hz cap: median 16.7 ms, p95 17.9–18.6 ms, no frame over 18.8 ms, in 18 samples.
+- Draw calls are 186–351 per frame. The highest is still Goblin Cookfire combat (351), the same as after the #10/#26 room layouts, so no chapter goes above the 265–351 baseline range. Chapters II–VI stay at 186–319, which is lower than Chapter I.
+- Triangles peak at 329k in Goblin Cookfire combat. Combat with the Quaternius imp or the skeletons stays at 263k–271k. These models stay until #11 (v1.1).
+- No WebGL context loss and no console error in about 77 minutes of headed play across both full runs.
