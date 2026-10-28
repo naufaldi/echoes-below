@@ -1,7 +1,7 @@
 import type {PublicSave} from '../shared/types.js';
 import {speakerLabel} from '../shared/speaker-label.js';
 
-function narrationEntries(save:PublicSave) {
+export function narrationEntries(save:PublicSave) {
   if(save.revision===0)return [];
   // Older saves stamped the two creation exchanges as revision 1.
   const logs=save.logs.filter((l,i)=>!(i<2&&l.revision===1&&l.source==='authored'&&l.speaker===(i===0?'mira':'oren')));
