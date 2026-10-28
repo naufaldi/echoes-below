@@ -8,8 +8,8 @@ const seedCount=Number(process.argv[2]??1);if(!Number.isInteger(seedCount)||seed
 const runs=[];
 for(const classId of ['guardian','scout','adept','cleric'] as ClassId[])for(let seed=1;seed<=seedCount;seed++){
  let rng=seed*733;const dice=(sides:number)=>{rng=(Math.imul(rng,1664525)+1013904223)>>>0;return 1+Math.floor(rng/4294967296*sides);};
- let s=createSave({name:'Attrition audit',classId,backgroundId:'delver',appearanceId:'ember',rulesVersion:CURATED_RULES_VERSION});let actions=0;const rooms:unknown[]=[];let error:string|undefined;
- const act=(id:string)=>{s=applyAction(s,id,dice);actions++;};
+ let s=createSave({name:'Attrition audit',classId,backgroundId:'delver',appearanceId:'ember',rulesVersion:CURATED_RULES_VERSION});let actions=0,peakPotions=0;const rooms:unknown[]=[];let error:string|undefined;
+ const act=(id:string)=>{s=applyAction(s,id,dice);actions++;peakPotions=Math.max(peakPotions,...s.party.map(a=>a.potions));};
  const stats=()=>({scene:s.sceneId,mode:s.mode,level:s.level,xp:s.xp,party:s.party.map(a=>({id:a.id,hp:a.hp,maxHp:a.maxHp,potions:a.potions,rations:a.rations,dead:s.tactical!.actors[a.id].dead,slots:s.tactical!.actors[a.id].slots,hitDice:s.tactical!.actors[a.id].hitDice}))});
  function fight(){
   for(let step=0;step<300&&s.mode==='combat';step++){
@@ -41,6 +41,6 @@ for(const classId of ['guardian','scout','adept','cleric'] as ClassId[])for(let 
   act('prison');act('force');act('ledger');recover();act('bell');act('fight');fight();rooms.push(stats());act('secure');act('continue_campaign');
   for(const room of EXPEDITION){if(s.sceneId!==room.id)throw Error('Unexpected room');recover();act('exp_evidence');act('exp_talk');act('exp_supplies');if(CURATED_ENCOUNTERS[room.id]){act('exp_fight');fight();}act('exp_choice:1');recover();s=JSON.parse(JSON.stringify(s)) as Save;rooms.push(stats());act('exp_next');}
  }catch(e){error=e instanceof Error?e.message:String(e);}
- const result={classId,seed,actions,error,final:stats(),rooms};runs.push(result);console.log(JSON.stringify({classId,seed,actions,error,final:result.final}));
+ const result={classId,seed,actions,peakPotions,error,final:stats(),rooms};runs.push(result);console.log(JSON.stringify({classId,seed,actions,peakPotions,error,final:result.final}));
 }
-writeFileSync('docs/CAMPAIGN_ATTRITION.json',JSON.stringify({kind:'Continuous controlled combat-route simulation, not human playtime or balance acceptance',assumptions:'No injected HP, XP, levels, inventory or resources. All authored combats; all room evidence and supply caches; no side quests. Existing Rogue/Fighter companions, greedy legal-action hero policy, automatic companions. Short/extra Hit Dice rests for injuries, long rest for remaining injuries or half-depleted slots when legal. First available ability improvements. JSON save round-trip at room boundaries. Failure stops that run; no retries or checkpoint resets. In-game rest hours are not player hours. No paid AI.',seedCount,runs},null,2)+'\n');
+writeFileSync('docs/CAMPAIGN_ATTRITION.json',JSON.stringify({peakPotionsPerMember:Math.max(...runs.map(r=>r.peakPotions)),kind:'Continuous controlled combat-route simulation, not human playtime or balance acceptance',assumptions:'No injected HP, XP, levels, inventory or resources. All authored combats; all room evidence and supply caches; no side quests. Existing Rogue/Fighter companions, greedy legal-action hero policy, automatic companions. Short/extra Hit Dice rests for injuries, long rest for remaining injuries or half-depleted slots when legal. First available ability improvements. JSON save round-trip at room boundaries. Failure stops that run; no retries or checkpoint resets. In-game rest hours are not player hours. No paid AI.',seedCount,runs},null,2)+'\n');

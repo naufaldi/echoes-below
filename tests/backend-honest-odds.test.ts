@@ -37,7 +37,7 @@ test('every advertised modifier, DC and advantage equals the saved roll',()=>{
   s=applyAction(s,'exp_evidence',sides=>sides);const helped=attempt();
   if(helped){assert.equal(helped.check!.advantage,'Evidence');verify(s,helped,seen);}
  }
- for(const id of ['tracks','inspect','chain','disarm','persuade','distract','pick','negotiate','exp_choice','attack','tactical:attack'])assert.ok(seen.has(id),`no ${id} option was verified`);
+ for(const id of ['tracks','inspect','chain','disarm','persuade','distract','pick','negotiate','exp_evidence','exp_choice','attack','tactical:attack'])assert.ok(seen.has(id),`no ${id} option was verified`);
 });
 test('the public save carries only public terms on its options',()=>{
  const s=publicSave(createSave({name:'Odds',classId:'scout',backgroundId:'delver',appearanceId:'moon'}));

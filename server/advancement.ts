@@ -12,7 +12,7 @@ export function advancementActions(s:Save):ActionOption[]{
   return ABILITIES.flatMap((first,i)=>ABILITIES.slice(i).flatMap(second=>{
    if(c.abilities[first]+(first===second?2:1)>20||c.abilities[second]+(first===second?2:1)>20)return[];
    const bonus=first===second?`${title(first)} +2`:`${title(first)} +1, ${title(second)} +1`;
-   return[{id:`advance:${actor.id}:${level}:${first}:${second}`,kind:'inventory',actorId:actor.id,label:`${bonus} · ${actor.name}`,description:`Spend ${actor.name}’s level ${level} Ability Score Improvement. ${bonus}. This permanent choice is saved with the character. Scores cannot exceed 20.`}];
+   return[{id:`advance:${actor.id}:${level}:${first}:${second}`,kind:'inventory',actorId:actor.id,label:`${bonus} · ${actor.name}`,description:`Spend ${actor.name}’s level ${level} Ability Score Improvement. ${bonus}. This choice is permanent. Scores cannot exceed 20.`}];
   }));
  });
 }
@@ -20,6 +20,6 @@ export function applyAdvancement(original:Save,id:string):Save{
  const choice=advancementActions(original).find(a=>a.id===id);if(!choice)throw new GameError(422,'ADVANCEMENT','That ability improvement is unavailable.');
  const s=structuredClone(original),[,actor,level,first,second]=id.split(':');s.presentation=[];
  s.tactical!.actors[actor]=improveCharacter(s.tactical!.actors[actor],{level:Number(level),first:first as Ability,second:second as Ability});
- projectTactical(s,false);log(s,`${choice.label}. Level ${level} improvement saved.`,actor);
+ projectTactical(s,false);log(s,`${choice.label}. The level ${level} improvement is permanent.`,actor);
  s.revision++;s.updatedAt=new Date().toISOString();return s;
 }

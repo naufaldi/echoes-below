@@ -48,7 +48,7 @@ test('a trap failure strips the damage number from prose but keeps it in text',(
  assert.ok(fresh(s,next).some(l=>/A dart strikes Aria for \d+ damage/.test(l.text)));assert.equal(entry.prose,'The plate drops. A dart strikes you. The chain crashes; the mechanism is spent.');
 });
 test('expedition room checks record the challenge and evidence advantage',()=>{
- const room=EXPEDITION[0];let s=echo();s.sceneId=room.id;s=applyAction(s,'exp_evidence',()=>1);
+ const room=EXPEDITION[0];let s=echo();s.sceneId=room.id;s=applyAction(s,'exp_evidence',()=>20);
  const next=applyAction(s,'exp_choice:0',n=>n===20?18:1),[entry]=rolled(s,next);
  assert.equal(entry.check!.kind,'check');assert.equal(entry.check!.skill,room.challenge);assert.equal(entry.check!.advantage,true);assert.equal(entry.check!.natural,18);
  const decision=next.facts.find(x=>x.id===`decision:${room.id}`)!.text;assert.equal(entry.check!.success,true);assert.equal(entry.prose,decision);assert.ok(entry.check!.xp!>0);storyOnly(entry);framed(next,entry);

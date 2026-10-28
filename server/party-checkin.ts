@@ -16,7 +16,7 @@ const lines:Record<string,[string,string]>={
 const checkInKey=(s:Save,id:string)=>`checkin:${s.sceneId.split('-')[0]}:${id}`;
 export function checkInActions(s:Save):ActionOption[]{
  if(s.mode!=='explore'||s.companionStoryId||s.party[0].hp<=0)return[];
- return (['mira','oren'] as const).filter(id=>s.party.some(a=>a.id===id&&a.hp>0)&&!s.flags[checkInKey(s,id)]).map(id=>({id:`checkin:${id}`,label:`Check in with ${id==='mira'?'Mira':'Oren'}`,description:'Hear an authored companion reflection. No AI charge, dice roll or reward.',kind:'interact',actorId:id,targetId:id}));
+ return (['mira','oren'] as const).filter(id=>s.party.some(a=>a.id===id&&a.hp>0)&&!s.flags[checkInKey(s,id)]).map(id=>({id:`checkin:${id}`,label:`Check in with ${id==='mira'?'Mira':'Oren'}`,description:`Sit with ${id==='mira'?'Mira':'Oren'} a moment and hear what is on ${id==='mira'?'her':'his'} mind. No roll and no reward.`,kind:'interact',actorId:id,targetId:id}));
 }
 export function resolveCheckIn(original:Save,id:string):Save{
  if(!checkInActions(original).some(a=>a.id===id))throw new GameError(422,'ACTION','That companion conversation is not available now.');

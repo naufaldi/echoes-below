@@ -131,7 +131,7 @@ export class Storage {
       id: randomUUID(),
       revision: 0,
       speaker: "dm",
-      text: "Restored checkpoint as a new save branch. The original adventure remains saved.",
+      text: "You return to an earlier moment. The road you left stays where it was.",
       source: "rules",
       rolls: [],
     });
