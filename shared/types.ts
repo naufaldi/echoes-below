@@ -57,6 +57,8 @@ export interface GameLog {
   check?: OutcomeCheck;
   /** #64 U4: set on the level-up line. `maxHp`/`focus` are the per-member gains under Echo Rules; Curated gains vary by class, so they are absent. */
   levelUp?: {level: number; maxHp?: number; focus?: number};
+  /** #64: set on each "The party gains N XP." line, so the story box need not parse the text. Absent on older saves. */
+  xp?: number;
   actionKind?: 'reaction';
   animation?: AnimationCue;
   speakerName?: string;
@@ -165,6 +167,8 @@ export interface PublicSave {
   ending: string | null;
   /** #69: present only on a completed descent whose ending names its title. */
   recap?: import("./endings.js").CampaignRecap;
+  /** #66: one entry per finished chapter, oldest first. Absent when the save's flags cannot account for its XP. */
+  chapterRecaps?: import("./chapter-pages.js").ChapterRecap[];
   checkpoints: { id: string; label: string }[];
   createdAt: string;
   updatedAt: string;

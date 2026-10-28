@@ -71,7 +71,7 @@ export const CHOICE_TRUST:Record<string,readonly [Companion|null,Companion|null]
 };
 /** Rooms before the cut-off whose saved choice won this companion over. */
 const earned=(f:Save['flags'],rooms:string[],who:Companion)=>rooms.filter(id=>(CHOICE_TRUST[id]??[]).some((c,i)=>c===who&&f[`${id}:choice:${i}`])).length;
-const chapterOneDone=(s:Save)=>!!expeditionRoom(s.sceneId)||s.sceneId==='aftermath'&&s.mode==='complete';
+export const chapterOneDone=(s:Save)=>!!expeditionRoom(s.sceneId)||s.sceneId==='aftermath'&&s.mode==='complete';
 /** A room only counts toward Mercy when a fight was actually on offer there; Curated rooms without an authored encounter count for neither side. */
 const fightOffered=(s:Save,id:string)=>!s.tactical||!!CURATED_ENCOUNTERS[id];
 /** Reads Chapter I and every expedition room before `before`, so a fork cannot change while the party stands in it. */

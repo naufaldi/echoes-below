@@ -1,6 +1,8 @@
 import {GameError,log,type Save} from './game.js';
 import type {ActionOption,Scene} from '../shared/types.js';
 export const INK_RESCUE='The apprentice lifts the repaired lantern while you carry the sleeved reeds clear of its heat. The living pages remain intact. She chooses to leave with you, carrying the light, and offers to witness Sel’s contracts when you reach his desk. No name needs to burn for the road ahead.';
+/** The rescue option's label once the lantern is ready; the chapter recap repeats it. */
+export const INK_RESCUE_LABEL='Leave with the apprentice and protected pages';
 export function inkPrepared(s:Save){return !!s.tactical&&s.sceneId==='archive-2'&&!!s.flags['ink:wick'];}
 export function inkActions(s:Save):ActionOption[]{
  if(!s.tactical||s.sceneId!=='archive-2'||s.mode!=='explore'||s.party[0].hp<=0||s.companionStoryId||s.flags['archive-2:resolved'])return[];

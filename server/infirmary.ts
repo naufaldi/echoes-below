@@ -1,6 +1,8 @@
 import {GameError,log,type Save} from './game.js';
 import type {ActionOption,Scene} from '../shared/types.js';
 export const PREPARED_RESCUE='The braced cot settles gently as you guide the medic out. His medicine remains dry in its secured case. He thanks you for making a place for him before opening the water, and keeps the medicine for his patients.';
+/** The rescue option's label once the cot is braced; the chapter recap repeats it. */
+export const PREPARED_RESCUE_LABEL='Help the medic from the lowered cot';
 export function infirmaryPrepared(s:Save){return !!s.tactical&&s.sceneId==='archive-4'&&!!s.flags['infirmary:drain'];}
 export function infirmaryActions(s:Save):ActionOption[]{
  if(!s.tactical||s.sceneId!=='archive-4'||s.mode!=='explore'||s.party[0].hp<=0||s.companionStoryId||s.flags['archive-4:resolved'])return[];
