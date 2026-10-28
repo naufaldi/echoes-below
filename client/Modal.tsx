@@ -56,8 +56,8 @@ export function Dialog({label,labelledBy,className,backdrop='modal-backdrop',onC
  const ref=useRef<HTMLElement>(null);useModal(ref,{onClose,initial});
  return <div className={backdrop} onClick={onBackdrop&&(e=>{if(e.target===e.currentTarget)onBackdrop();})}><section ref={ref} tabIndex={-1} className={'modal'+(className?' '+className:'')} role="dialog" aria-modal="true" aria-label={label} aria-labelledby={labelledBy}>{children}</section></div>;
 }
-/** A full-page overlay (the ending, the chapter card): its heading takes focus and the dimmed HUD behind it is inert; the frame stays live. */
-export function Overlay({className,labelledBy,children}:{className:string;labelledBy:string;children:ReactNode}){
- const ref=useRef<HTMLElement>(null);useModal(ref,{initial:'#'+labelledBy,trap:false,keep:OVERLAY_FRAME});
+/** A full-page overlay (the ending, the chapter pages): its heading takes focus and the dimmed HUD behind it is inert; the frame stays live. Escape calls `onClose` when the page can be turned. */
+export function Overlay({className,labelledBy,onClose,children}:{className:string;labelledBy:string;onClose?:()=>void;children:ReactNode}){
+ const ref=useRef<HTMLElement>(null);useModal(ref,{onClose,initial:'#'+labelledBy,trap:false,keep:OVERLAY_FRAME});
  return <section ref={ref} className={className} aria-labelledby={labelledBy}>{children}</section>;
 }

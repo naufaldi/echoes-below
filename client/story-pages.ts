@@ -23,9 +23,9 @@ type Cast=Pick<PublicSave,'party'|'enemies'>;
 
 const cap=(s:string)=>s.charAt(0).toUpperCase()+s.slice(1);
 /**
- * The one string match in the story box (#60, #64): XP log lines carry no structured amount. A checked outcome's tag uses
- * `check.xp`, which the engine sums over the action's XP lines, so this only identifies those lines to absorb them, and
- * reads the amount where no check counts it (encounter XP, older saves).
+ * XP lines carry their amount as `log.xp` (#66); this string match only reads saves from before it. A checked outcome's tag
+ * uses `check.xp`, which the engine sums over the action's XP lines, so the amount here only absorbs those lines, and shows
+ * where no check counts it (encounter XP).
  */
 const XP_LINE=/^The party gains (\d+) XP\.$/;
 const xpTag=(n:number):TagPart[]=>[{text:`+${n} XP`,xp:n}];
@@ -64,8 +64,8 @@ export function storyLines(logs:readonly GameLog[],cast:Cast,{rollTags=false}:{r
    if(l.prose&&logs[i+1]?.text===l.prose)i++;
    continue;
   }
-  const xp=l.speaker==='dm'&&l.source==='rules'?XP_LINE.exec(l.text):null;
-  if(xp){const n=Number(xp[1]);if(n<=xpBudget){xpBudget-=n;continue;}lines.push({key:l.id,voice:'narrator',speakerId:null,name:null,text:'',tag:xpTag(n)});continue;}
+  const n=l.speaker==='dm'&&l.source==='rules'?l.xp??Number(XP_LINE.exec(l.text)?.[1]??0):0;
+  if(n){if(n<=xpBudget){xpBudget-=n;continue;}lines.push({key:l.id,voice:'narrator',speakerId:null,name:null,text:'',tag:xpTag(n)});continue;}
   if(l.levelUp&&!rollTags){lines.push({key:l.id,voice:'narrator',speakerId:null,name:null,text:'',tag:levelTag(l.levelUp)});continue;}
   const text=l.prose??l.text,tag=rollTags&&l.rolls.length?l.rolls.map(r=>({text:`${cap(r.purpose)} · ${r.total}`})):null;
   const voiced=l.speaker==='dm'&&l.source!=='rules'?cast.party.map(a=>({a,name:speakerLabel({speaker:a.id,source:'rules'},cast.party,cast.enemies)})).find(p=>unprefixed(text,p.name)!==null):undefined;
