@@ -43,7 +43,7 @@ export default function Onboarding({onClose}:{onClose:()=>void}){
    <h2 id="guide-title">{current.title}</h2>
    <div id="guide-body" aria-live="polite"><p>{current.body}</p>{current.demo}</div>
    <div className="guide-dots" aria-hidden="true">{STEPS.map((_,i)=><span key={i} className={i===step?'on':i<step?'done':undefined}/>)}</div>
-   <div className="guide-actions"><button className="guide-skip" onClick={onClose}>Skip guide</button><span>{step>0&&<button className="guide-back" onClick={()=>setStep(step-1)}>Back</button>}<button data-autofocus className="primary" onClick={()=>last?onClose():setStep(step+1)}>{last?'Begin':'Next'} <span aria-hidden="true">{last?'↗':'›'}</span></button></span></div>
+   <div className="guide-actions"><button className="guide-skip" onClick={onClose}>Skip guide</button><span>{step>0&&<button className="guide-back" onClick={()=>setStep(step-1)}>Back</button>}<button data-autofocus className="primary" onClick={()=>last?onClose():setStep(step+1)}>{last?'Begin':<>Next <span aria-hidden="true">›</span></>}</button></span></div>
   </section>
  </div>;
 }
