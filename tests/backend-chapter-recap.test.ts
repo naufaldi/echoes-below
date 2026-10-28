@@ -1,7 +1,8 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {createSave,legalActions,publicSave,type Save} from '../server/game.js';
+import {applyAction,createSave,legalActions,publicSave,type Save} from '../server/game.js';
+import {experienceAward} from '../server/chapter-recap.js';
 import {Storage} from '../server/storage.js';
 import {ROOM_FORKS,playedRoom,playstyleLedger,roomFork,type PlaystyleLedger} from '../server/playstyle.js';
 import {CAMPAIGN_CONSEQUENCES} from '../server/campaign-consequences.js';
@@ -124,4 +125,17 @@ test('#66: chapter title pages use public text the party reads on the way in',()
   for(const line of page.prologue)assert.ok(firstTexts.every(t=>t.includes(line))||(leadIn?[leadIn.description]:afterChapterOne).every(t=>t.includes(line)),`Chapter ${page.chapter}: "${line}"`);
   for(const room of EXPEDITION)for(const line of page.prologue)assert.ok(![room.clue,room.voice,...room.outcomes].some(t=>t.includes(line)),`Chapter ${page.chapter} prologue reveals ${room.id}`);
  }
+});
+
+test('#66: help from a returning ally counts toward the chapter it arrives in',()=>{
+ for(const c of CAMPAIGN_CONSEQUENCES)assert.deepEqual(experienceAward(`fact:consequence:${c.id}`),{amount:35,chapter:expeditionRoom(c.target)!.chapter},c.id);
+ let s=createSave({name:'Aria',classId:'guardian',backgroundId:'envoy',appearanceId:'moon'});
+ s.sceneId='archive-8';
+ for(const room of EXPEDITION.slice(0,7))Object.assign(s.flags,{[`${room.id}:resolved`]:true,[`${room.id}:choice:0`]:true});
+ const max=(sides:number)=>sides;
+ for(const id of ['exp_ally:ferry-return','exp_choice:0','exp_next'])s=applyAction(s,id,max);
+ assert.equal(s.sceneId,'market-1');
+ const chapter=publicSave(s).chapterRecaps!.find(r=>r.chapter===2)!,ferry=s.facts.find(f=>f.id==='consequence:ferry-return')!.text,decision=s.facts.find(f=>f.id==='decision:archive-8')!.text;
+ assert.deepEqual(chapter.changes,[firstSentence(ferry),firstSentence(decision)]);
+ assert.equal(chapter.xp,35+35+expeditionRoom('archive-8')!.xp+100,'the ally, the decision, the room and its peaceful resolution');
 });
