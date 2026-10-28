@@ -21,11 +21,13 @@ function offered(rules:'echo'|'curated'){
  for(const room of EXPEDITION){s=previewSave(room.id,rules);for(const id of ['exp_evidence','exp_talk','exp_supplies','exp_choice:1'])act(id);take(s);converse();}
  return [...seen.values()];
 }
-const FREE=/^(checkin:|bond_(begin|reply):|loot_cache$|ledger$|exp_(evidence|talk|supplies)$|counterweight:|scrit-talk$|scrit:(supplies|captive|ward)$|courier:|parley:|infirmary:(inspect|signal)$|ink:(inspect|ask)$|index:read$|side:[^:]+:investigate$)/;
+const FREE=/^(checkin:|bond_(begin|reply):|loot_cache$|ledger$|exp_(talk|supplies)$|counterweight:|scrit-talk$|scrit:(supplies|captive|ward)$|courier:|parley:|infirmary:(inspect|signal)$|ink:(inspect|ask)$|index:read$|side:[^:]+:investigate$)/;
 for(const rules of ['echo','curated'] as const)test(`free actions skip the card and nothing that spends, moves, fights or closes does (${rules})`,()=>{
  const actions=offered(rules),free=actions.filter(a=>confirmationFor(a)==='none').map(a=>a.id);
  assert.deepEqual(free.filter(id=>!FREE.test(id)),[]);
- for(const id of ['loot_cache','checkin:mira','counterweight:read','counterweight:pawl','counterweight:weight','counterweight:pin','scrit-talk','ledger','exp_evidence','exp_talk','exp_supplies'])assert.ok(free.includes(id),id+' should commit directly');
+ for(const id of ['loot_cache','checkin:mira','counterweight:read','counterweight:pawl','counterweight:weight','counterweight:pin','scrit-talk','ledger','exp_talk','exp_supplies'])assert.ok(free.includes(id),id+' should commit directly');
+ // #95 made examining the evidence a roll, so it keeps its card like every other check.
+ if(actions.some(a=>a.id==='exp_evidence'))assert.ok(!free.includes('exp_evidence'),'exp_evidence rolls, so it keeps its card');
  assert.ok(free.some(id=>id.startsWith('bond_reply:')),'conversation replies commit directly');
  const kept=actions.filter(a=>confirmationFor(a)!=='none').map(a=>a.id);
  for(const pattern of [/^enter$/,/^quick$/,/^offer$/,/^prison$/,/^bell$/,/^negotiate$/,/^secure$/,/^exp_choice:/,/^exp_next$/,/^continue_campaign$/,rules==='echo'?/^(campheal:|potion$)/:/^recover:/])
