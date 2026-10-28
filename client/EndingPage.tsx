@@ -2,6 +2,7 @@ import {useState} from 'react';
 import type {PublicSave} from '../shared/types';
 import type {CampaignRecap} from '../shared/endings';
 import Credits from './Credits';
+import {Overlay} from './Modal';
 import {endingParagraphs,pathTaken,recapRows} from './ending-recap';
 import {endingSlots,recordFound} from './endings-found';
 
@@ -12,10 +13,10 @@ function remember(recap:CampaignRecap){const ending={id:recap.endingId,title:rec
 export default function EndingPage({save,recap,busy,onRead,onRestart}:{save:PublicSave;recap:CampaignRecap;busy:boolean;onRead:()=>void;onRestart:()=>void}){
  // Recording is idempotent, so a repeated initialiser (Strict Mode) writes the same list.
  const[found]=useState(()=>remember(recap)),slots=endingSlots(found),{depths}=pathTaken(save);
- return <section className="ending ending-page" aria-labelledby="ending-title">
+ return <Overlay className="ending ending-page" labelledBy="ending-title">
   <article className="ending-story">
    <div className="eyebrow">THE DESCENT IS OVER</div>
-   <h2 id="ending-title">{recap.title}</h2>
+   <h2 id="ending-title" tabIndex={-1}>{recap.title}</h2>
    {endingParagraphs(save,recap.title).map((p,i)=><p key={i}>{p}</p>)}
    <div className="ending-actions"><button className="primary" onClick={onRead}>Read your story →</button><Credits className="ending-quiet"/><button className="ending-quiet" disabled={busy} onClick={onRestart}>Begin another journey</button></div>
   </article>
@@ -26,5 +27,5 @@ export default function EndingPage({save,recap,busy,onRead,onRestart}:{save:Publ
    <h3>Endings found <small>{found.length} of {slots.length}</small></h3>
    <ul className="endings-found">{slots.map((s,i)=>s.found?<li key={s.id} className={s.id===recap.endingId?'current':undefined}><strong>{s.title}</strong>{s.id===recap.endingId&&<small>This descent</small>}</li>:<li key={'locked-'+i} className="locked" aria-label="An ending not yet found"><strong aria-hidden="true">?</strong><small>{LOCKED_HINT}</small></li>)}</ul>
   </aside>
- </section>;
+ </Overlay>;
 }
