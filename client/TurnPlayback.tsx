@@ -1,4 +1,4 @@
-import {revealedScene} from './playback-scene';
+import {playbackStartSave,playbackRevealSave} from './playback-save';
 import {playFrameCues} from './audio';
 import {playbackSteps} from './playback-steps';
 import {useEffect,useMemo,useRef,useState} from 'react';
@@ -23,13 +23,11 @@ export function TurnPlayback({before,after,reduced,autoAdvance,barks,onFrame,onR
   if(!frame){done.current();return;}
   setRevealed(false);if(!panel.current?.contains(document.activeElement))panel.current?.focus({preventScroll:true});
   const previous=index?frames[index-1]:null;
-  const room=frame.sceneId===before.scene.id?before:after;
-  const turn=frame.turn??after.turn??before.turn;
-  const visible={...room,activeReaction:frame.log.actionKind==='reaction'?frame.actorId:undefined,mode:frame.mode??room.mode,actions:[],party:previous?.party??before.party,enemies:previous?.enemies.length?previous.enemies:frame.enemies,logs:before.logs,turn:turn?{...turn,actorId:frame.actorId}:null};
+  const visible=playbackStartSave(before,after,frames,index);
   show.current(visible);playFrameCues('start',frame,previous??before);
   const first=group.length===1?frame.log.rolls[0]:undefined,roll=first?{key:frame.log.id,actorId:frame.actorId,sides:first.sides,rolling:true,kept:null}:null;rolled.current(roll);
   let shown=false;
-  const reveal=()=>{if(shown)return;shown=true;setRevealed(true);rolled.current(roll&&{...roll,rolling:false,kept:first!.kept});cued.current(group.length===1?cueFor(frame.log.id,frame.actorId,frame.log.animation,frame.log.text,[...visible.party,...(previous?.enemies??before.enemies)],[...frame.party,...frame.enemies]):null);show.current({...visible,scene:revealedScene(before,after,final,last===frames.length-1),tactical:final.tactical??visible.tactical,party:final.party,enemies:final.enemies,turn:turn?{...turn,actorId:group.length>1?(final.turn??after.turn)?.actorId??final.actorId:final.actorId}:null,logs:[...before.logs,...group.map(f=>f.log)]});playFrameCues('reveal',final,previous??before);};
+  const reveal=()=>{if(shown)return;shown=true;setRevealed(true);rolled.current(roll&&{...roll,rolling:false,kept:first!.kept});cued.current(group.length===1?cueFor(frame.log.id,frame.actorId,frame.log.animation,frame.log.text,[...visible.party,...(previous?.enemies??before.enemies)],[...frame.party,...frame.enemies]):null);show.current(playbackRevealSave(before,after,frames,index,last));playFrameCues('reveal',final,previous??before);};
   // A press while the die is still in the air lands it now, so the step's roll and cue are never skipped.
   const t=setTimeout(reveal,reduced?100:frame.log.rolls.length?1250:300);revealNow.current=()=>{clearTimeout(t);reveal();};
   return()=>{clearTimeout(t);revealNow.current=null;};

@@ -1,0 +1,3 @@
+import {Component,type ReactNode} from 'react';
+/** #94: a failure anywhere in the table falls back to one story-safe page; the adventure itself lives on the table, so a reload resumes it. */
+export default class AppBoundary extends Component<{children:ReactNode},{error:boolean}>{state={error:false};static getDerivedStateFromError(){return{error:true};}componentDidCatch(error:unknown){console.error(error);}render(){return this.state.error?<main className="app-failure" role="alert"><div className="eyebrow">THE LANTERN GUTTERS</div><h1>The tale slipped from the page.</h1><p>Your adventure waits where you left it. Reload to pick up the thread.</p><button className="primary" onClick={()=>location.reload()}>Reload the adventure</button></main>:this.props.children;}}
