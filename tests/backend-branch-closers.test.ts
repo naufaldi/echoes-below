@@ -15,13 +15,13 @@ const quiet=(s:Save,id:string)=>{const a=action(s,id);assert.ok(a,`${id} should 
 const at=(s:Save,scene:Save['sceneId'])=>{s.sceneId=scene;return s;};
 
 test('#13: resting at camp in Echo Rules spends the ration Scrit needs, so it must say so',()=>{
- let s=echo();warns(s,'rest',/Closes: .*ration to Scrit.*seal negotiation with Vark/);
+ let s=echo();warns(s,'rest',/Closes: the last ration, which someone below may need\./);assert.doesNotMatch(action(s,'rest')!.description,/Scrit|Vark/,'#64 G8: not met yet');
  s=applyAction(s,'rest',win);assert.equal(s.party.reduce((n,a)=>n+a.rations,0),0);
  s=applyAction(applyAction(s,'enter',win),'ledge',win);assert.equal(s.sceneId,'cookfire');
  assert.ok(!has(s,'offer'),'the warning describes a real closure');
 });
 test('#13: a tactical long rest at the opening camp warns without claiming the ward inquiry is lost',()=>{
- let s=tactical();warns(s,'camp:long',/Closes: .*ration to Scrit/);assert.doesNotMatch(action(s,'camp:long')!.description,/negotiation/);
+ let s=tactical();warns(s,'camp:long',/Closes: the last ration/);assert.doesNotMatch(action(s,'camp:long')!.description,/Scrit|Vark|negotiation/);
  s=applyAction(s,'camp:long',win);s=at(s,'cookfire');assert.ok(!has(s,'offer'));
  s=applyAction(s,'scrit-talk',win);for(const q of ['supplies','captive','ward'])s=applyAction(s,`scrit:${q}`,win);assert.equal(s.flags.sealKnowledge,true);
 });
