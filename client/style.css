@@ -331,6 +331,36 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .pack-note,.pack-panel small{font-size:var(--fs-sm);color:var(--text-secondary)}.pack-items>div{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-subtle)}
 .pack-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.pack-actions button{padding:10px;border:1px solid var(--border-strong)}
 
+/* #63 Descent map: a journal page with the way down inked on it. Six depths, top to bottom; the rows switch back so the trail winds down like a stair. Only the modal's own entrance moves, so held arrow keys and reduced motion have nothing to replay. */
+.track-map{display:flex;align-items:center;gap:7px;flex-shrink:0;padding:5px 12px;font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-secondary);border:1px solid var(--border-subtle);border-radius:14px}
+@media(max-width:1500px){.camera-hint{display:none}} /* eight room names and the map button fill the strip; the hint would only be clipped */
+@media(hover:hover) and (pointer:fine){.track-map:hover{color:var(--accent-strong);border-color:var(--accent)}}
+.map-icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}.map-icon circle{fill:currentColor;stroke:none}.track-map .map-icon{width:15px;height:15px}
+.modal.descent-map{width:min(1000px,100%);padding:24px 34px 18px}.descent-map h2{margin:4px 0 12px}
+.map-page{position:relative}
+.map-trail{position:absolute;inset:0;pointer-events:none;overflow:visible}.map-trail path{fill:none;stroke-linecap:round;filter:url(#map-ink)}
+.map-trail .taken{stroke:var(--ink-soft);stroke-width:2.2}.map-trail .ahead{stroke:var(--ink-faint);stroke-width:1.4;stroke-dasharray:2 6;opacity:.6}
+.map-depths,.map-rooms,.map-legend{list-style:none;margin:0;padding:0}
+.map-depth{display:grid;grid-template-columns:160px 1fr;gap:34px;align-items:start;min-height:70px}.map-depth.ahead{min-height:48px}
+.map-depth-name{display:flex;gap:10px;align-items:baseline;font-family:var(--font-display);font-size:var(--fs-lg);line-height:1.2;color:var(--text-muted)}.map-depth-name span{width:26px;flex-shrink:0;text-align:right;font-size:var(--fs-xl)}
+.map-depth.past .map-depth-name{color:var(--text-secondary)}.map-depth.current .map-depth-name{color:var(--accent-strong)}
+.map-rooms{display:flex}.map-depth.reverse .map-rooms{flex-direction:row-reverse}
+.map-room{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:0 3px;outline:none;cursor:default}
+.map-node{position:relative;width:24px;height:24px;flex-shrink:0;display:grid;place-items:center;border-radius:50%;border:1px solid var(--border-default);background:var(--paper-1);font-size:var(--fs-2xs);color:var(--text-muted);font-variant-numeric:tabular-nums}
+.map-room.cleared .map-node{border-color:var(--ink-soft);color:var(--ink-soft);background:var(--paper-2)}
+.map-room.current .map-node,.map-legend .here{border:2px solid var(--accent);color:var(--accent-strong);background:color-mix(in srgb,var(--accent) 16%,var(--paper-1));font-weight:600}
+.map-room.current .map-node{width:28px;height:28px;margin:-2px 0;box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 14%,transparent)}
+.map-room.unlit .map-node{width:10px;height:10px;margin:7px 0;border-color:color-mix(in srgb,var(--ink-faint) 45%,transparent);background:var(--paper-0)}
+.map-room-name{font-family:var(--font-body);font-size:var(--fs-xs);line-height:1.15;text-align:center;color:var(--text-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.map-room.cleared .map-room-name{color:var(--text-secondary)}.map-room.current .map-room-name{color:var(--text-primary)}
+.map-fork{position:absolute;top:-8px;right:-10px;width:12px;height:12px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.map-room:focus-visible .map-node{outline:2px solid var(--focus);outline-offset:3px}
+@media(hover:hover) and (pointer:fine){.map-room:hover .map-room-name{color:var(--text-primary)}}
+.map-caption{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-top:4px;padding-top:10px;border-top:1px solid var(--border-subtle);min-height:74px}
+.modal .map-caption small{display:block;letter-spacing:var(--tracking-caps)}.map-caption strong{display:block;font-family:var(--font-display);font-size:var(--fs-2xl);font-weight:500;line-height:1.15}.modal .map-caption p{margin:2px 0 0;font-size:var(--fs-lg)}.map-caption em{color:var(--accent-strong)}
+.map-legend{display:flex;flex-direction:column;gap:6px;flex-shrink:0;font-size:var(--fs-xs);color:var(--text-muted)}.map-legend li{display:flex;align-items:center;gap:8px}.map-legend .map-node{width:18px;height:18px}.map-legend .map-fork{position:static;width:18px;height:14px}
+@media(max-width:860px){.map-depth{grid-template-columns:118px 1fr;gap:30px}.map-depth-name{font-size:var(--fs-sm)}.map-legend{display:none}}
+
 /* Ending, and the busy and error toasts. */
 .ending{position:absolute;z-index:15;inset:77px 0 49px;background:var(--paper-grain),radial-gradient(70% 90% at 50% 40%,var(--torch),transparent 70%),linear-gradient(90deg,color-mix(in srgb,var(--paper-1) 96%,transparent),color-mix(in srgb,var(--paper-0) 90%,transparent) 60%,color-mix(in srgb,var(--paper-0) 72%,transparent));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:50px}
 .ending h2{font-size:var(--fs-display);line-height:1;letter-spacing:-1px;margin:22px 0}.ending p{max-width:620px;font-family:var(--font-body);font-size:var(--fs-xl);line-height:1.6;color:var(--text-secondary)}
