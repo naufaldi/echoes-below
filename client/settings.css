@@ -7,12 +7,12 @@
 .settings-panel .choice-row.off{opacity:.55}
 .settings-panel .segmented{display:inline-flex;flex:none;border:1px solid var(--border-default);border-radius:3px;overflow:hidden}
 .settings-panel .segmented label{position:relative;display:inline-flex;cursor:pointer}
-.settings-panel .segmented input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:inherit}
+.settings-panel .segmented label input[type=radio]{position:absolute;inset:0;width:100%;height:100%;margin:0;border:0;opacity:0;cursor:inherit}
 .settings-panel .segmented span{display:inline-flex;align-items:center;min-height:28px;padding:0 11px;font:500 var(--fs-sm)/1 var(--font-ui);color:var(--text-secondary);transition:background-color .15s var(--ease-out),color .15s var(--ease-out)}
 .settings-panel .segmented label+label span{border-left:1px solid var(--border-subtle)}
 .settings-panel .segmented input:checked+span{background:var(--accent-tint);color:var(--text-primary)}
 .settings-panel .segmented input:focus-visible+span{outline:2px solid var(--accent);outline-offset:-2px}
-.settings-panel .segmented input:disabled{cursor:default}
+.settings-panel .segmented label input[type=radio]:disabled{opacity:0;cursor:default}
 .settings-panel .reading-sample{margin:12px 0 2px;padding:10px 14px;min-height:calc(var(--fs-narration) * 1.4 * 2);border-left:2px solid color-mix(in srgb,var(--gold) 60%,transparent);background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 7%,transparent),transparent 75%)}
 .settings-panel .reading-sample .story-text{line-height:1.4;color:var(--text-primary)}
 .settings-panel .settings-button{flex:none;min-height:28px;padding:0 12px;border:1px solid var(--border-default);border-radius:3px;font-size:var(--fs-sm);color:var(--text-primary)}

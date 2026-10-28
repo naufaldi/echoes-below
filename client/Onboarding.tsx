@@ -11,17 +11,18 @@ const STEPS:Step[]=[
  {title:'Read, then go on',target:'.story-box',body:<>The story is told in a box at the foot of the screen. Press <kbd>Space</kbd> or <kbd>Enter</kbd>, or click <b>Go on</b>: the first press shows the whole page, the next turns it. <kbd>J</kbd> opens the journal, with everything so far.</>,
   demo:<div className="guide-demo guide-story"><p>The gate stands open. Cold air rises from the stair below.</p><span className="guide-next">Go on <span aria-hidden="true">›</span></span></div>},
  {title:'Choose what to do',target:'.actions-panel',body:<>Your choices wait at the side, grouped as <b>Look</b>, <b>Talk</b>, <b>Act</b> and <b>Move</b>. Click one, or press its number, <kbd>1</kbd> to <kbd>9</kbd>. A choice that costs something asks before it happens.</>},
- {title:'Read the odds',target:'.actions-panel .odds',body:<>A risky choice shows its odds before you commit, and who in the party is best placed to try. Hover the word for the exact chance.</>,
+ {title:'Read the odds',target:'.actions-panel .odds-line',body:<>A risky choice shows its odds before you commit, and who in the party is best placed to try. Hover the word for the exact chance.</>,
   demo:<div className="guide-demo guide-odds"><span>Insight · DC 10</span><span className="odds-line"><span className="odds-who">Mira</span><OddsBand odds={SAMPLE_ODDS} always/></span></div>},
  {title:'One roll decides',target:null,body:<>When you commit, the die is thrown once, in the room. The roll stands: there are no second tries. A natural 20 or a natural 1 is an event of its own.</>,
   demo:<div className="guide-demo guide-roll"><span className="guide-die" aria-hidden="true">17</span><span className="mech-tag">Insight · 17 + 3 = 20 vs DC 10</span></div>},
 ];
-type Spot={top:number;left:number;width:number;height:number};
+/** `edge`: the left edge of the panel holding the lit part, so the card sits clear of the whole panel. */
+type Spot={top:number;left:number;width:number;height:number;edge:number};
 /** The lit target: the first match that is on screen, padded a little. A closed drawer or a missing panel lights nothing. */
 function spotFor(selector:string|null):Spot|null{
  const el=selector?[...document.querySelectorAll<HTMLElement>(selector)].find(e=>e.getClientRects().length&&!e.closest('.guide')):null;if(!el)return null;
  const r=el.getBoundingClientRect();if(r.width<4||r.height<4||r.bottom<0||r.top>innerHeight)return null;
- return {top:r.top-6,left:r.left-6,width:r.width+12,height:r.height+12};
+ return {top:r.top-6,left:r.left-6,width:r.width+12,height:r.height+12,edge:(el.closest('.actions-panel')??el).getBoundingClientRect().left-6};
 }
 
 export default function Onboarding({onClose}:{onClose:()=>void}){
@@ -32,9 +33,9 @@ export default function Onboarding({onClose}:{onClose:()=>void}){
  useEffect(()=>{const el=card.current;if(el&&!el.contains(document.activeElement))el.querySelector<HTMLElement>('[data-autofocus]')?.focus({preventScroll:true});},[step]);
  useLayoutEffect(()=>{const place=()=>setSpot(spotFor(current.target));place();addEventListener('resize',place);return()=>removeEventListener('resize',place);},[current.target]);
  // Beside a lit part when there is room for the card, otherwise centred above the story box.
- const side=spot&&spot.left>380?{top:Math.max(76,Math.min(spot.top+spot.height/2-150,innerHeight-360)),left:spot.left-372}:null;
+ const side=spot&&spot.edge>380?{top:Math.max(76,Math.min(spot.top+spot.height/2-150,innerHeight-360)),left:spot.edge-372}:null;
  return <div className={'guide'+(spot?' lit':'')}>
-  {spot&&<div className="guide-spot" style={spot} aria-hidden="true"/>}
+  {spot&&<div className="guide-spot" style={{top:spot.top,left:spot.left,width:spot.width,height:spot.height}} aria-hidden="true"/>}
   <section ref={card} tabIndex={-1} className="modal guide-card" style={side??undefined} data-side={side?'':undefined} role="dialog" aria-modal="true" aria-labelledby="guide-title" aria-describedby="guide-body">
    <div className="eyebrow">HOW TO PLAY · {step+1} OF {STEPS.length}</div>
    <h2 id="guide-title">{current.title}</h2>
