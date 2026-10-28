@@ -58,3 +58,26 @@ test('environment gate rejects an unlisted file, changed bytes, a non-CC0 licenc
   fails(/Environment assets exceed the 20 MB budget: 2\d\.\d MB/);
  }finally{rmSync(folder,{recursive:true,force:true});}
 });
+test('#91 model gate rejects a removed manifest entry, an unlisted file, a stale hash and a licence outside its folder allow-list',()=>{
+ const folder=mkdtempSync(join(tmpdir(),'echoes-model-qa-'));
+ try{
+  cpSync(new URL('../public/assets',import.meta.url),join(folder,'assets'),{recursive:true});
+  const run=()=>execFileSync(process.execPath,['scripts/verify-asset-bundle.mjs',folder],{cwd:new URL('../',import.meta.url),stdio:'pipe'});
+  const fails=(pattern:RegExp)=>assert.throws(run,(error:any)=>pattern.test(error.stderr.toString()));
+  assert.match(run().toString(),/\d+ manifest-listed model files/);
+  const edit=(dir:string,change:(files:any[])=>void)=>{const path=join(folder,'assets',dir,'manifest.json'),original=readFileSync(path,'utf8'),manifest=JSON.parse(original);change(manifest.files);writeFileSync(path,JSON.stringify(manifest));return ()=>writeFileSync(path,original);};
+  for(const file of ['kaykit/Knight.glb','quaternius/Imp-animated.glb','quaternius/Warrior.gltf','expansion/Workbench.bin','expansion/Cauldron.gltf','expansion/Skull_EAsVEJwsv7.glb']){
+   const [dir,name]=file.split('/'),restore=edit(dir,files=>files.splice(files.findIndex(f=>f.file===name),1));
+   fails(new RegExp(`Model file has no manifest entry: assets/${file.replace('.','\\.')}`));restore();
+  }
+  const stray=join(folder,'assets/kaykit/Knight_texture.png');writeFileSync(stray,'x');fails(/Model file has no manifest entry: assets\/kaykit\/Knight_texture\.png/);rmSync(stray);
+  mkdirSync(join(folder,'assets/newpack'));writeFileSync(join(folder,'assets/newpack/model.glb'),'x');fails(/Model folder ships without a manifest: assets\/newpack\/manifest\.json/);rmSync(join(folder,'assets/newpack'),{recursive:true});
+  let restore=edit('quaternius',files=>{files.find(f=>f.file==='Imp-animated.glb').sha256='0'.repeat(64);});fails(/Model hash differs from manifest: assets\/quaternius\/Imp-animated\.glb/);restore();
+  restore=edit('kaykit',files=>{delete files.find(f=>f.file==='Mage.glb').retrieved;});fails(/Model manifest entry lacks retrieved: assets\/kaykit\/Mage\.glb/);restore();
+  restore=edit('kaykit',files=>{files.find(f=>f.file==='Mage.glb').licence='CC-BY-NC-4.0';});fails(/Model licence not allowed: assets\/kaykit\/Mage\.glb \(CC-BY-NC-4\.0\)/);restore();
+  // The Quaternius Asset License is allowed for the Bestiary creature only, not for props.
+  restore=edit('expansion',files=>{files.find(f=>f.file==='Bed_Twin1.gltf').licence='QAL-1.0';});fails(/Model licence not allowed: assets\/expansion\/Bed_Twin1\.gltf \(QAL-1\.0\)/);restore();
+  restore=edit('quaternius',files=>{files.find(f=>f.file==='Imp-animated.glb').includes[0].licence='CC-BY-NC-4.0';});fails(/Model licence not allowed: assets\/quaternius\/Imp-animated\.glb \(Universal Animation Library \(Standard\)\) \(CC-BY-NC-4\.0\)/);restore();
+  assert.match(run().toString(),/\d+ manifest-listed model files/);
+ }finally{rmSync(folder,{recursive:true,force:true});}
+});

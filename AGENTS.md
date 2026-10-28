@@ -19,6 +19,7 @@
 - Chapter rooms follow [client/rooms/README.md](client/rooms/README.md). Each chapter edits only its own file and its own kit folder.
 - Assets:
   - Environment models must be CC0.
+  - Character, creature and prop models must be CC0. The one exception is the Quaternius Asset License, allowed only under `assets/quaternius/` for the Bestiary creature. The allow-list and its reasons are in `scripts/verify-asset-bundle.mjs`.
   - Music and SFX must be on the licence allow-list in `scripts/verify-asset-bundle.mjs`.
   - Every file needs a manifest entry with its sha256.
   - Downloads go into a fresh, empty temp directory first.
