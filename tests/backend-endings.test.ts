@@ -10,7 +10,7 @@ import {runProfile} from '../scripts/playstyle-profiles.js';
 import {ENDINGS_FOUND_KEY,endingSlots,readFound,recordFound} from '../client/endings-found.js';
 import {endingParagraphs,recapRows} from '../client/ending-recap.js';
 import {CREDITS,SRD_NOTICE} from '../client/asset-credits-data.js';
-import {LICENCE_FILE_CREDITS,authorName,buildCredits,licenceLabel} from '../client/asset-credits.js';
+import {authorName,buildCredits,licenceLabel} from '../client/asset-credits.js';
 
 test('#69 the client knows every ending by id, and only by id',()=>{
  assert.deepEqual([...ENDING_IDS].sort(),Object.keys(ENDINGS).sort());
@@ -76,6 +76,7 @@ test('#69 credits name the author and licence of every file in every manifest',(
    const credit=CREDITS.find(c=>c.files.includes(file));
    assert.ok(credit,`${file} is credited`);assert.equal(credit.author,authorName(author!),file);assert.equal(credit.licence,licenceLabel(licence!),file);
    if(e.credit)assert.equal(credit.credit,e.credit,`${file} keeps its attribution line verbatim`);
+   for(const part of (e as {includes?:Entry[]}).includes??[])assert.ok(CREDITS.some(c=>c.files.includes(file)&&c.work===part.work&&c.author===authorName(part.author!)&&c.licence===licenceLabel(part.licence!)),`${file} also credits ${part.work}`);
    checked++;
   }
  }
@@ -83,14 +84,13 @@ test('#69 credits name the author and licence of every file in every manifest',(
  assert.deepEqual(CREDITS,buildCredits(manifests),'client/asset-credits-data.ts is current: run node scripts/generate-credits.mjs');
  assert.ok(CREDITS.some(c=>c.section==='Music'&&c.work==='In Darkness'&&c.licence==='CC BY 4.0'&&c.credit?.includes('Of Far Different Nature')));
 });
-test('#69 every shipped asset is credited, from a manifest or its bundled licence file',()=>{
+test('#69 every shipped asset is credited from its manifest, and each bundled licence text names its author',()=>{
  const credited=new Set(CREDITS.flatMap(c=>c.files)),paperwork=/(\/manifest\.json|\.txt|\/audit-[^/]+\.json|^assets\/audit-index\.json)$/;
  assert.deepEqual(shipped.filter(p=>!paperwork.test(p)&&!credited.has(p)),[]);
- for(const c of LICENCE_FILE_CREDITS){
-  const text=readFileSync(resolve(pub,c.licenceFile),'utf8');
-  assert.ok(text.includes(c.author),`${c.licenceFile} names ${c.author}`);assert.ok(text.includes(c.mark),`${c.licenceFile} grants ${c.licence}`);
-  for(const f of c.files)assert.ok(shipped.includes(f),`${f} ships`);
- }
+ // #91 The licence texts shipped beside models are named by the manifest that relies on them.
+ const named=manifests.flatMap(({path,json})=>{const dir=path.replace(/\/manifest\.json$/,''),m=(Array.isArray(json)?{}:json) as Entry&{files?:(Entry&{includes?:Entry[]})[]};return [m,...(m.files??[]).flatMap(e=>[e,...(e.includes??[])])].filter(x=>x.licenceFile).map(x=>({file:`${dir}/${x.licenceFile}`,author:authorName((x.author??m.author)!)}));});
+ assert.deepEqual([...new Set(named.map(n=>n.file))].sort(),shipped.filter(p=>/\/[^/]*licen[cs]e[^/]*\.txt$/i.test(p)).sort(),'every bundled licence text is named by a manifest');
+ for(const {file,author} of named)assert.ok(readFileSync(resolve(pub,file),'utf8').includes(author),`${file} names ${author}`);
  assert.equal(SRD_NOTICE,readFileSync(resolve(pub,'SRD-NOTICE.txt'),'utf8').split(/\n\s*\n/)[0].trim());
  assert.match(SRD_NOTICE,/SRD 5\.2\.1.*Creative Commons Attribution 4\.0/s);
 });

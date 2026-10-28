@@ -3,19 +3,6 @@ import type {Credit} from './asset-credits.js';
 export const CREDITS:Credit[]=[
  {
   "section": "Characters",
-  "work": "RPG Character Pack",
-  "author": "Quaternius",
-  "licence": "CC0 1.0",
-  "source": "https://quaternius.com/packs/rpgcharacters.html",
-  "files": [
-   "assets/quaternius/Warrior.gltf",
-   "assets/quaternius/Ranger.gltf",
-   "assets/quaternius/Wizard.gltf",
-   "assets/quaternius/Rogue.gltf"
-  ]
- },
- {
-  "section": "Characters",
   "work": "KayKit Adventurers Character Pack (1.0)",
   "author": "Kay Lousberg",
   "licence": "CC0 1.0",
@@ -30,18 +17,32 @@ export const CREDITS:Credit[]=[
  },
  {
   "section": "Characters",
+  "work": "RPG Character Pack",
+  "author": "Quaternius",
+  "licence": "CC0 1.0",
+  "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "https://quaternius.com/packs/rpgcharacters.html",
+  "files": [
+   "assets/quaternius/Warrior.gltf",
+   "assets/quaternius/Ranger.gltf",
+   "assets/quaternius/Wizard.gltf",
+   "assets/quaternius/Rogue.gltf"
+  ]
+ },
+ {
+  "section": "Characters",
   "work": "Bestiary: Dungeon Monsters Kit (free)",
   "author": "Quaternius",
   "licence": "Quaternius Asset License 1.0",
   "licenceUrl": "https://quaternius.com/license.html",
-  "source": "https://quaternius.com",
+  "source": "https://quaternius.com/packs/bestiarydungeonmonsterskit.html",
   "files": [
    "assets/quaternius/Imp-animated.glb"
   ]
  },
  {
   "section": "Characters",
-  "work": "Character animations",
+  "work": "Universal Animation Library (Standard)",
   "author": "Quaternius",
   "licence": "CC0 1.0",
   "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
@@ -94,7 +95,7 @@ export const CREDITS:Credit[]=[
   "author": "Quaternius",
   "licence": "CC0 1.0",
   "licenceUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
-  "source": "https://quaternius.com",
+  "source": "https://quaternius.com/packs/fantasypropsmegakit.html",
   "files": [
    "assets/expansion/Bed_Twin1.gltf",
    "assets/expansion/Bed_Twin1.bin",

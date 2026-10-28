@@ -81,6 +81,30 @@ for(const model of models){
  for(const image of document.images??[]){if(image.uri){if(!dependency(model,image.uri).length)throw Error(`Empty image: ${model}`);}else if(!document.bufferViews?.[image.bufferView])throw Error(`Missing embedded image: ${model}`);}
  report.push({path:relative(source,model),bytes:bytes.length,sha256:digest(bytes),meshes:document.meshes?.length??0,skins:document.skins?.length??0,animations:document.animations?.length??0,images:document.images?.length??0});
 }
+// Model manifest gate (#91): every other file under assets/ (models, glTF buffers, textures) is listed in the manifest.json beside it, with the environment-kit fields, a matching hash and a licence allowed for its folder.
+// env/, audio/ and portraits/ have their own gates above; Vite's hashed chunks sit loose in assets/, so a loose file is checked only when it comes from public/assets/. Licence texts and audit notes are paperwork, the same set the credits test skips. Runs after the glTF checks, so a missing or changed model keeps its bundling error.
+// Model licences, each allowed for a stated reason:
+// - CC0-1.0 in every folder: a public domain dedication with no conditions (KayKit Adventurers, Quaternius RPG Character Pack, Poly Pizza props, Fantasy Props MegaKit).
+// - QAL-1.0 only in assets/quaternius/: the Quaternius Asset License grants use and modification inside a game with no credit required, and bars only reselling or redistributing the assets as assets. Imp-animated.glb ships only as part of this game (docs/ASSETS.md).
+const MODEL_LICENCES={'CC0-1.0':null,'QAL-1.0':'quaternius'},PAPERWORK=/(\/manifest\.json|\.txt|\/audit-[^/]+\.json|^assets\/audit-index\.json)$/,assetsRoot=resolve(built,'assets'),modelManifests=new Map();
+const modelLicence=(folder,licence,what)=>{if(!Object.hasOwn(MODEL_LICENCES,licence)||(MODEL_LICENCES[licence]&&folder!==MODEL_LICENCES[licence]))throw Error(`Model licence not allowed: assets/${folder}/${what} (${licence})`);};
+for(const name of files(assetsRoot).map(p=>relative(assetsRoot,p).split(sep).join('/')).filter(name=>!/^(env|audio|portraits)\//.test(name)&&!PAPERWORK.test('assets/'+name)&&(name.includes('/')||existsSync(resolve(source,'assets',name))))){
+ const folder=name.includes('/')?name.slice(0,name.lastIndexOf('/')):'',where=folder?`assets/${folder}`:'assets';
+ if(!modelManifests.has(folder)){const path=resolve(assetsRoot,folder,'manifest.json');if(!existsSync(path))throw Error(`Model folder ships without a manifest: ${where}/manifest.json`);const listed=JSON.parse(readFileSync(path,'utf8')).files;if(!Array.isArray(listed))throw Error(`Model manifest needs a files list: ${where}/manifest.json`);modelManifests.set(folder,new Map(listed.map(entry=>[entry.file,entry])));}
+ if(!modelManifests.get(folder).has(name.slice(folder?folder.length+1:0)))throw Error(`Model file has no manifest entry: assets/${name}`);
+}
+for(const [folder,entries] of modelManifests){
+ for(const entry of entries.values()){
+  const missing=ENV_FIELDS.find(field=>typeof entry[field]!=='string'||!entry[field].trim());if(missing)throw Error(`Model manifest entry lacks ${missing}: assets/${folder}/${entry.file}`);
+  modelLicence(folder,entry.licence,entry.file);for(const part of entry.includes??[])modelLicence(folder,part.licence,`${entry.file} (${part.work})`);
+  const path=resolve(assetsRoot,folder,entry.file);if(!path.startsWith(resolve(assetsRoot,folder)+sep))throw Error(`Model manifest entry escapes its folder: assets/${folder}/${entry.file}`);
+  if(!existsSync(path))throw Error(`Model manifest entry has no file: assets/${folder}/${entry.file}`);
+  if(digest(readFileSync(path))!==entry.sha256)throw Error(`Model hash differs from manifest: assets/${folder}/${entry.file}`);
+  verifyCopy(resolve(source,'assets',folder,entry.file));
+ }
+ verifyCopy(resolve(source,'assets',folder,'manifest.json'));
+}
+const modelFiles=[...modelManifests.values()].reduce((n,e)=>n+e.size,0);
 // Verify literal model references too: scanning existing files alone cannot catch a typo in rendering code.
 // Chapter room files (client/rooms/) must name env models as full '/assets/env/<kit>/<file>' literals so this scan can follow them.
 for(const name of ['shared/visual-identity.ts','client/DungeonDressing.tsx','client/ChapterOneRooms.tsx',...readdirSync(resolve(root,'client/rooms')).filter(f=>/\.tsx?$/.test(f)).map(f=>'client/rooms/'+f)]){
@@ -90,5 +114,5 @@ for(const name of ['shared/visual-identity.ts','client/DungeonDressing.tsx','cli
  }
 }
 mkdirSync(resolve(root,'data'),{recursive:true});
-writeFileSync(resolve(root,'data/asset-bundle-verification.json'),JSON.stringify({scope:'Bundled bytes, model references and glTF dependencies; not visual pose or shader acceptance',models:report,audio:{files:audioEntries.size,bytes:audioBytes},environment:{kits:[...envKits.keys()],files:[...envKits.values()].reduce((n,e)=>n+e.size,0),bytes:envBytes},verifiedFiles:verified.size},null,2)+'\n');
-console.log(`Verified ${models.length} models, ${audioEntries.size} licensed audio files (${(audioBytes/1024/1024).toFixed(1)} MB), ${[...envKits.values()].reduce((n,e)=>n+e.size,0)} CC0 environment files (${(envBytes/1024/1024).toFixed(1)} MB) and ${verified.size} bundled files, including external glTF dependencies.`);
+writeFileSync(resolve(root,'data/asset-bundle-verification.json'),JSON.stringify({scope:'Bundled bytes, model references and glTF dependencies; not visual pose or shader acceptance',models:report,audio:{files:audioEntries.size,bytes:audioBytes},environment:{kits:[...envKits.keys()],files:[...envKits.values()].reduce((n,e)=>n+e.size,0),bytes:envBytes},modelManifests:{folders:[...modelManifests.keys()],files:modelFiles},verifiedFiles:verified.size},null,2)+'\n');
+console.log(`Verified ${models.length} models, ${audioEntries.size} licensed audio files (${(audioBytes/1024/1024).toFixed(1)} MB), ${[...envKits.values()].reduce((n,e)=>n+e.size,0)} CC0 environment files (${(envBytes/1024/1024).toFixed(1)} MB), ${modelFiles} manifest-listed model files and ${verified.size} bundled files, including external glTF dependencies.`);
