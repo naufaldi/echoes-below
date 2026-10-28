@@ -28,7 +28,7 @@ export function descentMap(sceneId:string,settled=false):MapDepth[]{
   return {chapter,numeral,name,state,label:`Chapter ${numeral}, ${name}`,rooms:rooms.map((r,j)=>{
    const index=ROUTE.indexOf(r),roomState:RoomState=index<at?'cleared':index===at?'current':state==='current'?'ahead':'unlit';
    const title=roomState==='unlit'?null:r.title,fork=FORK_ROOMS.includes(r.id),done=roomState==='current'&&settled;
-   const label=`${title?title+', ':''}room ${j+1} of ${rooms.length}, ${status[roomState]}${done?', your choice made':''}${fork?'. '+FORK_LINE:''}`;
+   const label=`${title?title+', ':`Chapter ${numeral}, `}room ${j+1} of ${rooms.length}, ${status[roomState]}${done?', your choice made':''}${fork?'. '+FORK_LINE:''}`;
    return {id:r.id,number:j+1,title,state:roomState,path:roomState==='cleared'||roomState==='current',settled:done,fork,label};
   })};
  });

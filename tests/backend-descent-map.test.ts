@@ -26,7 +26,7 @@ test('rooms before the current one are cleared and on the path; the rest of the 
 test('the strip already names this chapter, so ahead rooms keep their titles while unlit rooms stay unnamed',()=>{
  assert.equal(state('market-3','market-7').title,'The Council of Three');
  assert.equal(state('market-3','roots-1').title,null);
- assert.equal(state('market-3','roots-1').label,'room 1 of 8, not yet reached');
+ assert.equal(state('market-3','roots-1').label,'Chapter IV, room 1 of 8, not yet reached');
  assert.equal(state('market-3','market-3').label,'The Bone Auction, room 3 of 8, you are here');
  assert.equal(state('market-3','archive-2').label,'The Ink Garden, room 2 of 8, behind you');
 });
