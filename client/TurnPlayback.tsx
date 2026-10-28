@@ -41,7 +41,7 @@ export function TurnPlayback({before,after,reduced,autoAdvance,barks,onFrame,onR
  useEffect(()=>{if(!autoAdvance||!finished)return;const t=setTimeout(()=>keys.current(),order.length?2500:readingDelay(text));return()=>clearTimeout(t);},[autoAdvance,finished,text,order.length]);
  if(!frame)return null;
  const cast={party:frame.party,enemies:frame.enemies,scene:after.scene};
- const tags:TagPart[][]=!revealed||order.length?[]:frame.log.check?[checkTag(frame.log.check,frame.log.rolls,cast,{named:frame.log.check.actorId!==actor?.id})]:frame.log.rolls.map(r=>[{text:cap(r.purpose)},{text:`${r.kept} ${r.modifier<0?'−':'+'} ${Math.abs(r.modifier)} = ${r.total}`}]);
+ const tags:TagPart[][]=!revealed||order.length?[]:frame.log.check?[checkTag(frame.log.check,frame.log.rolls,cast,{named:frame.log.check.actorId!==actor?.id,short:(frame.mode??after.mode)==='combat'})]:frame.log.rolls.map(r=>[{text:cap(r.purpose)},{text:`${r.kept} ${r.modifier<0?'−':'+'} ${Math.abs(r.modifier)} = ${r.total}`}]);
  const bark=revealed?barks.find(b=>b.step===step):undefined,name=actor?actorDisplayName(actor,frame.enemies):frame.actorId;
  // Portraits are for characters (#65); an enemy keeps its plate only, so combat never queues a new model snapshot.
  const portrait=!!actor&&!order.length&&actor.side!=='enemy';

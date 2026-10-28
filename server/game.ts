@@ -10,6 +10,7 @@ import {counterweightActions,resolveCounterweight} from './counterweight-puzzle.
 import {checkInActions,resolveCheckIn} from './party-checkin.js';
 import {CURATED_ENCOUNTERS,encounterEnemies} from './encounters.js';
 import {speakerLabel} from '../shared/speaker-label.js';
+import {feetFromMetres} from '../shared/movement.js';
 import {explorationHealingActions,resolveExplorationHealing} from './exploration-healing.js';
 import {sideActions,sideEntities,resolveSide} from './side-adventures.js';
 import {questProgress,updateQuests,questActions,declineQuest} from './quests.js';
@@ -598,7 +599,7 @@ function baseActions(s: Save): ActionOption[] {
           ),
         );
       a.push(
-        opt("run", "Run", "Spend your action to gain 6m movement.", "run"),
+        opt("run", "Run", `Spend your action to gain ${feetFromMetres(6)} ft of movement.`, "run"),
       );
     }
     if (s.turn.movementM > 0) {
@@ -609,7 +610,7 @@ function baseActions(s: Save): ActionOption[] {
             opt(
               `move:${id}`,
               label,
-              `Move ${dist.toFixed(1)}m. Movement does not use your action.`,
+              `Move ${feetFromMetres(dist)} ft. Movement does not use your action.`,
               "move",
               id,
             ),
@@ -1607,7 +1608,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
     } else if (kind === "run") {
       s.turn!.movementM += 6;
       s.turn!.actionRemaining = false;
-      log(s, `${h.name} runs: 6m additional movement.`, "hero");
+      log(s, `${h.name} runs: ${feetFromMetres(6)} ft of extra movement.`, "hero");
     } else if (kind === "move") {
       const pos = movementAnchors(s).find((x) => x[0] === actorId)![1];
       s.turn!.movementM -= Math.hypot(

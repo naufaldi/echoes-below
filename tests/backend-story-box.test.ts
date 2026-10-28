@@ -83,11 +83,13 @@ test('attack tags name the AC, the damage and a critical; combat lines carry the
  const cast=view(make()),check:OutcomeCheck={kind:'attack',actorId:'mira',targetId:'x',skill:'attack',sides:20,natural:20,modifier:5,total:25,dc:13,success:true,critical:true};
  assert.equal(tagText(checkTag(check,[{sides:20,values:[20],kept:20,modifier:5,total:25,purpose:'Attack'} as never,{sides:8,values:[6],kept:6,modifier:3,total:9,purpose:'Damage'} as never],cast)),'Mira · Attack · 25 vs AC 13 · Critical · 9 damage');
  assert.equal(tagText(checkTag(check,[],cast,{named:false})),'Attack · 25 vs AC 13 · Critical');
+ assert.equal(tagText(checkTag(check,[{sides:8,values:[6],kept:6,modifier:3,total:9,purpose:'Damage'} as never],cast,{named:false,short:true})),'Attack · 25 vs AC 13 · Critical · 9 dmg');
  let s=make();s.sceneId='cookfire';s=applyAction(s,'fight',()=>10);s.enemies.forEach(e=>{e.hp=e.maxHp=200;});s.party.forEach(a=>{a.hp=a.maxHp=200;});
  assert.equal(s.turn!.actorId,'hero');const target=s.enemies.find(e=>legalActions(s).some(a=>a.id===`attack:${e.id}`))!;
  s=applyAction(s,`attack:${target.id}`,()=>20);
  const lines=combatLines(view(s));
  assert.ok(lines.length<=2&&lines.length>0);
  const hit=lines.find(l=>l.text===`You land a blow on ${target.name}.`);assert.ok(hit,JSON.stringify(lines));
- assert.match(tagText(hit!.tag!),new RegExp(`^Aria · Attack · \\d+ vs AC \\d+ · Critical · \\d+ damage$`));
+ // The hero's line speaks to "you", so the combat tag drops the name and keeps roll, target, the natural 20 and damage (#98).
+ assert.match(tagText(hit!.tag!),new RegExp(`^Attack · \\d+ vs AC \\d+ · Critical · \\d+ dmg$`));
 });

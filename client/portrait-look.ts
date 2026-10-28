@@ -26,6 +26,9 @@ export function expressionClip(names:string[],expression:PortraitExpression):str
 /** The look of whoever is speaking: a party member or enemy by id, otherwise a scene NPC with the same model rule the world uses. */
 export function portraitSubjectFor(id:string,save:{party:Actor[];enemies:Actor[];scene:{entities:Entity[]}}):PortraitSubject|null{
  const actor=[...save.party,...save.enemies].find(a=>a.id===id);if(actor)return actor;
- const npc=save.scene.entities.find(e=>e.kind==='npc'&&e.id===id);return npc?{id:npc.id,classId:npcModelClass(npc),appearanceId:npc.appearanceId??'moss'}:null;
+ const npc=save.scene.entities.find(e=>e.kind==='npc'&&e.id===id);return npc?{id:npc.id,classId:npcModelClass(npc),appearanceId:npcAppearance(npc)}:null;
 }
 export function npcModelClass(e:Pick<Entity,'id'|'modelClassId'>):Actor['classId']{return e.modelClassId??(e.id==='courier'?'scout':e.id==='vark'?'vark':'goblin');}
+const PARTY_MODELS:readonly Actor['classId'][]=['guardian','scout','adept','cleric'];
+/** An NPC on a party model (the courier, the ferryman) wears the darker `ash` palette unless its look is authored, so it never reads as Mira or the hero (#98, until #11 gives NPCs their own models). The world and the portrait share this. */
+export function npcAppearance(e:Pick<Entity,'id'|'modelClassId'|'appearanceId'>){return e.appearanceId??(PARTY_MODELS.includes(npcModelClass(e))?'ash':'moss');}

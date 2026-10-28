@@ -36,7 +36,7 @@ test('speaker portraits follow the party, enemies and scene NPCs',()=>{
  const save={party:[actor(),actor({id:'mira',classId:'scout',appearanceId:'moss'})],enemies:[actor({id:'goblin-1',classId:'goblin',side:'enemy'})],scene:{entities:[npc({}),npc({id:'index-librarian',modelClassId:'guardian',appearanceId:'bronze'})]}};
  assert.equal(portraitSubjectFor('mira',save)?.classId,'scout');
  assert.equal(portraitSubjectFor('goblin-1',save)?.classId,'goblin');
- assert.deepEqual(portraitSubjectFor('courier',save),{id:'courier',classId:'scout',appearanceId:'moss'});
+ assert.deepEqual(portraitSubjectFor('courier',save),{id:'courier',classId:'scout',appearanceId:'ash'}); // not Mira's moss: an NPC on a party model wears ash (#98)
  assert.equal(portraitSubjectFor('index-librarian',save)?.appearanceId,'bronze');
  assert.equal(portraitSubjectFor('nobody',save),null);
  assert.equal(npcModelClass({id:'vark'}),'vark');assert.equal(npcModelClass({id:'scrit'}),'goblin');
