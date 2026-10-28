@@ -124,6 +124,7 @@ Taste is the owner's call, so #55 first produces **three HTML mockup directions*
 
 The owner picks one, and #59 applies it.
 *Changes:* #55, then #59. #59 also removes dead CSS.
+*Decision:* Owner delegated the pick on 27 Oct 2026; (a) chosen; mockups skipped (#55 closed).
 
 **D10. What is the priority order now?** This **departs from PRD owner decision 1** ("combat → characters → environment → HUD"). Combat readability shipped, and characters are blocked on the owner's Tripo models.
 
