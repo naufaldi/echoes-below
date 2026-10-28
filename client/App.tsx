@@ -90,7 +90,7 @@ export default function App(){
  /** Free, reversible actions (companion check-ins) skip the confirmation (#62). A keyboard choice opens the card without motion. */
  function choose(a:ActionOption,from?:HTMLElement,keyboard=false){if(busy||lock.current)return;setPreview(null);setError('');if(save?.tactical&&a.id==='tactical:auto'||confirmationFor(a)==='none'){void confirm(a);return;}confirmFrom.current=from??(document.activeElement instanceof HTMLElement?document.activeElement:null);setInstantConfirm(keyboard);setPending(a);}
  /** TurnPlayback reports only the die; the frame's saved check says whether it landed on a natural 20 or 1 (#61). */
- function presentRoll(roll:WorldRoll|null,after:PublicSave){const frame=roll&&!roll.rolling?after.presentation?.find(f=>f.log.id===roll.key):undefined,check=frame?.log.check,event=check&&check.natural===roll?.kept?naturalEvent(check):null;
+ function presentRoll(roll:WorldRoll|null,after:PublicSave){if(roll?.rolling)setNatural(null);const frame=roll&&!roll.rolling?after.presentation?.find(f=>f.log.id===roll.key):undefined,check=frame?.log.check,event=check&&check.natural===roll?.kept?naturalEvent(check):null;
   if(roll&&event){playNatural(event);setNatural({key:roll.key,event,name:[...after.party,...after.enemies].find(a=>a.id===check!.actorId)?.name??''});}setWorldRoll(roll&&event?{...roll,event}:roll);}
  function reconsider(){const from=confirmFrom.current;setPending(null);setPreview(null);if(from?.isConnected)from.focus();}
  useGameTools(save,!!busy,choose);

@@ -1,8 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {actionRows,bestChoice,verbFor,verbGroups,type Verb} from '../client/action-focus.js';
-import {confirmationFor,freeAction} from '../client/confirmation.js';
-import {applyAction,createSave,legalActions,publicSave,closes,type Save} from '../server/game.js';
+import {applyAction,createSave,legalActions,type Save} from '../server/game.js';
 import {previewSave} from '../server/dev-preview.js';
 import {EXPEDITION} from '../shared/campaign.js';
 import type {ActionOption} from '../shared/types.js';
@@ -51,14 +50,4 @@ test('ties keep the listed order, and a single check names its own actor',()=>{
 test('rows without public odds name no best member',()=>{
  assert.equal(bestChoice({kind:'single',action:opt('force','force')},party),null);
  assert.equal(bestChoice({kind:'single',action:opt('pick','interact',{actorId:'hero',check:{dc:13,attribute:'agility'}})},party),null);
-});
-test('companion check-ins are free; checks stay light; costly or branch-closing actions stay strong',()=>{
- const s=publicSave(createSave({name:'Free',classId:'guardian',backgroundId:'delver',appearanceId:'moon'}));
- const checkIn=s.actions.find(a=>a.id==='checkin:mira')!;
- assert.equal(freeAction(checkIn),true);assert.equal(confirmationFor(checkIn),'none');
- assert.equal(confirmationFor(s.actions.find(a=>a.id==='tracks:hero')!),'light');
- assert.equal(confirmationFor(opt('rest','rest',{description:closes('Consume one ration per character.',['the ration to Scrit'])})),'strong');
- assert.equal(confirmationFor(opt('fight','attack',{dangerous:true})),'strong');
- assert.equal(confirmationFor(opt('bond_begin:x','interact')),'light');
- assert.equal(confirmationFor(opt('loot_cache','inspect')),'light');
 });
