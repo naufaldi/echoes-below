@@ -1,53 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
 /* Design tokens: "an adventurer's journal under torchlight" (ROADMAP D9). Colors and sizes below come from here; node scripts/check-contrast.mjs measures every pairing. */
 :root{
-  /* Stone: HUD chrome (top bar, party, actions, chapter track, chips). The dungeon is the stage, so chrome takes the scene's own green-black, quieter than the story; each chapter re-tints it from its mood background (see "Chapter accents"). */
-  --stone-0:#0a0e0d; /* app background, wells, inputs */
-  --stone-1:#141a18; /* panels and cards */
-  --stone-2:#1f2724; /* raised: hover, current, selected */
-  /* Mist: the HUD's quiet accent (labels, focus, selected), the scene's ambient light washed toward grey. */
-  --chapter-mist:#b3c2b6;
-  --chapter-mist-strong:#d5ded7;
-  --chapter-mist-ink:#0d1210;
+  /* Warm iron and soot: one low-chroma material across every chapter. */
+  --stone-0:#11100f; /* app background, wells, inputs */
+  --stone-1:#1b1917; /* panels and cards */
+  --stone-2:#2b2722; /* raised: hover, current, selected */
+  /* Desaturated brass: interactive edges and selection, never a large fill. */
+  --chapter-mist:#c1af8c;
+  --chapter-mist-strong:#e4d8bf;
+  --chapter-mist-ink:#171410;
   /* Paper: story surfaces (story panel, playback, modals, journal, pack, ending). Warm brown-black, ink-coloured text. */
-  --paper-0:#120c08; /* wells and inputs on a page */
-  --paper-1:#1d150f; /* the page */
-  --paper-2:#2a1f16; /* raised on a page */
-  --paper-edge:rgb(196 150 98 / .34); /* worn inner rule */
-  --paper-burn:rgb(5 2 0 / .6); /* scorched page edge */
-  --torch:rgb(255 184 104 / .07); /* torchlight falling across the page from the top left */
-  --paper-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .62 0 0 0 0 .47 0 0 0 0 .3 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-  --ink:#efe3cb; /* text on paper */
-  --ink-soft:#cdba98;
-  --ink-faint:#ac9a7c;
+  --paper-0:#171411; /* wells and inputs on a page */
+  --paper-1:#24201b; /* the page */
+  --paper-2:#302a23; /* raised on a page */
+  --paper-edge:rgb(193 175 140 / .22); /* worn inner rule */
+  --paper-burn:rgb(0 0 0 / .2); /* scorched page edge */
+  --torch:rgb(228 216 191 / .025); /* torchlight falling across the page from the top left */
+  --paper-grain:none;
+  --ink:#eee5d4; /* text on paper */
+  --ink-soft:#c8bdab;
+  --ink-faint:#b4a894;
   /* Ink accent: eyebrows, headings and selected rows on story surfaces. Warm and unsaturated, so the page never competes with gold. */
-  --ink-accent:#d9c29b;
-  --ink-accent-strong:#f2e6cf;
-  --ink-accent-ink:#1d150f;
+  --ink-accent:#c1af8c;
+  --ink-accent-strong:#e4d8bf;
+  --ink-accent-ink:#171410;
   /* Active surface set. HUD uses stone; story surfaces swap these to paper (see "Story surfaces"). */
   --surface-0:var(--stone-0);
   --surface-1:var(--stone-1);
   --surface-2:var(--stone-2);
-  --scene-shade:#0d1813; /* green-black that fades UI edges into the 3D scene; matches the scene fog, not the panels */
+  --scene-shade:#14120f; /* a neutral fade into the scene */
   --shadow:rgb(0 0 0 / .4);
   --shadow-deep:rgb(0 0 0 / .65);
   /* Borders (iron on stone) */
-  --border-subtle:rgb(196 194 186 / .15); /* dividers, resting controls */
-  --border-default:rgb(196 194 186 / .28); /* boxed groups, HUD panel edges */
+  --border-subtle:rgb(193 175 140 / .15); /* dividers, resting controls */
+  --border-default:rgb(193 175 140 / .28); /* boxed groups, HUD panel edges */
   /* Text on stone */
-  --text-primary:#e6e3dc;
-  --text-secondary:#b9b6ae;
-  --text-muted:#a6a39b;
+  --text-primary:#eee5d4;
+  --text-secondary:#c8bdab;
+  --text-muted:#b4a894;
   /* Chapter accent: where you are in the descent. Only the chapter's own pages and the current room on the chapter strip wear it; a neutral warm iron on the title screen, and each chapter overrides it from its mood (see "Chapter accents"). */
   --chapter-accent:#c4baa8;
   --chapter-accent-strong:#e2d9c8; /* emphasis, current item, hover */
   --chapter-accent-ink:#16130e; /* text on an accent fill */
-  /* Gold: the dice decide. Only what you choose or roll: dice, natural 20s, an action under the pointer or chosen, Roll, and the one primary button. */
+  /* Gold: dice, natural 20s and the primary call to action only. */
+  --primary-fill:#211c15;
+  --primary-hover:#382e20;
+  --primary-pressed:#443722;
   --gold:#ddb46a;
   --gold-strong:#f3cd82;
   --gold-ink:#1b1408; /* text on a gold fill */
-  --gold-tint:color-mix(in srgb,var(--gold) 11%,transparent); /* an action under the pointer or chosen */
-  --gold-edge:color-mix(in srgb,var(--gold) 55%,transparent);
+  --gold-tint:rgb(221 180 106 / .11);
+  --gold-edge:rgb(221 180 106 / .55);
   /* Character name plates take the speaker's palette colour. */
   --palette-ember:#eba27e;
   --palette-moss:#a9c98f;
@@ -63,52 +65,55 @@
   --ease-out:cubic-bezier(.23,1,.32,1); /* strong ease-out: UI answers at once, then settles */
   --press-duration:160ms;
   --enter-duration:200ms; /* modals and panels appearing */
-  /* Type: three voices (D3). DM Sans for UI and mechanics, Cormorant Garamond for display, EB Garamond for the narrator and story prose. */
-  --font-ui:'DM Sans',sans-serif;
-  --font-display:'Cormorant Garamond',Georgia,serif;
-  --font-body:'EB Garamond',Georgia,serif;
-  --fs-2xs:11px; /* floor for any visible text */
-  --fs-xs:12px;
-  --fs-sm:13px;
-  --fs-md:14px; /* body */
-  --fs-lg:16px;
-  --fs-narration:18px; /* story prose: Garamond reads small, so it sits between lg and xl */
+  /* Three voices (D3): Fell display, Alegreya prose, Alegreya Sans mechanics. */
+  --font-ui:'Alegreya Sans',sans-serif;
+  --font-label:'Alegreya Sans SC',sans-serif;
+  --font-wordmark:'IM Fell English SC',Georgia,serif;
+  --surface-depth:inset 0 1px 0 rgb(193 175 140 / .2),0 10px 28px rgb(0 0 0 / .35);
+  --font-display:'IM Fell English',Georgia,serif;
+  --font-body:'Alegreya',Georgia,serif;
+  --fs-2xs:12px; /* floor for any visible text */
+  --fs-xs:14px;
+  --fs-sm:15px;
+  --fs-md:16px; /* body */
+  --fs-lg:18px;
+  --fs-narration:19px; /* reading size */
   --fs-xl:20px;
   --fs-2xl:24px;
   --fs-3xl:28px;
   --fs-4xl:36px;
   --fs-5xl:48px;
   --fs-display:64px;
-  --tracking-caps:.1em; /* small uppercase labels; the Google Fonts cuts have no smcp, so mechanics use uppercase + tracking */
-  --tracking-wide:.2em; /* eyebrows and top bar */
-  color-scheme:dark;font-family:var(--font-ui);color:var(--text-primary);background:var(--surface-0);font-synthesis:none;font-size:var(--fs-md);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale
+  --tracking-caps:.05em; /* real small-cap cut for labels */
+  --tracking-wide:.06em; /* small caps */
+  color-scheme:dark;font-family:var(--font-ui);color:var(--text-primary);background:var(--surface-0);font-synthesis:none;font-variant-numeric:lining-nums tabular-nums;font-size:var(--fs-md);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale
 }
-/* Colour roles (#110). Each surface picks its accent: HUD chrome the chapter's mist, story surfaces the ink accent, chapter pages the chapter accent. */
+/* One brass accent for HUD and story; chapter colour is limited to chapter pages and the descent marker. */
 :root,.app{--role-accent:var(--chapter-mist);--role-accent-strong:var(--chapter-mist-strong);--role-accent-ink:var(--chapter-mist-ink)}
 .narration-panel,.turn-playback,.modal,.pack-panel,.confirm-pop,.ending{--role-accent:var(--ink-accent);--role-accent-strong:var(--ink-accent-strong);--role-accent-ink:var(--ink-accent-ink)}
 .ending.chapter-page{--role-accent:var(--chapter-accent);--role-accent-strong:var(--chapter-accent-strong);--role-accent-ink:var(--chapter-accent-ink)}
-/* Derived tokens. Custom properties resolve where they are declared, so anything built from the role accent or the surface set is re-declared on every element that changes either. */
+/* Shared surface treatments; colour tokens stay hex/rgb for the contrast gate. */
 :root,.app,.narration-panel,.turn-playback,.modal,.pack-panel,.confirm-pop,.ending{
   --accent:var(--role-accent);
   --accent-strong:var(--role-accent-strong);
   --accent-ink:var(--role-accent-ink);
-  --accent-wash:color-mix(in srgb,var(--accent) 8%,transparent); /* faint accent fill */
-  --accent-tint:color-mix(in srgb,var(--accent) 20%,transparent); /* hover and selected accent fill */
-  --border-strong:color-mix(in srgb,var(--accent) 42%,transparent); /* accent edges: current, chosen, story pages */
-  --focus:var(--accent-strong); /* focus rings */
-  --glass-0:color-mix(in srgb,var(--surface-0) 88%,transparent); /* surface-0 floating over the 3D scene */
-  --glass-1:color-mix(in srgb,var(--surface-1) 94%,transparent); /* surface-1 floating over the 3D scene */
-  --scrim:color-mix(in srgb,var(--surface-0) 85%,transparent); /* behind modals */
+  --accent-wash:rgb(193 175 140 / .08); /* faint accent fill */
+  --accent-tint:rgb(193 175 140 / .16); /* hover and selected accent fill */
+  --border-strong:rgb(193 175 140 / .42); /* accent edges: current, chosen, story pages */
+  --focus:#eee5d4; /* focus rings */
+  --glass-0:rgb(17 16 15 / .94); /* surface-0 floating over the 3D scene */
+  --glass-1:rgb(27 25 23 / .97); /* surface-1 floating over the 3D scene */
+  --scrim:rgb(17 16 15 / .85); /* behind modals */
 }
-/* Chapter tokens, taken from each chapter's mood (ChapterAtmosphere chapterMood): the accent from its signature colour, the stones from its background, the mist from its ambient light. App.tsx sets data-chapter from the current scene; a chapter page sets the chapter it belongs to, so a recap keeps the chapter just finished. */
-.app[data-chapter=relay],.chapter-page[data-chapter=relay]{--chapter-accent:#86c4b0;--chapter-accent-strong:#b0dfcf;--chapter-accent-ink:#0b1a15;--stone-0:#0a0e0d;--stone-1:#141a18;--stone-2:#1f2724;--chapter-mist:#b3c2b6;--chapter-mist-strong:#d5ded7;--chapter-mist-ink:#0d1210} /* I · The Bell Beneath Briarwatch: verdigris bell bronze in the rain */
-.app[data-chapter=archive],.chapter-page[data-chapter=archive]{--chapter-accent:#8bbbe0;--chapter-accent-strong:#b6d5ef;--chapter-accent-ink:#0a1620;--stone-0:#0a0e10;--stone-1:#131a1d;--stone-2:#1e272b;--chapter-mist:#b6c3c4;--chapter-mist-strong:#d8e0e0;--chapter-mist-ink:#0c1112} /* II · The Drowned Archive: tide water */
-.app[data-chapter=market],.chapter-page[data-chapter=market]{--chapter-accent:#ef9f66;--chapter-accent-strong:#f8c196;--chapter-accent-ink:#1f1006;--stone-0:#0f0d0c;--stone-1:#1b1716;--stone-2:#27221f;--chapter-mist:#cdc0b0;--chapter-mist-strong:#e6ddd1;--chapter-mist-ink:#14100d} /* III · The Ash Market: ember */
-.app[data-chapter=roots],.chapter-page[data-chapter=roots]{--chapter-accent:#bccb7a;--chapter-accent-strong:#d7e2a3;--chapter-accent-ink:#151a08;--stone-0:#0a0e0a;--stone-1:#141a15;--stone-2:#1f281f;--chapter-mist:#bac6a8;--chapter-mist-strong:#dae2cd;--chapter-mist-ink:#0e120b} /* IV · The Rootbound Prison: lichen and sap */
-.app[data-chapter=choir],.chapter-page[data-chapter=choir]{--chapter-accent:#adb6f2;--chapter-accent-strong:#ccd2f9;--chapter-accent-ink:#10132a;--stone-0:#0b0c11;--stone-1:#15171f;--stone-2:#20232d;--chapter-mist:#bcc1d0;--chapter-mist-strong:#dcdfe8;--chapter-mist-ink:#0e0f15} /* V · The Hollow Choir: moonlit stone */
-.app[data-chapter=depth],.chapter-page[data-chapter=depth]{--chapter-accent:#cfa0e6;--chapter-accent-strong:#e4c6f2;--chapter-accent-ink:#1b0f22;--stone-0:#0e0b0f;--stone-1:#19141b;--stone-2:#251e27;--chapter-mist:#c3bacb;--chapter-mist-strong:#e0d9e5;--chapter-mist-ink:#120e13} /* VI · The Last Descent: amethyst dark */
-/* The chapter's stones become the HUD's surfaces, and its edges tint toward the mist instead of neutral iron. Story surfaces swap all of these back to paper (below). */
-.app{--surface-0:var(--stone-0);--surface-1:var(--stone-1);--surface-2:var(--stone-2);--border-subtle:color-mix(in srgb,var(--chapter-mist) 15%,transparent);--border-default:color-mix(in srgb,var(--chapter-mist) 27%,transparent)}
+/* Chapter accents belong to chapter pages and the current descent marker only. HUD iron and brass remain constant (supersedes #110). */
+.app[data-chapter=relay],.chapter-page[data-chapter=relay]{--chapter-accent:#86c4b0;--chapter-accent-strong:#b0dfcf;--chapter-accent-ink:#0b1a15;} /* I · The Bell Beneath Briarwatch: verdigris bell bronze in the rain */
+.app[data-chapter=archive],.chapter-page[data-chapter=archive]{--chapter-accent:#8bbbe0;--chapter-accent-strong:#b6d5ef;--chapter-accent-ink:#0a1620;} /* II · The Drowned Archive: tide water */
+.app[data-chapter=market],.chapter-page[data-chapter=market]{--chapter-accent:#ef9f66;--chapter-accent-strong:#f8c196;--chapter-accent-ink:#1f1006;} /* III · The Ash Market: ember */
+.app[data-chapter=roots],.chapter-page[data-chapter=roots]{--chapter-accent:#bccb7a;--chapter-accent-strong:#d7e2a3;--chapter-accent-ink:#151a08;} /* IV · The Rootbound Prison: lichen and sap */
+.app[data-chapter=choir],.chapter-page[data-chapter=choir]{--chapter-accent:#adb6f2;--chapter-accent-strong:#ccd2f9;--chapter-accent-ink:#10132a;} /* V · The Hollow Choir: moonlit stone */
+.app[data-chapter=depth],.chapter-page[data-chapter=depth]{--chapter-accent:#cfa0e6;--chapter-accent-strong:#e4c6f2;--chapter-accent-ink:#1b0f22;} /* VI · The Last Descent: amethyst dark */
+/* The HUD shares one warm neutral ramp with the slightly lighter story paper. */
+.app{--surface-0:var(--stone-0);--surface-1:var(--stone-1);--surface-2:var(--stone-2);--border-subtle:rgb(193 175 140 / .15);--border-default:rgb(193 175 140 / .28)}
 
 
 /* Base elements and type polish: a floor for unstyled <small>, even heading wraps, no orphans in prose, steady numbers. */
@@ -117,146 +122,145 @@ h1,h2{font-family:var(--font-display);font-weight:400;margin:12px 0}h2{font-size
 small{font-size:max(var(--fs-2xs),.83em)}
 h1,h2,h3,h4,legend{text-wrap:balance}
 .story-text,.modal p,.ending p,.intro,.class-detail,.journal-logs p,.pack-panel p{text-wrap:pretty}
-.party-stats,.pack-counts,.panel-label>span,.roll-badge,.initiative-strip,.initiative-order b,.turn-chip,.action-count,.check-preview,.chapter-track span,.tactical-controls,.class-card small{font-variant-numeric:tabular-nums}
+.party-stats,.pack-counts,.panel-label>span,.roll-badge,.initiative-strip,.initiative-order b,.turn-chip,.action-count,.check-preview,.chapter-track span,.tactical-controls,.class-card small{font-size:var(--fs-xs);color:var(--text-secondary);margin-top:3px;white-space:nowrap}
 
 /* Controls: themed native inputs, one focus ring, press feedback. Hover-only effects need a fine pointer so they never stick on touch. Action rows draw the ring inset because the scrolling list clips anything outside it. */
 button,input,select,textarea{font:inherit}
 button{cursor:pointer;color:inherit;border:0;background:none;transition:background-color .15s var(--ease-out),color .15s var(--ease-out),border-color .15s var(--ease-out),transform var(--press-duration) var(--ease-out)}button:disabled{opacity:.45;cursor:wait}
 button:active:not(:disabled),.choice-cards label:not(.unavailable):active{transform:scale(.96)}
 :focus-visible{outline:2px solid var(--focus);outline-offset:3px}[tabindex="-1"]:focus,[tabindex="-1"]:focus-visible{outline:none}
-input,select,textarea{background:var(--surface-0);border:1px solid var(--border-subtle);color:var(--text-primary);border-radius:3px}
+input,select,textarea{background:var(--surface-0);border:1px solid var(--border-subtle);color:var(--text-primary);border-radius:4px;corner-shape:bevel}
 textarea{resize:vertical;min-height:64px;padding:12px;line-height:1.5}
 select{max-width:100%;padding:10px 8px;cursor:pointer}option{background:var(--surface-1)}
 select:not([multiple]){appearance:none;padding-right:28px;background-image:linear-gradient(45deg,transparent calc(50% - .6px),var(--accent) calc(50% - .6px) calc(50% + .6px),transparent calc(50% + .6px)),linear-gradient(135deg,transparent calc(50% - .6px),var(--accent) calc(50% - .6px) calc(50% + .6px),transparent calc(50% + .6px));background-position:calc(100% - 14px) 50%,calc(100% - 8px) 50%;background-size:6px 6px;background-repeat:no-repeat}
-input[type=radio],input[type=checkbox]{appearance:none;flex:none;width:18px;height:18px;margin:0;display:inline-grid;place-content:center;background:var(--surface-0);border:1px solid var(--text-muted);cursor:pointer;transition:background-color .15s var(--ease-out),border-color .15s var(--ease-out)}input[type=radio]{border-radius:50%}input[type=checkbox]{border-radius:3px}
-input[type=radio]::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);opacity:0}input[type=checkbox]::before{content:'';width:10px;height:8px;background:var(--accent-ink);clip-path:polygon(14% 44%,0 65%,50% 100%,100% 16%,80% 0,43% 62%);opacity:0}
+input[type=radio],input[type=checkbox]{appearance:none;flex:none;width:18px;height:18px;margin:0;display:inline-grid;place-content:center;background:var(--surface-0);border:1px solid var(--text-muted);cursor:pointer;transition:background-color .15s var(--ease-out),border-color .15s var(--ease-out)}input[type=radio]{border-radius:50%;corner-shape:round}input[type=checkbox]{border-radius:4px;corner-shape:bevel}
+input[type=radio]::before{content:'';width:8px;height:8px;border-radius:50%;corner-shape:round;background:var(--accent);opacity:0}input[type=checkbox]::before{content:'';width:10px;height:8px;background:var(--accent-ink);clip-path:polygon(14% 44%,0 65%,50% 100%,100% 16%,80% 0,43% 62%);opacity:0}
 input[type=radio]:checked,input[type=checkbox]:checked{border-color:var(--accent)}input[type=checkbox]:checked{background:var(--accent)}input[type=radio]:checked::before,input[type=checkbox]:checked::before{opacity:1}
 input[type=radio]:disabled,input[type=checkbox]:disabled,input[type=range]:disabled{opacity:.45;cursor:not-allowed}
 input[type=range]{accent-color:var(--accent);cursor:pointer}
-@media(hover:hover) and (pointer:fine){button:hover:not(:disabled){color:var(--accent-strong)}.primary:hover:not(:disabled){background:var(--gold-strong);border-color:var(--gold-strong)}.action:hover:not(:disabled){background:var(--gold-tint);border-color:var(--gold-edge)}.member-choices button:hover:not(:disabled){border-color:var(--gold);background:var(--surface-2)}input[type=radio]:hover:not(:disabled,:checked),input[type=checkbox]:hover:not(:disabled,:checked),select:hover:not(:disabled){border-color:var(--accent)}.choice-cards label:not(.unavailable):hover{border-color:var(--border-strong)}.narration-link:hover:not(:disabled){color:var(--text-primary)}.managed-world-label.dim:hover{color:var(--text-primary);background:color-mix(in srgb,var(--surface-0) 72%,transparent)}}
-.primary{background:var(--gold);color:var(--gold-ink)!important;padding:12px 18px;border:1px solid var(--gold);border-radius:3px;font-weight:600;font-size:var(--fs-lg)}
-.eyebrow{font-size:var(--fs-xs);letter-spacing:var(--tracking-wide);color:var(--accent);font-weight:600}.eyebrow>span{display:inline-block;width:22px;height:1px;background:var(--accent);vertical-align:middle;margin-right:10px}
-.field-label{font-size:var(--fs-xs);color:var(--text-secondary);letter-spacing:var(--tracking-caps);font-weight:600;display:block}
+@media(hover:hover) and (pointer:fine){button:hover:not(:disabled){color:var(--accent-strong)}.primary:hover:not(:disabled){background:var(--primary-hover);border-color:var(--gold-strong)}.action:hover:not(:disabled){background:var(--accent-wash);border-color:var(--accent)}.member-choices button:hover:not(:disabled){border-color:var(--accent);background:var(--surface-2)}input[type=radio]:hover:not(:disabled,:checked),input[type=checkbox]:hover:not(:disabled,:checked),select:hover:not(:disabled){border-color:var(--accent)}.choice-cards label:not(.unavailable):hover{border-color:var(--border-strong)}.narration-link:hover:not(:disabled){color:var(--text-primary)}.managed-world-label.dim:hover{color:var(--text-primary);background:color-mix(in srgb,var(--surface-0) 72%,transparent)}}
+.primary{background:var(--primary-fill);color:var(--gold-strong)!important;padding:11px 20px;border:1px solid var(--gold);border-radius:5px;corner-shape:bevel;font:400 var(--fs-xl)/1.3 var(--font-display);box-shadow:var(--surface-depth);min-height:44px}
+.eyebrow{font:400 var(--fs-sm)/1.3 var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;letter-spacing:var(--tracking-caps);color:var(--text-secondary)}.eyebrow>span{display:inline-block;width:22px;height:1px;background:var(--accent);vertical-align:middle;margin-right:10px}
+.field-label{font:400 var(--fs-sm)/1.3 var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;color:var(--text-secondary);letter-spacing:var(--tracking-caps);display:block}
 .spinner{width:13px;height:13px;border:1px solid var(--border-subtle);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 
-/* Story surfaces: dark paper under torchlight. One skin for every page the story is told on; nested text, wells and dividers follow the swapped tokens. The worn edge is all shadow: a hairline inner rule, a scorched inner vignette, then the drop shadow. The grain is an inline SVG noise tile. */
+/* Dark paper sits slightly lighter than the iron HUD, with the same bevel and depth cue. */
 .narration-panel,.turn-playback,.modal,.pack-panel,.confirm-pop,.ending{--surface-0:var(--paper-0);--surface-1:var(--paper-1);--surface-2:var(--paper-2);--text-primary:var(--ink);--text-secondary:var(--ink-soft);--text-muted:var(--ink-faint);--border-subtle:rgb(214 178 128 / .16);--border-default:rgb(214 178 128 / .3)}
-.narration-panel,.turn-playback,.modal,.pack-panel,.confirm-pop{background:var(--paper-grain),radial-gradient(120% 160% at 0% 0%,var(--torch),transparent 60%),linear-gradient(165deg,var(--paper-1),color-mix(in srgb,var(--paper-1) 55%,var(--paper-0)));border:0;border-radius:4px;box-shadow:inset 0 0 0 1px var(--paper-edge),inset 0 0 26px 3px var(--paper-burn),0 12px 40px var(--shadow-deep)}
+.narration-panel,.turn-playback,.modal,.pack-panel,.confirm-pop{background:var(--paper-1);border:0;border-radius:10px;corner-shape:bevel;box-shadow:var(--surface-depth)}
 .modal,.pack-panel{border-radius:6px}
 
-/* Three voices (ROADMAP D3). Narrator: serif prose, no plate. Character: a name plate in the speaker's colour (set --speaker, or data-palette for a party member). Mechanics: an uppercase tag with no verbs; true small caps need an smcp feature these font cuts lack. */
+/* Narrator prose, character name plates, and small-cap mechanics. The served Sans cut has no smcp, so labels use the dedicated SC family. */
 .voice-narrator,.voice-character{font-family:var(--font-body);font-size:var(--fs-narration);line-height:1.4;color:var(--text-primary)}
-.name-plate{--speaker:var(--accent);display:inline-flex;align-items:center;gap:6px;width:fit-content;padding:2px 10px 3px 11px;border-radius:2px;background:color-mix(in srgb,var(--speaker) 14%,transparent);box-shadow:inset 2px 0 0 var(--speaker),inset 0 0 0 1px color-mix(in srgb,var(--speaker) 38%,transparent);font:600 var(--fs-lg)/1.25 var(--font-display);letter-spacing:.03em;color:var(--speaker)}
+.name-plate{--speaker:var(--accent);display:inline-flex;align-items:center;gap:6px;width:fit-content;padding:3px 14px 5px;border-radius:5px;corner-shape:bevel;background:var(--paper-2);box-shadow:var(--surface-depth);font:400 var(--fs-xl)/1.2 var(--font-display);letter-spacing:0;color:var(--text-primary)}
 .name-plate[data-palette=ember]{--speaker:var(--palette-ember)}.name-plate[data-palette=moss]{--speaker:var(--palette-moss)}.name-plate[data-palette=moon]{--speaker:var(--palette-moon)}
-/* Small caps are for section headings only (#110); a check's DC, odds and risk read as plain small text, first letter up. */
-.mech-tag,.action small{font:500 var(--fs-xs)/1.35 var(--font-ui);font-variant-numeric:tabular-nums;color:var(--text-muted)}.mech-tag::first-letter,.action small::first-letter{text-transform:uppercase}.mech-tag{display:inline-block}
+/* Public checks remain compact; mechanics use lining tabular figures. */
+.mech-tag,.action small{font:500 var(--fs-xs)/1.35 var(--font-ui);font-variant-numeric:lining-nums tabular-nums;color:var(--text-muted)}.mech-tag::first-letter,.action small::first-letter{text-transform:uppercase}.mech-tag{display:inline-block}
 
 /* App shell: the 3D world fills the window; Drei HTML labels stay beneath the application overlays. */
 .app{width:100%;height:100dvh;min-height:680px;position:relative;overflow:hidden}
 .world,.vignette{position:absolute;inset:0}.world{isolation:isolate;z-index:0}
 .vignette{pointer-events:none;background:linear-gradient(0deg,color-mix(in srgb,var(--scene-shade) 85%,transparent),transparent 40%,transparent 75%,color-mix(in srgb,var(--scene-shade) 50%,transparent)),radial-gradient(ellipse at center,transparent 30%,color-mix(in srgb,var(--scene-shade) 28%,transparent))}
-.title-mode .world{left:28%;width:90%}
+.title-mode .world{left:28%;width:90%;mask-image:linear-gradient(90deg,transparent,black 14%),linear-gradient(0deg,transparent,black 18%);mask-composite:intersect}
 .title-mode .vignette{background:linear-gradient(90deg,var(--scene-shade) 6%,color-mix(in srgb,var(--scene-shade) 94%,transparent) 26%,color-mix(in srgb,var(--scene-shade) 25%,transparent) 63%,transparent),linear-gradient(0deg,var(--scene-shade),transparent 22%)}
 @media(max-width:760px){.app{min-width:760px}}
 
 /* Top bar: the brand, the chapter name, and save state. */
-.topbar{position:absolute;top:0;left:0;right:0;height:68px;padding:0 35px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(var(--glass-0),color-mix(in srgb,var(--surface-0) 67%,transparent));border-bottom:1px solid var(--border-subtle);z-index:5}
-.brand{display:flex;align-items:center;gap:11px;font-family:var(--font-display);letter-spacing:.12em;font-size:var(--fs-2xl);font-weight:600}.brand i{font-style:normal;color:var(--accent)}.brand-mark{font-size:var(--fs-3xl);color:var(--accent)}
-.top-center{font-size:var(--fs-2xs);letter-spacing:var(--tracking-wide);color:var(--text-secondary)}.app:not(.title-mode) .top-center{font-size:var(--fs-xs)}.top-center span{margin:0 14px;color:var(--accent)}
+.topbar{position:absolute;top:0;left:0;right:0;height:74px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(rgb(17 16 15 / .86),rgb(17 16 15 / .35) 70%,transparent);z-index:5}
+.brand{display:flex;align-items:center;gap:0;font:400 var(--fs-2xl)/1.1 var(--font-wordmark);letter-spacing:.025em;color:var(--text-primary)}
+.top-center{font:400 var(--fs-sm)/1.2 var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;letter-spacing:var(--tracking-caps);color:var(--text-secondary)}.app:not(.title-mode) .top-center{font-size:var(--fs-sm)}.top-center span{margin:0 14px;color:var(--accent)}
 .top-controls{display:flex;align-items:center;gap:12px}
-.icon-btn{font-size:var(--fs-2xl);width:34px;height:34px;border:1px solid var(--border-subtle);border-radius:50%;display:grid;place-items:center}
+.icon-btn{font-size:var(--fs-2xl);width:36px;height:36px;border:0;border-radius:5px;corner-shape:bevel;background:var(--glass-0);display:grid;place-items:center}
 .saved{font-size:var(--fs-xs);color:var(--text-secondary);margin-right:10px}.saved b{font-size:var(--fs-2xs);color:var(--ally);margin-right:5px}
 @media(max-width:1100px){.top-center{display:none}}
 @media(max-width:760px){.topbar{padding:0 18px}.top-controls{gap:5px}.saved{display:none}}
 
-/* Portraits: a class-tinted disc in the party panel; the companion picker shrinks it to a colour dot. */
-.portrait{width:42px;height:42px;flex-shrink:0;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent-tint),var(--accent-wash));font-size:var(--fs-3xl);color:var(--accent);border:1px solid var(--border-default);border-radius:50%}
-.portrait.scout{color:var(--class-scout);background:color-mix(in srgb,var(--class-scout) 20%,transparent)}.portrait.adept{color:var(--class-adept);background:color-mix(in srgb,var(--class-adept) 20%,transparent)}
+/* Model portraits in bevelled frames; companion names use a quiet marker. */
+.portrait{width:44px;height:50px;flex-shrink:0;display:grid;place-items:center;background:var(--surface-2);font-size:var(--fs-3xl);color:var(--accent);border:0;border-radius:6px;corner-shape:bevel;box-shadow:inset 0 1px 0 rgb(193 175 140 / .2);overflow:hidden}
+.portrait.scout{color:var(--text-secondary);background:var(--surface-2)}.portrait.adept{color:var(--text-secondary);background:var(--surface-2)}
 
-/* #32 Creation. Two groups side by side, everything visible at 1440x900, the right half left to the 3D preview. Only the body scrolls (on short screens); the footer sits outside it, so text never passes under Begin, and the fade says there is more above it. */
-.creation{position:absolute;top:84px;left:4%;width:clamp(600px,50vw,720px);max-height:calc(100dvh - 100px);display:flex;flex-direction:column;overflow:hidden;padding:0;background:linear-gradient(135deg,var(--glass-1),color-mix(in srgb,var(--surface-1) 85%,transparent));border:1px solid var(--border-default);border-radius:5px}
-.creation h1{font-size:var(--fs-4xl);line-height:1;letter-spacing:-1.5px;margin:10px 0}
-.creation .eyebrow{letter-spacing:var(--tracking-caps);text-wrap:balance}
-.intro{font-size:var(--fs-xs);line-height:1.5;color:var(--text-secondary);margin:0 0 16px}
-.creation-body{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;align-items:start;padding:18px 24px 16px;mask-image:linear-gradient(to bottom,black calc(100% - 16px),transparent)}
-.creation .group-title{font:var(--fs-xl)/1.2 var(--font-display);color:var(--accent);margin:0 0 12px;padding-bottom:6px;border-bottom:1px solid var(--border-subtle)}.creation .creation-group>.group-title:first-child{margin-top:4px}
-.creation .hero-name{width:100%;padding:8px 12px;margin-top:6px;font-family:var(--font-display);font-size:var(--fs-xl)}
-.class-label{margin:14px 0 8px}
-.class-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.class-card{border:1px solid var(--border-subtle);background:var(--glass-0);padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:3px;border-radius:3px}.class-card.active{border-color:var(--accent);background:linear-gradient(135deg,var(--accent-tint),var(--accent-wash));box-shadow:inset 0 0 0 2px var(--accent-wash)}
-.class-symbol{font-size:var(--fs-3xl);color:var(--accent);height:32px}.class-card strong{font-size:var(--fs-lg);font-weight:500}.class-card small{font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);color:var(--text-muted);margin-top:3px}
-.class-detail{font-size:var(--fs-md);color:var(--text-secondary);margin:8px 0 12px;line-height:1.5}.class-detail span{display:block;color:var(--text-muted);font-size:var(--fs-md)}
-.creation-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.creation-options label{font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);color:var(--text-muted);min-width:0}
-.creation-options select{display:block;width:100%;margin-top:7px;padding:8px 28px 8px 8px;font-size:var(--fs-md);letter-spacing:0}.creation-options .wide-option{grid-column:1/-1}
-.choice-cards{border:0;padding:0;margin:0 0 12px;min-width:0;display:grid;gap:6px}.choice-cards legend,.companion-picker legend{padding:0;margin-bottom:8px;font-size:var(--fs-xs);font-weight:600;letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-secondary)}
-.choice-cards label{display:flex;gap:10px;align-items:flex-start;padding:6px 10px;border:1px solid var(--border-subtle);border-radius:3px;background:var(--glass-0);cursor:pointer;transition:transform var(--press-duration) var(--ease-out),border-color .15s var(--ease-out),background-color .15s var(--ease-out)}.choice-cards label:has(input:checked){border-color:var(--accent);background:linear-gradient(135deg,var(--accent-tint),var(--accent-wash))}.choice-cards .unavailable{opacity:.6;cursor:not-allowed}
-.choice-cards input{margin-top:1px}.choice-cards strong,.choice-cards label small{display:block}.choice-cards strong{font-size:var(--fs-sm);font-weight:600}.choice-cards label small{font-size:var(--fs-xs);line-height:1.35;color:var(--text-secondary);margin-top:1px}
+/* Creation: two columns below the title lockup; the whole sheet scrolls only on short windows. */
+.creation{position:absolute;top:168px;left:44px;width:min(760px,calc(100% - 88px));max-height:calc(100dvh - 192px);display:flex;flex-direction:column;overflow:auto;padding:0;background:var(--glass-1);border:0;border-radius:10px;corner-shape:bevel;box-shadow:var(--surface-depth)}
+
+
+
+.creation-body{flex:1 0 auto;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;align-items:start;padding:22px 24px 14px}
+.creation .group-title{font:400 var(--fs-2xl)/1.2 var(--font-display);color:var(--text-primary);margin:0 0 16px;padding:0;border:0}.creation .creation-group>.group-title:first-child{margin-top:4px}
+.creation .hero-name{width:100%;padding:7px 12px;margin:4px 0 16px;font:400 var(--fs-xl)/1.3 var(--font-display)}
+
+.class-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.class-card{border:1px solid transparent;background:var(--surface-0);padding:10px 3px 8px;display:flex;flex-direction:column;align-items:center;gap:2px;border-radius:6px;corner-shape:bevel;box-shadow:var(--surface-depth)}.class-card.active{border-color:var(--accent);background:var(--surface-2)}
+.class-symbol{font-size:var(--fs-3xl);color:var(--text-secondary);height:34px}.class-card strong{font-size:var(--fs-lg);font-weight:500}.class-card small{font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);color:var(--text-muted);margin-top:3px}
+.class-detail{font-size:var(--fs-md);color:var(--text-secondary);margin:12px 0 16px;line-height:1.4}.class-detail span{display:block;color:var(--text-muted);font-size:var(--fs-sm)}
+.creation-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.creation-options label{font:400 var(--fs-sm)/1.3 var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;letter-spacing:var(--tracking-caps);color:var(--text-secondary);min-width:0}
+.creation-options select{display:block;width:100%;margin-top:4px;padding:7px 28px 7px 8px;font:400 var(--fs-md)/1.3 var(--font-ui);font-variant-caps:normal;text-transform:none;letter-spacing:0}.creation-options .wide-option{grid-column:1/-1}
+.choice-cards{border:0;padding:0;margin:0 0 12px;min-width:0;display:grid;gap:6px}.choice-cards legend,.companion-picker legend{padding:0;margin-bottom:8px;font:400 var(--fs-xl)/1.2 var(--font-display);color:var(--text-primary)}
+.choice-cards label{display:flex;gap:10px;align-items:flex-start;padding:6px 10px;border:0;border-radius:5px;corner-shape:bevel;background:var(--surface-0);cursor:pointer;box-shadow:inset 0 1px 0 rgb(193 175 140 / .12);transition:transform var(--press-duration) var(--ease-out),background-color .15s var(--ease-out)}.choice-cards label:has(input:checked){background:var(--surface-2);box-shadow:inset 2px 0 0 var(--accent),inset 0 1px 0 rgb(193 175 140 / .2)}.choice-cards .unavailable{cursor:not-allowed}
+.choice-cards input{margin-top:1px}.choice-cards strong,.choice-cards label small{display:block}.choice-cards strong{font-size:var(--fs-sm);font-weight:500}.choice-cards label small{font-size:var(--fs-xs);line-height:1.35;color:var(--text-secondary);margin-top:1px}
 .rules-disclosure{margin:0;font-size:var(--fs-xs);line-height:1.4;color:var(--text-muted)}.rules-disclosure a{color:var(--accent)}
 .companion-picker{border:0;padding:0;margin:0 0 12px;min-width:0}.companion-picker p{margin:0 0 4px;font-size:var(--fs-xs);color:var(--text-muted)}.companion-picker .creation-options{gap:8px}
-.companion-row{display:grid;grid-template-columns:62px repeat(3,minmax(0,1fr));gap:6px;align-items:center;margin-top:6px}.companion-head{margin:0;font-size:var(--fs-2xs);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-muted)}
-.companion-name{display:flex;align-items:center;gap:8px;font-size:var(--fs-sm);font-weight:600}.companion-name .portrait{width:12px;height:12px;border-radius:50%;border:0;background:currentColor}
+.companion-row{display:grid;grid-template-columns:54px repeat(3,minmax(0,1fr));gap:5px;align-items:center;margin-top:7px}
+.companion-name{display:flex;align-items:center;gap:8px;font-size:var(--fs-sm);font-weight:500}.companion-name .portrait{width:12px;height:12px;border-radius:50%;border:0;background:currentColor}
 .companion-row select{min-width:0;width:100%;padding:7px 22px 7px 8px;font-size:var(--fs-sm)}
-.creation-footer{flex:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 28px;align-items:center;padding:10px 24px 12px;border-top:1px solid var(--border-subtle)}
+.creation-footer{flex:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 28px;align-items:center;padding:12px 24px 10px;border:0}
 .creation-actions{grid-column:2;grid-row:1;display:grid;gap:4px}.creation-notes{grid-column:1;grid-row:1}
 .start{width:100%;text-align:left;margin:0;display:flex;justify-content:space-between;align-items:center;padding:12px 17px}.start span{font-size:var(--fs-xl)}
 .resume{font-size:var(--fs-2xs);width:100%;padding:6px 12px;color:var(--text-secondary)}.resume span{margin-left:12px;color:var(--accent)}
 .saved-adventures{margin:0}.saved-adventures summary{cursor:pointer;padding:3px 0;color:var(--accent)}.saved-adventures button{display:block;width:100%;text-align:left;margin:8px 0;padding:10px;border:1px solid var(--border-default);border-radius:6px}.saved-adventures small{display:block;color:var(--text-muted);margin-top:4px}
 .voice-disclosure{font-size:var(--fs-xs);color:var(--text-muted);margin:0;line-height:1.5}
-.creation-note{font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);color:var(--text-muted);margin:6px 0 0;line-height:1.5}.creation-note span{padding:0 7px;color:var(--accent)}
-@media(max-width:1399px){.companion-row{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:4px}.companion-name{grid-column:1/-1}.companion-head>span:first-child{display:none}}
-@media(max-height:800px){.creation{top:76px;max-height:calc(100dvh - 88px)}.creation h1{font-size:var(--fs-3xl);margin:6px 0}.intro{margin-bottom:10px}.creation-body{padding-top:14px}}
+
+@media(max-height:800px){.creation{top:140px;max-height:calc(100dvh - 156px)}.creation-body{padding-top:14px}}
 
 /* The top bar names the chapter; the heading names the room on its own plate, with a mood line only when it adds something. In combat the turn tracker names the room context, so the heading shrinks and drops its mood line. */
-.scene-heading{position:absolute;top:88px;left:0;right:0;margin:0 auto;text-align:center;pointer-events:none;width:50%;max-width:calc(100% - 620px)}
-.scene-title{display:inline-block;max-width:100%;padding:6px 24px 8px;background:var(--glass-0);border:1px solid var(--border-subtle);border-radius:5px;box-shadow:0 10px 24px var(--shadow)}
-.scene-heading h1{font-size:var(--fs-4xl);margin:0;letter-spacing:-.4px}
-.scene-heading p{font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);color:var(--text-secondary);margin:2px 0 0}
+.scene-heading{position:absolute;top:88px;left:0;right:0;margin:0 auto;text-align:center;pointer-events:none;width:55%;max-width:calc(100% - 540px)}
+.scene-title{display:inline-block;max-width:100%;padding:8px 24px 10px;background:var(--glass-0);border:0;border-radius:8px;corner-shape:bevel;box-shadow:var(--surface-depth)}
+.scene-heading h1{font-size:var(--fs-3xl);margin:0;letter-spacing:0}
+.scene-heading p{font:400 var(--fs-sm)/1.3 var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;letter-spacing:var(--tracking-caps);color:var(--text-secondary);margin:4px 0 0}
 .app:has(.initiative-strip) .scene-heading{top:148px}.app:has(.initiative-strip) .scene-heading h1{font-size:var(--fs-2xl)}.app:has(.initiative-strip) .scene-heading p{display:none}
 @media(max-height:800px){.scene-heading{top:77px}.scene-heading h1{font-size:var(--fs-3xl)}.app:has(.initiative-strip) .scene-heading{top:142px}}
 
-/* HUD hierarchy. The party column is one backed panel, like the action panel, so none of its text reads straight off the bright 3D floor. */
-.party-panel{position:absolute;top:145px;left:24px;width:222px;max-height:calc(100dvh - 210px);overflow:auto;padding:14px 12px;background:linear-gradient(150deg,var(--glass-1),var(--glass-0));border:1px solid var(--border-default);border-radius:5px;box-shadow:0 14px 30px var(--shadow)}
-.panel-label{display:flex;justify-content:space-between;font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);color:var(--text-secondary);align-items:center;margin-bottom:13px}.panel-label>span{color:var(--accent);font-size:var(--fs-2xs)}
-/* Level and XP keep a line of their own, right-aligned, so 2- and 5-digit XP lay out the same (#98). */
-.party-panel .panel-label{flex-direction:column;align-items:stretch;gap:3px}.party-panel .panel-label>span{font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);text-align:right;white-space:nowrap}
-.party-card{display:flex;width:100%;padding:10px 9px;gap:10px;margin:0 0 7px;background:linear-gradient(120deg,var(--glass-1),var(--glass-0));border:1px solid var(--border-subtle);border-radius:3px;text-align:left}.party-card.active{border-color:var(--accent)}.party-card.downed{filter:grayscale(1);opacity:.65}
-.taking-turn{border-color:var(--accent-strong)!important;box-shadow:0 0 20px var(--accent-tint)}
-.party-info{flex:1;min-width:0}.party-info>div:first-child{display:flex;justify-content:space-between;align-items:center}.party-info strong{font-size:var(--fs-md);font-weight:500}.party-info small{font-size:var(--fs-xs);color:var(--text-muted)}
-.health-track{height:3px;background:var(--surface-0);margin:9px 0 6px}.health-track i{display:block;height:100%;background:var(--ally);transform-origin:left;transition:transform 250ms var(--ease-out)} /* App.tsx sets scaleX(hp share) */
+/* Independent party cards and a compact quest tracker leave the centre for the scene. */
+.party-panel{position:absolute;top:154px;left:24px;width:210px;max-height:calc(100dvh - 224px);overflow:auto;padding:0;background:none;border:0}
+.panel-label{display:flex;justify-content:space-between;font:400 var(--fs-sm)/1.3 var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;letter-spacing:var(--tracking-caps);color:var(--text-secondary);align-items:center;margin-bottom:10px}.panel-label>span{color:var(--accent);font-size:var(--fs-2xs)}
+/* Experience keeps its own small line above the cards. */
+.party-panel .panel-label{padding:4px 10px;background:var(--glass-0);border-radius:4px;corner-shape:bevel;margin:0 0 8px}.party-panel .panel-label>span{font-size:var(--fs-sm);letter-spacing:0;text-align:left;white-space:nowrap;color:var(--text-secondary)}
+.party-card{display:flex;width:100%;padding:10px;gap:10px;margin:0 0 8px;background:var(--glass-1);border:1px solid transparent;border-radius:8px;corner-shape:bevel;box-shadow:var(--surface-depth);text-align:left}.party-card.active{border-color:var(--accent)}.party-card.downed{filter:grayscale(1);opacity:.65}
+.taking-turn{border-color:var(--accent-strong)!important;box-shadow:var(--surface-depth)}
+.party-info{flex:1;min-width:0}.party-info>div:first-child{display:flex;justify-content:space-between;align-items:center}.party-info strong{font-size:var(--fs-md);font-weight:500;overflow-wrap:anywhere}.party-info small{font-size:var(--fs-xs);color:var(--text-muted)}
+.health-track{height:6px;border-radius:1px;background:var(--surface-0);margin:7px 0 5px;overflow:hidden}.health-track i{display:block;height:100%;background:var(--ally);transform-origin:left;transition:transform 250ms var(--ease-out)} /* App.tsx sets scaleX(hp share) */
 .party-stats{font-size:var(--fs-xs);color:var(--text-muted);display:flex;justify-content:space-between}.party-stats span+span{color:var(--accent)}
-.companion-chat{padding:4px 0}.companion-chat button{display:flex;justify-content:space-between;width:100%;font-size:var(--fs-md);color:var(--text-secondary);padding:7px 9px}.companion-chat span{color:var(--accent)}
-.pack-row{display:flex;flex-direction:column;gap:4px;width:100%;padding:10px 2px;border-top:1px solid var(--border-subtle);text-align:left;font-size:var(--fs-sm);color:var(--text-secondary)}.pack-counts b{margin-right:8px;font-size:var(--fs-xs);font-weight:500;letter-spacing:var(--tracking-caps);color:var(--text-muted)}.pack-open-label{color:var(--accent)}
-.objective{display:flex;gap:9px;padding:12px 2px 2px;border-top:1px solid var(--border-subtle)}.objective p{font-size:var(--fs-xs);line-height:1.6;color:var(--text-secondary);margin:8px 0}.gold-diamond{color:var(--accent);font-size:var(--fs-xl);line-height:.7}
+.companion-chat{padding:5px 10px;margin:14px 0 8px;background:var(--glass-0);border-radius:6px;corner-shape:bevel}.companion-chat button{display:flex;width:100%;min-height:30px;font-size:var(--fs-sm);color:var(--text-secondary);padding:5px 0}.companion-chat span{color:var(--accent)}
+.pack-row{display:flex;flex-direction:column;gap:4px;width:100%;padding:8px 10px;background:var(--glass-0);border:0;border-radius:5px;corner-shape:bevel;text-align:left;font-size:var(--fs-sm);color:var(--text-secondary)}.pack-counts b{margin-right:8px;font-size:var(--fs-xs);font-weight:500;letter-spacing:var(--tracking-caps);color:var(--text-muted)}.pack-open-label{color:var(--accent)}
+.objective{display:block;margin-top:16px;padding:12px 10px;background:var(--glass-0);border:0;border-radius:8px;corner-shape:bevel;box-shadow:var(--surface-depth)}.objective p{font-size:var(--fs-sm);line-height:1.4;color:var(--text-secondary);margin:7px 0 0}.gold-diamond{color:var(--accent);font-size:var(--fs-xl);line-height:.7}
 @media(max-height:800px){.party-panel{top:123px}.party-card{padding:7px}.companion-chat button{padding:9px 0}}
 
-/* Action panel: focus filter, the action list, and the free-text intent. */
-.actions-panel{position:absolute;top:145px;right:24px;width:270px;max-height:calc(100dvh - 210px);display:flex;flex-direction:column;padding:16px;background:linear-gradient(150deg,var(--glass-1),var(--glass-0));border:1px solid var(--border-default);border-radius:5px;box-shadow:0 14px 30px var(--shadow)}
+/* Borderless choices; the target filter appears only for long lists. */
+.actions-panel{position:absolute;top:154px;right:24px;width:260px;max-height:calc(100dvh - 224px);display:flex;flex-direction:column;padding:18px 14px;background:var(--glass-1);border:0;border-radius:10px;corner-shape:bevel;box-shadow:var(--surface-depth)}
 .target-select{margin-bottom:12px}.target-select select{width:100%;margin-top:6px;font-size:var(--fs-lg)}
-.action-count{font-size:var(--fs-xs);color:var(--text-muted);margin:-2px 0 8px}
+
 .action-list{overflow:auto;min-height:70px;scrollbar-width:thin;scrollbar-color:var(--text-muted) var(--surface-0)}.action-list>:last-child{margin-bottom:0}.action-list .action:focus-visible{outline-offset:-2px}
-.action{display:flex;align-items:center;text-align:left;width:100%;padding:11px 8px;border:1px solid var(--border-subtle);border-radius:3px;margin-bottom:5px;gap:10px;background:color-mix(in srgb,var(--surface-2) 55%,transparent)}
-.action strong{font-weight:500;font-size:var(--fs-xs);line-height:1.5;display:block}.action small{display:block;margin-top:5px}
+.action{display:flex;align-items:center;text-align:left;width:100%;padding:8px 10px;border:0;border-left:2px solid transparent;border-radius:0;margin-bottom:4px;gap:10px;background:none}
+.action strong{font-weight:500;font-size:var(--fs-md);line-height:1.3;display:block}.action small{display:block;margin-top:5px}
 /* A reply waits for its question's last page (#96): visible, quieter, not clickable. */
 .action.waiting{opacity:.62;cursor:not-allowed}.action.waiting .read-on{font-style:italic;text-transform:none;letter-spacing:0;font-weight:500}
 .action-main{flex:1;min-width:0}
 /* #62 Story choices: verb groups, a subtle key cap for the number key, and the odds band (#61) with its exact figure on hover or focus. */
-.verb-group+.verb-group{margin-top:10px}.verb-label{margin:0 0 5px;font:600 var(--fs-2xs)/1.3 var(--font-ui);text-transform:uppercase;letter-spacing:var(--tracking-wide);color:var(--text-muted)}
-.key-cap{flex:none;align-self:flex-start;min-width:18px;padding:0 5px;border:1px solid var(--border-subtle);border-radius:3px;font:600 var(--fs-2xs)/1.5 var(--font-ui);text-align:center;color:var(--text-muted);opacity:.5;transition:opacity var(--press-duration) var(--ease-out)}
+.verb-group+.verb-group{margin-top:10px}.verb-label{margin:0 0 5px 12px;font:400 var(--fs-sm)/1.3 var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;letter-spacing:var(--tracking-caps);color:var(--text-muted)}
+.key-cap{flex:none;align-self:flex-start;min-width:16px;padding:0;border:0;font:400 var(--fs-xs)/1.5 var(--font-ui);font-variant-numeric:lining-nums tabular-nums;text-align:right;color:var(--text-muted)}
 .action:hover .key-cap{opacity:1}
 /* Keyboard focus reveals at once: no motion on keyboard-triggered changes. */
 .action:focus-visible .key-cap,.action:focus-within .key-cap,.action:focus-visible .odds-pct,.action:focus-within .odds-pct{opacity:1;transition:none}
 [data-band=likely]{--odds:var(--ally)}[data-band=risky]{--odds:var(--text-primary)}[data-band=long]{--odds:var(--enemy)}
-.odds-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin-top:3px;font:500 var(--fs-xs)/1.35 var(--font-ui)}.odds-who{color:var(--text-secondary)}.odds{font-weight:600}
-.odds{color:var(--odds);font-variant-numeric:tabular-nums}.odds-pct{font-weight:inherit;opacity:0;transition:opacity var(--press-duration) var(--ease-out)}
+.odds-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin-top:3px;font:500 var(--fs-xs)/1.35 var(--font-ui)}.odds-who{color:var(--text-secondary)}.odds{font-weight:500}
+.odds{color:var(--odds);font-variant-numeric:lining-nums tabular-nums}.odds-pct{font-weight:inherit;opacity:0;transition:opacity var(--press-duration) var(--ease-out)}
 .action:hover .odds-pct,.odds.always .odds-pct{opacity:1}
 .odds-dot{display:inline-block;width:6px;height:6px;margin-right:6px;border-radius:50%;vertical-align:1px;background:var(--odds)}
 .member-choices button.best{border-color:var(--border-strong)}
 /* Compact chips keep their look; an invisible 4px band above and below makes each one at least 24px tall (#97), and wrapped rows sit 8px apart so the bands never overlap. */
 .member-choices button{position:relative}.member-choices button::after{content:'';position:absolute;z-index:1;inset:-4px 0}
-.member-action{cursor:default}.member-action>span:nth-child(2){flex:1;min-width:0}.member-choices{display:flex;flex-wrap:wrap;gap:8px 3px;margin-top:2px}.member-choices button{padding:4px 10px;border:1px solid var(--border-default);border-radius:12px;background:var(--surface-0);color:var(--text-primary);font-size:var(--fs-xs)}.member-choices button:focus-visible{border-color:var(--accent-strong);background:var(--surface-2)}
-.action.chosen,.member-choices button.chosen{border-color:var(--gold);background:var(--gold-tint)}
+.member-action{cursor:default}.member-action>span:nth-child(2){flex:1;min-width:0}.member-choices{display:flex;flex-wrap:wrap;gap:8px 3px;margin-top:2px}.member-choices button{padding:3px 7px;min-height:24px;border:1px solid transparent;border-radius:4px;corner-shape:bevel;background:var(--surface-0);color:var(--text-primary);font-size:var(--fs-xs)}.member-choices button:focus-visible{border-color:var(--accent-strong);background:var(--surface-2)}
+.action.chosen,.member-choices button.chosen{border-color:var(--accent);background:var(--accent-tint)}
 .focus-empty{font-size:var(--fs-xs);line-height:1.5;color:var(--text-muted);margin:10px 0;padding:10px;border:1px solid var(--border-subtle);border-radius:5px;background:var(--accent-wash)}.focus-empty button{display:block;margin-top:7px;color:var(--accent-strong);text-decoration:underline;text-underline-offset:3px}
-.custom-intent{margin-top:15px;border-top:1px solid var(--border-subtle);padding-top:13px}.custom-intent>div{display:flex;justify-content:space-between}
+.custom-intent{margin-top:14px;border:0;padding:10px 10px 0}.custom-intent>div{display:flex;justify-content:space-between}
 .custom-intent textarea{width:100%;font-size:var(--fs-lg);margin-top:7px;min-height:56px;max-height:90px}
 .custom-intent button{font-size:var(--fs-2xs);padding:7px 4px;color:var(--accent)}.custom-intent .mic{color:var(--text-muted)}.custom-intent .recording{color:var(--danger);background:color-mix(in srgb,var(--danger) 20%,transparent);border-radius:4px}.custom-intent .text-chat{font-size:var(--fs-md);color:var(--text-muted);padding-top:9px}
 /* Without AI, free-text actions cannot run, so one live link to Settings replaces a block of disabled controls. */
@@ -270,11 +274,11 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .tactical-controls select{width:100%;padding:9px 28px 9px 9px;background-color:var(--surface-0);border:1px solid var(--border-default)}.tactical-controls button{padding:8px;margin-top:6px;border:1px solid var(--border-strong)}
 .tactical-controls .turn-state{margin:8px 0 0;gap:5px}.tactical-controls .turn-chip{padding:3px 8px;font-size:var(--fs-xs)}
 @media(min-width:1650px){.action{padding:14px 10px}}
-@media(max-height:1000px){.action{padding:5px 8px;margin-bottom:3px}.member-choices button{padding:1px 8px;line-height:1.2}.custom-intent textarea{min-height:38px;height:38px;padding:9px 12px}.custom-intent textarea:focus,.custom-intent textarea:not(:placeholder-shown){height:80px}}
+@media(max-height:1000px){.action{padding:7px 10px;margin-bottom:3px}.member-choices button{padding:3px 7px;line-height:1.2}.custom-intent textarea{min-height:38px;height:38px;padding:9px 12px}.custom-intent textarea:focus,.custom-intent textarea:not(:placeholder-shown){height:80px}}
 @media(max-height:800px){.actions-panel{top:123px;max-height:calc(100dvh - 180px)}.custom-intent{margin-top:10px;padding-top:10px}}
 
-/* #60 Story box (ADV, ROADMAP D2). One fixed slot for the settled story, the read-aloud room page and turn playback, so a page turn never moves the camera framing (SceneFraming reads this rect). Long text pages instead of growing the box: 118px fits three lines of prose and the tag row, and keeps the scene at least 55% visible at 1440x900. Combat keeps the #29 two-line event view. Page turns swap instantly; only the bark tab enters, with a fade under reduced motion. */
-.story-box{position:absolute;bottom:72px;left:calc(50% - 25px);transform:translateX(-50%);width:min(620px,calc(100% - 590px));min-width:280px;height:118px;box-sizing:border-box;padding:10px 18px 4px;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;column-gap:14px;row-gap:4px;text-align:left}
+/* #60 Story box (ADV, ROADMAP D2). One fixed slot for the settled story, the read-aloud room page and turn playback, so a page turn never moves the camera framing (SceneFraming reads this rect). Long text pages instead of growing the box: 142px fits three lines of prose and the tag row, and keeps the scene at least 55% visible at 1440x900. Combat keeps the #29 two-line event view. Page turns swap instantly; only the bark tab enters, with a fade under reduced motion. */
+.story-box{position:absolute;bottom:70px;left:calc(50% - 12px);transform:translateX(-50%);width:min(680px,calc(100% - 570px));min-width:280px;height:142px;box-sizing:border-box;padding:18px 20px 8px;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;column-gap:16px;row-gap:4px;text-align:left}
 .story-box.speaking{grid-template-columns:64px minmax(0,1fr)}
 .story-box.turn-playback{position:fixed;z-index:120}
 /* While the light confirm card is open the decision leads: the story box steps back (opacity only, so its rect and the camera framing stay put) and the scene keeps 55%. */
@@ -282,40 +286,40 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .story-box:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .story-body,.story-foot{grid-column:-2/-1;min-width:0}
 .story-body{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;cursor:pointer} /* PAGE_CHARS fits three lines down to the 1100px box with a portrait (measured); scrolling is only a safety net, never clipping */
-.story-text{margin:0;font-family:var(--font-body);font-size:var(--fs-narration);line-height:1.4;color:var(--text-primary);text-wrap:pretty}
+.story-text{margin:0;font-family:var(--font-body);font-size:var(--fs-narration);line-height:1.45;color:var(--text-primary);text-wrap:pretty}
 .story-text .unrevealed{opacity:0}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 .story-portrait{grid-row:1/-1;align-self:center;width:64px;height:64px;border-radius:4px;overflow:hidden}
 .story-portrait.small{width:22px;height:22px;border-radius:50%;font-size:var(--fs-md)}
 /* The plate and the read-aloud title sit on the box's top edge, VN-style, so they cost no text line. On the edge they need an opaque base. */
-.story-plate,.read-aloud-tab{position:absolute;top:-14px;left:18px;z-index:1}
+.story-plate,.read-aloud-tab{position:absolute;top:-16px;left:20px;z-index:1}
 .story-box.speaking>.story-plate{left:96px}
-.story-box .story-plate{background:color-mix(in srgb,var(--speaker) 16%,var(--paper-1))}
+.story-box .story-plate{background:var(--paper-2)}
 .name-plate[data-enemy]{--speaker:var(--enemy)}
-.read-aloud-tab{padding:3px 11px;border-radius:2px;background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--border-strong);font:600 var(--fs-2xs)/1.3 var(--font-ui);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--accent)}
+.read-aloud-tab{padding:4px 12px;border-radius:5px;corner-shape:bevel;background:var(--paper-2);box-shadow:var(--surface-depth);font:400 var(--fs-sm)/1.3 var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;letter-spacing:var(--tracking-caps);color:var(--text-secondary)}
 /* Read-aloud (D&D boxed text): the room's description in a shaded well with an ink rule, then the box collapses to an ordinary page. */
 .story-box.boxed .story-body{padding:2px 0 0 12px;box-shadow:inset 2px 0 0 color-mix(in srgb,var(--accent) 60%,transparent);background:linear-gradient(90deg,var(--accent-wash),transparent 70%)}
 .story-foot{display:flex;align-items:center;gap:12px;min-height:24px} /* 24px targets (WCAG 2.5.8, #97); the 4px comes from the box's bottom padding, so the page keeps its three lines. A tag row too long for one line wraps (#98); the page then scrolls rather than clipping. */
 .story-tags{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px}
 .story-tag>span{white-space:nowrap}.story-tag .mark-high{color:var(--gold-strong)}.story-tag .mark-low{color:var(--danger)}
 .story-controls{flex:none;display:flex;align-items:center;gap:14px}
-.page-indicator{font-size:var(--fs-2xs);letter-spacing:var(--tracking-caps);color:var(--text-muted);font-variant-numeric:tabular-nums}
+.page-indicator{font-size:var(--fs-2xs);letter-spacing:var(--tracking-caps);color:var(--text-muted);font-variant-numeric:lining-nums tabular-nums}
 .story-link{display:inline-flex;align-items:center;min-height:24px;padding:0;font-size:var(--fs-xs);color:var(--text-secondary);white-space:nowrap}
-.story-box kbd{margin-left:4px;padding:0 4px;border:1px solid var(--border-default);border-radius:2px;font:600 var(--fs-2xs)/1.3 var(--font-ui);color:var(--text-muted)}
-.story-next{display:inline-flex;align-items:center;gap:4px;min-height:24px;padding:0;font:600 var(--fs-sm) var(--font-ui);color:var(--gold-strong);white-space:nowrap}
+.story-box kbd{margin-left:4px;padding:0 4px;border:1px solid var(--border-default);border-radius:2px;font:500 var(--fs-2xs)/1.3 var(--font-ui);color:var(--text-muted)}
+.story-next{display:inline-flex;align-items:center;gap:4px;min-height:24px;padding:0;font:500 var(--fs-sm) var(--font-ui);color:var(--text-primary);white-space:nowrap}
 /* Combat (#29): the newest two events beside the journal link. Each wraps to a second line rather than clipping (#98), so the slot holds four lines at a fixed height: the camera framing reads this rect and must not jump per event. Anything longer scrolls, newest line pinned to the bottom. */
 .story-box.combat{height:100px;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:minmax(0,1fr);align-items:start;padding:8px 16px}
 .story-box.combat .story-body{grid-column:1;align-self:stretch;cursor:default;display:flex;flex-direction:column-reverse}.story-box.combat .story-body>*{margin-bottom:auto}.story-box.combat .story-controls{padding-top:3px}
-.event-lines{list-style:none;margin:0;padding:0;font-size:var(--fs-md);line-height:1.5;color:var(--text-secondary);font-variant-numeric:tabular-nums}.event-lines li:last-child{color:var(--text-primary)}.event-lines b{font-weight:600;color:var(--accent-strong)}.event-lines b.enemy{color:var(--enemy)}.event-lines .story-tag{display:inline-block;margin-left:6px} /* a tag that fits on one line moves down whole; a longer one breaks between its parts */
+.event-lines{list-style:none;margin:0;padding:0;font-size:var(--fs-md);line-height:1.5;color:var(--text-secondary);font-variant-numeric:lining-nums tabular-nums}.event-lines li:last-child{color:var(--text-primary)}.event-lines b{font-weight:500;color:var(--accent-strong)}.event-lines b.enemy{color:var(--enemy)}.event-lines .story-tag{display:inline-block;margin-left:6px} /* a tag that fits on one line moves down whole; a longer one breaks between its parts */
 /* Companion barks (#67): a tab on the top edge, right side, so the page under it stays readable. */
 .story-bark{position:absolute;top:-12px;right:16px;z-index:1;display:flex;align-items:center;gap:6px;max-width:min(440px,74%);padding:2px 12px 2px 2px;border-radius:14px;background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--paper-edge),0 6px 18px var(--shadow-deep);animation:bark-in var(--enter-duration) var(--ease-out) both}
-.story-bark .story-plate{position:static;padding:0 4px;font-size:var(--fs-sm);box-shadow:none;background:none}
+.story-bark .story-plate{position:static;padding:0 4px;font:400 var(--fs-md)/1.3 var(--font-ui);box-shadow:none;background:none}
 .story-bark q{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:italic var(--fs-md)/1.25 var(--font-body);color:var(--text-primary)}
 @keyframes bark-in{from{opacity:0;translate:0 4px}}
 /* Playback: the die badge leads the tag row; initiative is one row of chips. */
-.story-box .roll-badge{flex:none;display:grid;place-items:center;width:28px;height:28px;border:1px solid var(--gold);border-radius:6px;background:var(--surface-2);font:var(--fs-xl) var(--font-display);font-variant-numeric:lining-nums tabular-nums;color:var(--gold-strong);text-shadow:0 2px 8px var(--shadow-deep)}.story-box .roll-badge.revealed{animation:die-reveal 300ms var(--ease-out)}
+.story-box .roll-badge{flex:none;corner-shape:bevel;font-family:var(--font-ui);display:grid;place-items:center;width:28px;height:28px;border:1px solid var(--gold);border-radius:6px;background:var(--surface-2);font:500 var(--fs-xl) var(--font-ui);font-variant-numeric:lining-nums tabular-nums;color:var(--gold-strong);text-shadow:0 2px 8px var(--shadow-deep)}.story-box .roll-badge.revealed{animation:die-reveal 300ms var(--ease-out)}
 @keyframes die-reveal{from{transform:scale(1.25);opacity:.3}}
-.initiative-order{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}.initiative-order li{display:flex;align-items:baseline;gap:7px;padding:2px 9px;border:1px solid var(--border-subtle);border-radius:3px;font-size:var(--fs-sm)}.initiative-order li b{font-size:var(--fs-lg);color:var(--gold-strong)}
+.initiative-order{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}.initiative-order li{display:flex;align-items:baseline;gap:7px;padding:2px 9px;border:1px solid var(--border-subtle);border-radius:4px;corner-shape:bevel;font-size:var(--fs-sm)}.initiative-order li b{font-size:var(--fs-lg);color:var(--gold-strong)}
 @media(max-width:760px){.story-box{width:280px}}
 
 /* Initiative strip: the combat turn order across the top of the stage. */
@@ -326,11 +330,11 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 @media(max-width:1000px){.initiative-strip{max-width:calc(100% - 420px)}}
 
 /* Chapter track: the rooms of the current chapter along the bottom edge. */
-.chapter-track{position:absolute;bottom:0;height:49px;left:26px;right:26px;background:var(--glass-0);border-top:1px solid var(--border-subtle);display:flex;align-items:center;gap:22px;overflow-x:auto;white-space:nowrap}
-.chapter-track>div{font-size:var(--fs-xs);color:var(--text-muted);display:flex;gap:7px;align-items:center;flex-shrink:0}
-.chapter-track>div>span:first-child{font-size:var(--fs-xs);border:1px solid var(--border-subtle);border-radius:50%;width:22px;height:22px;display:grid;place-items:center}
+.chapter-track{position:absolute;bottom:0;height:48px;left:24px;right:24px;background:linear-gradient(transparent,var(--stone-0));display:flex;align-items:center;gap:0;overflow-x:auto;white-space:nowrap}
+.chapter-track>div{position:relative;font-size:var(--fs-sm);color:var(--text-muted);display:flex;gap:9px;align-items:center;flex:1;min-width:24px;height:30px}
+.chapter-track>div>span:first-child{position:relative;z-index:1;width:7px;height:7px;flex:none;border:1px solid var(--text-muted);border-radius:50%;background:var(--stone-0)}
 /* The current room is the one place the HUD wears the chapter accent (#110). */
-.chapter-track>div.current{color:var(--chapter-accent)}.chapter-track>div.current>span:first-child{border-color:var(--chapter-accent)}.chapter-track>div.passed{color:var(--text-secondary)}
+.chapter-track>div.current{flex:0 0 auto;padding-right:22px;color:var(--chapter-accent)}.chapter-track>div.current>span:first-child{width:9px;height:9px;border-color:var(--chapter-accent);background:var(--chapter-accent);box-shadow:0 0 0 4px rgb(193 175 140 / .1)}.chapter-track>div.passed{color:var(--text-secondary)}
 .camera-hint{margin-left:auto;font-size:var(--fs-2xs);color:var(--text-muted);letter-spacing:var(--tracking-caps)}
 @media(max-width:1100px){.chapter-track{gap:12px}.camera-hint{display:none}}
 /* Up to 1280px a chapter's eight room names cannot all fit (#110; Chapter I's six do): the rooms around you keep their numbers and the current room keeps its name. Hidden names stay in the accessible text. */
@@ -360,20 +364,20 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .key-settings{border:1px solid var(--border-default);padding:16px;margin:16px 0}.key-settings label{display:block;font-size:var(--fs-lg);margin-bottom:8px}.key-settings input{width:100%;margin-bottom:10px;font-size:var(--fs-md)}.key-settings>div{display:flex;gap:12px}.key-settings p{font-size:var(--fs-md);line-height:1.5;color:var(--text-secondary)}
 .key-status{color:var(--accent-strong);font-size:var(--fs-md);line-height:1.5;min-height:22px}
 .settings-note,.credits{font-size:var(--fs-2xs);color:var(--text-muted);line-height:1.8;margin-top:22px}.settings-note{font-size:var(--fs-md)!important;line-height:1.6}.credits a{color:var(--text-muted)}
-.journal{width:690px}.journal h3{font-size:var(--fs-2xs);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--accent);margin-top:26px}.journal .fact{padding:7px 12px;background:var(--accent-wash);border-left:2px solid var(--accent);font-size:var(--fs-xs)}
+.journal{width:690px}.journal h3{font:400 var(--fs-xl)/1.3 var(--font-display);color:var(--text-primary);margin-top:26px}.journal .fact{padding:7px 12px;background:var(--accent-wash);border-left:2px solid var(--accent);font-size:var(--fs-xs)}
 .journal-logs>div{border-bottom:1px solid var(--border-subtle);padding:15px 0}.journal-logs p{margin:7px 0}
 #journal-backlog{scroll-margin-top:28px}.backlog-line .story-plate{position:static}.backlog-line .name-plate{background:color-mix(in srgb,var(--speaker) 14%,transparent)}.backlog-line p{margin:6px 0}.backlog-line.character p{color:var(--text-primary)}.backlog-line .story-tag{display:block}
 .conversation-entry{padding:8px 0 16px;border-bottom:1px solid var(--border-subtle)}.conversation-entry button{font-size:var(--fs-2xs);color:var(--accent)}
-.quest-journal details{padding:14px 0;border-bottom:1px solid var(--border-subtle)}.quest-journal summary{cursor:pointer;color:var(--accent-strong);font-weight:600}.quest-journal summary span{display:block;margin:6px 0;font-size:var(--fs-xs);font-weight:400;color:var(--text-secondary)}
+.quest-journal details{padding:14px 0;border-bottom:1px solid var(--border-subtle)}.quest-journal summary{cursor:pointer;color:var(--accent-strong);font-weight:500}.quest-journal summary span{display:block;margin:6px 0;font-size:var(--fs-xs);font-weight:400;color:var(--text-secondary)}
 .quest-journal ul{list-style:none;padding:0;line-height:1.8}.quest-journal small{display:block;color:var(--text-secondary)}.quest-journal button{margin-top:12px;padding:9px;border:1px solid var(--border-default)}.quest-journal h4{color:var(--accent)}
 
 /* #31 Confirmations. Routine actions get a light card beside the action panel that scales out of the chosen row or chip, with no scrim, so the scene stays in view. Dangerous and branch-closing actions keep the centered modal. */
 .confirm-pop{position:fixed;z-index:40;top:50%;left:50%;translate:-50% -50%;width:300px;max-width:calc(100vw - 32px);padding:16px 18px 14px;animation:confirm-in 180ms var(--ease-out) both}
 .confirm-pop[data-anchor=panel]{left:auto;translate:none;transform-origin:calc(100% + 12px) var(--origin-y,24px)}.confirm-pop[data-anchor=panel]::after{content:'';position:absolute;right:-6px;top:calc(var(--origin-y,24px) - 5px);width:9px;height:9px;background:var(--paper-1);border:solid var(--paper-edge);border-width:1px 1px 0 0;rotate:45deg}
-.confirm-pop h2{font-size:var(--fs-xl);line-height:1.2;margin:6px 0 4px}.confirm-pop p{margin:0;font-family:var(--font-body);font-size:var(--fs-lg);line-height:1.4;color:var(--text-secondary);text-wrap:pretty}.confirm-pop .check-preview{margin:10px 0 0;padding:8px 10px}.check-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.check-preview .odds{font-weight:600}.check-preview .breakdown{font-size:var(--fs-xs);color:var(--text-secondary);line-height:1.5}
+.confirm-pop h2{font-size:var(--fs-xl);line-height:1.2;margin:6px 0 4px}.confirm-pop p{margin:0;font-family:var(--font-body);font-size:var(--fs-lg);line-height:1.4;color:var(--text-secondary);text-wrap:pretty}.confirm-pop .check-preview{margin:10px 0 0;padding:8px 10px}.check-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.check-preview .odds{font-weight:500}.check-preview .breakdown{font-size:var(--fs-xs);color:var(--text-secondary);line-height:1.5}
 .confirm-pop small{display:block;margin-top:10px;font-size:var(--fs-2xs);line-height:1.5;color:var(--text-muted)}
-.confirm-pop .modal-actions{margin-top:14px;gap:10px}.confirm-pop .modal-actions>button:first-child{font-size:var(--fs-sm);padding:6px 4px}.confirm-pop .primary{width:auto;margin:0;padding:8px 14px;font-size:var(--fs-sm)}
-.confirm-closes{margin:16px 0 4px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--danger) 45%,transparent);border-left:3px solid var(--danger);border-radius:3px;background:color-mix(in srgb,var(--danger) 9%,transparent);font-size:var(--fs-md);line-height:1.55;color:var(--text-primary);text-wrap:pretty}.confirm-closes b{display:block;margin-bottom:4px;font-size:var(--fs-2xs);letter-spacing:var(--tracking-caps);color:var(--danger)}
+.confirm-pop .modal-actions{margin-top:14px;gap:10px}.confirm-pop .modal-actions>button:first-child{font-size:var(--fs-sm);padding:6px 4px}.confirm-pop .primary{width:auto;margin:0;padding:8px 14px;font-size:var(--fs-xl)}
+.confirm-closes{margin:16px 0 4px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--danger) 45%,transparent);border-left:3px solid var(--danger);border-radius:4px;corner-shape:bevel;background:color-mix(in srgb,var(--danger) 9%,transparent);font-size:var(--fs-md);line-height:1.55;color:var(--text-primary);text-wrap:pretty}.confirm-closes b{display:block;margin-bottom:4px;font-size:var(--fs-2xs);letter-spacing:var(--tracking-caps);color:var(--danger)}
 @keyframes confirm-in{from{opacity:0;transform:scale(.96)}}
 /* A choice made from the keyboard (number key, Enter or Space) opens its card at once: no motion on repeated keyboard actions. */
 .confirm-pop[data-instant],.modal[data-instant],.modal-backdrop:has(>[data-instant]){animation:none!important}
@@ -388,7 +392,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .pack-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.pack-actions button{padding:10px;border:1px solid var(--border-strong)}
 
 /* #63 Descent map: a journal page with the way down inked on it. Six depths, top to bottom; the rows switch back so the trail winds down like a stair. Only the modal's own entrance moves, so held arrow keys and reduced motion have nothing to replay. */
-.track-map{display:flex;align-items:center;gap:7px;flex-shrink:0;padding:5px 12px;font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--text-secondary);border:1px solid var(--border-subtle);border-radius:14px}
+.track-map{display:flex;align-items:center;gap:7px;flex-shrink:0;min-height:28px;padding:4px 12px 4px 0;margin-right:18px;font:400 var(--fs-sm)/1.3 var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;letter-spacing:var(--tracking-caps);color:var(--text-secondary);border:0}
 @media(max-width:1500px){.camera-hint{display:none}} /* eight room names and the map button fill the strip; the hint would only be clipped */
 @media(hover:hover) and (pointer:fine){.track-map:hover{color:var(--accent-strong);border-color:var(--accent)}}
 .map-icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}.map-icon circle{fill:currentColor;stroke:none}.track-map .map-icon{width:15px;height:15px}
@@ -397,15 +401,15 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .map-trail{position:absolute;inset:0;pointer-events:none;overflow:visible}.map-trail path{fill:none;stroke-linecap:round;filter:url(#map-ink)}
 .map-trail .taken{stroke:var(--ink-soft);stroke-width:2.2}.map-trail .ahead{stroke:var(--ink-faint);stroke-width:1.4;stroke-dasharray:2 6;opacity:.6}
 .map-depths,.map-rooms,.map-legend{list-style:none;margin:0;padding:0}
-.map-depth{display:grid;grid-template-columns:160px 1fr;gap:34px;align-items:start;min-height:70px}.map-depth.ahead{min-height:48px}
+.map-depth{display:grid;grid-template-columns:232px 1fr;gap:34px;align-items:center;min-height:78px}.map-depth.ahead{min-height:78px}
 /* The label's centre sits on its row of nodes (each 24px tall), even when the chapter name takes two lines (#98). */
-.map-depth-name{display:flex;gap:10px;align-items:center;font-family:var(--font-display);font-size:var(--fs-lg);line-height:1.2;color:var(--text-muted);transform:translateY(calc(12px - 50%))}.map-depth-name span{width:26px;flex-shrink:0;text-align:right;font-size:var(--fs-xl)}
+.map-depth-name{display:flex;gap:10px;align-items:center;font-family:var(--font-display);font-size:var(--fs-xl);line-height:1.2;color:var(--text-muted);transform:none}.map-depth-name span{width:26px;flex-shrink:0;text-align:right;font-size:var(--fs-xl)}
 .map-depth.past .map-depth-name{color:var(--text-secondary)}.map-depth.current .map-depth-name{color:var(--accent-strong)}
 .map-rooms{display:flex}.map-depth.reverse .map-rooms{flex-direction:row-reverse}
 .map-room{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:0 3px;outline:none;cursor:default}
-.map-node{position:relative;width:24px;height:24px;flex-shrink:0;display:grid;place-items:center;border-radius:50%;border:1px solid var(--border-default);background:var(--paper-1);font-size:var(--fs-2xs);color:var(--text-muted);font-variant-numeric:tabular-nums}
+.map-node{position:relative;width:24px;height:24px;flex-shrink:0;display:grid;place-items:center;border-radius:50%;border:1px solid var(--border-default);background:var(--paper-1);font-size:var(--fs-2xs);color:var(--text-muted);font-variant-numeric:lining-nums tabular-nums}
 .map-room.cleared .map-node{border-color:var(--ink-soft);color:var(--ink-soft);background:var(--paper-2)}
-.map-room.current .map-node,.map-legend .here{border:2px solid var(--accent);color:var(--accent-strong);background:color-mix(in srgb,var(--accent) 16%,var(--paper-1));font-weight:600}
+.map-room.current .map-node,.map-legend .here{border:2px solid var(--accent);color:var(--accent-strong);background:color-mix(in srgb,var(--accent) 16%,var(--paper-1));font-weight:500}
 .map-room.current .map-node{width:28px;height:28px;margin:-2px 0;box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 14%,transparent)}
 .map-room.unlit .map-node{width:10px;height:10px;margin:7px 0;border-color:color-mix(in srgb,var(--ink-faint) 45%,transparent);background:var(--paper-0)}
 .map-room-name{font-family:var(--font-body);font-size:var(--fs-xs);line-height:1.15;text-align:center;color:var(--text-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
@@ -414,9 +418,9 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .map-room:focus-visible .map-node{outline:2px solid var(--focus);outline-offset:3px}
 @media(hover:hover) and (pointer:fine){.map-room:hover .map-room-name{color:var(--text-primary)}}
 .map-caption{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-top:4px;padding-top:10px;border-top:1px solid var(--border-subtle);min-height:74px}
-.modal .map-caption small{display:block;letter-spacing:var(--tracking-caps)}.map-caption strong{display:block;font-family:var(--font-display);font-size:var(--fs-2xl);font-weight:500;line-height:1.15}.modal .map-caption p{margin:2px 0 0;font-size:var(--fs-lg)}.map-caption em{color:var(--accent-strong)}
+.modal .map-caption small{display:block;letter-spacing:var(--tracking-caps)}.map-caption strong{display:block;font-family:var(--font-display);font-size:var(--fs-2xl);font-weight:400;line-height:1.15}.modal .map-caption p{margin:2px 0 0;font-size:var(--fs-lg)}.map-caption em{color:var(--accent-strong)}
 .map-legend{display:flex;flex-direction:column;gap:6px;flex-shrink:0;font-size:var(--fs-xs);color:var(--text-muted)}.map-legend li{display:flex;align-items:center;gap:8px}.map-legend .map-node{width:18px;height:18px}.map-legend .map-fork{position:static;width:18px;height:14px}
-@media(max-width:860px){.map-depth{grid-template-columns:118px 1fr;gap:30px}.map-depth-name{font-size:var(--fs-sm)}.map-legend{display:none}}
+@media(max-width:860px){.map-depth{grid-template-columns:118px 1fr;gap:30px}.map-depth-name{font-size:var(--fs-xl)}.map-legend{display:none}}
 
 /* #69 Ending page (ROADMAP D2, NVL full page): the ending on the left, the run's recap and the endings found on the right, on the same dark paper as the old ending card. The page fades in over 600ms, slower than UI on purpose: it is the run's last beat and should read as a page turning, not a panel opening. Its two halves then rise 8px within 300ms. Opacity and transform only; reduced motion keeps just the fades (shared rule below). */
 .ending.ending-page{background:var(--paper-grain),radial-gradient(60% 80% at 30% 35%,var(--torch),transparent 70%),linear-gradient(90deg,color-mix(in srgb,var(--paper-1) 97%,transparent),color-mix(in srgb,var(--paper-0) 94%,transparent));display:grid;grid-template-columns:minmax(0,600px) minmax(300px,380px);gap:clamp(40px,6vw,88px);justify-content:center;align-content:center;align-items:start;text-align:left;overflow:auto;padding:40px clamp(28px,5vw,72px);animation:fade-in 600ms var(--ease-out) both}
@@ -426,20 +430,20 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .ending-page .ending-story p{max-width:none;margin:0 0 16px;font-size:var(--fs-xl);line-height:1.65;color:var(--text-primary)}.ending-page .ending-story p+p{color:var(--text-secondary)}
 .ending-page .ending-actions{margin:30px 0 0}.ending-page .ending-actions>button+button{font-size:var(--fs-md)}
 .ending-recap{padding:4px 0 4px 28px;border-left:1px solid var(--border-subtle)}
-.ending-recap h3{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 6px;font:600 var(--fs-2xs)/1.3 var(--font-ui);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--accent)}.ending-recap h3 small{color:var(--text-muted);font-variant-numeric:tabular-nums}
+.ending-recap h3{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 6px;font:500 var(--fs-2xs)/1.3 var(--font-ui);letter-spacing:var(--tracking-caps);font-family:var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;color:var(--accent)}.ending-recap h3 small{color:var(--text-muted);font-variant-numeric:lining-nums tabular-nums}
 .ending-recap dl{margin:0 0 6px}.recap-row{padding:8px 0;border-bottom:1px solid var(--border-subtle)}.recap-row.recap-rooms{border-bottom:0}
-.recap-row dt{font:600 var(--fs-2xs)/1.3 var(--font-ui);letter-spacing:var(--tracking-caps);text-transform:uppercase;font-variant-numeric:tabular-nums;color:var(--text-muted)}.recap-row dd{margin:3px 0 0;font:var(--fs-lg)/1.4 var(--font-body);color:var(--text-primary)}
+.recap-row dt{font:500 var(--fs-2xs)/1.3 var(--font-ui);letter-spacing:var(--tracking-caps);font-family:var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;font-variant-numeric:lining-nums tabular-nums;color:var(--text-muted)}.recap-row dd{margin:3px 0 0;font:var(--fs-lg)/1.4 var(--font-body);color:var(--text-primary)}
 .ending-path{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:3px}.ending-path li{display:grid;grid-template-columns:20px 1fr auto;gap:8px;align-items:center;font:var(--fs-sm)/1.3 var(--font-body);color:var(--text-secondary)}
-.ending-path-numeral{text-align:right;font-family:var(--font-display);color:var(--text-muted)}.ending-path-rooms{display:flex;gap:4px}.ending-path-rooms i{width:6px;height:6px;border-radius:50%;background:var(--ink-soft)}.ending-path-rooms i.fork{background:var(--accent)} /* the fork rooms, as the descent map marks them */
-.endings-found{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}.endings-found li{min-height:56px;padding:9px 12px;border:1px solid var(--border-subtle);border-radius:3px}
-.endings-found strong{display:block;font:500 var(--fs-lg)/1.2 var(--font-display);color:var(--text-primary)}.endings-found small{display:block;margin-top:3px;font-size:var(--fs-2xs);line-height:1.4;color:var(--text-muted)}
-.endings-found .current{border-color:var(--accent)}.endings-found .current small{letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--accent)}.endings-found .locked{border-style:dashed}.endings-found .locked strong{font-size:var(--fs-2xl);line-height:1;color:var(--text-muted)}
+.ending-path-numeral{text-align:right;font-family:var(--font-ui);color:var(--text-muted)}.ending-path-rooms{display:flex;gap:4px}.ending-path-rooms i{width:6px;height:6px;border-radius:50%;background:var(--ink-soft)}.ending-path-rooms i.fork{background:var(--accent)} /* the fork rooms, as the descent map marks them */
+.endings-found{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}.endings-found li{min-height:56px;padding:9px 12px;border:1px solid var(--border-subtle);border-radius:4px;corner-shape:bevel}
+.endings-found strong{display:block;font:400 var(--fs-xl)/1.2 var(--font-display);color:var(--text-primary)}.endings-found small{display:block;margin-top:3px;font-size:var(--fs-2xs);line-height:1.4;color:var(--text-muted)}
+.endings-found .current{border-color:var(--accent)}.endings-found .current small{letter-spacing:var(--tracking-caps);font-family:var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;color:var(--accent)}.endings-found .locked{border-style:dashed}.endings-found .locked strong{font-size:var(--fs-2xl);line-height:1;color:var(--text-muted)}
 @media(max-width:900px){.ending.ending-page{grid-template-columns:minmax(0,600px);align-content:start}.ending-recap{padding:22px 0 0;border-left:0;border-top:1px solid var(--border-subtle)}}
 /* Credits: one tall page above Settings or the ending, grouped by what the work is. */
 .credits-backdrop{z-index:35}.modal.credits-page{width:min(720px,100%)}
-.credit-section h3{margin:24px 0 4px;font:600 var(--fs-2xs)/1.3 var(--font-ui);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--accent)}
+.credit-section h3{margin:24px 0 4px;font:500 var(--fs-2xs)/1.3 var(--font-ui);letter-spacing:var(--tracking-caps);font-family:var(--font-label);font-variant-caps:all-small-caps;text-transform:lowercase;color:var(--accent)}
 .credit-section ul{list-style:none;margin:0;padding:0}.credit-section li{padding:9px 0;border-bottom:1px solid var(--border-subtle);font-size:var(--fs-md);line-height:1.5;color:var(--text-secondary)}
-.credit-section strong{font:500 var(--fs-lg) var(--font-display);color:var(--text-primary)}.modal .credit-section small{display:block}.credit-section a{position:relative;color:var(--text-secondary);text-underline-offset:3px}
+.credit-section strong{font:400 var(--fs-xl) var(--font-display);color:var(--text-primary)}.modal .credit-section small{display:block}.credit-section a{position:relative;color:var(--text-secondary);text-underline-offset:3px}
 /* Small-text links keep their line; an invisible 5px band above and below makes each one at least 24px tall (#97). */
 .credit-section a,.rules-disclosure a{position:relative}.credit-section a::after,.rules-disclosure a::after{content:'';position:absolute;inset:-5px 0}
 .modal .credit-line{margin:4px 0 0;font-size:var(--fs-md);line-height:1.5}.modal .credit-colophon{margin:26px 0 0;font:var(--fs-xs) var(--font-ui);letter-spacing:var(--tracking-caps);color:var(--text-muted)}
@@ -450,7 +454,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .ending h2{font-size:var(--fs-display);line-height:1;letter-spacing:-1px;margin:22px 0}.ending p{max-width:620px;font-family:var(--font-body);font-size:var(--fs-xl);line-height:1.6;color:var(--text-secondary)}
 .ending-actions{display:flex;gap:22px;align-items:center;margin:22px 0}.ending-actions>button+button{font-size:var(--fs-xs);color:var(--text-secondary)}.ending-actions button{min-height:24px}.ending>small{font-size:var(--fs-md);max-width:400px;line-height:1.6;color:var(--text-muted)}
 .busy,.error{position:fixed;left:50%;transform:translateX(-50%);z-index:50;border:1px solid var(--border-strong);border-radius:5px;background:var(--glass-1);box-shadow:0 10px 30px var(--shadow);display:flex;align-items:center;gap:10px;padding:13px 20px;font-size:var(--fs-xs)}
-.busy{top:88px;white-space:nowrap}.scene-heading .busy{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%)} /* In a room it hangs under the title, out of flow, so it never covers the title or moves the heading rect SceneFraming reads (#98). The heading is centred without a transform, so the toast keeps its z-index above the chapter and ending pages. Narrow windows keep the root toast, above the drawer. */.error{bottom:65px;border-color:var(--danger);background:color-mix(in srgb,var(--danger) 18%,var(--surface-1));max-width:650px;line-height:1.5}.error button{font-size:var(--fs-2xl);margin-left:12px}.error .error-action{font-size:var(--fs-xs);border:1px solid var(--border-strong);border-radius:3px;padding:5px 12px;color:var(--text-primary)}.saved.offline{color:var(--danger)}.saved.offline b{color:var(--danger)}
+.busy{top:88px;white-space:nowrap}.scene-heading .busy{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%)} /* In a room it hangs under the title, out of flow, so it never covers the title or moves the heading rect SceneFraming reads (#98). The heading is centred without a transform, so the toast keeps its z-index above the chapter and ending pages. Narrow windows keep the root toast, above the drawer. */.error{bottom:65px;border-color:var(--danger);background:color-mix(in srgb,var(--danger) 18%,var(--surface-1));max-width:650px;line-height:1.5}.error button{font-size:var(--fs-2xl);margin-left:12px}.error .error-action{font-size:var(--fs-xs);border:1px solid var(--border-strong);border-radius:4px;corner-shape:bevel;padding:5px 12px;color:var(--text-primary)}.saved.offline{color:var(--danger)}.saved.offline b{color:var(--danger)}
 
 /* Shared entrances. Occasional surfaces (modals, the pack) settle in from 97% around their centre; scrims only fade. `scale` is the individual property, so a panel's own centring transform is untouched. */
 @keyframes fade-in{from{opacity:0}}@keyframes panel-in{from{opacity:0;scale:.97}}
@@ -463,12 +467,12 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 /* #98 Windows 1000–1280px wide: both side panels narrow and the party cards go compact (portrait, name with the class under it, health), so the scene keeps at least 55% at 1100×800 and 1280×720. Panel heights leave the lower middle of the stage open. */
 @media(min-width:1000px) and (max-width:1280px){
   .scene-heading{width:55%;max-width:calc(100% - 460px)}
-  .party-panel{left:12px;width:164px;padding:10px 9px;max-height:calc(100dvh - 330px)}.party-panel .panel-label{margin-bottom:9px}
+  .party-panel{left:12px;width:184px;padding:0;max-height:calc(100dvh - 330px)}.party-panel .panel-label{margin-bottom:9px}
   .party-card{padding:6px 7px;gap:8px;margin-bottom:5px}.party-card .portrait{width:34px;height:34px;font-size:var(--fs-xl)}
   .party-info>div:first-child{flex-direction:column;align-items:flex-start;gap:1px}.party-info strong{font-size:var(--fs-sm);line-height:1.25;overflow-wrap:anywhere}.party-info small{font-size:var(--fs-2xs)}
   .health-track{margin:5px 0 4px}.party-stats{gap:6px;font-size:var(--fs-2xs);white-space:nowrap}.party-stats span+span{letter-spacing:normal}
   .companion-chat button{padding:5px 2px;font-size:var(--fs-xs);white-space:nowrap}.pack-row{padding:7px 2px;font-size:var(--fs-xs)}.pack-counts{white-space:nowrap}.pack-counts b{display:block;margin:0 0 2px}.objective{padding-top:8px}.objective p{margin:4px 0}.app:has(.initiative-strip) .objective{display:none} /* a fight is not the time for the room's objective */
-  .actions-panel{right:12px;width:216px;padding:12px;max-height:calc(100dvh - 330px);overflow-y:auto}.actions-panel>*{flex-shrink:0}.actions-panel>.action-list{flex-shrink:1} /* tactical turns are taller than the panel: the list shrinks first, then the panel scrolls */
+  .actions-panel{right:12px;width:224px;padding:14px 10px;max-height:calc(100dvh - 330px);overflow-y:auto}.actions-panel>*{flex-shrink:0}.actions-panel>.action-list{flex-shrink:1} /* tactical turns are taller than the panel: the list shrinks first, then the panel scrolls */
   .chapter-track{height:40px}.ending{bottom:40px} /* the ending and chapter pages meet the shorter strip */
   .story-box{width:min(620px,calc(100% - 465px))}
 }
@@ -479,15 +483,15 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .drawer-toggle{display:none}
 @media(max-width:999px){
   .app{min-width:0;min-height:0}
-  .topbar{height:52px;padding:0 12px}.brand{gap:8px;font-size:var(--fs-lg)}.brand-mark{font-size:var(--fs-2xl)}.top-controls{gap:6px}.saved{display:none}
-  .creation{top:60px;left:12px;width:calc(100% - 24px);max-height:calc(100dvh - 72px)}
+  .topbar{height:52px;padding:0 12px}.brand{gap:8px;font-size:var(--fs-xl)}.top-controls{gap:6px}.saved{display:none}
+  .creation{top:140px;left:20px;width:calc(100% - 40px);max-height:calc(100dvh - 156px)}
   /* The room's name is already on the story box tab and the chapter strip, so the banner gives its row to the party (#110). */
   .scene-heading{display:none}
   .initiative-strip{top:58px;max-width:calc(100% - 24px)}.initiative-strip span{padding:4px 10px}
   /* Party: no outer panel, just compact cards under the top bar: a small portrait, a thin health bar and "30/30" in tabular figures. */
   .party-panel{top:60px;left:8px;width:auto;max-width:calc(100% - 16px);max-height:none;overflow:visible;display:flex;gap:6px;padding:0;background:none;border:0;box-shadow:none}
   .party-panel .panel-label{display:none}
-  .party-card{flex-direction:column;align-items:center;width:52px;padding:4px 3px 3px;gap:2px;margin:0;background:var(--glass-0);border-radius:4px}.party-card .portrait{width:28px;height:28px;font-size:var(--fs-lg)}
+  .party-card{flex-direction:column;align-items:center;width:62px;padding:4px 3px 3px;gap:2px;margin:0;background:var(--glass-0);border-radius:4px}.party-card .portrait{width:28px;height:28px;font-size:var(--fs-lg)}
   .party-info{width:100%}.party-info>div:first-child{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.health-track{height:2px;margin:2px 0}.party-stats{justify-content:center;font-size:var(--fs-2xs);line-height:1.2;color:var(--text-secondary)}.party-stats span+span{display:none}
   .app:has(.initiative-strip) .party-panel{top:108px}
   /* The actions open as a bottom sheet docked on the chapter strip, right above its button. The sheet's height is fixed (it scrolls inside), so the story box can sit on its top edge as a single line. */
@@ -506,7 +510,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
   .story-box,.story-box.turn-playback{left:8px;right:8px;bottom:48px;width:auto;min-width:0;transform:none;padding:10px 14px 4px}
   .chapter-track{left:8px;right:8px;height:40px;gap:10px}.chapter-track>div:not(.current){display:none}
   /* "What will you do?" is the screen's one gold primary while the drawer is closed or open. */
-  .drawer-toggle{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;min-height:30px;padding:4px 14px;border:1px solid var(--gold);border-radius:4px;background:var(--gold);font-size:var(--fs-sm);font-weight:600;color:var(--gold-ink)!important}
+  .drawer-toggle{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;min-height:30px;padding:4px 14px;border:1px solid var(--gold);border-radius:4px;background:var(--primary-fill);font-size:var(--fs-sm);font-weight:500;color:var(--gold-strong)!important}
   .busy{top:124px}.app:has(.initiative-strip) .busy{top:172px}.error{bottom:184px;max-width:calc(100% - 24px)} /* the toast stays above the story box, under the party or the turn order (#98) */
   /* Confirmations use the same bottom sheet: the light card and the strong modal both rise out of the chapter strip. */
   .confirm-pop{top:auto;left:8px;right:8px;bottom:40px;width:auto;max-width:none;max-height:calc(100dvh - 60px);overflow:auto;translate:none;border-radius:8px 8px 0 0;transform-origin:50% 100%;animation-name:sheet-in}
@@ -514,6 +518,26 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
   .modal-backdrop{padding:12px}.modal{padding:24px 20px}.pack-panel{top:12px;max-height:calc(100% - 24px);width:calc(100vw - 24px);padding:18px}
   .ending,.ending.ending-page{inset:52px 0 40px;padding:20px 24px;overflow:auto;justify-content:safe center}.ending h2{font-size:var(--fs-4xl);margin:12px 0}.ending p{font-size:var(--fs-lg)}.ending-actions{flex-wrap:wrap;gap:12px 22px}
 }
-@media(max-width:999px) and (hover:hover) and (pointer:fine){.drawer-toggle:hover:not(:disabled){background:var(--gold-strong);border-color:var(--gold-strong)}}
+@media(max-width:999px) and (hover:hover) and (pointer:fine){.drawer-toggle:hover:not(:disabled){background:var(--primary-hover);border-color:var(--gold-strong)}}
 @keyframes sheet-in{from{opacity:0;transform:translateY(12px)}}
 
+
+/* Title lockup sits over the scene; the creation sheet below keeps every field above its footer. */
+.title-mode .topbar{height:138px;align-items:flex-start;padding:36px 44px 0;background:none}.title-mode .brand{font-size:68px;letter-spacing:-.025em}.title-mode .top-controls{padding-top:8px}
+.title-mode .vignette{background:linear-gradient(90deg,#11100f 26%,rgb(17 16 15 / .94) 33%,rgb(17 16 15 / .3) 68%,transparent 86%),linear-gradient(0deg,rgb(17 16 15 / .65),transparent 24%)}
+.title-intro{position:absolute;top:105px;left:48px;margin:8px 0 0;font:400 var(--fs-lg)/1.4 var(--font-body);color:var(--text-secondary)}
+.objective h2{font:400 var(--fs-xl)/1.2 var(--font-display);margin:0;color:var(--text-primary)}
+.chapter-track>div::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border-default);pointer-events:none}.chapter-track>div:last-of-type::before{right:calc(100% - 7px)}
+.chapter-track>div.passed>span:first-child{background:var(--text-secondary);border-color:var(--text-secondary)}.chapter-track .room-name{background:var(--stone-0);padding-right:8px}.chapter-track>div:not(.current) .room-name{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.name-plate[data-palette],.name-plate[data-enemy]{--speaker:var(--accent)}
+.action.chosen,.action:focus-within{border-left-color:var(--accent);background:var(--accent-wash)}.member-choices button::after{inset:0}
+.primary:active:not(:disabled),.drawer-toggle:active:not(:disabled){background:var(--primary-pressed)}
+.close{min-width:32px;min-height:32px}.saved b{color:var(--text-muted)}
+@media(hover:hover) and (pointer:fine){.action:hover:not(:disabled){border-left-color:var(--accent);background:var(--accent-wash)}.class-card:hover:not(:disabled){border-color:var(--accent)}.party-card:hover:not(:disabled){background:var(--surface-2)}.primary:hover:not(:disabled){background:var(--primary-hover)}}
+@media(max-width:1100px){.title-mode .topbar{padding-left:24px}.title-mode .brand{font-size:60px}.title-intro{left:28px}.creation{left:24px;width:720px;max-width:calc(100% - 48px)}}
+@media(max-width:999px){.title-mode .topbar{height:120px;padding:24px 20px 0}.title-mode .brand{font-size:52px}.title-intro{top:84px;left:24px}.title-mode .world{left:0;width:100%}.creation-body{gap:0 22px;padding:20px}.creation-footer{padding:10px 20px 18px;gap:6px 22px}.chapter-track>div.current{padding-right:8px}.story-box,.story-box.turn-playback{padding-top:18px}.party-card .health-track{height:5px}.party-panel{gap:8px}}
+@media(max-height:800px){.title-mode .topbar{padding-top:22px}.title-mode .brand{font-size:52px}.title-intro{top:82px}.creation-body{padding-top:18px}}
+
+@media(max-width:1100px){.chapter-track{gap:0}}
+
+@media(min-width:1000px) and (max-width:1280px){.title-mode .world{left:37%;width:80%;height:760px;top:0;bottom:auto}}

@@ -111,7 +111,7 @@ function StoryPages({storyId,save,dialogue,reduced,autoAdvance,active,bark,onBac
   <div className="story-foot">
    <span className="story-tags">{current.tags.map((t,i)=><MechTag key={i} parts={t}/>)}</span>
    <span className="story-controls">
-    {pages.length>1&&<span className="page-indicator" aria-label={`Page ${page+1} of ${pages.length}`}>{page+1} / {pages.length}</span>}
+    {pages.length>1&&<span className="page-indicator" role="status" aria-label={`Page ${page+1} of ${pages.length}`}>{page+1} / {pages.length}</span>}
     {dialogue&&<button className="story-link" disabled={!voice.speaking&&!voice.ready} title={!voice.ready?'Choose an AI mode in Settings to hear voices':undefined} onClick={voice.onToggle}>{voice.speaking?'■ Stop':voice.ready?'▷ Listen':'Voice unavailable'}</button>}
     {narrate&&<button className="story-link" onClick={narrate}>Let the DM narrate ✧</button>}
     {holding&&!read&&<button className="story-link" onClick={skip} title="Turn to the last page" aria-keyshortcuts="Escape">Skip <kbd>Esc</kbd></button>}

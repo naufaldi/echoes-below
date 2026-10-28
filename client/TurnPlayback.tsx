@@ -61,7 +61,7 @@ export function TurnPlayback({before,after,reduced,autoAdvance,barks,onFrame,onR
   <div className="story-foot">
    <span className="story-tags">{roll&&<strong className={'roll-badge'+(revealed?' revealed':'')} aria-label={revealed?`Rolled ${roll.kept}`:'Rolling'}>{revealed?roll.kept:'?'}</strong>}{order.length>0&&<span className="mech-tag story-tag">Initiative · {order.length} combatants</span>}{tags.map((t,i)=><MechTag key={i} parts={t}/>)}</span>
    <span className="story-controls">
-    <span className="page-indicator" aria-label={`Step ${step+1} of ${steps.length}`}>{step+1} / {steps.length}</span>
+    <span className="page-indicator" role="status" aria-label={`Step ${step+1} of ${steps.length}`}>{step+1} / {steps.length}</span>
     <button className="story-link" onClick={()=>done.current()} title="Skip ahead. Every roll stands as it fell." aria-keyshortcuts="Escape">Skip <kbd>Esc</kbd></button>
     <button className="story-next" onClick={advance}>Go on <span aria-hidden="true">›</span></button>
    </span>
