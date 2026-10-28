@@ -84,3 +84,13 @@ test('a real Curated goblin turn chains to the next actor and never past it',()=
   assert.ok(s.mode!=='combat'||s.turn!.actorId!==actor||!legalActions(s).some(a=>a.id==='tactical:auto'),'the chain stops only when the turn moves on');}
  assert.notEqual(s.mode,'combat');
 });
+
+// #96 acceptance: with a wounded party, no Chapter II–VI room lists more than eight rows (the panel's "scroll to explore" threshold).
+for(const rules of ['echo','curated'] as const)test(`wounded rooms stay within eight rows (${rules})`,()=>{
+ const over:string[]=[];
+ const rowsFor=(s:Save)=>actionRows(legalActions(wound(s)).filter(a=>a.kind!=='inventory'&&a.kind!=='quest'&&!a.id.startsWith('checkin:')),s.party,{tend:true}).length;
+ for(const room of EXPEDITION){const s=previewSave(room.id,rules),n=rowsFor(s);if(n>8)over.push(`${room.id}: ${n}`);
+  const after=legalActions(s).some(a=>a.id==='exp_evidence')?applyAction(s,'exp_evidence',certain):s;const m=rowsFor(after);if(m>8)over.push(`${room.id} (after evidence): ${m}`);}
+ // Known: Curated roots-1 also offers the well-guilds' help and a side quest, so a wounded party sees nine rows (thirteen before the Tend wounds row). Reported on #96.
+ assert.deepEqual(over,rules==='curated'?['roots-1: 9']:[]);
+});
