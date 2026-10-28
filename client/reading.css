@@ -11,9 +11,9 @@
 :root[data-text-size] .actions-panel .member-choices button{font-size:calc(var(--fs-xs) * var(--read-scale))}
 :root[data-text-size] .confirm-pop h2,:root[data-text-size] .modal.confirm h2{font-size:calc(var(--fs-xl) * var(--read-scale))}
 :root[data-text-size] .confirm-pop p,:root[data-text-size] .modal.confirm p{font-size:calc(var(--fs-lg) * var(--read-scale))}
-/* Narrow windows: the action drawer and the error toast clear the taller box. */
+/* Narrow windows: the error toast clears the taller box. The action drawer docks on the chapter strip and the box is one line while it is open, so the drawer needs nothing here. */
 @media(max-width:999px){
-  :root[data-text-size] .app:not(:has(.story-box.combat)) .actions-panel{bottom:calc(184px + var(--story-grow))}
   :root[data-text-size] .app:not(:has(.story-box.combat)) .error{bottom:calc(184px + var(--story-grow))}
-  :root[data-text-size] .app:has(.story-box.combat) .actions-panel,:root[data-text-size] .app:has(.story-box.combat) .error{bottom:calc(126px + var(--combat-grow))}
+  :root[data-text-size] .app:has(.story-box.combat) .error{bottom:calc(126px + var(--combat-grow))}
 }
+

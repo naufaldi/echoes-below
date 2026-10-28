@@ -1,10 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
 /* Design tokens: "an adventurer's journal under torchlight" (ROADMAP D9). Colors and sizes below come from here; node scripts/check-contrast.mjs measures every pairing. */
 :root{
-  /* Stone: HUD chrome (top bar, party, actions, chapter track, chips). Neutral iron, quieter than the story. */
-  --stone-0:#0b0c0e; /* app background, wells, inputs */
-  --stone-1:#16181b; /* panels and cards */
-  --stone-2:#22252a; /* raised: hover, current, selected */
+  /* Stone: HUD chrome (top bar, party, actions, chapter track, chips). The dungeon is the stage, so chrome takes the scene's own green-black, quieter than the story; each chapter re-tints it from its mood background (see "Chapter accents"). */
+  --stone-0:#0a0e0d; /* app background, wells, inputs */
+  --stone-1:#141a18; /* panels and cards */
+  --stone-2:#1f2724; /* raised: hover, current, selected */
+  /* Mist: the HUD's quiet accent (labels, focus, selected), the scene's ambient light washed toward grey. */
+  --chapter-mist:#b3c2b6;
+  --chapter-mist-strong:#d5ded7;
+  --chapter-mist-ink:#0d1210;
   /* Paper: story surfaces (story panel, playback, modals, journal, pack, ending). Warm brown-black, ink-coloured text. */
   --paper-0:#120c08; /* wells and inputs on a page */
   --paper-1:#1d150f; /* the page */
@@ -16,6 +20,10 @@
   --ink:#efe3cb; /* text on paper */
   --ink-soft:#cdba98;
   --ink-faint:#ac9a7c;
+  /* Ink accent: eyebrows, headings and selected rows on story surfaces. Warm and unsaturated, so the page never competes with gold. */
+  --ink-accent:#d9c29b;
+  --ink-accent-strong:#f2e6cf;
+  --ink-accent-ink:#1d150f;
   /* Active surface set. HUD uses stone; story surfaces swap these to paper (see "Story surfaces"). */
   --surface-0:var(--stone-0);
   --surface-1:var(--stone-1);
@@ -29,15 +37,17 @@
   /* Text on stone */
   --text-primary:#e6e3dc;
   --text-secondary:#b9b6ae;
-  --text-muted:#9a978f;
-  /* Chapter accent: a neutral warm iron on the title screen; each chapter overrides it from its mood (see "Chapter accents"). */
+  --text-muted:#a6a39b;
+  /* Chapter accent: where you are in the descent. Only the chapter's own pages and the current room on the chapter strip wear it; a neutral warm iron on the title screen, and each chapter overrides it from its mood (see "Chapter accents"). */
   --chapter-accent:#c4baa8;
   --chapter-accent-strong:#e2d9c8; /* emphasis, current item, hover */
   --chapter-accent-ink:#16130e; /* text on an accent fill */
-  /* Gold: only dice, natural 20s and the primary call to action. */
+  /* Gold: the dice decide. Only what you choose or roll: dice, natural 20s, an action under the pointer or chosen, Roll, and the one primary button. */
   --gold:#ddb46a;
   --gold-strong:#f3cd82;
   --gold-ink:#1b1408; /* text on a gold fill */
+  --gold-tint:color-mix(in srgb,var(--gold) 11%,transparent); /* an action under the pointer or chosen */
+  --gold-edge:color-mix(in srgb,var(--gold) 55%,transparent);
   /* Character name plates take the speaker's palette colour. */
   --palette-ember:#eba27e;
   --palette-moss:#a9c98f;
@@ -73,11 +83,15 @@
   --tracking-wide:.2em; /* eyebrows and top bar */
   color-scheme:dark;font-family:var(--font-ui);color:var(--text-primary);background:var(--surface-0);font-synthesis:none;font-size:var(--fs-md);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale
 }
-/* Derived tokens. Custom properties resolve where they are declared, so anything built from the chapter accent or the surface set is re-declared on every element that changes either. */
+/* Colour roles (#110). Each surface picks its accent: HUD chrome the chapter's mist, story surfaces the ink accent, chapter pages the chapter accent. */
+:root,.app{--role-accent:var(--chapter-mist);--role-accent-strong:var(--chapter-mist-strong);--role-accent-ink:var(--chapter-mist-ink)}
+.narration-panel,.turn-playback,.modal,.pack-panel,.confirm-pop,.ending{--role-accent:var(--ink-accent);--role-accent-strong:var(--ink-accent-strong);--role-accent-ink:var(--ink-accent-ink)}
+.ending.chapter-page{--role-accent:var(--chapter-accent);--role-accent-strong:var(--chapter-accent-strong);--role-accent-ink:var(--chapter-accent-ink)}
+/* Derived tokens. Custom properties resolve where they are declared, so anything built from the role accent or the surface set is re-declared on every element that changes either. */
 :root,.app,.narration-panel,.turn-playback,.modal,.pack-panel,.confirm-pop,.ending{
-  --accent:var(--chapter-accent);
-  --accent-strong:var(--chapter-accent-strong);
-  --accent-ink:var(--chapter-accent-ink);
+  --accent:var(--role-accent);
+  --accent-strong:var(--role-accent-strong);
+  --accent-ink:var(--role-accent-ink);
   --accent-wash:color-mix(in srgb,var(--accent) 8%,transparent); /* faint accent fill */
   --accent-tint:color-mix(in srgb,var(--accent) 20%,transparent); /* hover and selected accent fill */
   --border-strong:color-mix(in srgb,var(--accent) 42%,transparent); /* accent edges: current, chosen, story pages */
@@ -86,13 +100,16 @@
   --glass-1:color-mix(in srgb,var(--surface-1) 94%,transparent); /* surface-1 floating over the 3D scene */
   --scrim:color-mix(in srgb,var(--surface-0) 85%,transparent); /* behind modals */
 }
-/* Chapter accents, taken from each chapter's mood (ChapterAtmosphere chapterMood). App.tsx sets data-chapter from the current scene. */
-.app[data-chapter=relay]{--chapter-accent:#86c4b0;--chapter-accent-strong:#b0dfcf;--chapter-accent-ink:#0b1a15} /* I · The Bell Beneath Briarwatch: verdigris bell bronze in the rain */
-.app[data-chapter=archive]{--chapter-accent:#8bbbe0;--chapter-accent-strong:#b6d5ef;--chapter-accent-ink:#0a1620} /* II · The Drowned Archive: tide water */
-.app[data-chapter=market]{--chapter-accent:#ef9f66;--chapter-accent-strong:#f8c196;--chapter-accent-ink:#1f1006} /* III · The Ash Market: ember */
-.app[data-chapter=roots]{--chapter-accent:#bccb7a;--chapter-accent-strong:#d7e2a3;--chapter-accent-ink:#151a08} /* IV · The Rootbound Prison: lichen and sap */
-.app[data-chapter=choir]{--chapter-accent:#adb6f2;--chapter-accent-strong:#ccd2f9;--chapter-accent-ink:#10132a} /* V · The Hollow Choir: moonlit stone */
-.app[data-chapter=depth]{--chapter-accent:#cfa0e6;--chapter-accent-strong:#e4c6f2;--chapter-accent-ink:#1b0f22} /* VI · The Last Descent: amethyst dark */
+/* Chapter tokens, taken from each chapter's mood (ChapterAtmosphere chapterMood): the accent from its signature colour, the stones from its background, the mist from its ambient light. App.tsx sets data-chapter from the current scene; a chapter page sets the chapter it belongs to, so a recap keeps the chapter just finished. */
+.app[data-chapter=relay],.chapter-page[data-chapter=relay]{--chapter-accent:#86c4b0;--chapter-accent-strong:#b0dfcf;--chapter-accent-ink:#0b1a15;--stone-0:#0a0e0d;--stone-1:#141a18;--stone-2:#1f2724;--chapter-mist:#b3c2b6;--chapter-mist-strong:#d5ded7;--chapter-mist-ink:#0d1210} /* I · The Bell Beneath Briarwatch: verdigris bell bronze in the rain */
+.app[data-chapter=archive],.chapter-page[data-chapter=archive]{--chapter-accent:#8bbbe0;--chapter-accent-strong:#b6d5ef;--chapter-accent-ink:#0a1620;--stone-0:#0a0e10;--stone-1:#131a1d;--stone-2:#1e272b;--chapter-mist:#b6c3c4;--chapter-mist-strong:#d8e0e0;--chapter-mist-ink:#0c1112} /* II · The Drowned Archive: tide water */
+.app[data-chapter=market],.chapter-page[data-chapter=market]{--chapter-accent:#ef9f66;--chapter-accent-strong:#f8c196;--chapter-accent-ink:#1f1006;--stone-0:#0f0d0c;--stone-1:#1b1716;--stone-2:#27221f;--chapter-mist:#cdc0b0;--chapter-mist-strong:#e6ddd1;--chapter-mist-ink:#14100d} /* III · The Ash Market: ember */
+.app[data-chapter=roots],.chapter-page[data-chapter=roots]{--chapter-accent:#bccb7a;--chapter-accent-strong:#d7e2a3;--chapter-accent-ink:#151a08;--stone-0:#0a0e0a;--stone-1:#141a15;--stone-2:#1f281f;--chapter-mist:#bac6a8;--chapter-mist-strong:#dae2cd;--chapter-mist-ink:#0e120b} /* IV · The Rootbound Prison: lichen and sap */
+.app[data-chapter=choir],.chapter-page[data-chapter=choir]{--chapter-accent:#adb6f2;--chapter-accent-strong:#ccd2f9;--chapter-accent-ink:#10132a;--stone-0:#0b0c11;--stone-1:#15171f;--stone-2:#20232d;--chapter-mist:#bcc1d0;--chapter-mist-strong:#dcdfe8;--chapter-mist-ink:#0e0f15} /* V · The Hollow Choir: moonlit stone */
+.app[data-chapter=depth],.chapter-page[data-chapter=depth]{--chapter-accent:#cfa0e6;--chapter-accent-strong:#e4c6f2;--chapter-accent-ink:#1b0f22;--stone-0:#0e0b0f;--stone-1:#19141b;--stone-2:#251e27;--chapter-mist:#c3bacb;--chapter-mist-strong:#e0d9e5;--chapter-mist-ink:#120e13} /* VI · The Last Descent: amethyst dark */
+/* The chapter's stones become the HUD's surfaces, and its edges tint toward the mist instead of neutral iron. Story surfaces swap all of these back to paper (below). */
+.app{--surface-0:var(--stone-0);--surface-1:var(--stone-1);--surface-2:var(--stone-2);--border-subtle:color-mix(in srgb,var(--chapter-mist) 15%,transparent);--border-default:color-mix(in srgb,var(--chapter-mist) 27%,transparent)}
+
 
 /* Base elements and type polish: a floor for unstyled <small>, even heading wraps, no orphans in prose, steady numbers. */
 *{box-sizing:border-box}body{margin:0}
@@ -116,7 +133,7 @@ input[type=radio]::before{content:'';width:8px;height:8px;border-radius:50%;back
 input[type=radio]:checked,input[type=checkbox]:checked{border-color:var(--accent)}input[type=checkbox]:checked{background:var(--accent)}input[type=radio]:checked::before,input[type=checkbox]:checked::before{opacity:1}
 input[type=radio]:disabled,input[type=checkbox]:disabled,input[type=range]:disabled{opacity:.45;cursor:not-allowed}
 input[type=range]{accent-color:var(--accent);cursor:pointer}
-@media(hover:hover) and (pointer:fine){button:hover:not(:disabled){color:var(--accent-strong)}.primary:hover:not(:disabled){background:var(--gold-strong);border-color:var(--gold-strong)}.action:hover:not(:disabled){background:var(--accent-tint);border-color:var(--border-strong)}.member-choices button:hover:not(:disabled){border-color:var(--accent-strong);background:var(--surface-2)}input[type=radio]:hover:not(:disabled,:checked),input[type=checkbox]:hover:not(:disabled,:checked),select:hover:not(:disabled){border-color:var(--accent)}.choice-cards label:not(.unavailable):hover{border-color:var(--border-strong)}.narration-link:hover:not(:disabled){color:var(--text-primary)}.managed-world-label.dim:hover{color:var(--text-primary);background:color-mix(in srgb,var(--surface-0) 72%,transparent)}}
+@media(hover:hover) and (pointer:fine){button:hover:not(:disabled){color:var(--accent-strong)}.primary:hover:not(:disabled){background:var(--gold-strong);border-color:var(--gold-strong)}.action:hover:not(:disabled){background:var(--gold-tint);border-color:var(--gold-edge)}.member-choices button:hover:not(:disabled){border-color:var(--gold);background:var(--surface-2)}input[type=radio]:hover:not(:disabled,:checked),input[type=checkbox]:hover:not(:disabled,:checked),select:hover:not(:disabled){border-color:var(--accent)}.choice-cards label:not(.unavailable):hover{border-color:var(--border-strong)}.narration-link:hover:not(:disabled){color:var(--text-primary)}.managed-world-label.dim:hover{color:var(--text-primary);background:color-mix(in srgb,var(--surface-0) 72%,transparent)}}
 .primary{background:var(--gold);color:var(--gold-ink)!important;padding:12px 18px;border:1px solid var(--gold);border-radius:3px;font-weight:600;font-size:var(--fs-lg)}
 .eyebrow{font-size:var(--fs-xs);letter-spacing:var(--tracking-wide);color:var(--accent);font-weight:600}.eyebrow>span{display:inline-block;width:22px;height:1px;background:var(--accent);vertical-align:middle;margin-right:10px}
 .field-label{font-size:var(--fs-xs);color:var(--text-secondary);letter-spacing:var(--tracking-caps);font-weight:600;display:block}
@@ -131,7 +148,8 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .voice-narrator,.voice-character{font-family:var(--font-body);font-size:var(--fs-narration);line-height:1.4;color:var(--text-primary)}
 .name-plate{--speaker:var(--accent);display:inline-flex;align-items:center;gap:6px;width:fit-content;padding:2px 10px 3px 11px;border-radius:2px;background:color-mix(in srgb,var(--speaker) 14%,transparent);box-shadow:inset 2px 0 0 var(--speaker),inset 0 0 0 1px color-mix(in srgb,var(--speaker) 38%,transparent);font:600 var(--fs-lg)/1.25 var(--font-display);letter-spacing:.03em;color:var(--speaker)}
 .name-plate[data-palette=ember]{--speaker:var(--palette-ember)}.name-plate[data-palette=moss]{--speaker:var(--palette-moss)}.name-plate[data-palette=moon]{--speaker:var(--palette-moon)}
-.mech-tag,.action small{font:600 var(--fs-2xs)/1.3 var(--font-ui);text-transform:uppercase;letter-spacing:var(--tracking-caps);font-variant-numeric:tabular-nums;color:var(--text-muted)}
+/* Small caps are for section headings only (#110); a check's DC, odds and risk read as plain small text, first letter up. */
+.mech-tag,.action small{font:500 var(--fs-xs)/1.35 var(--font-ui);font-variant-numeric:tabular-nums;color:var(--text-muted)}.mech-tag::first-letter,.action small::first-letter{text-transform:uppercase}.mech-tag{display:inline-block}
 
 /* App shell: the 3D world fills the window; Drei HTML labels stay beneath the application overlays. */
 .app{width:100%;height:100dvh;min-height:680px;position:relative;overflow:hidden}
@@ -203,9 +221,9 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .party-panel .panel-label{flex-direction:column;align-items:stretch;gap:3px}.party-panel .panel-label>span{font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);text-align:right;white-space:nowrap}
 .party-card{display:flex;width:100%;padding:10px 9px;gap:10px;margin:0 0 7px;background:linear-gradient(120deg,var(--glass-1),var(--glass-0));border:1px solid var(--border-subtle);border-radius:3px;text-align:left}.party-card.active{border-color:var(--accent)}.party-card.downed{filter:grayscale(1);opacity:.65}
 .taking-turn{border-color:var(--accent-strong)!important;box-shadow:0 0 20px var(--accent-tint)}
-.party-info{flex:1;min-width:0}.party-info>div:first-child{display:flex;justify-content:space-between;align-items:center}.party-info strong{font-size:var(--fs-md);font-weight:500}.party-info small{font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);color:var(--text-muted)}
+.party-info{flex:1;min-width:0}.party-info>div:first-child{display:flex;justify-content:space-between;align-items:center}.party-info strong{font-size:var(--fs-md);font-weight:500}.party-info small{font-size:var(--fs-xs);color:var(--text-muted)}
 .health-track{height:3px;background:var(--surface-0);margin:9px 0 6px}.health-track i{display:block;height:100%;background:var(--ally);transform-origin:left;transition:transform 250ms var(--ease-out)} /* App.tsx sets scaleX(hp share) */
-.party-stats{font-size:var(--fs-xs);color:var(--text-muted);display:flex;justify-content:space-between}.party-stats span+span{color:var(--accent);letter-spacing:.15em}
+.party-stats{font-size:var(--fs-xs);color:var(--text-muted);display:flex;justify-content:space-between}.party-stats span+span{color:var(--accent)}
 .companion-chat{padding:4px 0}.companion-chat button{display:flex;justify-content:space-between;width:100%;font-size:var(--fs-md);color:var(--text-secondary);padding:7px 9px}.companion-chat span{color:var(--accent)}
 .pack-row{display:flex;flex-direction:column;gap:4px;width:100%;padding:10px 2px;border-top:1px solid var(--border-subtle);text-align:left;font-size:var(--fs-sm);color:var(--text-secondary)}.pack-counts b{margin-right:8px;font-size:var(--fs-xs);font-weight:500;letter-spacing:var(--tracking-caps);color:var(--text-muted)}.pack-open-label{color:var(--accent)}
 .objective{display:flex;gap:9px;padding:12px 2px 2px;border-top:1px solid var(--border-subtle)}.objective p{font-size:var(--fs-xs);line-height:1.6;color:var(--text-secondary);margin:8px 0}.gold-diamond{color:var(--accent);font-size:var(--fs-xl);line-height:.7}
@@ -228,7 +246,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 /* Keyboard focus reveals at once: no motion on keyboard-triggered changes. */
 .action:focus-visible .key-cap,.action:focus-within .key-cap,.action:focus-visible .odds-pct,.action:focus-within .odds-pct{opacity:1;transition:none}
 [data-band=likely]{--odds:var(--ally)}[data-band=risky]{--odds:var(--text-primary)}[data-band=long]{--odds:var(--enemy)}
-.odds-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin-top:4px;font:600 var(--fs-2xs)/1.3 var(--font-ui);text-transform:uppercase;letter-spacing:var(--tracking-caps)}.odds-who{color:var(--text-secondary)}
+.odds-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin-top:3px;font:500 var(--fs-xs)/1.35 var(--font-ui)}.odds-who{color:var(--text-secondary)}.odds{font-weight:600}
 .odds{color:var(--odds);font-variant-numeric:tabular-nums}.odds-pct{font-weight:inherit;opacity:0;transition:opacity var(--press-duration) var(--ease-out)}
 .action:hover .odds-pct,.odds.always .odds-pct{opacity:1}
 .odds-dot{display:inline-block;width:6px;height:6px;margin-right:6px;border-radius:50%;vertical-align:1px;background:var(--odds)}
@@ -236,7 +254,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 /* Compact chips keep their look; an invisible 4px band above and below makes each one at least 24px tall (#97), and wrapped rows sit 8px apart so the bands never overlap. */
 .member-choices button{position:relative}.member-choices button::after{content:'';position:absolute;z-index:1;inset:-4px 0}
 .member-action{cursor:default}.member-action>span:nth-child(2){flex:1;min-width:0}.member-choices{display:flex;flex-wrap:wrap;gap:8px 3px;margin-top:2px}.member-choices button{padding:4px 10px;border:1px solid var(--border-default);border-radius:12px;background:var(--surface-0);color:var(--text-primary);font-size:var(--fs-xs)}.member-choices button:focus-visible{border-color:var(--accent-strong);background:var(--surface-2)}
-.action.chosen,.member-choices button.chosen{border-color:var(--accent);background:var(--accent-tint)}
+.action.chosen,.member-choices button.chosen{border-color:var(--gold);background:var(--gold-tint)}
 .focus-empty{font-size:var(--fs-xs);line-height:1.5;color:var(--text-muted);margin:10px 0;padding:10px;border:1px solid var(--border-subtle);border-radius:5px;background:var(--accent-wash)}.focus-empty button{display:block;margin-top:7px;color:var(--accent-strong);text-decoration:underline;text-underline-offset:3px}
 .custom-intent{margin-top:15px;border-top:1px solid var(--border-subtle);padding-top:13px}.custom-intent>div{display:flex;justify-content:space-between}
 .custom-intent textarea{width:100%;font-size:var(--fs-lg);margin-top:7px;min-height:56px;max-height:90px}
@@ -274,9 +292,9 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .story-box.speaking>.story-plate{left:96px}
 .story-box .story-plate{background:color-mix(in srgb,var(--speaker) 16%,var(--paper-1))}
 .name-plate[data-enemy]{--speaker:var(--enemy)}
-.read-aloud-tab{padding:3px 11px;border-radius:2px;background:var(--paper-2);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 45%,transparent);font:600 var(--fs-2xs)/1.3 var(--font-ui);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--gold)}
-/* Read-aloud (D&D boxed text): the room's description in a shaded well with a gold rule, then the box collapses to an ordinary page. */
-.story-box.boxed .story-body{padding:2px 0 0 12px;box-shadow:inset 2px 0 0 color-mix(in srgb,var(--gold) 70%,transparent);background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 7%,transparent),transparent 70%)}
+.read-aloud-tab{padding:3px 11px;border-radius:2px;background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--border-strong);font:600 var(--fs-2xs)/1.3 var(--font-ui);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--accent)}
+/* Read-aloud (D&D boxed text): the room's description in a shaded well with an ink rule, then the box collapses to an ordinary page. */
+.story-box.boxed .story-body{padding:2px 0 0 12px;box-shadow:inset 2px 0 0 color-mix(in srgb,var(--accent) 60%,transparent);background:linear-gradient(90deg,var(--accent-wash),transparent 70%)}
 .story-foot{display:flex;align-items:center;gap:12px;min-height:24px} /* 24px targets (WCAG 2.5.8, #97); the 4px comes from the box's bottom padding, so the page keeps its three lines. A tag row too long for one line wraps (#98); the page then scrolls rather than clipping. */
 .story-tags{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px}
 .story-tag>span{white-space:nowrap}.story-tag .mark-high{color:var(--gold-strong)}.story-tag .mark-low{color:var(--danger)}
@@ -303,17 +321,20 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 /* Initiative strip: the combat turn order across the top of the stage. */
 .initiative-strip{position:absolute;top:80px;left:50%;transform:translateX(-50%);display:flex;gap:6px;max-width:calc(100% - 560px);overflow:auto;z-index:10}
 .initiative-strip span{background:var(--glass-0);border:1px solid var(--border-default);padding:8px 14px;font-size:var(--fs-md);white-space:nowrap}
-.initiative-strip small{display:block;font-size:var(--fs-xs);letter-spacing:var(--tracking-caps);color:var(--text-muted);margin-top:3px}
+.initiative-strip small{display:block;font-size:var(--fs-xs);color:var(--text-muted);margin-top:2px}
 .initiative-strip .current{border-color:var(--accent-strong);background:color-mix(in srgb,var(--accent) 22%,var(--surface-1))}.initiative-strip .current small{color:var(--accent-strong)}.initiative-strip .fallen{color:var(--text-muted);text-decoration:line-through}
 @media(max-width:1000px){.initiative-strip{max-width:calc(100% - 420px)}}
 
 /* Chapter track: the rooms of the current chapter along the bottom edge. */
 .chapter-track{position:absolute;bottom:0;height:49px;left:26px;right:26px;background:var(--glass-0);border-top:1px solid var(--border-subtle);display:flex;align-items:center;gap:22px;overflow-x:auto;white-space:nowrap}
 .chapter-track>div{font-size:var(--fs-xs);color:var(--text-muted);display:flex;gap:7px;align-items:center;flex-shrink:0}
-.chapter-track>div span{font-size:var(--fs-xs);border:1px solid var(--border-subtle);border-radius:50%;width:22px;height:22px;display:grid;place-items:center}
-.chapter-track>div.current{color:var(--accent)}.chapter-track>div.current span{border-color:var(--accent)}.chapter-track>div.passed{color:var(--text-secondary)}
+.chapter-track>div>span:first-child{font-size:var(--fs-xs);border:1px solid var(--border-subtle);border-radius:50%;width:22px;height:22px;display:grid;place-items:center}
+/* The current room is the one place the HUD wears the chapter accent (#110). */
+.chapter-track>div.current{color:var(--chapter-accent)}.chapter-track>div.current>span:first-child{border-color:var(--chapter-accent)}.chapter-track>div.passed{color:var(--text-secondary)}
 .camera-hint{margin-left:auto;font-size:var(--fs-2xs);color:var(--text-muted);letter-spacing:var(--tracking-caps)}
 @media(max-width:1100px){.chapter-track{gap:12px}.camera-hint{display:none}}
+/* Up to 1280px a chapter's eight room names cannot all fit (#110; Chapter I's six do): the rooms around you keep their numbers and the current room keeps its name. Hidden names stay in the accessible text. */
+@media(max-width:1280px){.chapter-track:has(>div:nth-of-type(7))>div:not(.current) .room-name{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.chapter-track:has(>div:nth-of-type(7))>div:not(.current){gap:0}}
 @media(max-width:760px){.chapter-track{gap:9px}}
 
 /* World labels: names pinned to the 3D scene, with leader lines when they are pushed off their anchor. */
@@ -329,12 +350,12 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .scene-failure{position:absolute;top:40%;left:40%;max-width:250px;background:var(--surface-1);padding:20px;line-height:1.5}
 
 /* Modals: settings, journal, and the strong confirmation. */
-.modal-backdrop{position:fixed;inset:0;background:var(--scrim);backdrop-filter:blur(7px);z-index:30;display:grid;place-items:center;padding:24px;animation:fade-in var(--enter-duration) var(--ease-out) both}
+.modal-backdrop{position:fixed;inset:0;background:var(--scrim);z-index:30;display:grid;place-items:center;padding:24px;animation:fade-in var(--enter-duration) var(--ease-out) both}
 .modal{position:relative;width:460px;max-width:100%;max-height:90dvh;overflow:auto;padding:35px;animation:panel-in var(--enter-duration) var(--ease-out) both}.modal:has(.key-settings){max-height:90vh}
 .modal p{font-family:var(--font-body);font-size:var(--fs-narration);line-height:1.6;color:var(--text-secondary)}.modal small{font-size:var(--fs-xs);line-height:1.6;color:var(--text-muted)}
 .modal-actions{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:28px}.modal-actions>button:first-child{font-size:var(--fs-md);color:var(--text-muted)}
 .close{position:absolute;right:12px;top:10px;font-size:var(--fs-2xl);color:var(--text-secondary)}
-.check-preview{margin:20px 0;padding:13px;background:var(--accent-wash);border:1px solid var(--border-subtle);font-size:var(--fs-2xs);letter-spacing:var(--tracking-caps);color:var(--accent);display:flex;flex-direction:column;gap:6px}
+.check-preview{margin:20px 0;padding:13px;background:var(--accent-wash);border:1px solid var(--border-subtle);font-size:var(--fs-sm);color:var(--text-primary);display:flex;flex-direction:column;gap:4px}
 .toggle{display:flex;justify-content:space-between;gap:15px;align-items:center;padding:18px 0;border-bottom:1px solid var(--border-subtle);font-size:var(--fs-lg)}.toggle small{display:block;margin-top:4px}.toggle select{font-size:var(--fs-2xs)}.toggle input[type=range]{width:120px;height:24px}.toggle input[type=checkbox]{width:24px;height:24px}.playtest-summary button{min-height:24px}
 .key-settings{border:1px solid var(--border-default);padding:16px;margin:16px 0}.key-settings label{display:block;font-size:var(--fs-lg);margin-bottom:8px}.key-settings input{width:100%;margin-bottom:10px;font-size:var(--fs-md)}.key-settings>div{display:flex;gap:12px}.key-settings p{font-size:var(--fs-md);line-height:1.5;color:var(--text-secondary)}
 .key-status{color:var(--accent-strong);font-size:var(--fs-md);line-height:1.5;min-height:22px}
@@ -349,7 +370,8 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 /* #31 Confirmations. Routine actions get a light card beside the action panel that scales out of the chosen row or chip, with no scrim, so the scene stays in view. Dangerous and branch-closing actions keep the centered modal. */
 .confirm-pop{position:fixed;z-index:40;top:50%;left:50%;translate:-50% -50%;width:300px;max-width:calc(100vw - 32px);padding:16px 18px 14px;animation:confirm-in 180ms var(--ease-out) both}
 .confirm-pop[data-anchor=panel]{left:auto;translate:none;transform-origin:calc(100% + 12px) var(--origin-y,24px)}.confirm-pop[data-anchor=panel]::after{content:'';position:absolute;right:-6px;top:calc(var(--origin-y,24px) - 5px);width:9px;height:9px;background:var(--paper-1);border:solid var(--paper-edge);border-width:1px 1px 0 0;rotate:45deg}
-.confirm-pop h2{font-size:var(--fs-xl);line-height:1.2;margin:6px 0 4px}.confirm-pop p{margin:0;font-family:var(--font-body);font-size:var(--fs-lg);line-height:1.4;color:var(--text-secondary);text-wrap:pretty}.confirm-pop .check-preview{margin:10px 0 0;padding:8px 10px}.check-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.check-preview .odds{font-weight:600;text-transform:uppercase}.check-preview .breakdown{color:var(--text-secondary);line-height:1.5}.confirm-pop small{display:block;margin-top:10px;font-size:var(--fs-2xs);line-height:1.5;color:var(--text-muted)}
+.confirm-pop h2{font-size:var(--fs-xl);line-height:1.2;margin:6px 0 4px}.confirm-pop p{margin:0;font-family:var(--font-body);font-size:var(--fs-lg);line-height:1.4;color:var(--text-secondary);text-wrap:pretty}.confirm-pop .check-preview{margin:10px 0 0;padding:8px 10px}.check-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.check-preview .odds{font-weight:600}.check-preview .breakdown{font-size:var(--fs-xs);color:var(--text-secondary);line-height:1.5}
+.confirm-pop small{display:block;margin-top:10px;font-size:var(--fs-2xs);line-height:1.5;color:var(--text-muted)}
 .confirm-pop .modal-actions{margin-top:14px;gap:10px}.confirm-pop .modal-actions>button:first-child{font-size:var(--fs-sm);padding:6px 4px}.confirm-pop .primary{width:auto;margin:0;padding:8px 14px;font-size:var(--fs-sm)}
 .confirm-closes{margin:16px 0 4px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--danger) 45%,transparent);border-left:3px solid var(--danger);border-radius:3px;background:color-mix(in srgb,var(--danger) 9%,transparent);font-size:var(--fs-md);line-height:1.55;color:var(--text-primary);text-wrap:pretty}.confirm-closes b{display:block;margin-bottom:4px;font-size:var(--fs-2xs);letter-spacing:var(--tracking-caps);color:var(--danger)}
 @keyframes confirm-in{from{opacity:0;transform:scale(.96)}}
@@ -459,28 +481,39 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
   .app{min-width:0;min-height:0}
   .topbar{height:52px;padding:0 12px}.brand{gap:8px;font-size:var(--fs-lg)}.brand-mark{font-size:var(--fs-2xl)}.top-controls{gap:6px}.saved{display:none}
   .creation{top:60px;left:12px;width:calc(100% - 24px);max-height:calc(100dvh - 72px)}
-  .scene-heading,.app:has(.initiative-strip) .scene-heading{top:58px;width:calc(100% - 180px);max-width:none}.scene-heading h1,.app:has(.initiative-strip) .scene-heading h1{font-size:var(--fs-xl)}.scene-heading p{display:none}
-  .initiative-strip{top:58px;max-width:calc(100% - 24px)}.initiative-strip span{padding:4px 10px}.app:has(.initiative-strip) .scene-heading{display:none}
-  .party-panel{top:96px;left:8px;width:auto;max-width:calc(100% - 16px);display:flex;gap:5px;padding:5px}
+  /* The room's name is already on the story box tab and the chapter strip, so the banner gives its row to the party (#110). */
+  .scene-heading{display:none}
+  .initiative-strip{top:58px;max-width:calc(100% - 24px)}.initiative-strip span{padding:4px 10px}
+  /* Party: no outer panel, just compact cards under the top bar: a small portrait, a thin health bar and "30/30" in tabular figures. */
+  .party-panel{top:60px;left:8px;width:auto;max-width:calc(100% - 16px);max-height:none;overflow:visible;display:flex;gap:6px;padding:0;background:none;border:0;box-shadow:none}
   .party-panel .panel-label{display:none}
-  .party-card{flex-direction:column;align-items:center;width:64px;padding:5px 4px;gap:3px;margin:0}.party-card .portrait{width:34px;height:34px;font-size:var(--fs-xl)}
-  .party-info{width:100%}.party-info>div:first-child{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.health-track{margin:2px 0 3px}.party-stats{justify-content:center;font-size:var(--fs-2xs)}.party-stats span+span{display:none}
-  .actions-panel{top:auto;right:8px;left:8px;bottom:184px;width:auto;max-height:calc(100dvh - 242px);overflow:auto;padding:12px;z-index:6}
+  .party-card{flex-direction:column;align-items:center;width:52px;padding:4px 3px 3px;gap:2px;margin:0;background:var(--glass-0);border-radius:4px}.party-card .portrait{width:28px;height:28px;font-size:var(--fs-lg)}
+  .party-info{width:100%}.party-info>div:first-child{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.health-track{height:2px;margin:2px 0}.party-stats{justify-content:center;font-size:var(--fs-2xs);line-height:1.2;color:var(--text-secondary)}.party-stats span+span{display:none}
+  .app:has(.initiative-strip) .party-panel{top:108px}
+  /* The actions open as a bottom sheet docked on the chapter strip, right above its button. The sheet's height is fixed (it scrolls inside), so the story box can sit on its top edge as a single line. */
+  .app{--sheet-h:calc(100dvh - 222px)}.app:has(.initiative-strip){--sheet-h:calc(100dvh - 270px)}
+  .actions-panel{top:auto;right:8px;left:8px;bottom:40px;width:auto;height:var(--sheet-h);max-height:none;overflow:auto;padding:12px 12px 10px;z-index:11;background:var(--surface-1);border-bottom:0;border-radius:8px 8px 0 0;box-shadow:0 -12px 30px var(--shadow)}.actions-panel>*{flex-shrink:0}
   .app[data-drawer=closed] .actions-panel{display:none}
-  /* The drawer's bottom edge clears the story box's top-edge tabs (name plate, read-aloud title, bark). */
-  .actions-panel{z-index:11;background:var(--surface-1)}.actions-panel>*{flex-shrink:0}
+  .app:has(.turn-playback) .actions-panel{visibility:hidden} /* a turn playing out takes the stage; the sheet comes back after it */
+  .app[data-drawer=open] .story-box.narration-panel:not(.turn-playback){bottom:calc(46px + var(--sheet-h));height:38px;padding:6px 14px;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:minmax(0,1fr);align-items:center}
+  .app[data-drawer=open] .story-box:not(.turn-playback) .story-body{grid-column:1;grid-row:1;overflow:hidden;align-self:center}.app[data-drawer=open] .story-box:not(.turn-playback) .story-foot{grid-column:2;grid-row:1;min-height:0}.app[data-drawer=open] .story-box:not(.turn-playback) :is(.story-tags,.page-indicator,.story-portrait){display:none}.app[data-drawer=open] .story-box.speaking>.story-plate{left:14px}
+  .app[data-drawer=open] .story-box:not(.turn-playback) :is(.story-text,.event-lines li:last-child){font-size:var(--fs-lg);line-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.app[data-drawer=open] .story-box:not(.turn-playback) .event-lines li:not(:last-child){display:none}.app[data-drawer=open] .story-box.combat .story-controls{padding-top:0}
   /* Combat: the event box is shorter (three lines across the full width), and the turn order takes the row under the top bar. */
-  .story-box.combat{height:79px}.app:has(.story-box.combat) .actions-panel{bottom:143px;max-height:calc(100dvh - 201px)}.app:has(.story-box.combat) .error{bottom:143px}
-  .app:has(.initiative-strip) .party-panel{top:112px}
+  .story-box.combat{height:79px}.app:has(.story-box.combat) .error{bottom:143px}
   .action-list{overflow:visible;min-height:0}
   .target-select{display:flex;align-items:center;gap:10px;margin-bottom:8px}.target-select select{flex:1;margin-top:0;font-size:var(--fs-md)}
   .drawer-party{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 14px;margin-top:12px;border-top:1px solid var(--border-subtle)}.drawer-party .pack-row,.drawer-party .objective{border-top:0}
   .story-box,.story-box.turn-playback{left:8px;right:8px;bottom:48px;width:auto;min-width:0;transform:none;padding:10px 14px 4px}
   .chapter-track{left:8px;right:8px;height:40px;gap:10px}.chapter-track>div:not(.current){display:none}
-  .drawer-toggle{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;min-height:30px;padding:4px 14px;border:1px solid var(--border-strong);border-radius:15px;background:var(--surface-1);font-size:var(--fs-sm);color:var(--text-primary)}
-  .app[data-drawer=open] .drawer-toggle{border-color:var(--accent);color:var(--accent-strong)}
-  .busy{top:108px}.app:has(.initiative-strip) .busy{top:114px}.error{bottom:184px;max-width:calc(100% - 24px)} /* the toast stays above the drawer, under the room title or the turn order (#98) */
+  /* "What will you do?" is the screen's one gold primary while the drawer is closed or open. */
+  .drawer-toggle{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;min-height:30px;padding:4px 14px;border:1px solid var(--gold);border-radius:4px;background:var(--gold);font-size:var(--fs-sm);font-weight:600;color:var(--gold-ink)!important}
+  .busy{top:124px}.app:has(.initiative-strip) .busy{top:172px}.error{bottom:184px;max-width:calc(100% - 24px)} /* the toast stays above the story box, under the party or the turn order (#98) */
+  /* Confirmations use the same bottom sheet: the light card and the strong modal both rise out of the chapter strip. */
+  .confirm-pop{top:auto;left:8px;right:8px;bottom:40px;width:auto;max-width:none;max-height:calc(100dvh - 60px);overflow:auto;translate:none;border-radius:8px 8px 0 0;transform-origin:50% 100%;animation-name:sheet-in}
+  .modal-backdrop:has(>.modal.confirm){place-items:end stretch;padding:0 8px 40px}.modal.confirm{width:auto;max-height:calc(100dvh - 60px);border-radius:8px 8px 0 0;animation-name:sheet-in}
   .modal-backdrop{padding:12px}.modal{padding:24px 20px}.pack-panel{top:12px;max-height:calc(100% - 24px);width:calc(100vw - 24px);padding:18px}
   .ending,.ending.ending-page{inset:52px 0 40px;padding:20px 24px;overflow:auto;justify-content:safe center}.ending h2{font-size:var(--fs-4xl);margin:12px 0}.ending p{font-size:var(--fs-lg)}.ending-actions{flex-wrap:wrap;gap:12px 22px}
 }
-@media(max-width:999px) and (hover:hover) and (pointer:fine){.drawer-toggle:hover{border-color:var(--accent)}}
+@media(max-width:999px) and (hover:hover) and (pointer:fine){.drawer-toggle:hover:not(:disabled){background:var(--gold-strong);border-color:var(--gold-strong)}}
+@keyframes sheet-in{from{opacity:0;transform:translateY(12px)}}
+
