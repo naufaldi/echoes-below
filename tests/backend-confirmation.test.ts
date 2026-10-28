@@ -20,7 +20,7 @@ test('a conditional closer keeps its condition',()=>{
  assert.deepEqual(splitCloses(d),{text:'Agility DC13. Success gains passage, but no supplies. Failure raises alarm.',closes:'Success closes: the ration to Scrit.'});
 });
 test('a description that is only the closer has no leading text',()=>assert.deepEqual(splitCloses('Closes: the courier.'),{text:'',closes:'Closes: the courier.'}));
-// #62: free, reversible actions skip the confirmation entirely.
+// #62, #96: free actions skip the confirmation entirely.
 test('companion check-ins are free; checks stay light; costly or branch-closing actions stay strong',()=>{
  const s=publicSave(createSave({name:'Free',classId:'guardian',backgroundId:'delver',appearanceId:'moon'}));
  const checkIn=s.actions.find(a=>a.id==='checkin:mira')!;
@@ -28,6 +28,7 @@ test('companion check-ins are free; checks stay light; costly or branch-closing 
  assert.equal(confirmationFor(s.actions.find(a=>a.id==='tracks:hero')!),'light');
  assert.equal(confirmationFor({...action(closes('Consume one ration per character.',['the ration to Scrit'])),id:'rest',kind:'rest'}),'strong');
  assert.equal(confirmationFor({...action('Begin combat.',true),id:'fight',kind:'attack'}),'strong');
- assert.equal(confirmationFor({...action('A private conversation with Mira.'),id:'bond_begin:x'}),'light');
- assert.equal(confirmationFor({...action('Recover one healing potion.'),id:'loot_cache',kind:'inspect'}),'light');
+ // #96: a conversation and a chest search roll nothing, spend nothing and close nothing, so they commit directly too.
+ assert.equal(confirmationFor({...action('A private conversation with Mira.'),id:'bond_begin:x'}),'none');
+ assert.equal(confirmationFor({...action('Recover one healing potion.'),id:'loot_cache',kind:'inspect'}),'none');
 });

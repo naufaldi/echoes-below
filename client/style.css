@@ -219,6 +219,8 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .action-list{overflow:auto;min-height:70px;scrollbar-width:thin;scrollbar-color:var(--text-muted) var(--surface-0)}.action-list>:last-child{margin-bottom:0}.action-list .action:focus-visible{outline-offset:-2px}
 .action{display:flex;align-items:center;text-align:left;width:100%;padding:11px 8px;border:1px solid var(--border-subtle);border-radius:3px;margin-bottom:5px;gap:10px;background:color-mix(in srgb,var(--surface-2) 55%,transparent)}
 .action strong{font-weight:500;font-size:var(--fs-xs);line-height:1.5;display:block}.action small{display:block;margin-top:5px}
+/* A reply waits for its question's last page (#96): visible, quieter, not clickable. */
+.action.waiting{opacity:.62;cursor:not-allowed}.action.waiting .read-on{font-style:italic;text-transform:none;letter-spacing:0;font-weight:500}
 .action-main{flex:1;min-width:0}
 /* #62 Story choices: verb groups, a subtle key cap for the number key, and the odds band (#61) with its exact figure on hover or focus. */
 .verb-group+.verb-group{margin-top:10px}.verb-label{margin:0 0 5px;font:600 var(--fs-2xs)/1.3 var(--font-ui);text-transform:uppercase;letter-spacing:var(--tracking-wide);color:var(--text-muted)}
@@ -258,7 +260,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .story-box.speaking{grid-template-columns:64px minmax(0,1fr)}
 .story-box.turn-playback{position:fixed;z-index:120}
 /* While the light confirm card is open the decision leads: the story box steps back (opacity only, so its rect and the camera framing stay put) and the scene keeps 55%. */
-.story-box{transition:opacity 150ms var(--ease-out),visibility 0s}.app:has(.confirm-pop) .story-box:not(.turn-playback){opacity:0;visibility:hidden;transition:opacity 150ms var(--ease-out),visibility 0s 150ms}
+.story-box{transition:opacity 150ms var(--ease-out),filter 150ms var(--ease-out)}.app:has(.confirm-pop) .story-box:not(.turn-playback){opacity:.5;filter:saturate(.7);pointer-events:none}
 .story-box:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .story-body,.story-foot{grid-column:-2/-1;min-width:0}
 .story-body{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;cursor:pointer} /* PAGE_CHARS fits three lines down to the 1100px box with a portrait (measured); scrolling is only a safety net, never clipping */
