@@ -25,6 +25,7 @@ function audit(profile:Profile,rules:Rules){
   for(const [field,text] of [['title',view.scene.title],['description',view.scene.description],['objective',view.scene.objective]] as const)if(text)scan(`${s.sceneId} ${field}`,text,found);
   for(const l of s.logs)if(!seen.has(l.id)){seen.add(l.id);scan(`${s.sceneId} log`,l.text,found);if(l.prose)scan(`${s.sceneId} prose`,l.prose,found);if(l.levelUp)levelUps++;}
   for(const f of s.facts){scan(`fact ${f.id}`,f.text,found);if(/\bthe hero\b/i.test(f.text))found.push(`fact ${f.id} (hero name): ${f.text}`);}
+  for(const r of view.chapterRecaps??[])for(const text of [r.title,...r.changes,...r.choices.flatMap(c=>[c.title,c.choice])]){scan(`chapter ${r.chapter} recap`,text,found);if(/\bthe hero\b/i.test(text))found.push(`chapter ${r.chapter} recap (hero name): ${text}`);}
  };
  const run=runProfile(profile,rules,'guardian',look);
  return {found:[...new Set(found)],levelUps,run};

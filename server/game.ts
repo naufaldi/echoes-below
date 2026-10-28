@@ -1,7 +1,7 @@
 import {expeditionSupplyReward,collectExpeditionSupplies,gainPotions,leftBehind} from './expedition-supplies.js';
-import {inkActions,resolveInk,inkPrepared,projectInk,INK_RESCUE} from './ink-garden.js';
+import {inkActions,resolveInk,inkPrepared,projectInk,INK_RESCUE,INK_RESCUE_LABEL} from './ink-garden.js';
 import {courierActions,resolveCourier} from './courier-inquiry.js';
-import {infirmaryActions,resolveInfirmary,infirmaryPrepared,projectInfirmary,PREPARED_RESCUE} from './infirmary.js';
+import {infirmaryActions,resolveInfirmary,infirmaryPrepared,projectInfirmary,PREPARED_RESCUE,PREPARED_RESCUE_LABEL} from './infirmary.js';
 import {indexActions,resolveIndex} from './bell-index.js';
 import {bellIndexState} from '../shared/bell-index.js';
 import {scritActions,resolveScrit,canSpeakToScrit} from './scrit-inquiry.js';
@@ -19,6 +19,7 @@ import {makeCharacter,restoreClassResources,classResources} from '../shared/cura
 import {projectTactical,initializeTactical,startTacticalCombat,tacticalActions,applyTactical,tacticalProposal} from './tactical.js';
 import {CAMPAIGN_CONSEQUENCES,availableConsequences,campaignEffects} from './campaign-consequences.js';
 import {playedRoom,projectFork,endingText,campaignRecap} from './playstyle.js';
+import {chapterRecaps,experienceAward} from './chapter-recap.js';
 import {COMPANION_STORIES} from '../shared/companion-stories.js';
 import {EXPEDITION,expeditionRoom,expeditionScene} from "../shared/campaign.js";
 import {outcomeCheck,attackProse,trapProse,type Outcome} from './outcome.js';
@@ -334,7 +335,7 @@ export function log(
   animation?: GameLog["animation"],
   actionKind?: GameLog["actionKind"],
   outcome?: Outcome,
-  levelUp?: GameLog["levelUp"],
+  extra: Pick<GameLog, "levelUp" | "xp"> = {},
 ) {
   s.logs.push({
     id: randomUUID(),
@@ -348,7 +349,7 @@ export function log(
     rolls,
     ...(outcome?.prose?{prose:outcome.prose}:{}),
     ...(outcome?.check?{check:outcome.check}:{}),
-    ...(levelUp?{levelUp}:{}),
+    ...extra,
   });
   if (s.logs.length > 250) s.logs.shift();
   if (s.presentation && (animation || rolls.length || /moves|guards|aims|runs|restores/.test(text))) {
@@ -448,7 +449,6 @@ export function scritLoss(s:Save){return s.flags.fed||!s.party.some(a=>a.rations
 /** #64 U2: "An Insight check", "A Might check". */
 export const checkPhrase=(skill:string)=>`${/^[aeiou]/i.test(skill)?'An':'A'} ${skill.charAt(0).toUpperCase()}${skill.slice(1)} check`;
 export function rationLoss(s:Save,cost:number){return ['approach','hall','cookfire'].includes(s.sceneId)&&s.party.reduce((n,a)=>n+a.rations,0)-cost<1?scritLoss(s):[];}
-const ROOM_ENCOUNTER_XP=100;
 // Keep a broad triangle within the authored approach area. Tactical cells are
 // deliberately untouched: combat establishes its own formation on entry.
 function placeExplorationParty(s:Save,leader:Actor,anchor:[number,number]){
@@ -458,6 +458,7 @@ function placeExplorationParty(s:Save,leader:Actor,anchor:[number,number]){
   member.position=[Math.max(-3,Math.min(3,anchor[0]+side*1.4)),anchor[1]-1.4];
  }
 }
+export const sceneTitle=(id:SceneId)=>baseScenes[id].title;
 // Authored interaction anchors stay inside each room's walkable approach area.
 // In the hall, inspection never steps across the unresolved pressure-plate line.
 function approachTarget(s: Save, option: ActionOption) {
@@ -683,7 +684,7 @@ function baseActions(s: Save): ActionOption[] {
       const fightable=!defeated&&(!s.tactical||!!CURATED_ENCOUNTERS[s.sceneId]),unused=availableConsequences(prefix,f).map(c=>`help from ${c.name.replace(/^The /,'the ')} offered here`);
       const forgone=(choice:0|1)=>[...CAMPAIGN_CONSEQUENCES.filter(c=>c.source===prefix&&c.choice!==choice).map(c=>`help from ${c.name.replace(/^The /,'the ')} at ${baseScenes[c.target].title}`),...unused];
       const roller=roomRoller(s,expedition.challenge);
-      if(defeated||(roller&&(named||prepared||garden||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',prepared?'Help the medic from the lowered cot':garden?'Leave with the apprentice and protected pages':expedition.choice[0],closes(garden?'The lantern burns steadily and the pages are protected. Leave together without a check or destroying records.':prepared?'The cot is secured and the pocket drained. Rescue the medic without a check; his medicine remains with him.':named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`${checkPhrase(expedition.challenge)}, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`,[...(certain?[]:[`this option if the check fails${fightable?', unless you defeat the defenders':''}`]),...forgone(0)]), 'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:roller!.id,certain?undefined:dc,certain?undefined:expedition.challenge,!certain||forgone(0).length>0));
+      if(defeated||(roller&&(named||prepared||garden||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',prepared?PREPARED_RESCUE_LABEL:garden?INK_RESCUE_LABEL:expedition.choice[0],closes(garden?'The lantern burns steadily and the pages are protected. Leave together without a check or destroying records.':prepared?'The cot is secured and the pocket drained. Rescue the medic without a check; his medicine remains with him.':named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`${checkPhrase(expedition.challenge)}, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`,[...(certain?[]:[`this option if the check fails${fightable?', unless you defeat the defenders':''}`]),...forgone(0)]), 'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:roller!.id,certain?undefined:dc,certain?undefined:expedition.challenge,!certain||forgone(0).length>0));
       const attempt=a.find(o=>o.id==='exp_choice:0');if(attempt?.check){const terms=expeditionTerms(s,roller!,expedition.challenge);attempt.check={...attempt.check,modifier:terms.modifier,parts:terms.parts,...(terms.advantage?{advantage:'Evidence'}:{}),...(effects.dcReduction?{dcHelp:effects.dcReduction}:{})};}
       if(!prepared&&!garden)a.push(opt('exp_choice:1',expedition.choice[1],closes('Commit to this alternative and its consequences without a check.',forgone(1)),'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',undefined,undefined,undefined,forgone(1).length>0));
       if(!defeated&&(!s.tactical||CURATED_ENCOUNTERS[s.sceneId]))a.push(opt('exp_fight','Confront the chamber’s defenders','Resolve the obstruction in turn-based combat, then choose the outcome.','attack',s.tactical&&prefix==='archive-3'?'index-sentinel':'encounter',undefined,undefined,undefined,true));
@@ -1076,13 +1077,14 @@ export function publicSave(s: Save): PublicSave {
     scene.description='The guards have fallen. Scrit has fled deeper into the relay. The passage to the prison is clear.';
     scene.objective='Continue through the open prison passage.';
   }
-  const recap=campaignRecap(s);
+  const recap=campaignRecap(s),chapters=chapterRecaps(s);
   return {
     ...structuredClone(visible),
     tacticalProposal:tacticalProposal(s),
     ...(s.tactical?{logistics:structuredClone(logisticsFor(s)),quests:questProgress(s)}:{}),
     scene,
     ...(recap?{recap}:{}),
+    ...(chapters?.length?{chapterRecaps:chapters}:{}),
     actions: legalActions(s),
     checkpoints: checkpointIds,
   };
@@ -1091,24 +1093,26 @@ export function fact(s: Save, id: string, text: string) {
   if (!s.facts.some((x) => x.id === id)) {
     s.facts.push({ id, text });
     log(s, text);
-    awardExperience(s, `fact:${id}`, 35);
+    awardExperience(s,`fact:${id}`);
   }
 }
 export const LEVEL_THRESHOLDS = [0,300,900,2700,6500,14000,23000,34000];
-function awardExperience(s:Save,key:string,amount:number){
+function awardExperience(s:Save,key:string){
   if(s.flags[`xp:${key}`])return;
+  const amount=experienceAward(key)?.amount;
+  if(amount===undefined)throw Error(`No experience award for ${key}`);
   s.flags[`xp:${key}`]=true;
   s.xp=(s.xp??0)+amount;
   const level=LEVEL_THRESHOLDS.filter(n=>s.xp!>=n).length;
   const gained=level-(s.level??1);
-  log(s,`The party gains ${amount} XP.`, 'dm');
+  log(s,`The party gains ${amount} XP.`,'dm',[],'rules',undefined,undefined,undefined,{xp:amount});
   if(gained>0){
     for(const member of s.party){
       if(s.tactical){const old=s.tactical.actors[member.id],next=makeCharacter(old.classId,level,old.improvements);const increase=next.maxHp-old.maxHp;next.hp=old.dead||old.hp<=0?0:Math.min(next.maxHp,old.hp+increase);next.slots=next.maxSlots.map((n,i)=>Math.min(n,(old.slots[i]??0)+n-(old.maxSlots[i]??0)));next.features={...classResources(old),secondWind:classResources(old).secondWind+Math.max(0,classResources(next).secondWind-(old.classId==="fighter"?(old.level>=4?3:2):0)),actionSurge:classResources(old).actionSurge+(old.classId==="fighter"&&old.level<2&&level>=2?1:0)};next.death=next.hp>0?{successes:0,failures:0,stable:false}:old.death;next.dead=old.dead;next.concentration=old.concentration;s.tactical.actors[member.id]=next;member.hp=next.hp;member.maxHp=next.maxHp;}
       else{member.maxHp+=gained*6;member.hp=Math.min(member.maxHp,member.hp+gained*6);member.maxFocus+=gained;member.focus+=gained;}
     }
     // #64 U4: its own line with a structured `levelUp`, so the story box can show it as a tag instead of prose. The text stays for older clients and the journal.
-    log(s,s.tactical?`Level ${level}! Your class health and spell slot capacity increase.`:`Level ${level}! Everyone gains ${gained*6} maximum health and ${gained} focus.`,'dm',[],'rules',undefined,undefined,undefined,s.tactical?{level}:{level,maxHp:gained*6,focus:gained});
+    log(s,s.tactical?`Level ${level}! Your class health and spell slot capacity increase.`:`Level ${level}! Everyone gains ${gained*6} maximum health and ${gained} focus.`,'dm',[],'rules',undefined,undefined,undefined,{levelUp:s.tactical?{level}:{level,maxHp:gained*6,focus:gained}});
   }
   s.level=level;
   if(gained>0&&s.tactical)projectTactical(s,false);
@@ -1185,7 +1189,7 @@ function check(
 function enterScene(s: Save, id: SceneId) {
   // #95: the aftermath only calls the party battered when someone is hurt; fixed on entry so the description stays stable.
   if(id==='aftermath'){if(s.party.every(a=>a.hp>=a.maxHp))s.flags.aftermathUnhurt=true;else delete s.flags.aftermathUnhurt;}
-  awardExperience(s,`entered:${id}`,50);
+  awardExperience(s,`entered:${id}`);
   delete s.flags.retreatRequested;
   s.sceneId = id;
   s.enemies = [];
@@ -1221,8 +1225,10 @@ function trap(s: Save, a: Actor, dice: Dice) {
     [r],
   );
 }
-function rescue(s: Save) {
+/** #66: `how` records which gate option freed the courier, for the chapter recap. Older saves lack it. */
+function rescue(s: Save, how: "unlock" | "pick" | "force") {
   s.flags.rescued = true;
+  s.flags[`rescue:${how}`] = true;
   fact(s, "courier", COURIER);
   trust(s, "oren", "rescue");
 }
@@ -1281,7 +1287,7 @@ export function finishCheck(s: Save) {
     return true;
   }
   if (s.enemies.every((a) => a.hp === 0)) {
-    awardExperience(s,`encounter:${s.sceneId}`,s.sceneId==='bell'?250:ROOM_ENCOUNTER_XP);
+    awardExperience(s,`encounter:${s.sceneId}`);
     s.mode = "explore";
     s.turn = null;
     s.party.forEach((a) => {
@@ -1560,7 +1566,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
       const choice=Number(actorId) as 0|1;
       let success=true,roller=h;
       if(choice===0&&!f[`${prefix}:defendersDefeated`]&&!(prefix==='archive-3'&&f['index:solved'])&&!infirmaryPrepared(s)&&!inkPrepared(s)){f[`${prefix}:tried`]=true;roller=roomRoller(s,room.challenge)!;const terms=expeditionTerms(s,roller,room.challenge);const r=rollD20(dice,terms.modifier,room.choice[0],terms.advantage);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${roller.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,roller.id,[r],'rules',undefined,undefined,{prose:success?room.outcomes[choice]:roller.id==='hero'?'The attempt fails and leaves you hurt. You can choose the alternative or confront the defenders.':`The attempt fails and leaves ${roller.name} hurt. You can choose the alternative or confront the defenders.`,check:outcomeCheck('check',roller.id,room.challenge,r,dc,success,{advantage:terms.advantage})});}
-      if(success){f[`${prefix}:resolved`]=true;f[`${prefix}:choice:${choice}`]=true;fact(s,`decision:${prefix}`,choice===0&&inkPrepared(s)?INK_RESCUE:choice===0&&infirmaryPrepared(s)?PREPARED_RESCUE:room.outcomes[choice]);awardExperience(s,`room:${prefix}`,room.xp);if(choice===0&&!f[`xp:encounter:${prefix}`]&&(!s.tactical||CURATED_ENCOUNTERS[prefix]))awardExperience(s,`resolution:${prefix}`,ROOM_ENCOUNTER_XP);s.relationships[choice===0?'mira':'oren']=Math.min(20,s.relationships[choice===0?'mira':'oren']+1);}
+      if(success){f[`${prefix}:resolved`]=true;f[`${prefix}:choice:${choice}`]=true;fact(s,`decision:${prefix}`,choice===0&&inkPrepared(s)?INK_RESCUE:choice===0&&infirmaryPrepared(s)?PREPARED_RESCUE:room.outcomes[choice]);awardExperience(s,`room:${prefix}`);if(choice===0&&!f[`xp:encounter:${prefix}`]&&(!s.tactical||CURATED_ENCOUNTERS[prefix]))awardExperience(s,`resolution:${prefix}`);s.relationships[choice===0?'mira':'oren']=Math.min(20,s.relationships[choice===0?'mira':'oren']+1);}
       else{const r=damageRoll(dice,6,0,'Setback');roller.hp=Math.max(1,roller.hp-r.total);log(s,`The attempt costs ${roller.id==='hero'?'':`${roller.name} `}${r.total} health. You can choose the alternative or confront the defenders.`,roller.id,[r]);}
     }else if(kind==='exp_next'){
       const next=EXPEDITION[EXPEDITION.findIndex(r=>r.id===s.sceneId)+1];
@@ -1772,11 +1778,11 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
         else enterScene(s, "prison");
         break;
       case "prison":
-        if (kind === "unlock") rescue(s);
+        if (kind === "unlock") rescue(s, "unlock");
         else if (kind === "pick") {
           f.pickTried = true;
           if (check(s, dice, chapterRoller(s, "agility", "pick")!, "agility", 13, "pick", "Pick the gate", { pass: COURIER, fail: JAMMED }))
-            rescue(s);
+            rescue(s, "pick");
           else {
             s.ticks++;
             log(s, JAMMED);
@@ -1784,7 +1790,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
         } else if (kind === "force") {
           s.ticks++;
           f.alarm = true;
-          rescue(s);
+          rescue(s, "force");
           log(
             s,
             "The gate breaks with a ringing crash. The bell chamber is alerted.",
@@ -1799,6 +1805,8 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
         } else enterScene(s, "bell");
         break;
       case "bell":
+        // #66: which approach to Vark the party took, for the chapter recap. Older saves lack it.
+        f[`vark:${kind}`] = true;
         if (kind === "negotiate") {
           if (
             check(
