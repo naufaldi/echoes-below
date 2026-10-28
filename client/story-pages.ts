@@ -15,14 +15,24 @@ export const PAGE_CHARS=200;
 export const readingDelay=(text:string)=>Math.max(1800,900+text.length*45);
 
 export type Voice='narrator'|'character';
-export interface TagPart {text:string;mark?:'high'|'low'}
+/** `xp` marks a tag that is only an XP amount, so two on one page sum (#64 U4). */
+export interface TagPart {text:string;mark?:'high'|'low';xp?:number}
 export interface StoryLine {key:string;voice:Voice;speakerId:string|null;name:string|null;text:string;tag:TagPart[]|null}
 export interface StoryPage {key:string;voice:Voice;speakerId:string|null;name:string|null;text:string;tags:TagPart[][];readAloud?:true}
 type Cast=Pick<PublicSave,'party'|'enemies'>;
 
 const cap=(s:string)=>s.charAt(0).toUpperCase()+s.slice(1);
-/** The one string match in the story box (see the PR): an XP line restates `check.xp`, which the engine sums over the action's XP lines. */
+/**
+ * The one string match in the story box (#60, #64): XP log lines carry no structured amount. A checked outcome's tag uses
+ * `check.xp`, which the engine sums over the action's XP lines, so this only identifies those lines to absorb them, and
+ * reads the amount where no check counts it (encounter XP, older saves).
+ */
 const XP_LINE=/^The party gains (\d+) XP\.$/;
+const xpTag=(n:number):TagPart[]=>[{text:`+${n} XP`,xp:n}];
+/** `LEVEL 2 · +6 MAX HP · +1 FOCUS`. Curated gains vary by class, so its level-up names the level only. */
+export const levelTag=(up:NonNullable<GameLog['levelUp']>):TagPart[]=>[{text:`Level ${up.level}`},...(up.maxHp?[{text:`+${up.maxHp} max HP`}]:[]),...(up.focus?[{text:`+${up.focus} focus`}]:[])];
+/** A character line opening with its own speaker's name ("Mira: My brother…") under a plate that already says "Mira" (#64 U1). */
+const unprefixed=(text:string,name:string)=>{for(const p of [`${name}:`,`${name} :`])if(text.startsWith(p))return text.slice(p.length).trimStart();return null;};
 
 /** `MIRA · INSIGHT · 22 vs DC 10 · NATURAL 20 · +35 XP` as parts, so the natural roll can be marked. Public numbers only. `named:false` drops the name when a plate already shows who rolled. */
 export function checkTag(check:OutcomeCheck,rolls:Roll[],cast:Cast,{named=true}:{named?:boolean}={}):TagPart[]{
@@ -40,7 +50,9 @@ export const tagText=(tag:TagPart[])=>tag.map(p=>p.text).join(' · ');
 /**
  * Logs as story lines, in order. A check shows its prose with a tag; the entry right after it that repeats the prose
  * word for word (the clue or authored line, #56) is shown once. XP lines that `check.xp` already counts are absorbed;
- * any others become a `+N XP` tag. `rollTags` (the backlog) also tags rolls that decided no check, such as damage.
+ * any others become a `+N XP` tag. A level-up becomes a tag rather than prose (#64 U4). A character line drops a
+ * leading `Name:` its plate already shows, and an unscripted DM line that opens with a party member's name is theirs (#64 U1).
+ * `rollTags` (the backlog) keeps the level-up's sentence and also tags rolls that decided no check, such as damage.
  */
 export function storyLines(logs:readonly GameLog[],cast:Cast,{rollTags=false}:{rollTags?:boolean}={}):StoryLine[]{
  const lines:StoryLine[]=[];let xpBudget=0;
@@ -53,10 +65,13 @@ export function storyLines(logs:readonly GameLog[],cast:Cast,{rollTags=false}:{r
    continue;
   }
   const xp=l.speaker==='dm'&&l.source==='rules'?XP_LINE.exec(l.text):null;
-  if(xp){const n=Number(xp[1]);if(n<=xpBudget){xpBudget-=n;continue;}lines.push({key:l.id,voice:'narrator',speakerId:null,name:null,text:'',tag:[{text:`+${n} XP`}]});continue;}
-  const character=l.speaker!=='dm'&&l.source!=='rules';
-  const tag=rollTags&&l.rolls.length?l.rolls.map(r=>({text:`${cap(r.purpose)} · ${r.total}`})):null;
-  lines.push({key:l.id,voice:character?'character':'narrator',speakerId:character?l.speaker:null,name:character?speakerLabel(l,cast.party,cast.enemies):null,text:l.prose??l.text,tag});
+  if(xp){const n=Number(xp[1]);if(n<=xpBudget){xpBudget-=n;continue;}lines.push({key:l.id,voice:'narrator',speakerId:null,name:null,text:'',tag:xpTag(n)});continue;}
+  if(l.levelUp&&!rollTags){lines.push({key:l.id,voice:'narrator',speakerId:null,name:null,text:'',tag:levelTag(l.levelUp)});continue;}
+  const text=l.prose??l.text,tag=rollTags&&l.rolls.length?l.rolls.map(r=>({text:`${cap(r.purpose)} · ${r.total}`})):null;
+  const voiced=l.speaker==='dm'&&l.source!=='rules'?cast.party.map(a=>({a,name:speakerLabel({speaker:a.id,source:'rules'},cast.party,cast.enemies)})).find(p=>unprefixed(text,p.name)!==null):undefined;
+  if(voiced){lines.push({key:l.id,voice:'character',speakerId:voiced.a.id,name:voiced.name,text:unprefixed(text,voiced.name)!,tag});continue;}
+  const character=l.speaker!=='dm'&&l.source!=='rules',name=character?speakerLabel(l,cast.party,cast.enemies):null;
+  lines.push({key:l.id,voice:character?'character':'narrator',speakerId:character?l.speaker:null,name,text:name?unprefixed(text,name)??text:text,tag});
  }
  return lines;
 }
@@ -76,7 +91,8 @@ export function splitText(text:string,budget=PAGE_CHARS):string[]{
 
 /**
  * Lines as pages. Consecutive lines in the same voice and speaker share pages, except that a checked outcome ends its
- * passage, so the next line starts a page of its own. A tag sits on the page where its line ends, and a tag-only line joins the page before it. `readAloud` keeps the first line (the room description) on its own
+ * passage, so the next line starts a page of its own. A tag sits on the page where its line ends, and a tag-only line joins the page before it.
+ * Two XP-only tags on one page sum to one (`+125 XP`, #64 U4). `readAloud` keeps the first line (the room description) on its own
  * pages, marked for the boxed read-aloud treatment.
  */
 export function paginate(lines:readonly StoryLine[],{budget=PAGE_CHARS,readAloud=false}:{budget?:number;readAloud?:boolean}={}):StoryPage[]{
@@ -95,13 +111,18 @@ export function paginate(lines:readonly StoryLine[],{budget=PAGE_CHARS,readAloud
   const open=(text:string)=>own.push({key:`${p.first.key}:${own.length}`,voice:p.first.voice,speakerId:p.first.speakerId,name:p.first.name,text,tags:[],...(p.readAloud?{readAloud:true as const}:{})});
   for(const part of p.parts){
    for(const chunk of splitText(part.text,budget)){if(own.length&&page().text.length+1+chunk.length<=budget)page().text+=' '+chunk;else open(chunk);}
-   if(part.tag){if(!own.length)open('');page().tags.push(part.tag);}
+   if(part.tag){if(!own.length)open('');addTag(page().tags,part.tag);}
   }
   pages.push(...own);
  }
  return pages;
 }
 
+/** Adds a tag to a page; an XP-only tag folds into one already there, past any level tag between them. */
+function addTag(tags:TagPart[][],tag:TagPart[]){
+ const n=tag.length===1?tag[0]!.xp:undefined,i=n?tags.findIndex(t=>t.length===1&&t[0]!.xp):-1;
+ if(n&&i>=0)tags[i]=xpTag(tags[i]![0]!.xp!+n);else tags.push(tag);
+}
 /** The current revision's pages, as the settled story box shows them. The first entry in a room is its description. */
 export function storyPages(save:PublicSave,{readAloud=false,budget=PAGE_CHARS}:{readAloud?:boolean;budget?:number}={}):StoryPage[]{
  // With nothing to show (a new adventure, or a revision of absorbed lines only) the room's description stands in, so there is always a page.
