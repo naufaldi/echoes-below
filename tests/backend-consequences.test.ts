@@ -22,7 +22,7 @@ test('every linked opportunity follows its actual source decision and stays hidd
 test('aid has a concrete once-only effect and remains applied after reload',()=>{
  for(const link of CAMPAIGN_CONSEQUENCES){
   let s=newSave();s.sceneId=link.target;s.flags[`${link.source}:choice:${link.choice}`]=true;
-  s.party.forEach(a=>{a.hp=2;a.focus=0;});
+  s.party.forEach(a=>{a.hp=2;a.focus=0;a.potions=0;});
   const potions=s.party.map(a=>a.potions);const baseDC=legalActions(s).find(a=>a.id==='exp_choice:0')!.check!.dc;
   s=applyAction(s,'exp_ally:'+link.id,dice);s=JSON.parse(JSON.stringify(s));
   assert.equal(s.facts.filter(f=>f.id==='consequence:'+link.id).length,1);

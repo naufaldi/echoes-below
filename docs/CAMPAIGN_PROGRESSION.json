@@ -8,6 +8,7 @@
       "level": 8,
       "xp": 35545,
       "revisions": 222,
+      "peakPotions": 2,
       "milestones": [
         {
           "scene": "prison",
@@ -264,6 +265,7 @@
       "level": 8,
       "xp": 35545,
       "revisions": 221,
+      "peakPotions": 2,
       "milestones": [
         {
           "scene": "prison",
@@ -519,6 +521,7 @@
       "level": 8,
       "xp": 35545,
       "revisions": 221,
+      "peakPotions": 2,
       "milestones": [
         {
           "scene": "prison",
@@ -774,6 +777,7 @@
       "level": 8,
       "xp": 35545,
       "revisions": 221,
+      "peakPotions": 2,
       "milestones": [
         {
           "scene": "prison",
@@ -1024,7 +1028,7 @@
       ]
     }
   ],
-  "playstyleAssumptions": "Guardian hero in both rule sets. Diplomatic: feed Scrit, negotiate, entrust the seal, no fights, first room option with maximum dice. Aggressive: fight every offered battle, force the gate, secure the seal, then the second room option; seeded dice, first surviving seed from a fixed list (recorded per run; Echo seeds 733 and 1466 lose a Chapter II fight).",
+  "playstyleAssumptions": "Guardian hero in both rule sets. Diplomatic: feed Scrit, negotiate, entrust the seal, no fights, first room option with maximum dice. Aggressive: fight every offered battle, force the gate, secure the seal, then the second room option; seeded dice, first surviving seed from a fixed list (recorded per run; Echo seeds 733 and 1466 lose a Chapter II fight, and since #95 seed 2199 loses at choir-3).",
   "playstyles": [
     {
       "rules": "echo-v1",
@@ -1082,6 +1086,7 @@
           },
           "fights": 0,
           "actions": 250,
+          "peakPotions": 2,
           "forks": [
             {
               "room": "archive-1",
@@ -1153,7 +1158,7 @@
         {
           "profile": "aggressive",
           "classId": "guardian",
-          "seed": 2199,
+          "seed": 3665,
           "mode": "complete",
           "endingId": "iron-watch",
           "ending": "The Iron Watch. The core is sealed, the stairs are guarded, and every threat between Briarwatch and the deep has met your steel. Oren draws up a rota that no one is bound to keep forever, and Mira signs it last. The town above sleeps soundly. The deep remembers you as the party that won, and keeps quiet when your watch passes. Your party helps rebuild the routes below. Doors remain open, watches have endings, and the story of the descent becomes a warning against easy sacrifices.",
@@ -1167,7 +1172,8 @@
             "scrit": "scattered"
           },
           "fights": 42,
-          "actions": 1004,
+          "actions": 1008,
+          "peakPotions": 2,
           "forks": [
             {
               "room": "archive-1",
@@ -1294,6 +1300,7 @@
           },
           "fights": 0,
           "actions": 222,
+          "peakPotions": 2,
           "forks": [
             {
               "room": "archive-1",
@@ -1379,7 +1386,8 @@
             "scrit": "scattered"
           },
           "fights": 24,
-          "actions": 1070,
+          "actions": 1008,
+          "peakPotions": 2,
           "forks": [
             {
               "room": "archive-1",

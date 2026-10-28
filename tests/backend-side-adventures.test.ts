@@ -13,7 +13,7 @@ for(const adventure of SIDE_ADVENTURES)for(const choice of [0,1])test(`${adventu
  s=applyAction(s,command('accept'),n=>n);s.sceneId=adventure.finish;
  assert.ok(!legalActions(s).some(a=>a.id===command('choose-'+choice)));
  s.sceneId=adventure.investigate;s=applyAction(s,command('investigate'),n=>n);s=JSON.parse(JSON.stringify(s));s.sceneId=adventure.finish;
- const potions=s.party.reduce((n,a)=>n+a.potions,0);s=applyAction(s,command('choose-'+choice),n=>n);
+ s.party.forEach(a=>{a.potions=0;});const potions=0;s=applyAction(s,command('choose-'+choice),n=>n);
  assert.equal(s.quests?.find(q=>q.id===adventure.questId)?.status,'completed');
  assert.equal(s.party.reduce((n,a)=>n+a.potions,0),potions+(adventure.choices[choice].potions??0));
  assert.throws(()=>applyAction(s,command('choose-'+choice),n=>n));assert.equal(s.facts.filter(f=>f.id===`side:${adventure.id}:outcome`).length,1);

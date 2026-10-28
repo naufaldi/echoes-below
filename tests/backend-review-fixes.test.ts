@@ -82,7 +82,7 @@ test("companions can regroup for retreat after moving into melee", () => {
   assert.equal(s.sceneId, "hall");
   assert.equal(s.mode, "explore");
 });
-test("downed hero cannot pick, persuade, distract or negotiate but companions can heal and lead travel", () => {
+test("downed hero cannot persuade or negotiate, but companions can pick, distract, heal and lead travel", () => {
   for (const sceneId of ["cookfire", "prison", "bell"] as const) {
     const s = createSave(hero);
     s.sceneId = sceneId;
@@ -91,7 +91,10 @@ test("downed hero cannot pick, persuade, distract or negotiate but companions ca
     s.flags.rescued = sceneId === "bell";
     s.flags.sealKnowledge = true;
     const ids = legalActions(s).map((a) => a.id);
-    for (const id of ["pick", "persuade", "distract", "negotiate"]) {
+    // #95: physical checks pass to the best living companion; the hero still speaks for the party.
+    const physical = sceneId === "cookfire" ? "distract" : sceneId === "prison" ? "pick" : undefined;
+    if (physical) assert.notEqual(legalActions(s).find((a) => a.id === physical)?.actorId ?? "hero", "hero");
+    for (const id of ["persuade", "negotiate"]) {
       assert.ok(!ids.includes(id), `${sceneId} offered ${id}`);
       assert.throws(() =>
         applyAction(s, id, () => {
