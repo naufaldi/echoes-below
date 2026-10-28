@@ -21,6 +21,8 @@ Echoes Below combines three things:
 
 ## 2. Where the game is today (playtest, 27 October 2026, build after #54)
 
+**Update, 28 October 2026 (v1.0 release gate, `3c588bc`, Site version 21):** every §5 row passes except Release, which waits for the owner's "deploy". The diplomatic and aggressive Echo runs reach The Open Relay and The Iron Watch through all 46 rooms with different fork states. A Curated run through Chapter II no longer blanks the page. Every chapter holds 60 fps at 186–351 draw calls. Details are in [RELEASE-GATE-v1.0.md](RELEASE-GATE-v1.0.md). The observations below are from the 27 October playtest and are kept as history.
+
 UI hygiene is done: the design tokens, controls, HUD hierarchy, story panel, labels, creation screen and confirmations were all fixed in #27–#33 and deployed in version 14. The owner still finds the game ugly. The remaining gap is **genre identity**, not polish. Observed:
 
 - **It reads like a dashboard, not a book.**
