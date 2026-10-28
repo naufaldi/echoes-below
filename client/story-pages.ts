@@ -34,14 +34,14 @@ export const levelTag=(up:NonNullable<GameLog['levelUp']>):TagPart[]=>[{text:`Le
 /** A character line opening with its own speaker's name ("Mira: My brother…") under a plate that already says "Mira" (#64 U1). */
 const unprefixed=(text:string,name:string)=>{for(const p of [`${name}:`,`${name} :`])if(text.startsWith(p))return text.slice(p.length).trimStart();return null;};
 
-/** `MIRA · INSIGHT · 22 vs DC 10 · NATURAL 20 · +35 XP` as parts, so the natural roll can be marked. Public numbers only. `named:false` drops the name when a plate already shows who rolled. */
-export function checkTag(check:OutcomeCheck,rolls:Roll[],cast:Cast,{named=true}:{named?:boolean}={}):TagPart[]{
+/** `MIRA · INSIGHT · 22 vs DC 10 · NATURAL 20 · +35 XP` as parts, so the natural roll can be marked. Public numbers only. `named:false` drops the name when a plate already shows who rolled; `short` (combat, #98) writes damage as `5 dmg`. */
+export function checkTag(check:OutcomeCheck,rolls:Roll[],cast:Cast,{named=true,short=false}:{named?:boolean;short?:boolean}={}):TagPart[]{
  const parts:TagPart[]=[...(named?[{text:speakerLabel({speaker:check.actorId,source:'rules'},cast.party,cast.enemies)}]:[]),{text:check.kind==='attack'?'Attack':check.kind==='save'?`${cap(check.skill)} save`:cap(check.skill)}];
  parts.push({text:`${check.total} vs ${check.kind==='attack'?'AC':'DC'} ${check.dc}`});
  if(check.sides===20&&check.natural===20)parts.push({text:check.critical?'Critical':'Natural 20',mark:'high'});
  else if(check.sides===20&&check.natural===1)parts.push({text:'Natural 1',mark:'low'});
  if(check.advantage)parts.push({text:'Advantage'});if(check.disadvantage)parts.push({text:'Disadvantage'});
- const damage=rolls.find(r=>/damage/i.test(r.purpose));if(damage&&check.success)parts.push({text:`${damage.total} damage`});
+ const damage=rolls.find(r=>/damage/i.test(r.purpose));if(damage&&check.success)parts.push({text:`${damage.total} ${short?'dmg':'damage'}`});
  if(check.xp)parts.push({text:`+${check.xp} XP`});
  return parts;
 }
@@ -54,12 +54,12 @@ export const tagText=(tag:TagPart[])=>tag.map(p=>p.text).join(' · ');
  * leading `Name:` its plate already shows, and an unscripted DM line that opens with a party member's name is theirs (#64 U1).
  * `rollTags` (the backlog) keeps the level-up's sentence and also tags rolls that decided no check, such as damage.
  */
-export function storyLines(logs:readonly GameLog[],cast:Cast,{rollTags=false}:{rollTags?:boolean}={}):StoryLine[]{
+export function storyLines(logs:readonly GameLog[],cast:Cast,{rollTags=false,short=false}:{rollTags?:boolean;short?:boolean}={}):StoryLine[]{
  const lines:StoryLine[]=[];let xpBudget=0;
  for(let i=0;i<logs.length;i++){
   const l=logs[i]!;
   if(l.check){
-   lines.push({key:l.id,voice:'narrator',speakerId:null,name:null,text:l.prose??l.text,tag:checkTag(l.check,l.rolls,cast)});
+   lines.push({key:l.id,voice:'narrator',speakerId:null,name:null,text:l.prose??l.text,tag:checkTag(l.check,l.rolls,cast,{short})});
    xpBudget=l.check.xp??0;
    if(l.prose&&logs[i+1]?.text===l.prose)i++;
    continue;
@@ -132,12 +132,17 @@ export function storyPages(save:PublicSave,{readAloud=false,budget=PAGE_CHARS}:{
 /** True when this revision brought the party into the room: its entries open with the room description, or (a new adventure) the description is all there is. */
 export function opensWithDescription(save:PublicSave){const entries=narrationEntries(save),first=entries[0];return !first||first.speaker==='dm'&&first.text===save.scene.description;}
 
-/** Combat (#29): only the newest events, one line each, with the actor's name leading when the line opens with it. */
+/**
+ * Combat (#29): only the newest events, with the actor's name leading when the line opens with it. Lines wrap, never clip (#98),
+ * so the tag is kept short: it drops the roller's name when the line already names them (or opens "You" for the hero), and damage reads `5 dmg`.
+ */
 export function combatLines(save:PublicSave,count=2){
- return storyLines(narrationEntries(save),save).filter(l=>l.text).slice(-count).map(l=>{
-  const actor=[...save.party,...save.enemies].find(a=>l.text.startsWith(speakerLabel({speaker:a.id,source:'rules'},save.party,save.enemies)));
-  const lead=actor?speakerLabel({speaker:actor.id,source:'rules'},save.party,save.enemies):null;
-  return {...l,lead,enemy:!!actor&&actor.side!=='party'};
+ const label=(id:string)=>speakerLabel({speaker:id,source:'rules'},save.party,save.enemies);
+ return storyLines(narrationEntries(save),save,{short:true}).filter(l=>l.text).slice(-count).map(l=>{
+  const actor=[...save.party,...save.enemies].find(a=>l.text.startsWith(label(a.id)));
+  const lead=actor?label(actor.id):null,roller=l.tag?.[0]?.text;
+  const named=!!roller&&(roller===lead||/^You\b/.test(l.text)&&save.party.some(a=>a.id==='hero'&&label(a.id)===roller));
+  return {...l,tag:named?l.tag!.slice(1):l.tag,lead,enemy:!!actor&&actor.side!=='party'};
  });
 }
 /** Whose plate a speaker gets: a party member's palette, the enemy colour, or the chapter accent for anyone else. */

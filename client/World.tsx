@@ -23,7 +23,7 @@ import {OrbitControls,useGLTF,useAnimations,ContactShadows,Billboard} from '@rea
 import * as THREE from 'three';
 import {dressCharacter,raceBreadth} from './character-dress';
 import PortraitStudio from './PortraitStudio';
-import {npcModelClass} from './portrait-look';
+import {npcModelClass,npcAppearance} from './portrait-look';
 import type {Actor,ActionOption,Entity,PublicSave,Speaker,CompanionSetup} from '../shared/types';
 
 /** Compact always-facing HP bar shown over combatants during combat. */
@@ -73,7 +73,7 @@ function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroA
  {save?.scene.bellIndex&&save.mode!=='combat'&&<BellIndexConsole state={save.scene.bellIndex}/>}
  {save?.scene.counterweight&&<CounterweightMechanism state={save.scene.counterweight} reduced={reduced} onSelect={()=>onSelect('chain')}/>}
  {party.map(a=><Character key={(save?.scene.id??'creation')+a.id} actor={{...a,name:actorDisplayName(a,save?.enemies??[])}} attackId={latestAnimation(save?.logs??[],a)?.id} attackCue={latestAnimation(save?.logs??[],a)?.cue} face={face.get(a.id)} selected={a.id===selected||save?.turn?.actorId===a.id} onSelect={()=>onSelect(a.id)} reduced={reduced} labelMode={save?'actor':'none'} showHp={save?.mode==='combat'}/>)}
- {save?.scene.entities.filter(e=>e.kind==='npc'&&!(save.enemies.length&&['guards','vark'].includes(e.id))).map(e=><group key={'npc-'+e.id} position={[0,e.elevation??0,0]}><Character actor={{...demoActor(e.id,npcModelClass(e),e.position),name:e.name,side:e.id.startsWith('ally:')||e.id.startsWith('side:')?'party':'enemy',appearanceId:e.appearanceId??'moss'}} face={face.get('npc:'+e.id)} selected={selected===e.id} onSelect={()=>onSelect(e.id)} reduced={reduced} labelMode="entity"/></group>)}
+ {save?.scene.entities.filter(e=>e.kind==='npc'&&!(save.enemies.length&&['guards','vark'].includes(e.id))).map(e=><group key={'npc-'+e.id} position={[0,e.elevation??0,0]}><Character actor={{...demoActor(e.id,npcModelClass(e),e.position),name:e.name,side:e.id.startsWith('ally:')||e.id.startsWith('side:')?'party':'enemy',appearanceId:npcAppearance(e)}} face={face.get('npc:'+e.id)} selected={selected===e.id} onSelect={()=>onSelect(e.id)} reduced={reduced} labelMode="entity"/></group>)}
  {save?.scene.id==='cookfire'&&save.scene.entities.some(e=>e.id==='guards')&&save.enemies.length===0&&<Character actor={{...demoActor('guard-extra','goblin',[2.4,2.3]),side:'enemy'}} face={face.get('npc:guards')} selected={false} onSelect={()=>onSelect('guards')} reduced={reduced} labelMode="entity"/>}
  {save?.enemies.map(a=><Character key={(save?.scene.id??'creation')+a.id} actor={{...a,name:actorDisplayName(a,save?.enemies??[])}} attackId={latestAnimation(save?.logs??[],a)?.id} attackCue={latestAnimation(save?.logs??[],a)?.cue} face={face.get(a.id)} selected={a.id===selected||save?.turn?.actorId===a.id} onSelect={()=>onSelect(a.id)} reduced={reduced} showHp={save?.mode==='combat'}/>)}
 

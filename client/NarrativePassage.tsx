@@ -30,7 +30,7 @@ export function MechTag({parts}:{parts:TagPart[]}){
  return <span className="mech-tag story-tag" title={tagText(parts)}>{parts.map((p,i)=><Fragment key={i}>{i>0&&" · "}<span className={p.mark?'mark-'+p.mark:undefined}>{p.text}</span></Fragment>)}</span>;
 }
 
-/** Combat events, oldest first, one line each: prose with its tag. The full text stays in the DOM (and the title) when a long line is clipped. */
+/** Combat events, oldest first: prose with its tag. A long event wraps onto a second line rather than clipping (#98); the tag breaks only between its parts. */
 export function EventLines({events}:{events:{key:string;text:string;tag:TagPart[]|null;lead:string|null;enemy:boolean}[]}){
- return <ol className="event-lines" aria-label="Latest events">{events.map(e=><li key={e.key} title={e.tag?`${e.text} ${tagText(e.tag)}`:e.text}>{e.lead?<><b className={e.enemy?'enemy':undefined}>{e.lead}</b>{e.text.slice(e.lead.length)}</>:e.text}{e.tag&&<> <MechTag parts={e.tag}/></>}</li>)}</ol>;
+ return <ol className="event-lines" aria-label="Latest events">{events.map(e=><li key={e.key}>{e.lead?<><b className={e.enemy?'enemy':undefined}>{e.lead}</b>{e.text.slice(e.lead.length)}</>:e.text}{e.tag&&<> <MechTag parts={e.tag}/></>}</li>)}</ol>;
 }
