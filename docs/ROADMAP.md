@@ -66,9 +66,9 @@ Each entry gives the decision, the recommendation, the reason, and what it chang
 *Changes:* new story box (#60). Narration and dialogue leave the generic panel.
 
 **D3. Whose voice is speaking?** Three voices, each with its own type treatment:
-- the **Narrator/DM**: serif, no name plate;
-- **characters**: name plate in that character's colour, with a portrait;
-- **mechanics**: small caps tags such as `INSIGHT 22 vs 10 · +35 XP`.
+- the **Narrator/DM**: Alegreya at 19px, no name plate;
+- **characters**: an IM Fell English name plate at 20px or above, with a portrait; the plate shares the warm iron/paper palette so character colour stays in the portrait;
+- **mechanics**: Alegreya Sans with lining tabular figures; labels use the real Alegreya Sans SC cut because Google Fonts’ Sans cut has no `smcp`. Small caps tags such as `INSIGHT 22 vs 10 · +35 XP` keep prose and numbers apart.
 
 System and implementation wording ("engine", "presentation", "saved", "AI charge") never appears in story surfaces. Where it is still needed, it moves to tooltips or Settings.
 *Changes:* wording pass (#64) and a copy guide in this file (§6).
@@ -114,10 +114,12 @@ System and implementation wording ("engine", "presentation", "saved", "AI charge
 *Changes:* #66 (chapter pages) and #63 (descent map). *Override note:* if the owner wants survival pressure in v1.0, add one issue for a light/torch mechanic and expect engine and balance work.
 
 **D9. What is the visual identity?** **"An adventurer's journal under torchlight."**
-- Story surfaces look like dark paper with ink: warm brown-black, a soft deckled edge, serif body text.
-- HUD chrome becomes neutral stone and iron, quieter than the story.
-- **Each chapter gets its own accent colour**, taken from its mood, replacing gold everywhere.
-- Gold is kept for dice, natural 20s and the primary call to action.
+- One warm iron/soot neutral family carries all chrome; story paper is slightly warmer and lighter. Bone text has secondary and muted steps. A desaturated brass edge marks interaction and selection.
+- IM Fell English gives room, chapter and panel titles their worn print character, at 20px and above. IM Fell English SC carries the wordmark; Alegreya carries prose and Alegreya Sans carries controls. Fonts load through Google Fonts links with preconnect and `display=swap`.
+- Bevelled corners repeat across panels, cards, controls, cartouches and name plates (`corner-shape:bevel`, small rounded fallback). A low brass inner top highlight and a soft shadow provide depth. Choice rows remain borderless.
+- **Chapter colour is limited to chapter title/recap pages and the current descent marker.** The HUD no longer re-tints its stone and mist tokens per chapter. This deliberately departs from #110 to keep one material over the six environments.
+- Gold is kept for dice, natural 20s and the primary call to action. The primary control has a deep fill, a 1px gold frame and a gold label. State colour stays on meaningful health, hostility and error indicators.
+- Compact individual party cards, a quest tracker, borderless verb groups and a slim descent line leave the scene open. Playback hides the empty action panel. Creation sits below a large game-title lockup, with no feature strip or repeated eyebrows.
 
 Taste is the owner's call, so #55 first produces **three HTML mockup directions** of the same screen (story box, action list, HUD):
 - (a) the dark journal (recommended);
