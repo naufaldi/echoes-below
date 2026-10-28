@@ -161,6 +161,8 @@ export interface PublicSave {
   };
   inventory: { guardKey: boolean; ledger: boolean; seal: boolean };
   ending: string | null;
+  /** #69: present only on a completed descent whose ending names its title. */
+  recap?: import("./endings.js").CampaignRecap;
   checkpoints: { id: string; label: string }[];
   createdAt: string;
   updatedAt: string;

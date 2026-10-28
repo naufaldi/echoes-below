@@ -1,6 +1,7 @@
 import {EXPEDITION,expeditionRoom,type ExpeditionId,type ExpeditionRoom} from '../shared/campaign.js';
 import {CURATED_ENCOUNTERS} from './encounters.js';
 import type {Save} from './game.js';
+import type {CampaignRecap,EndingId} from '../shared/endings.js';
 
 /** Derived from flags every Release 1 save already records; nothing here is persisted. */
 export interface PlaystyleLedger {mercy:number;force:number;stance:'mercy'|'force';mira:number;oren:number;companion:Companion;scrit:'guardian'|'friend'|'scattered'|'stranger';}
@@ -129,7 +130,7 @@ export function projectFork(s:Save,scene:{id:string;description:string;entities:
  if(v.ally&&s.mode==='explore'&&!s.flags[`${scene.id}:resolved`])scene.entities.push({id:'fork-ally',name:v.ally.name,kind:'npc',modelClassId:'scout',position:[4,2],description:v.ally.description});
 }
 
-export interface CampaignEnding {id:'open-relay'|'long-way-home'|'broken-chain'|'iron-watch';title:string;text:string;}
+export interface CampaignEnding {id:EndingId;title:string;text:string;}
 export const ENDINGS:Record<CampaignEnding['id'],CampaignEnding>={
  'open-relay':{id:'open-relay',title:'The Open Relay',text:'Scrit’s cookfire burns at the top of the stairs, and the relay is a crossroads again instead of a border. Market workers, freed prisoners and goblin cooks share the same road to Briarwatch. Every fight you could have started and did not is someone walking home. When the Bell rings now, it announces arrivals.'},
  'long-way-home':{id:'long-way-home',title:'The Long Way Home',text:'The people you spared walk ahead of you: prisoners, singers, a ferryman with his boat. The relay is quiet, and the goblins who kept it have gone somewhere no one thought to ask about. Briarwatch will learn a gentle story of the descent with one conversation still unfinished. The Bell stays silent until someone goes back down to finish it.'},
@@ -143,3 +144,9 @@ export function selectEnding(s:Save):CampaignEnding{
  return ENDINGS[s.flags['depth-7:choice:0']?'broken-chain':'iron-watch'];
 }
 export function endingText(s:Save){const ending=selectEnding(s),last=EXPEDITION.at(-1)!;return `${ending.title}. ${ending.text} ${last.outcomes[s.flags[`${last.id}:choice:0`]?0:1]}`;}
+/** #69: the ending page's recap. Only for a finished descent whose saved ending carries this title; a Release 1 run keeps the untitled ending it was shown and gets none. */
+export function campaignRecap(s:Save):CampaignRecap|undefined{
+ if(s.mode!=='complete'||s.sceneId!==EXPEDITION.at(-1)!.id)return;
+ const ending=selectEnding(s);if(!s.ending?.startsWith(`${ending.title}. `))return;
+ const l=playstyleLedger(s);return {endingId:ending.id,title:ending.title,stance:l.stance,spared:l.mercy,fought:l.force,companion:l.companion,mira:l.mira,oren:l.oren,scrit:l.scrit};
+}

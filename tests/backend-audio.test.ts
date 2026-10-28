@@ -31,7 +31,8 @@ test('music follows mode and room cues stay within one save and room',()=>{
 });
 test('every audio author is credited in game and in the README',()=>{
  const manifest=JSON.parse(readFileSync(new URL('../public/assets/audio/manifest.json',import.meta.url),'utf8'));
- const app=readFileSync(new URL('../client/App.tsx',import.meta.url),'utf8'),readme=readFileSync(new URL('../README.md',import.meta.url),'utf8');
+ // #69: the in-game credits page is generated from the manifests (Settings and the ending page open it).
+ const app=readFileSync(new URL('../client/asset-credits-data.ts',import.meta.url),'utf8'),readme=readFileSync(new URL('../README.md',import.meta.url),'utf8');
  for(const f of manifest.files){const author=f.author.replace(/ \(.*\)$/,'');assert.ok(app.includes(author)&&readme.includes(author),author);}
  for(const f of manifest.files.filter((f:any)=>f.licence==='CC-BY-4.0'))assert.ok(app.includes(f.title)&&app.includes('CC-BY 4.0')&&readme.includes(f.title),f.title);
 });
