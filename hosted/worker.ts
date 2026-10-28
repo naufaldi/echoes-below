@@ -14,7 +14,7 @@ function json(value:unknown,status=200,headers:Record<string,string>={}){return 
 async function readBody(request:Request){if(!request.headers.get('content-type')?.startsWith('application/json'))throw new GameError(415,'TYPE','JSON is required.');const max=1450000;if(Number(request.headers.get('content-length')??0)>max)throw new GameError(413,'SIZE','The request is too large.');const reader=request.body?.getReader(),chunks:Uint8Array[]=[];let total=0;if(reader)while(true){const part=await reader.read();if(part.done)break;total+=part.value.length;if(total>max){await reader.cancel();throw new GameError(413,'SIZE','The request is too large.');}chunks.push(part.value);}const bytes=new Uint8Array(total);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}const text=new TextDecoder().decode(bytes);try{return JSON.parse(text);}catch{throw new GameError(400,'JSON','The request could not be read.');}}
 async function execute(env:Env,store:Store,id:string,input:unknown){
  const body=commandSchema.parse(input),digest=await hash(JSON.stringify({id,...body})),duplicate=await store.duplicate(body.commandId,digest);if(duplicate)return duplicate;
- const before=await store.read(id);if(before.revision!==body.expectedRevision)throw new GameError(409,'STALE','Reload the latest saved adventure.');
+ const before=await store.read(id);if(before.revision!==body.expectedRevision)throw new GameError(409,'STALE','The story moved on. Reload your adventure.');
  if(!legalActions(before).some(a=>a.id===body.actionId))throw new GameError(422,'ACTION','That action is not available.');
  if(body.companionPlans)before.plans=body.companionPlans;
  if(!body.companionPlans&&env.OPENAI_API_KEY&&before.mode==='combat'&&(!before.tactical||before.party.some(a=>a.id===before.turn?.actorId&&a.id!=='hero'&&a.hp>0))&&!before.flags.retreatRequested&&['end_turn','continue','tactical:auto'].includes(body.actionId))try{before.plans=await planningOnce(store,body.commandId,digest,()=>plans(env,store,before));}catch(error){if(error instanceof GameError&&['AI_PENDING','COMMAND_REUSED'].includes(error.code))throw error;log(before,'Companion AI is unavailable. The party uses protective tactical rules.');}
@@ -30,7 +30,7 @@ export default {async fetch(request:Request,env:Env):Promise<Response>{
   if(path==='/api/session'&&request.method==='GET'){const session=token??crypto.randomUUID();return json({csrfToken:await hash('csrf:'+session)},200,{'Set-Cookie':`__Host-echo=${session}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=31536000`});}
   if(path==='/api/health')return json({ok:true,aiConfigured:!!env.OPENAI_API_KEY,hosted:true});
   if(request.headers.get('x-echoes-ai-mode')!=='sponsored')env={...env,OPENAI_API_KEY:undefined};
-  if(!token)throw new GameError(403,'SESSION','Refresh the page to establish your private save session.');
+  if(!token)throw new GameError(403,'SESSION','Refresh the page to open your private session.');
   if(request.method==='POST'&&request.headers.get('x-csrf-token')!==await hash('csrf:'+token))throw new GameError(403,'CSRF','Refresh your adventure before retrying.');
   const store=new Store(env.DB,await hash('owner:'+token));
   const body=request.method==='POST'?await readBody(request):null;

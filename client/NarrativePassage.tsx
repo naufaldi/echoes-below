@@ -1,21 +1,24 @@
 import {Fragment,useCallback,useEffect,useRef,useState,useSyncExternalStore} from 'react';
-import {TYPEWRITER_CPS,tagText,type TagPart} from './story-pages';
+import {tagText,type TagPart} from './story-pages';
+import {SPEED_CPS} from './reading-settings';
+import {useReading} from './use-reading';
 
 const motionQuery=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):null;
 /** The OS preference, live. The in-game setting is passed in separately; CSS rules cannot stop a JS reveal. */
 export function useOSReducedMotion(){return useSyncExternalStore(f=>{motionQuery?.addEventListener('change',f);return()=>motionQuery?.removeEventListener('change',f);},()=>!!motionQuery?.matches,()=>false);}
 
-/** Typewriter reveal at TYPEWRITER_CPS. `instant` (reduced motion, a page already read) shows the whole page at once. */
-export function useReveal(text:string,instant:boolean){
+/** Typewriter reveal at the player's text speed (#68; normal is TYPEWRITER_CPS). `instant` (reduced motion, a page already read, or instant text) shows the whole page at once. */
+export function useReveal(text:string,still:boolean){
+ const cps=SPEED_CPS[useReading().speed],instant=still||cps===Infinity;
  const [state,setState]=useState({text,count:0});const frame=useRef(0);
  const count=instant?text.length:state.text===text?state.count:0;
  useEffect(()=>{
   if(instant)return;
   const start=performance.now();
-  const tick=(now:number)=>{const n=Math.min(text.length,Math.floor((now-start)/1000*TYPEWRITER_CPS));setState(s=>s.text===text&&s.count===n?s:{text,count:n});if(n<text.length)frame.current=requestAnimationFrame(tick);};
+  const tick=(now:number)=>{const n=Math.min(text.length,Math.floor((now-start)/1000*cps));setState(s=>s.text===text&&s.count===n?s:{text,count:n});if(n<text.length)frame.current=requestAnimationFrame(tick);};
   setState({text,count:0});frame.current=requestAnimationFrame(tick);
   return()=>cancelAnimationFrame(frame.current);
- },[text,instant]);
+ },[text,instant,cps]);
  const complete=useCallback(()=>{cancelAnimationFrame(frame.current);setState({text,count:text.length});},[text]);
  return {count,done:count>=text.length,complete};
 }

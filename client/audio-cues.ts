@@ -3,12 +3,13 @@ import type {Actor,OutcomeCheck,PublicSave} from '../shared/types.js';
 /** Pure audio decisions, kept free of the DOM so they can be tested without a browser. */
 export type Sfx='dice-shake'|'die-throw'|'hit'|'miss'|'footstep'|'door-open'|'ui-click';
 export type MusicMode='silent'|'explore'|'combat'|'calm';
-export interface AudioSettings{master:number;music:number;sfx:number;muted:boolean}
-export const DEFAULT_AUDIO_SETTINGS:AudioSettings={master:.8,music:.5,sfx:.8,muted:false};
+/** `voice` is the AI voice's own level, under master (#68: kept with the rest instead of resetting each visit). */
+export interface AudioSettings{master:number;music:number;sfx:number;voice:number;muted:boolean}
+export const DEFAULT_AUDIO_SETTINGS:AudioSettings={master:.8,music:.5,sfx:.8,voice:.8,muted:false};
 const unit=(value:unknown,fallback:number)=>typeof value==='number'&&Number.isFinite(value)?Math.min(1,Math.max(0,value)):fallback;
 export function parseAudioSettings(raw:string|null):AudioSettings{
  let value:any={};try{value=raw?JSON.parse(raw):{};}catch{}
- const d=DEFAULT_AUDIO_SETTINGS;return{master:unit(value?.master,d.master),music:unit(value?.music,d.music),sfx:unit(value?.sfx,d.sfx),muted:value?.muted===true};
+ const d=DEFAULT_AUDIO_SETTINGS;return{master:unit(value?.master,d.master),music:unit(value?.music,d.music),sfx:unit(value?.sfx,d.sfx),voice:unit(value?.voice,d.voice),muted:value?.muted===true};
 }
 /** A revealed frame is a hit when anyone lost health; otherwise a miss when the log says so ("dismiss" is not a miss). */
 export function outcomeCue(before:Pick<Actor,'id'|'hp'>[],after:Pick<Actor,'id'|'hp'>[],text:string):'hit'|'miss'|null{

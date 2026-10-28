@@ -1,0 +1,19 @@
+/* #68 Text size: the story box and the choices grow; the HUD chrome keeps its size. `data-text-size` sits on the page root only when the size is not normal, so the normal layout is untouched. This file can load before style.css, so every rule names the root attribute and two classes or more. */
+:root[data-text-size=large]{--read-scale:1.12;--story-grow:10px;--combat-grow:3px}
+:root[data-text-size=larger]{--read-scale:1.25;--story-grow:19px;--combat-grow:8px}
+/* Three lines at the larger size: the box grows upward by the extra line height; pages hold fewer letters (pageBudget). */
+:root[data-text-size] .story-box:not(.combat){height:calc(118px + var(--story-grow))}
+:root[data-text-size] .story-box .story-text,:root[data-text-size] .story-box .voice-narrator,:root[data-text-size] .story-box .voice-character,:root[data-text-size] .reading-sample .story-text{font-size:calc(var(--fs-narration) * var(--read-scale))}
+/* Combat keeps its two event lines, a little taller. */
+:root[data-text-size] .story-box.combat{height:calc(62px + var(--combat-grow))}
+:root[data-text-size] .story-box.combat .event-lines{font-size:calc(var(--fs-md) * var(--read-scale))}
+:root[data-text-size] .actions-panel .action strong{font-size:calc(var(--fs-xs) * var(--read-scale))}
+:root[data-text-size] .actions-panel .member-choices button{font-size:calc(var(--fs-xs) * var(--read-scale))}
+:root[data-text-size] .confirm-pop h2,:root[data-text-size] .modal.confirm h2{font-size:calc(var(--fs-xl) * var(--read-scale))}
+:root[data-text-size] .confirm-pop p,:root[data-text-size] .modal.confirm p{font-size:calc(var(--fs-lg) * var(--read-scale))}
+/* Narrow windows: the action drawer and the error toast clear the taller box. */
+@media(max-width:999px){
+  :root[data-text-size] .app:not(:has(.story-box.combat)) .actions-panel{bottom:calc(184px + var(--story-grow))}
+  :root[data-text-size] .app:not(:has(.story-box.combat)) .error{bottom:calc(184px + var(--story-grow))}
+  :root[data-text-size] .app:has(.story-box.combat) .actions-panel,:root[data-text-size] .app:has(.story-box.combat) .error{bottom:calc(126px + var(--combat-grow))}
+}

@@ -9,6 +9,8 @@ import {cueFor,type WorldCue} from './combat-cue';
 import NarrativePassage,{MechTag,useOSReducedMotion,useReveal} from './NarrativePassage';
 import {NamePlate,SpeakerPortrait,StoryBark,storyKeyTarget} from './StoryBox';
 import {checkTag,readingDelay,type TagPart} from './story-pages';
+import {PAUSE_SCALE} from './reading-settings';
+import {useReading} from './use-reading';
 import {actorDisplayName} from '../shared/visual-identity';
 
 const cap=(s:string)=>s.charAt(0).toUpperCase()+s.slice(1);
@@ -38,7 +40,8 @@ export function TurnPlayback({before,after,reduced,autoAdvance,barks,onFrame,onR
  const finished=revealed&&typed.done;
  const advance=()=>{if(!revealed){revealNow.current?.();return;}if(!typed.done){typed.complete();return;}if(step+1<steps.length)setStep(step+1);else done.current();};
  const keys=useRef(advance);keys.current=advance;
- useEffect(()=>{if(!autoAdvance||!finished)return;const t=setTimeout(()=>keys.current(),order.length?2500:readingDelay(text));return()=>clearTimeout(t);},[autoAdvance,finished,text,order.length]);
+ const {pause}=useReading();
+ useEffect(()=>{if(!autoAdvance||!finished)return;const t=setTimeout(()=>keys.current(),order.length?2500*PAUSE_SCALE[pause]:readingDelay(text,pause));return()=>clearTimeout(t);},[autoAdvance,finished,text,order.length,pause]);
  if(!frame)return null;
  const cast={party:frame.party,enemies:frame.enemies,scene:after.scene};
  const tags:TagPart[][]=!revealed||order.length?[]:frame.log.check?[checkTag(frame.log.check,frame.log.rolls,cast,{named:frame.log.check.actorId!==actor?.id,short:(frame.mode??after.mode)==='combat'})]:frame.log.rolls.map(r=>[{text:cap(r.purpose)},{text:`${r.kept} ${r.modifier<0?'−':'+'} ${Math.abs(r.modifier)} = ${r.total}`}]);

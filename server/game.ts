@@ -1248,7 +1248,7 @@ function startCombat(s: Save, dice: Dice, advantage = false) {
     const level=s.level??1;
     s.enemies=Array.from({length:(room.enemy==='vark'?2:3)-campaignEffects(s.sceneId,s.flags).fewerEnemies},(_,i)=>({...enemy(`exp-${i}`),name:room.enemy==='vark'?(i===0?'Resonant guardian':'Bound sentry'):room.enemy==='skeleton'?'Bound skeleton':room.enemy==='slime'?'Luminous slime':room.enemy==='spider'?'Cavern spider':'Goblin defender',classId:i&&room.enemy==='vark'?'skeleton':room.enemy,hp:10+level*3+(room.enemy==='vark'&&i===0?12:0),maxHp:10+level*3+(room.enemy==='vark'&&i===0?12:0),defense:11+Math.floor(level/3),attributes:{might:2+Math.floor(level/3),agility:1,insight:0,presence:0},position:[(i-1)*2,2] as [number,number]}));
   }
-  if(s.tactical){s.enemies=encounterEnemies(s.sceneId,enemy('template'),campaignEffects(s.sceneId,s.flags).fewerEnemies,!!s.flags.alarm);if(!s.enemies.length)throw new GameError(422,'NO_ENCOUNTER','This room has no authored combat encounter.');startTacticalCombat(s,dice);return;}
+  if(s.tactical){s.enemies=encounterEnemies(s.sceneId,enemy('template'),campaignEffects(s.sceneId,s.flags).fewerEnemies,!!s.flags.alarm);if(!s.enemies.length)throw new GameError(422,'NO_ENCOUNTER','There is no fight to start in this room.');startTacticalCombat(s,dice);return;}
   const rolls = [...s.party, ...s.enemies]
     .map((a) => {
       const r = rollD20(

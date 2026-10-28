@@ -1,6 +1,7 @@
 import type {Actor,GameLog,OutcomeCheck,PublicSave,Roll} from '../shared/types.js';
 import {speakerLabel} from '../shared/speaker-label.js';
 import {narrationEntries} from './session.js';
+import {readingPause,type ReadingPause} from './reading-settings.js';
 
 /**
  * Issue #60: the story box's page model, kept pure so it can be tested. Three voices (ROADMAP D3): the narrator speaks
@@ -11,8 +12,8 @@ import {narrationEntries} from './session.js';
 export const TYPEWRITER_CPS=40;
 /** Characters per page: three lines of 18px Garamond in the narrowest box (1100px window). Longer passages page. */
 export const PAGE_CHARS=200;
-/** Auto-advance waits for a reading pause: about 22 characters a second, never under 1.8s. */
-export const readingDelay=(text:string)=>Math.max(1800,900+text.length*45);
+/** Auto-advance waits for a reading pause: about 22 characters a second, never under 1.8s, scaled by the player's chosen pause (#68). */
+export const readingDelay=(text:string,pause:ReadingPause='normal')=>readingPause(text,pause);
 
 export type Voice='narrator'|'character';
 /** `xp` marks a tag that is only an XP amount, so two on one page sum (#64 U4). */

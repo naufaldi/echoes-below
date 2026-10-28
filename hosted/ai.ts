@@ -9,10 +9,10 @@ export async function reserve(store:Store,amount:number){
  const day=new Date().toISOString().slice(0,10),ids=['lifetime',`day:${day}`,`visitor:${store.owner}:${day}`];
  await store.db.batch(ids.map(id=>store.db.prepare('INSERT OR IGNORE INTO budgets(id,reserved) VALUES(?,0)').bind(id)));
  const result=await store.db.prepare('WITH eligible AS MATERIALIZED (SELECT 1 WHERE (SELECT reserved FROM budgets WHERE id=?) + ? <= 25 AND (SELECT reserved FROM budgets WHERE id=?) + ? <= 2 AND (SELECT reserved FROM budgets WHERE id=?) + ? <= 0.30) UPDATE budgets SET reserved=reserved+? WHERE id IN (?,?,?) AND EXISTS(SELECT 1 FROM eligible) RETURNING id').bind(ids[0],amount,ids[1],amount,ids[2],amount,amount,...ids).all();
- if(result.results.length!==3)throw new GameError(429,'SPONSORED_LIMIT','The sponsored allowance is exhausted. Continue the authored adventure or connect your own OpenAI key.');
+ if(result.results.length!==3)throw new GameError(429,'SPONSORED_LIMIT','The host’s allowance is used up. Play on in free story mode, or connect your own OpenAI key.');
 }
 export async function provider(env:AIEnv,store:Store,path:string,body:unknown,cost:number){
- if(!env.OPENAI_API_KEY)throw new GameError(503,'AI_UNAVAILABLE','Connect your own OpenAI key for AI dialogue and voice. The authored game is playable without it.');
+ if(!env.OPENAI_API_KEY)throw new GameError(503,'AI_UNAVAILABLE','Connect your own OpenAI key for AI dialogue and voice. The whole adventure plays without it.');
  await reserve(store,cost);
  const form=body instanceof FormData;
  const response=await fetch('https://api.openai.com/v1/'+path,{method:'POST',headers:{Authorization:`Bearer ${env.OPENAI_API_KEY}`,...form?{}:{'Content-Type':'application/json'}},body:form?body:JSON.stringify(body),signal:AbortSignal.timeout(25000)});

@@ -4,7 +4,9 @@ import type {BarkEvent} from '../shared/companion-barks';
 import {PortraitImage} from './Portrait';
 import {portraitSubjectFor} from './portrait-look';
 import NarrativePassage,{EventLines,MechTag,useOSReducedMotion,useReveal} from './NarrativePassage';
-import {combatLines,opensWithDescription,paginate,plateColour,readingDelay,storyPages} from './story-pages';
+import {PAGE_CHARS,combatLines,opensWithDescription,paginate,plateColour,readingDelay,storyPages} from './story-pages';
+import {pageBudget} from './reading-settings';
+import {useReading} from './use-reading';
 
 type Cast=Pick<PublicSave,'party'|'enemies'>&{scene:Pick<PublicSave['scene'],'entities'>};
 /** The class glyphs the party panel uses; the portrait shows one until its snapshot is ready. */
@@ -66,7 +68,9 @@ function StoryPages({storyId,save,dialogue,reduced,autoAdvance,active,bark,onBac
  const box=useRef<HTMLElement>(null),os=useOSReducedMotion(),still=reduced||os;
  const combat=!dialogue&&save.mode==='combat';
  const [readAloud]=useState(()=>!dialogue&&!combat&&opensWithDescription(save)&&!readAloudSeen(save.id,save.scene.id));
- const pages=useMemo(()=>dialogue?paginate([{key:dialogue.id,voice:dialogue.speaker==='dm'?'narrator':'character',speakerId:dialogue.speaker==='dm'?null:dialogue.speaker,name:dialogue.speaker==='dm'?null:COMPANION_NAMES[dialogue.speaker],text:dialogue.text,tag:null}]):storyPages(save,{readAloud}),[save,dialogue,readAloud]);
+ // #68 Larger text fits fewer letters in the box's three lines, so pages hold less.
+ const reading=useReading(),budget=pageBudget(reading.size,PAGE_CHARS);
+ const pages=useMemo(()=>dialogue?paginate([{key:dialogue.id,voice:dialogue.speaker==='dm'?'narrator':'character',speakerId:dialogue.speaker==='dm'?null:dialogue.speaker,name:dialogue.speaker==='dm'?null:COMPANION_NAMES[dialogue.speaker],text:dialogue.text,tag:null}],{budget}):storyPages(save,{readAloud,budget}),[save,dialogue,readAloud,budget]);
  // Playback already showed this revision's outcome, so the settled box shows its pages whole, from the first.
  const [resumed]=useState(()=>!dialogue&&!readAloud&&!!save.presentation?.length);
  const [view,setView]=useState(()=>({page:0,boxed:readAloud}));
@@ -93,7 +97,7 @@ function StoryPages({storyId,save,dialogue,reduced,autoAdvance,active,bark,onBac
   };
   window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);
  },[active,combat]);
- useEffect(()=>{if(!autoAdvance||!active||!done||!more)return;const t=setTimeout(()=>keys.current.advance(),readingDelay(current.text));return()=>clearTimeout(t);},[autoAdvance,active,done,more,current.text]);
+ useEffect(()=>{if(!autoAdvance||!active||!done||!more)return;const t=setTimeout(()=>keys.current.advance(),readingDelay(current.text,reading.pause));return()=>clearTimeout(t);},[autoAdvance,active,done,more,current.text,reading.pause]);
  const speaker=current.voice==='character'&&current.speakerId?{id:current.speakerId,name:current.name??current.speakerId}:null;
  const journal=<button className="story-link" onClick={onBacklog} aria-keyshortcuts="J" title="Read everything so far (J)">Journal <kbd>J</kbd></button>;
  if(combat){

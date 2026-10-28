@@ -95,4 +95,4 @@ export const mood=(scene:string):MoodOverride=>({…});                       //
    - `&choice=0` takes the first option in every earlier room; the default is `choice=1`. This flips companion-axis forks such as `roots-4` (`0` → Mira, `1` → Oren). The stance forks (`archive-1`, `choir-4`) and the Scrit forks (`market-5`, `depth-2`) depend on fights and on Scrit, and the preview route doesn't change them: it always gets the mercy/ally variant. To see the other variant, use a played save.
 3. The route is `POST /api/dev/preview/:sceneId?rules=echo|curated&choice=0|1`. It needs the session CSRF token and a loopback socket. It is registered only by the local Fastify app (`server/dev-preview.ts`), never by the hosted Worker, and the build fails if `/api/dev/` appears in the Worker bundle.
 
-Preview saves are ordinary local saves named `Preview <scene>`. They appear in "Choose a saved adventure".
+Preview saves are ordinary local saves named `Preview <scene>`. They appear in "Choose an adventure".
