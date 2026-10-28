@@ -19,6 +19,7 @@
     ],
     "skins": 1,
     "source": "https://raw.githubusercontent.com/euuuuuuan/cairnfall-public/main/assets/vendor/quaternius_rpg/Warrior.gltf",
+    "author": "Quaternius",
     "license": "CC0 per original Quaternius RPG Character pack",
     "original": "https://quaternius.com/packs/rpgcharacters.html"
   },
@@ -43,6 +44,7 @@
     ],
     "skins": 1,
     "source": "https://raw.githubusercontent.com/euuuuuuan/cairnfall-public/main/assets/vendor/quaternius_rpg/Ranger.gltf",
+    "author": "Quaternius",
     "license": "CC0 per original Quaternius RPG Character pack",
     "original": "https://quaternius.com/packs/rpgcharacters.html"
   },
@@ -68,6 +70,7 @@
     ],
     "skins": 1,
     "source": "https://raw.githubusercontent.com/euuuuuuan/cairnfall-public/main/assets/vendor/quaternius_rpg/Wizard.gltf",
+    "author": "Quaternius",
     "license": "CC0 per original Quaternius RPG Character pack",
     "original": "https://quaternius.com/packs/rpgcharacters.html"
   },
@@ -90,6 +93,7 @@
     ],
     "skins": 1,
     "source": "https://raw.githubusercontent.com/euuuuuuan/cairnfall-public/main/assets/vendor/quaternius_rpg/Rogue.gltf",
+    "author": "Quaternius",
     "license": "CC0 per original Quaternius RPG Character pack",
     "original": "https://quaternius.com/packs/rpgcharacters.html"
   }

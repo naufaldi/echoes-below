@@ -10,7 +10,7 @@
     "dev": "vite --host 127.0.0.1",
     "dev:server": "tsx watch --env-file-if-exists=.env server/index.ts",
     "start": "tsx --env-file-if-exists=.env server/index.ts",
-    "build": "node scripts/generate-campaign-map.mjs && vite build && node scripts/verify-asset-bundle.mjs && node scripts/build-worker.mjs",
+    "build": "node scripts/generate-campaign-map.mjs && node scripts/generate-credits.mjs && vite build && node scripts/verify-asset-bundle.mjs && node scripts/build-worker.mjs",
     "typecheck:server": "tsc -p tsconfig.server.json --noEmit",
     "test": "tsx --test tests/backend*.test.ts",
     "typecheck:client": "tsc -p tsconfig.json --noEmit",

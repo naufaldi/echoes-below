@@ -18,7 +18,7 @@ import {logisticsFor,logisticsActions,applyLogistics,grantLogisticsLoot} from '.
 import {makeCharacter,restoreClassResources,classResources} from '../shared/curated-rules.js';
 import {projectTactical,initializeTactical,startTacticalCombat,tacticalActions,applyTactical,tacticalProposal} from './tactical.js';
 import {CAMPAIGN_CONSEQUENCES,availableConsequences,campaignEffects} from './campaign-consequences.js';
-import {playedRoom,projectFork,endingText} from './playstyle.js';
+import {playedRoom,projectFork,endingText,campaignRecap} from './playstyle.js';
 import {COMPANION_STORIES} from '../shared/companion-stories.js';
 import {EXPEDITION,expeditionRoom,expeditionScene} from "../shared/campaign.js";
 import {outcomeCheck,attackProse,trapProse,type Outcome} from './outcome.js';
@@ -1066,11 +1066,13 @@ export function publicSave(s: Save): PublicSave {
     scene.description='The guards have fallen. Scrit has fled deeper into the relay. The passage to the prison is clear.';
     scene.objective='Continue through the open prison passage.';
   }
+  const recap=campaignRecap(s);
   return {
     ...structuredClone(visible),
     tacticalProposal:tacticalProposal(s),
     ...(s.tactical?{logistics:structuredClone(logisticsFor(s)),quests:questProgress(s)}:{}),
     scene,
+    ...(recap?{recap}:{}),
     actions: legalActions(s),
     checkpoints: checkpointIds,
   };
