@@ -60,7 +60,7 @@ export async function buildApp(
     options.ai === false
       ? new OpenAIProvider(storage, "")
       : (options.ai ?? new OpenAIProvider(storage));
-  function requireSponsored(req:{headers:Record<string,unknown>}){if(req.headers['x-echoes-ai-mode']!=='sponsored')throw new GameError(403,'AI_MODE','Choose sponsored AI explicitly before using the server’s AI allowance.');}
+  function requireSponsored(req:{headers:Record<string,unknown>}){if(req.headers['x-echoes-ai-mode']!=='sponsored')throw new GameError(403,'AI_MODE','Choose the host’s allowance in Settings before using it.');}
   const csrf = randomUUID();
   const inflight = new Map<
     string,
@@ -126,7 +126,7 @@ export async function buildApp(
       error: "SERVER_ERROR",
       message:
         status === 500
-          ? "The operation could not be saved. Reload the last confirmed state before retrying."
+          ? "Something went wrong, and that choice did not count. Reload to pick up from your last choice."
           : "The request could not be accepted.",
     });
   });
@@ -137,7 +137,7 @@ export async function buildApp(
       throw new GameError(
         409,
         "STALE_REVISION",
-        `This save is now revision ${actual}. Reload before choosing another action.`,
+        `The story moved on in another window. Reload before choosing another action.`,
       );
   };
   async function execute(saveId: string, body: z.infer<typeof actionSchema>, allowAI=false) {

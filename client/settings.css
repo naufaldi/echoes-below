@@ -1,0 +1,23 @@
+/* #68 Settings: Reading, Sound, Motion, Play mode, then About. This file can load before style.css, so rules name two classes. */
+.modal.settings-panel{width:520px}
+.settings-panel .settings-section{margin-top:22px}
+.settings-panel .settings-section h3{margin:0;padding-bottom:6px;border-bottom:1px solid var(--border-default);font:600 var(--fs-xs)/1.3 var(--font-ui);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--accent)}
+.settings-panel .toggle{padding:14px 0}
+.settings-panel .choice-row{flex-wrap:wrap;row-gap:10px}
+.settings-panel .choice-row.off{opacity:.55}
+.settings-panel .segmented{display:inline-flex;flex:none;border:1px solid var(--border-default);border-radius:3px;overflow:hidden}
+.settings-panel .segmented label{position:relative;display:inline-flex;cursor:pointer}
+.settings-panel .segmented input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:inherit}
+.settings-panel .segmented span{display:inline-flex;align-items:center;min-height:28px;padding:0 11px;font:500 var(--fs-sm)/1 var(--font-ui);color:var(--text-secondary);transition:background-color .15s var(--ease-out),color .15s var(--ease-out)}
+.settings-panel .segmented label+label span{border-left:1px solid var(--border-subtle)}
+.settings-panel .segmented input:checked+span{background:var(--accent-tint);color:var(--text-primary)}
+.settings-panel .segmented input:focus-visible+span{outline:2px solid var(--accent);outline-offset:-2px}
+.settings-panel .segmented input:disabled{cursor:default}
+.settings-panel .reading-sample{margin:12px 0 2px;padding:10px 14px;min-height:calc(var(--fs-narration) * 1.4 * 2);border-left:2px solid color-mix(in srgb,var(--gold) 60%,transparent);background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 7%,transparent),transparent 75%)}
+.settings-panel .reading-sample .story-text{line-height:1.4;color:var(--text-primary)}
+.settings-panel .settings-button{flex:none;min-height:28px;padding:0 12px;border:1px solid var(--border-default);border-radius:3px;font-size:var(--fs-sm);color:var(--text-primary)}
+.settings-panel .ai-mode-picker{margin-top:14px}
+.settings-panel .settings-about{margin-top:22px;border-top:1px solid var(--border-default)}
+.settings-panel .settings-about summary{min-height:24px;padding:12px 0 0;cursor:pointer;font:600 var(--fs-xs)/1.3 var(--font-ui);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--accent)}
+.settings-panel .settings-about .credits{margin-top:10px}
+@media(hover:hover) and (pointer:fine){.settings-panel .segmented label:hover input:not(:checked,:disabled)+span{background:var(--accent-wash);color:var(--text-primary)}.settings-panel .settings-button:hover{border-color:var(--accent)}}

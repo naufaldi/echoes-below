@@ -10,13 +10,13 @@ const LOOPS:Record<Loop,string>={explore:'music/exploration-in-darkness.m4a',com
 const MIX:Record<MusicMode,Record<Loop,number>>={silent:{explore:0,combat:0,ambience:0},explore:{explore:.55,combat:0,ambience:.8},combat:{explore:0,combat:.6,ambience:.35},calm:{explore:0,combat:0,ambience:.6}};
 
 let settings:AudioSettings=(()=>{try{return parseAudioSettings(localStorage.getItem(KEY));}catch{return parseAudioSettings(null);}})();
-const listeners=new Set<()=>void>(),voices=new Map<HTMLAudioElement,number>();
+const listeners=new Set<()=>void>(),voices=new Set<HTMLAudioElement>();
 let graph:{ctx:AudioContext;master:GainNode;music:GainNode;sfx:GainNode}|null=null,mode:MusicMode='silent',ducked=false,stepsUntil=0;
 const loops=new Map<Loop,{el:HTMLAudioElement;gain:GainNode;stop?:ReturnType<typeof setTimeout>}>(),buffers=new Map<string,Promise<AudioBuffer|null>>();
 
 const ramp=(param:AudioParam,value:number,seconds:number)=>{const now=graph!.ctx.currentTime;param.cancelScheduledValues(now);param.setValueAtTime(param.value,now);param.linearRampToValueAtTime(value,now+seconds);};
 function applyLevels(){
- voices.forEach((level,el)=>el.volume=voiceVolume(level));
+ voices.forEach(el=>el.volume=voiceVolume());
  if(!graph)return;ramp(graph.master.gain,settings.muted?0:settings.master,.08);ramp(graph.music.gain,settings.music*(ducked?DUCK:1),ducked?.25:.8);ramp(graph.sfx.gain,settings.sfx,.08);
 }
 function applyMode(){
@@ -70,9 +70,9 @@ export function playFrameCues(stage:'start'|'reveal',frame:PresentationFrame,bas
  if(frame.log.rolls.length)playSfx('die-throw');
  const outcome=outcomeCue([...baseline.party,...baseline.enemies],[...frame.party,...frame.enemies],frame.log.text);if(outcome)playSfx(outcome,frame.log.rolls.length?.18:0);
 }
-export function voiceVolume(level:number){return settings.muted?0:level*settings.master;}
-/** Keeps an AI voice line under master volume and mute, including changes made while it plays. */
-export function bindVoice(el:HTMLAudioElement,level:number){if(!voices.has(el))['pause','ended','error'].forEach(type=>el.addEventListener(type,()=>voices.delete(el),{once:true}));voices.set(el,level);el.volume=voiceVolume(level);}
+export function voiceVolume(){return settings.muted?0:settings.voice*settings.master;}
+/** Keeps an AI voice line under its own level, master volume and mute, including changes made while it plays. */
+export function bindVoice(el:HTMLAudioElement){if(!voices.has(el))['pause','ended','error'].forEach(type=>el.addEventListener(type,()=>voices.delete(el),{once:true}));voices.add(el);el.volume=voiceVolume();}
 export function setAudioSettings(patch:Partial<AudioSettings>){settings=parseAudioSettings(JSON.stringify({...settings,...patch}));try{localStorage.setItem(KEY,JSON.stringify(settings));}catch{}applyLevels();listeners.forEach(l=>l());}
 export function useAudioSettings(){return useSyncExternalStore(l=>{listeners.add(l);return()=>listeners.delete(l);},()=>settings);}
 /** Music follows the save's mode with a crossfade, ducks under a voice line, and room changes play their cues. */

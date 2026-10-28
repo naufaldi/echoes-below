@@ -55,7 +55,7 @@ export class OpenAIProvider implements AIProvider {
       throw new GameError(
         503,
         "AI_UNAVAILABLE",
-        "AI is not configured. Authored scenes and rules remain available.",
+        "AI dialogue is not configured here. The whole adventure is still yours to play.",
       );
     if (this.active >= 2)
       throw new GameError(

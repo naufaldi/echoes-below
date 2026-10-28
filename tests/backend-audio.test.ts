@@ -17,7 +17,7 @@ test('a revealed frame sounds a hit on any health loss, else a miss only for the
 test('audio settings are clamped, defaulted and survive corrupt storage',()=>{
  assert.deepEqual(parseAudioSettings(null),DEFAULT_AUDIO_SETTINGS);
  assert.deepEqual(parseAudioSettings('{not json'),DEFAULT_AUDIO_SETTINGS);
- assert.deepEqual(parseAudioSettings(JSON.stringify({master:2,music:-1,sfx:.3,muted:true})),{master:1,music:0,sfx:.3,muted:true});
+ assert.deepEqual(parseAudioSettings(JSON.stringify({master:2,music:-1,sfx:.3,muted:true})),{master:1,music:0,sfx:.3,voice:.8,muted:true});
  assert.equal(parseAudioSettings(JSON.stringify({muted:'yes'})).muted,false);
 });
 test('music follows mode and room cues stay within one save and room',()=>{

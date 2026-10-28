@@ -212,7 +212,7 @@ export class Storage {
         throw new GameError(
           429,
           "BUDGET_EXCEEDED",
-          "AI generation paused at the spending limit. The saved adventure remains playable.",
+          "AI dialogue has paused at its spending limit. Your adventure goes on without it.",
         );
       const id = randomUUID();
       this.db
