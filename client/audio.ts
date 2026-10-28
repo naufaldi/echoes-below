@@ -1,5 +1,5 @@
 import {useEffect,useRef,useSyncExternalStore} from 'react';
-import {musicModeFor,outcomeCue,parseAudioSettings,sceneCues,type AudioSettings,type MusicMode,type Sfx} from './audio-cues';
+import {musicModeFor,outcomeCue,parseAudioSettings,sceneCues,type AudioSettings,type MusicMode,type NaturalEvent,type Sfx} from './audio-cues';
 import type {PublicSave,PresentationFrame} from '../shared/types';
 
 /** Music, ambience and SFX. Nothing is created or fetched until the first pointer/key gesture; voice stays an HTMLAudioElement owned by App. */
@@ -54,6 +54,15 @@ export function playSfx(cue:Sfx,delay=0){
 function play(cue:Sfx,delay:number){
  const {files,level}=SFX[cue],g=graph!;
  void buffer(files[Math.floor(Math.random()*files.length)]).then(data=>{if(!data||graph!==g)return;const source=g.ctx.createBufferSource(),gain=g.ctx.createGain();source.buffer=data;gain.gain.value=level;source.connect(gain).connect(g.sfx);source.start(g.ctx.currentTime+delay);});
+}
+/** Synthesised, so no new download enters the asset bundle: a natural 20 rings a bright two-partial chime; a natural 1 is a low knock with a short burst of grit, like stone cracking. */
+export function playNatural(event:NaturalEvent){
+ if(!graph||settings.muted||!settings.sfx)return;const {ctx,sfx}=graph,now=ctx.currentTime;
+ const voice=(type:OscillatorType,from:number,to:number,peak:number,length:number,at=0)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(from,now+at);o.frequency.exponentialRampToValueAtTime(to,now+at+length);g.gain.setValueAtTime(0,now+at);g.gain.linearRampToValueAtTime(peak,now+at+.008);g.gain.exponentialRampToValueAtTime(.0001,now+at+length);o.connect(g).connect(sfx);o.start(now+at);o.stop(now+at+length+.02);};
+ if(event==='natural-20'){voice('sine',1318.5,1318.5,.22,1.1);voice('sine',1975.5,1975.5,.12,.8,.06);voice('triangle',659.3,659.3,.1,.6);return;}
+ voice('sine',110,55,.5,.35);
+ const grit=ctx.createBuffer(1,Math.floor(ctx.sampleRate*.12),ctx.sampleRate),data=grit.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*(1-i/data.length)**3;
+ const noise=ctx.createBufferSource(),band=ctx.createBiquadFilter(),g=ctx.createGain();noise.buffer=grit;band.type='bandpass';band.frequency.value=1800;band.Q.value=.9;g.gain.value=.35;noise.connect(band).connect(g).connect(sfx);noise.start(now+.02);
 }
 /** Dice and outcome sounds for one committed playback frame; the baseline is the state shown before this frame. */
 export function playFrameCues(stage:'start'|'reveal',frame:PresentationFrame,baseline:Pick<PublicSave,'party'|'enemies'>){
