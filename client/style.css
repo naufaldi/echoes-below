@@ -324,6 +324,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .managed-world-label.muted{opacity:0;pointer-events:none}.managed-world-label:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .world-label-leaders{position:absolute;inset:0;pointer-events:none;overflow:hidden}.world-label-leaders line{stroke:var(--accent);stroke-width:1;opacity:.5}.world-label-leaders circle{fill:var(--accent-strong);stroke:var(--surface-0);stroke-width:1}
 .asset-issues{position:absolute;top:72px;left:30%;width:40%;max-height:100px;overflow:auto;pointer-events:auto;display:flex;flex-wrap:wrap;gap:4px;z-index:20}.asset-issues button{padding:8px;background:color-mix(in srgb,var(--danger) 18%,var(--surface-1));border:1px solid var(--border-strong);color:var(--text-primary)}
+.app-failure{position:fixed;inset:0;display:grid;place-content:center;justify-items:start;gap:14px;padding:32px;max-width:560px;margin:0 auto;line-height:1.6}.app-failure h1{margin:0;font-size:var(--fs-4xl);line-height:1.1}.app-failure p{margin:0;color:var(--text-secondary)}
 .scene-failure{position:absolute;top:40%;left:40%;max-width:250px;background:var(--surface-1);padding:20px;line-height:1.5}
 
 /* Modals: settings, journal, and the strong confirmation. */
@@ -423,7 +424,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .ending h2{font-size:var(--fs-display);line-height:1;letter-spacing:-1px;margin:22px 0}.ending p{max-width:620px;font-family:var(--font-body);font-size:var(--fs-xl);line-height:1.6;color:var(--text-secondary)}
 .ending-actions{display:flex;gap:22px;align-items:center;margin:22px 0}.ending-actions>button+button{font-size:var(--fs-xs);color:var(--text-secondary)}.ending>small{font-size:var(--fs-md);max-width:400px;line-height:1.6;color:var(--text-muted)}
 .busy,.error{position:fixed;left:50%;transform:translateX(-50%);z-index:50;border:1px solid var(--border-strong);border-radius:5px;background:var(--glass-1);box-shadow:0 10px 30px var(--shadow);display:flex;align-items:center;gap:10px;padding:13px 20px;font-size:var(--fs-xs)}
-.busy{top:88px;white-space:nowrap}.error{bottom:65px;border-color:var(--danger);background:color-mix(in srgb,var(--danger) 18%,var(--surface-1));max-width:650px;line-height:1.5}.error button{font-size:var(--fs-2xl);margin-left:12px}
+.busy{top:88px;white-space:nowrap}.error{bottom:65px;border-color:var(--danger);background:color-mix(in srgb,var(--danger) 18%,var(--surface-1));max-width:650px;line-height:1.5}.error button{font-size:var(--fs-2xl);margin-left:12px}.error .error-action{font-size:var(--fs-xs);border:1px solid var(--border-strong);border-radius:3px;padding:5px 12px;color:var(--text-primary)}.saved.offline{color:var(--danger)}.saved.offline b{color:var(--danger)}
 
 /* Shared entrances. Occasional surfaces (modals, the pack) settle in from 97% around their centre; scrims only fade. `scale` is the individual property, so a panel's own centring transform is untouched. */
 @keyframes fade-in{from{opacity:0}}@keyframes panel-in{from{opacity:0;scale:.97}}

@@ -6,9 +6,15 @@ import {narrativeContext} from '../shared/ai-context';
 import type {PublicSave,Speaker} from '../shared/types';
 const planCache=new Map<string,Record<string,string>>();
 let csrf='',session:Promise<void>|null=null;
-export class ApiFailure extends Error {constructor(message:string,public status:number){super(message);}}
-async function establish(){if(csrf)return;if(!session)session=fetch('/api/session').then(async r=>{if(!r.ok)throw new Error('The game server is unavailable.');csrf=(await r.json()).csrfToken;}).finally(()=>{session=null;});await session;}
-async function raw<T>(path:string,body?:unknown):Promise<T>{await establish();const r=await fetch(path,{method:body===undefined?'GET':'POST',headers:body===undefined?{}:{'Content-Type':'application/json','x-csrf-token':csrf,'x-echoes-ai-mode':getAIMode()},body:body===undefined?undefined:JSON.stringify(body)});if(r.ok&&r.headers.get('content-type')?.startsWith('audio/'))return {url:URL.createObjectURL(await r.blob())} as T;const d=await r.json();if(!r.ok){if(r.status===403)csrf='';throw new ApiFailure(d.message||'The request could not finish.',r.status);}return d;}
+export class ApiFailure extends Error {constructor(message:string,public status:number,public code=''){super(message);}}
+/** #94: story-safe copy. After a dropped connection the same command id is retried, so a choice that did land is never applied twice; a stale revision means another tab acted first. */
+export const OFFLINE_COPY="The connection dropped. Your choice wasn't sent. Try again.",MOVED_ON_COPY='This adventure moved on in another tab.';
+export const offline=(e:unknown)=>e instanceof ApiFailure&&e.code==='OFFLINE';
+export const movedOn=(e:unknown)=>e instanceof ApiFailure&&e.status===409&&['STALE_REVISION','STALE'].includes(e.code);
+const dropped=()=>new ApiFailure(OFFLINE_COPY,0,'OFFLINE');
+const reach=(path:string,init?:RequestInit)=>fetch(path,init).catch(()=>{throw dropped();});
+async function establish(){if(csrf)return;if(!session)session=reach('/api/session').then(async r=>{if(!r.ok)throw dropped();csrf=(await r.json()).csrfToken;}).finally(()=>{session=null;});await session;}
+async function raw<T>(path:string,body?:unknown):Promise<T>{await establish();const r=await reach(path,{method:body===undefined?'GET':'POST',headers:body===undefined?{}:{'Content-Type':'application/json','x-csrf-token':csrf,'x-echoes-ai-mode':getAIMode()},body:body===undefined?undefined:JSON.stringify(body)});if(r.ok&&r.headers.get('content-type')?.startsWith('audio/'))return {url:URL.createObjectURL(await r.blob())} as T;const d=await r.json().catch(()=>{throw r.ok||r.status>=500?dropped():new ApiFailure('The request could not finish.',r.status);});if(!r.ok){if(r.status===403)csrf='';const code=typeof d.error==='string'?d.error:'';throw new ApiFailure(movedOn(new ApiFailure('',r.status,code))?MOVED_ON_COPY:d.message||'The request could not finish.',r.status,code);}return d;}
 export async function api<T>(path:string,body?:unknown):Promise<T>{
  if(isPaidEndpoint(path,body)&&(getAIMode()==='off'||getAIMode()==='personal'&&!ownKeyConfigured()))throw new Error('Choose an AI mode in settings first. Free story mode makes no paid AI calls.');
  if(getAIMode()==='personal'&&ownKeyConfigured()&&body&&typeof body==='object'){
