@@ -69,7 +69,7 @@ function ChapterRecapPage({save,chapter,busy,onNext,onRead,onContinue,onRestart}
 export function StoryView({save,onClose}:{save:PublicSave;onClose:()=>void}){
  const current=chapterOf(save.scene.id),hero=save.party[0]?.name;
  const decisions=(chapter:number)=>CAMPAIGN_MAP.filter(r=>r.chapter===chapter).flatMap(r=>{const f=save.facts.find(x=>x.id==='decision:'+r.id);return f?[{room:r.id,title:r.title,text:f.text}]:[];});
- return <Dialog className="journal story-view" labelledBy="story-view-title" onClose={onClose} initial="#story-view-title">
+ return <Dialog className="story-view" labelledBy="story-view-title" onClose={onClose} initial="#story-view-title">
   <button aria-label="Close your story" className="close" onClick={onClose}>×</button>
   <div className="eyebrow">THE STORY SO FAR</div>
   <h2 id="story-view-title" tabIndex={-1}>{hero?`${hero}’s descent`:'Your descent'}</h2>
@@ -78,9 +78,9 @@ export function StoryView({save,onClose}:{save:PublicSave;onClose:()=>void}){
     <h3 id={'story-chapter-'+p.chapter}><span className="story-chapter-numeral">{p.numeral}</span>{p.name}</h3>
     {recap?<>
      <ol className="chapter-choices">{recap.choices.map(c=><li key={c.room}><span className="chapter-choice-room">{c.title}</span><span className="chapter-choice">{c.choice}</span></li>)}</ol>
-     {recap.changes.map((c,i)=><p key={i} className="fact">◇ {c}</p>)}
-     <p className="chapter-tags">{recapRows(recap).map(r=><span key={r.key}>{r.tag}</span>)}</p>
-    </>:told.length?told.map(d=><p key={d.room} className="fact"><span className="chapter-choice-room">{d.title}</span>{d.text}</p>):<p className="muted">This chapter is still being written.</p>}
+     {recap.changes.length>0&&<ul className="chapter-changes">{recap.changes.map((c,i)=><li key={i}>{c}</li>)}</ul>}
+     <div className="chapter-tags">{recapRows(recap).map(r=><span key={r.key}>{r.tag}</span>)}</div>
+    </>:told.length?<ul className="chapter-changes">{told.map(d=><li key={d.room}><span className="chapter-choice-room">{d.title}</span>{d.text}</li>)}</ul>:<p className="muted">This chapter is still being written.</p>}
    </section>;})}
  </Dialog>;
 }
