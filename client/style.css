@@ -447,7 +447,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
   .health-track{margin:5px 0 4px}.party-stats{gap:6px;font-size:var(--fs-2xs);white-space:nowrap}.party-stats span+span{letter-spacing:normal}
   .companion-chat button{padding:5px 2px;font-size:var(--fs-xs);white-space:nowrap}.pack-row{padding:7px 2px;font-size:var(--fs-xs)}.pack-counts{white-space:nowrap}.pack-counts b{display:block;margin:0 0 2px}.objective{padding-top:8px}.objective p{margin:4px 0}.app:has(.initiative-strip) .objective{display:none} /* a fight is not the time for the room's objective */
   .actions-panel{right:12px;width:216px;padding:12px;max-height:calc(100dvh - 330px);overflow-y:auto}.actions-panel>*{flex-shrink:0}.actions-panel>.action-list{flex-shrink:1} /* tactical turns are taller than the panel: the list shrinks first, then the panel scrolls */
-  .chapter-track{height:40px}
+  .chapter-track{height:40px}.ending{bottom:40px} /* the ending and chapter pages meet the shorter strip */
   .story-box{width:min(620px,calc(100% - 465px))}
 }
 /* Short windows in that range (1280×720) have scene to spare: one more action row. */
