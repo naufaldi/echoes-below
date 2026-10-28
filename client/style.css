@@ -288,7 +288,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 /* Combat (#29): the newest two events beside the journal link. Each wraps to a second line rather than clipping (#98), so the slot holds four lines at a fixed height: the camera framing reads this rect and must not jump per event. Anything longer scrolls, newest line pinned to the bottom. */
 .story-box.combat{height:100px;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:minmax(0,1fr);align-items:start;padding:8px 16px}
 .story-box.combat .story-body{grid-column:1;align-self:stretch;cursor:default;display:flex;flex-direction:column-reverse}.story-box.combat .story-body>*{margin-bottom:auto}.story-box.combat .story-controls{padding-top:3px}
-.event-lines{list-style:none;margin:0;padding:0;font-size:var(--fs-md);line-height:1.5;color:var(--text-secondary);font-variant-numeric:tabular-nums}.event-lines li:last-child{color:var(--text-primary)}.event-lines b{font-weight:600;color:var(--accent-strong)}.event-lines b.enemy{color:var(--enemy)}.event-lines .story-tag{margin-left:6px}
+.event-lines{list-style:none;margin:0;padding:0;font-size:var(--fs-md);line-height:1.5;color:var(--text-secondary);font-variant-numeric:tabular-nums}.event-lines li:last-child{color:var(--text-primary)}.event-lines b{font-weight:600;color:var(--accent-strong)}.event-lines b.enemy{color:var(--enemy)}.event-lines .story-tag{display:inline-block;margin-left:6px} /* a tag that fits on one line moves down whole; a longer one breaks between its parts */
 /* Companion barks (#67): a tab on the top edge, right side, so the page under it stays readable. */
 .story-bark{position:absolute;top:-12px;right:16px;z-index:1;display:flex;align-items:center;gap:6px;max-width:min(440px,74%);padding:2px 12px 2px 2px;border-radius:14px;background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--paper-edge),0 6px 18px var(--shadow-deep);animation:bark-in var(--enter-duration) var(--ease-out) both}
 .story-bark .story-plate{position:static;padding:0 4px;font-size:var(--fs-sm);box-shadow:none;background:none}
@@ -428,7 +428,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .ending h2{font-size:var(--fs-display);line-height:1;letter-spacing:-1px;margin:22px 0}.ending p{max-width:620px;font-family:var(--font-body);font-size:var(--fs-xl);line-height:1.6;color:var(--text-secondary)}
 .ending-actions{display:flex;gap:22px;align-items:center;margin:22px 0}.ending-actions>button+button{font-size:var(--fs-xs);color:var(--text-secondary)}.ending-actions button{min-height:24px}.ending>small{font-size:var(--fs-md);max-width:400px;line-height:1.6;color:var(--text-muted)}
 .busy,.error{position:fixed;left:50%;transform:translateX(-50%);z-index:50;border:1px solid var(--border-strong);border-radius:5px;background:var(--glass-1);box-shadow:0 10px 30px var(--shadow);display:flex;align-items:center;gap:10px;padding:13px 20px;font-size:var(--fs-xs)}
-.busy{top:88px;white-space:nowrap}.scene-heading .busy{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%)} /* In a room it hangs under the title, out of flow, so it never covers the title or moves the heading rect SceneFraming reads (#98) */.error{bottom:65px;border-color:var(--danger);background:color-mix(in srgb,var(--danger) 18%,var(--surface-1));max-width:650px;line-height:1.5}.error button{font-size:var(--fs-2xl);margin-left:12px}.error .error-action{font-size:var(--fs-xs);border:1px solid var(--border-strong);border-radius:3px;padding:5px 12px;color:var(--text-primary)}.saved.offline{color:var(--danger)}.saved.offline b{color:var(--danger)}
+.busy{top:88px;white-space:nowrap}.scene-heading .busy{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%)} /* In a room it hangs under the title, out of flow, so it never covers the title or moves the heading rect SceneFraming reads (#98). Narrow windows keep the root toast, above the drawer. */.error{bottom:65px;border-color:var(--danger);background:color-mix(in srgb,var(--danger) 18%,var(--surface-1));max-width:650px;line-height:1.5}.error button{font-size:var(--fs-2xl);margin-left:12px}.error .error-action{font-size:var(--fs-xs);border:1px solid var(--border-strong);border-radius:3px;padding:5px 12px;color:var(--text-primary)}.saved.offline{color:var(--danger)}.saved.offline b{color:var(--danger)}
 
 /* Shared entrances. Occasional surfaces (modals, the pack) settle in from 97% around their centre; scrims only fade. `scale` is the individual property, so a panel's own centring transform is untouched. */
 @keyframes fade-in{from{opacity:0}}@keyframes panel-in{from{opacity:0;scale:.97}}
@@ -446,10 +446,12 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
   .party-info>div:first-child{flex-direction:column;align-items:flex-start;gap:1px}.party-info strong{font-size:var(--fs-sm);line-height:1.25;overflow-wrap:anywhere}.party-info small{font-size:var(--fs-2xs)}
   .health-track{margin:5px 0 4px}.party-stats{gap:6px;font-size:var(--fs-2xs);white-space:nowrap}.party-stats span+span{letter-spacing:normal}
   .companion-chat button{padding:5px 2px;font-size:var(--fs-xs);white-space:nowrap}.pack-row{padding:7px 2px;font-size:var(--fs-xs)}.pack-counts{white-space:nowrap}.pack-counts b{display:block;margin:0 0 2px}.objective{padding-top:8px}.objective p{margin:4px 0}.app:has(.initiative-strip) .objective{display:none} /* a fight is not the time for the room's objective */
-  .actions-panel{right:12px;width:216px;padding:12px;max-height:calc(100dvh - 330px)}
+  .actions-panel{right:12px;width:216px;padding:12px;max-height:calc(100dvh - 330px);overflow-y:auto}.actions-panel>*{flex-shrink:0}.actions-panel>.action-list{flex-shrink:1} /* tactical turns are taller than the panel: the list shrinks first, then the panel scrolls */
   .chapter-track{height:40px}
   .story-box{width:min(620px,calc(100% - 465px))}
 }
+/* Short windows in that range (1280×720) have scene to spare: one more action row. */
+@media(min-width:1000px) and (max-width:1280px) and (max-height:760px){.actions-panel{max-height:calc(100dvh - 270px)}}
 
 /* #97 Narrow windows (below 1000px: 200% zoom on a 1440 or 1920 screen, about 720×450 and 960×475; NARROW_QUERY in narrow-layout.ts). Nothing sits off-screen: the top bar keeps its controls, the party collapses to portraits and health, the actions open as a bottom drawer, and the story box spans the width above the chapter strip. */
 .drawer-toggle{display:none}
@@ -458,7 +460,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
   .topbar{height:52px;padding:0 12px}.brand{gap:8px;font-size:var(--fs-lg)}.brand-mark{font-size:var(--fs-2xl)}.top-controls{gap:6px}.saved{display:none}
   .creation{top:60px;left:12px;width:calc(100% - 24px);max-height:calc(100dvh - 72px)}
   .scene-heading,.app:has(.initiative-strip) .scene-heading{top:58px;width:calc(100% - 180px);max-width:none}.scene-heading h1,.app:has(.initiative-strip) .scene-heading h1{font-size:var(--fs-xl)}.scene-heading p{display:none}
-  .initiative-strip{top:58px;max-width:calc(100% - 24px)}.initiative-strip span{padding:4px 10px}.app:has(.initiative-strip) .scene-title{display:none}.app:has(.initiative-strip) .scene-heading .busy{top:56px}
+  .initiative-strip{top:58px;max-width:calc(100% - 24px)}.initiative-strip span{padding:4px 10px}.app:has(.initiative-strip) .scene-heading{display:none}
   .party-panel{top:96px;left:8px;width:auto;max-width:calc(100% - 16px);display:flex;gap:5px;padding:5px}
   .party-panel .panel-label{display:none}
   .party-card{flex-direction:column;align-items:center;width:64px;padding:5px 4px;gap:3px;margin:0}.party-card .portrait{width:34px;height:34px;font-size:var(--fs-xl)}
@@ -467,8 +469,8 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
   .app[data-drawer=closed] .actions-panel{display:none}
   /* The drawer's bottom edge clears the story box's top-edge tabs (name plate, read-aloud title, bark). */
   .actions-panel{z-index:11;background:var(--surface-1)}.actions-panel>*{flex-shrink:0}
-  /* Combat: the two-line event box is shorter, and the turn order takes the row under the top bar. */
-  .app:has(.story-box.combat) .actions-panel{bottom:164px;max-height:calc(100dvh - 222px)}.app:has(.story-box.combat) .error{bottom:164px}
+  /* Combat: the event box is shorter (three lines across the full width), and the turn order takes the row under the top bar. */
+  .story-box.combat{height:79px}.app:has(.story-box.combat) .actions-panel{bottom:143px;max-height:calc(100dvh - 201px)}.app:has(.story-box.combat) .error{bottom:143px}
   .app:has(.initiative-strip) .party-panel{top:112px}
   .action-list{overflow:visible;min-height:0}
   .target-select{display:flex;align-items:center;gap:10px;margin-bottom:8px}.target-select select{flex:1;margin-top:0;font-size:var(--fs-md)}
@@ -477,7 +479,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
   .chapter-track{left:8px;right:8px;height:40px;gap:10px}.chapter-track>div:not(.current){display:none}
   .drawer-toggle{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;min-height:30px;padding:4px 14px;border:1px solid var(--border-strong);border-radius:15px;background:var(--surface-1);font-size:var(--fs-sm);color:var(--text-primary)}
   .app[data-drawer=open] .drawer-toggle{border-color:var(--accent);color:var(--accent-strong)}
-  .busy{top:60px}.error{bottom:184px;max-width:calc(100% - 24px)}
+  .busy{top:108px}.app:has(.initiative-strip) .busy{top:114px}.error{bottom:184px;max-width:calc(100% - 24px)} /* the toast stays above the drawer, under the room title or the turn order (#98) */
   .modal-backdrop{padding:12px}.modal{padding:24px 20px}.pack-panel{top:12px;max-height:calc(100% - 24px);width:calc(100vw - 24px);padding:18px}
   .ending,.ending.ending-page{inset:52px 0 40px;padding:20px 24px;overflow:auto;justify-content:safe center}.ending h2{font-size:var(--fs-4xl);margin:12px 0}.ending p{font-size:var(--fs-lg)}.ending-actions{flex-wrap:wrap;gap:12px 22px}
 }

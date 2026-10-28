@@ -134,14 +134,14 @@ export function opensWithDescription(save:PublicSave){const entries=narrationEnt
 
 /**
  * Combat (#29): only the newest events, with the actor's name leading when the line opens with it. Lines wrap, never clip (#98),
- * so the tag is kept short: it drops the roller's name when the line already names them (or opens "You" for the hero), and damage reads `5 dmg`.
+ * so the tag is kept short: it drops the roller's name when the line already names them (or, for the hero, speaks to "you"), and damage reads `5 dmg`.
  */
 export function combatLines(save:PublicSave,count=2){
  const label=(id:string)=>speakerLabel({speaker:id,source:'rules'},save.party,save.enemies);
  return storyLines(narrationEntries(save),save,{short:true}).filter(l=>l.text).slice(-count).map(l=>{
   const actor=[...save.party,...save.enemies].find(a=>l.text.startsWith(label(a.id)));
   const lead=actor?label(actor.id):null,roller=l.tag?.[0]?.text;
-  const named=!!roller&&(roller===lead||/^You\b/.test(l.text)&&save.party.some(a=>a.id==='hero'&&label(a.id)===roller));
+  const named=!!roller&&(roller===lead||/\byour?\b/i.test(l.text)&&save.party.some(a=>a.id==='hero'&&label(a.id)===roller));
   return {...l,tag:named?l.tag!.slice(1):l.tag,lead,enemy:!!actor&&actor.side!=='party'};
  });
 }

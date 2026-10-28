@@ -90,6 +90,6 @@ test('attack tags name the AC, the damage and a critical; combat lines carry the
  const lines=combatLines(view(s));
  assert.ok(lines.length<=2&&lines.length>0);
  const hit=lines.find(l=>l.text===`You land a blow on ${target.name}.`);assert.ok(hit,JSON.stringify(lines));
- // The hero's line opens "You", so the combat tag drops the name and keeps roll, target, the natural 20 and damage (#98).
+ // The hero's line speaks to "you", so the combat tag drops the name and keeps roll, target, the natural 20 and damage (#98).
  assert.match(tagText(hit!.tag!),new RegExp(`^Attack · \\d+ vs AC \\d+ · Critical · \\d+ dmg$`));
 });

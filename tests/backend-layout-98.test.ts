@@ -35,10 +35,14 @@ test('combat lines keep tags short: no name the line already gives, damage as dm
    if(!l.tag)continue;const text=tagText(l.tag);checked++;if(l.lead)leads++;
    assert.doesNotMatch(text,/damage/,text);
    if(l.lead)assert.notEqual(l.tag[0]!.text,l.lead,text);
-   if(/^You\b/.test(l.text))assert.ok(!text.startsWith('Aria'),text);
+   if(/\byour?\b/i.test(l.text))assert.ok(!text.startsWith('Aria'),text);
   }
  }
  assert.ok(checked>0&&leads>0,`checked ${checked} tagged lines, ${leads} with a lead`);
+ // A miss is told to the hero ("…evades your attack"), so its tag drops the hero's name too.
+ const miss=fight(),target=miss.enemies.find(e=>legalActions(miss).some(a=>a.id===`attack:${e.id}`))!;
+ const line=combatLines(publicSave(applyAction(miss,`attack:${target.id}`,()=>2))).find(l=>/your attack/.test(l.text));
+ assert.ok(line?.tag,JSON.stringify(line));assert.match(tagText(line!.tag!),/^Attack · \d+ vs AC \d+$/);
 });
 
 test('NPCs on a party model wear the ash palette; authored looks and creature models keep theirs (#98 U10)',()=>{
