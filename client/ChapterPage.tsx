@@ -5,6 +5,8 @@ import {CAMPAIGN_MAP} from '../shared/campaign-map';
 import {dueChapterPage,markPageSeen,recapRows,seenPages,type ChapterPageView} from './chapter-flow';
 import {CHAPTER_ONE} from './descent-map';
 import {Dialog,Overlay} from './Modal';
+import {chapterMood} from './ChapterAtmosphere';
+
 import './chapter-page.css';
 
 // #66 Chapter pages (ROADMAP D8, NVL): a title page as each chapter opens, a recap as it closes, and "Read your story" by chapter.
@@ -12,6 +14,8 @@ import './chapter-page.css';
 const store=()=>{try{return localStorage;}catch{return null;}};
 const chapterOf=(sceneId:string)=>CHAPTER_ONE.some(r=>r.id===sceneId)?1:CAMPAIGN_MAP.find(r=>r.id===sceneId)?.chapter??1;
 const pageFor=(chapter:number)=>CHAPTER_PAGES.find(p=>p.chapter===chapter)!;
+/** The chapter's mood kind (data-chapter in style.css), read from its first room: a recap keeps the accent of the chapter it closes (#110). Chapter I's rooms are not on the campaign map and fall back to its relay mood. */
+const moodOf=(chapter:number)=>chapterMood(CAMPAIGN_MAP.find(r=>r.chapter===chapter)?.id??'').kind;
 /** Enter on the page itself turns it; a focused button already answers Enter with its own click. */
 const onEnter=(go:()=>void)=>(e:KeyboardEvent)=>{if(e.key!=='Enter'||e.altKey||e.ctrlKey||e.metaKey||(e.target as HTMLElement).closest('button,a,summary,input,select,textarea'))return;e.preventDefault();go();};
 
@@ -33,7 +37,7 @@ export default function ChapterPages({page,save,busy,onDone,onRead,onContinue,on
 
 function ChapterTitlePage({chapter,onNext}:{chapter:number;onNext:()=>void}){
  const p=pageFor(chapter);
- return <Overlay className="ending chapter-page chapter-title-page" labelledBy="chapter-title" onClose={onNext}>
+ return <Overlay className="ending chapter-page chapter-title-page" labelledBy="chapter-title" onClose={onNext} chapter={moodOf(chapter)}>
   <article onKeyDown={onEnter(onNext)}>
    <div className="chapter-numeral" aria-hidden="true">{p.numeral}</div>
    <div className="eyebrow">CHAPTER {p.numeral}</div>
@@ -52,10 +56,11 @@ function ChapterRecapPage({save,chapter,busy,onNext,onRead,onContinue,onRestart}
   <h2 id="chapter-end-title" tabIndex={-1}>{closing?<>The bell is quiet.<br/><em>Your story isn't.</em></>:p.name}</h2>
   {closing&&save.ending&&<p>{save.ending}</p>}
   {recap&&recap.changes.length>0&&<><h3 className="chapter-section">What changed</h3><ul className="chapter-changes">{recap.changes.map((c,i)=><li key={i}>{c}</li>)}</ul></>}
-  <div className="ending-actions">{closing?<>{save.scene.id==='aftermath'&&<button className="primary" disabled={busy} onClick={onContinue}>Continue to Chapter II →</button>}<button className="primary" onClick={onRead}>Read your story →</button><button className="ending-quiet" disabled={busy} onClick={onRestart}>Begin another journey</button></>:<button className="primary" onClick={onNext} aria-keyshortcuts="Enter Escape">Turn the page <span aria-hidden="true">→</span></button>}</div>
+  <div className="ending-actions">{closing?<>{save.scene.id==='aftermath'&&<button className="primary" disabled={busy} onClick={onContinue}>Continue to Chapter II →</button>}<button className={save.scene.id==='aftermath'?undefined:'primary'} onClick={onRead}>Read your story →</button><button className="ending-quiet" disabled={busy} onClick={onRestart}>Begin another journey</button></>:<button className="primary" onClick={onNext} aria-keyshortcuts="Enter Escape">Turn the page <span aria-hidden="true">→</span></button>}</div>
   {closing&&<small className="chapter-note">Your party, experience and choices continue into five further chapters.</small>}
  </>;
- return <Overlay className={'ending chapter-page chapter-recap-page'+(recap?' ending-page':'')} labelledBy="chapter-end-title" onClose={closing?undefined:onNext}>
+ return <Overlay className={'ending chapter-page chapter-recap-page'+(recap?' ending-page':'')} labelledBy="chapter-end-title" onClose={closing?undefined:onNext} chapter={moodOf(chapter)}>
+
   <article className="ending-story" onKeyDown={closing?undefined:onEnter(onNext)}>{story}</article>
   {recap&&<aside className="ending-recap" aria-label={`Chapter ${p.numeral} in brief`}>
    <h3>Your choices <small>{recap.choices.length}</small></h3>
