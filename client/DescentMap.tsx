@@ -1,6 +1,7 @@
 import {useEffect,useLayoutEffect,useMemo,useRef,useState,type KeyboardEvent as KeyPress} from 'react';
 import {descentMap,roomSettled,FORK_LINE,type MapRoom} from './descent-map';
 import type {PublicSave} from '../shared/types';
+import {useModal} from './Modal';
 
 // #63 Descent map: a page of the journal with the way down inked on it. Read-only; it never travels.
 type Point={x:number;y:number;row:number};
@@ -32,17 +33,14 @@ export default function DescentMap({save,onClose}:{save:PublicSave;onClose:()=>v
  const settled=roomSettled(save),map=useMemo(()=>descentMap(save.scene.id,settled),[save.scene.id,settled]),rooms=map.flatMap(d=>d.rooms);
  const at=Math.max(0,rooms.findIndex(r=>r.state==='current'));
  const[focus,setFocus]=useState(rooms[at].id),[hover,setHover]=useState<string|null>(null),[sheet,setSheet]=useState<{w:number;h:number;points:Point[]}>({w:0,h:0,points:[]});
- const panel=useRef<HTMLElement>(null),page=useRef<HTMLDivElement>(null),close=useRef(onClose);close.current=onClose;
- // Open on "you are here"; Escape closes before any other handler sees it; focus returns to whatever opened the map.
- useEffect(()=>{const back=document.activeElement as HTMLElement|null;panel.current?.querySelector<HTMLElement>('[aria-current]')?.focus();
-  const key=(e:KeyboardEvent)=>{if(e.key!=='Escape')return;e.stopPropagation();e.preventDefault();close.current();};
-  window.addEventListener('keydown',key,true);return()=>{window.removeEventListener('keydown',key,true);back?.focus?.();};},[]);
+ const panel=useRef<HTMLElement>(null),page=useRef<HTMLDivElement>(null);
+ // Open on "you are here"; Escape closes, Tab stays inside (the close button and the focused room) and focus returns to whatever opened the map (#97).
+ useModal(panel,{onClose,initial:'[aria-current]'});
  // Node centres in the page's own pixels. The panel enters scaled, so divide the scale back out.
  useLayoutEffect(()=>{const el=page.current;if(!el)return;const measure=()=>{const box=el.getBoundingClientRect(),k=box.width/el.offsetWidth||1;
   setSheet({w:el.offsetWidth,h:el.offsetHeight,points:[...el.querySelectorAll<HTMLElement>('.map-node')].map(n=>{const r=n.getBoundingClientRect();return {x:(r.left+r.width/2-box.left)/k,y:(r.top+r.height/2-box.top)/k,row:Number(n.dataset.row)};})});};
   measure();const resize=new ResizeObserver(measure);resize.observe(el);return()=>resize.disconnect();},[map]);
  function keys(e:KeyPress<HTMLElement>){
-  if(e.key==='Tab'){const controls=[...e.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled),[tabindex="0"]')];e.preventDefault();const i=controls.indexOf(document.activeElement as HTMLElement);controls[(i+(e.shiftKey?-1:1)+controls.length)%controls.length]?.focus();return;}
   const from=rooms.findIndex(r=>r.id===(document.activeElement as HTMLElement|null)?.dataset.id);if(from<0||!NAV.includes(e.key))return;
   e.preventDefault();const id=rooms[step(sheet.points,from,e.key)].id;setFocus(id);page.current?.querySelector<HTMLElement>(`[data-id="${id}"]`)?.focus();
  }

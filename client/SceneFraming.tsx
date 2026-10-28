@@ -13,8 +13,8 @@ const rect=(selector:string)=>{const e=document.querySelector(selector);const r=
 export default function SceneFraming({save,orbit,reduced,userMoved}:{save:PublicSave|null;orbit:RefObject<{target:THREE.Vector3;update:()=>void}|null>;reduced:boolean;userMoved:RefObject<boolean>}){
  const {camera,size}=useThree();const shift=useRef({x:0,y:0});const goal=useRef<THREE.Vector3|null>(null);
  useEffect(()=>{
-  // Creation already lays its preview out beside the form, so only in-game HUD panels shift the view.
-  const apply=()=>{const free=rect('.creation')?{x:0,y:0}:freeRegion(size.width,size.height,{left:rect('.party-panel'),right:rect('.actions-panel'),top:rect('.scene-heading'),bottom:rect('.turn-playback')??rect('.narration-panel')});
+  // Creation already lays its preview out beside the form, so only in-game HUD panels shift the view. The narrow drawer (#97) spans the width, so it is not a side panel.
+  const apply=()=>{const free=rect('.creation')?{x:0,y:0}:freeRegion(size.width,size.height,{left:rect('.party-panel'),right:document.querySelector('.app[data-drawer]')?null:rect('.actions-panel'),top:rect('.scene-heading'),bottom:rect('.turn-playback')??rect('.narration-panel')});
    if(Math.abs(free.x-shift.current.x)<2&&Math.abs(free.y-shift.current.y)<2&&camera.view?.enabled)return;shift.current=free;
    const cam=camera as THREE.PerspectiveCamera;cam.setViewOffset(size.width,size.height,-free.x,-free.y,size.width,size.height);};
   apply();const t=setInterval(apply,400);return()=>{clearInterval(t);(camera as THREE.PerspectiveCamera).clearViewOffset();};
