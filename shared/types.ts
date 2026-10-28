@@ -83,7 +83,24 @@ export interface ActionOption {
   actorId?: string;
   kind: string;
   dangerous?: boolean;
-  check?: { dc: number; attribute: string };
+  check?: PublicCheck;
+}
+/** Everything the odds band needs, derived from public numbers only. `dc` is the defense for an attack. Older or interpreted options may carry only `dc` and `attribute`. */
+export interface PublicCheck {
+  dc: number;
+  attribute: string;
+  /** Total flat bonus; the sum of `parts`. */
+  modifier?: number;
+  parts?: { label: string; value: number }[];
+  /** Why the roll has advantage or disadvantage (e.g. "Help", "Guarded"). */
+  advantage?: string;
+  disadvantage?: string;
+  /** An extra die added to the total, such as Bless's d4. */
+  bonusDie?: number;
+  /** Attacks only: a natural roll at or above this always succeeds and a natural 1 always fails. Checks have no natural rules. */
+  critOn?: number;
+  /** How much help already lowered `dc`. */
+  dcHelp?: number;
 }
 export interface Entity {
   elevation?: number;

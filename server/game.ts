@@ -27,6 +27,7 @@ import type {
   Actor,
   ActionOption,
   CreateSaveRequest,
+  PublicCheck,
   GameLog,
   PublicSave,
   Scene,
@@ -483,7 +484,8 @@ function approachTarget(s: Save, option: ActionOption) {
     ];
   }
 }
-export function legalActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s),...parleyActions(s),...scritActions(s),...indexActions(s),...infirmaryActions(s),...courierActions(s),...inkActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
+export function legalActions(s:Save):ActionOption[]{return offeredActions(s).map(a=>withOdds(s,a));}
+function offeredActions(s:Save):ActionOption[]{const actions=[...baseActions(s),...checkInActions(s),...counterweightActions(s),...parleyActions(s),...scritActions(s),...indexActions(s),...infirmaryActions(s),...courierActions(s),...inkActions(s)];return s.tactical?[...actions.filter(a=>a.id!=='rest'&&a.id!=='exp_rest'&&!a.id.startsWith('campheal:')&&a.id!=='potion'),...logisticsActions(s),...advancementActions(s),...questActions(s),...sideActions(s),...explorationHealingActions(s)]:actions;}
 function baseActions(s: Save): ActionOption[] {
   if(s.tactical&&s.mode==="combat")return tacticalActions(s);
   const a: ActionOption[] = [];
@@ -540,16 +542,14 @@ function baseActions(s: Save): ActionOption[] {
       const ranged = h.classId !== "guardian";
       for (const e of s.enemies.filter((e) => e.hp > 0))
         if (distance(h, e) <= (ranged ? 8 : 1.5))
-          a.push(
-            opt(
+          a.push({...opt(
               `attack:${e.id}`,
               `Attack ${e.name}`,
               `Attack against Defense ${e.defense + (e.guard ? 2 : 0)}. One action.`,
               "attack",
               e.id,
               "hero",
-            ),
-          );
+            ),check:strikeCheck(h,e)});
       a.push(
         opt(
           "guard",
@@ -677,6 +677,7 @@ function baseActions(s: Save): ActionOption[] {
       const fightable=!defeated&&(!s.tactical||!!CURATED_ENCOUNTERS[s.sceneId]),unused=availableConsequences(prefix,f).map(c=>`help from ${c.name.replace(/^The /,'the ')} offered here`);
       const forgone=(choice:0|1)=>[...CAMPAIGN_CONSEQUENCES.filter(c=>c.source===prefix&&c.choice!==choice).map(c=>`help from ${c.name.replace(/^The /,'the ')} at ${baseScenes[c.target].title}`),...unused];
       if(defeated||(h.hp>0&&(named||prepared||garden||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',prepared?'Help the medic from the lowered cot':garden?'Leave with the apprentice and protected pages':expedition.choice[0],closes(garden?'The lantern burns steadily and the pages are protected. Leave together without a check or destroying records.':prepared?'The cot is secured and the pocket drained. Rescue the medic without a check; his medicine remains with him.':named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`,[...(certain?[]:[`this option if the check fails${fightable?', unless you defeat the defenders':''}`]),...forgone(0)]), 'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:'hero',certain?undefined:dc,certain?undefined:expedition.challenge,!certain||forgone(0).length>0));
+      const attempt=a.find(o=>o.id==='exp_choice:0');if(attempt?.check){const terms=expeditionTerms(s,h,expedition.challenge);attempt.check={...attempt.check,modifier:terms.modifier,parts:terms.parts,...(terms.advantage?{advantage:'Evidence'}:{}),...(effects.dcReduction?{dcHelp:effects.dcReduction}:{})};}
       if(!prepared&&!garden)a.push(opt('exp_choice:1',expedition.choice[1],closes('Commit to this alternative and its consequences without a check.',forgone(1)),'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',undefined,undefined,undefined,forgone(1).length>0));
       if(!defeated&&(!s.tactical||CURATED_ENCOUNTERS[s.sceneId]))a.push(opt('exp_fight','Confront the chamber’s defenders','Resolve the obstruction in turn-based combat, then choose the outcome.','attack',s.tactical&&prefix==='archive-3'?'index-sentinel':'encounter',undefined,undefined,undefined,true));
     }else{
@@ -1106,6 +1107,24 @@ function trust(s: Save, who: "mira" | "oren", key: string) {
     log(s, `${who === "mira" ? "Mira" : "Oren"} trusts you more.`, who);
   }
 }
+const TRAINED_BACKGROUND:Record<string,Actor["backgroundId"]>={inspect:"delver",persuade:"envoy",disarm:"survivor"};
+const titled=(attribute:string)=>attribute[0]!.toUpperCase()+attribute.slice(1);
+/** The public bonus of an exploration check; `check()` rolls exactly this, and the option advertises it (odds band, #61). */
+export function checkTerms(a:Actor,attribute:keyof Actor["attributes"],training:string){
+ const parts=[{label:titled(attribute),value:a.attributes[attribute]},...(TRAINED_BACKGROUND[training]===a.backgroundId?[{label:"Proficiency",value:2}]:[])];
+ return{modifier:parts.reduce((n,p)=>n+p.value,0),parts};
+}
+/** A Chapter II–VI room's single check: the hero's attribute plus half the party level, with advantage once the evidence is examined. */
+function expeditionTerms(s:Save,h:Actor,attribute:keyof Actor["attributes"]){
+ const parts=[{label:titled(attribute),value:h.attributes[attribute]},{label:"Proficiency",value:Math.floor((s.level??1)/2)}];
+ return{modifier:parts.reduce((n,p)=>n+p.value,0),parts,advantage:!!s.flags[`${s.sceneId}:evidence`]};
+}
+/** Option kinds name the training their check uses (`inspect`, `disarm`, `persuade`, `distract`); "Pick the gate lock" is untrained. */
+function withOdds(s:Save,a:ActionOption):ActionOption{
+ if(!a.check||a.check.modifier!==undefined||a.kind==="attack")return a;
+ const actor=s.party.find(x=>x.id===a.actorId);if(!actor)return a;
+ return{...a,check:{...a.check,...checkTerms(actor,a.check.attribute as keyof Actor["attributes"],a.kind)}};
+}
 function check(
   s: Save,
   dice: Dice,
@@ -1122,11 +1141,7 @@ function check(
       "ACTOR_DOWNED",
       "A downed character cannot attempt a check.",
     );
-  const trained =
-    (training === "inspect" && a.backgroundId === "delver") ||
-    (training === "persuade" && a.backgroundId === "envoy") ||
-    (training === "disarm" && a.backgroundId === "survivor");
-  const r = rollD20(dice, a.attributes[attribute] + (trained ? 2 : 0), purpose);
+  const r = rollD20(dice, checkTerms(a, attribute, training).modifier, purpose);
   const success = r.total >= dc;
   log(
     s,
@@ -1274,13 +1289,11 @@ function nextTurn(s: Save) {
   const a = allActors(s).find((x) => x.id === t.actorId);
   if (a) a.guard = false;
 }
+const strikeAttribute=(a:Actor)=>a.classId==="scout"?"agility":a.classId==="adept"||a.classId==="cleric"?"insight":"might";
+/** Echo Rules attack odds: the same modifier, defense and Aim advantage `strike()` rolls; a natural 20 hits and a natural 1 misses. */
+function strikeCheck(a:Actor,b:Actor):PublicCheck{const attribute=strikeAttribute(a),value=a.attributes[attribute];return{dc:b.defense+(b.guard?2:0),attribute:"attack",modifier:value,parts:[{label:titled(attribute),value}],...(a.aim?{advantage:"Aim"}:{}),critOn:20};}
 function strike(s: Save, a: Actor, b: Actor, dice: Dice) {
-  const modifier =
-    a.classId === "scout"
-      ? a.attributes.agility
-      : (a.classId === "adept" || a.classId === "cleric")
-        ? a.attributes.insight
-        : a.attributes.might;
+  const modifier = a.attributes[strikeAttribute(a)];
   const sides =
     a.classId === "guardian" || a.classId === "vark"
       ? 8
@@ -1511,7 +1524,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
     else if(kind==='exp_choice'){
       const choice=Number(actorId) as 0|1;
       let success=true;
-      if(choice===0&&!f[`${prefix}:defendersDefeated`]&&!(prefix==='archive-3'&&f['index:solved'])&&!infirmaryPrepared(s)&&!inkPrepared(s)){f[`${prefix}:tried`]=true;const r=rollD20(dice,h.attributes[room.challenge]+Math.floor((s.level??1)/2),room.choice[0],!!f[`${prefix}:evidence`]);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${h.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,'hero',[r],'rules',undefined,undefined,{prose:success?room.outcomes[choice]:'The attempt fails and leaves you hurt. You can choose the alternative or confront the defenders.',check:outcomeCheck('check','hero',room.challenge,r,dc,success,{advantage:!!f[`${prefix}:evidence`]})});}
+      if(choice===0&&!f[`${prefix}:defendersDefeated`]&&!(prefix==='archive-3'&&f['index:solved'])&&!infirmaryPrepared(s)&&!inkPrepared(s)){f[`${prefix}:tried`]=true;const terms=expeditionTerms(s,h,room.challenge);const r=rollD20(dice,terms.modifier,room.choice[0],terms.advantage);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${h.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,'hero',[r],'rules',undefined,undefined,{prose:success?room.outcomes[choice]:'The attempt fails and leaves you hurt. You can choose the alternative or confront the defenders.',check:outcomeCheck('check','hero',room.challenge,r,dc,success,{advantage:!!f[`${prefix}:evidence`]})});}
       if(success){f[`${prefix}:resolved`]=true;f[`${prefix}:choice:${choice}`]=true;fact(s,`decision:${prefix}`,choice===0&&inkPrepared(s)?INK_RESCUE:choice===0&&infirmaryPrepared(s)?PREPARED_RESCUE:room.outcomes[choice]);awardExperience(s,`room:${prefix}`,room.xp);if(choice===0&&!f[`xp:encounter:${prefix}`]&&(!s.tactical||CURATED_ENCOUNTERS[prefix]))awardExperience(s,`resolution:${prefix}`,ROOM_ENCOUNTER_XP);s.relationships[choice===0?'mira':'oren']=Math.min(20,s.relationships[choice===0?'mira':'oren']+1);}
       else{const r=damageRoll(dice,6,0,'Setback');h.hp=Math.max(1,h.hp-r.total);log(s,`The attempt costs ${r.total} health. You can choose the alternative or confront the defenders.`,'hero',[r]);}
     }else if(kind==='exp_next'){
