@@ -43,7 +43,14 @@ function markReadAloud(saveId:string,sceneId:string){try{const seen=JSON.parse(l
 interface StoryBoxProps {save:PublicSave;dialogue:Dialogue|null;reduced:boolean;autoAdvance:boolean;
  /** False while a modal, the confirm card or a request owns the keyboard. */
  active:boolean;bark:BarkEvent|null;onBacklog:()=>void;
- voice:{speaking:boolean;ready:boolean;onToggle:()=>void};narrate:(()=>void)|null}
+ voice:{speaking:boolean;ready:boolean;onToggle:()=>void};narrate:(()=>void)|null;
+ /** Called with the box's `storyKey` once its last page is fully shown, or skipped to (#96). Replies and the chapter card wait for it. */
+ onRead?:(key:string)=>void;
+ /** Something waits on this passage: offer a visible skip to its last page. */
+ holding?:boolean}
+
+/** One key per passage the box shows: a dialogue, the combat feed, or one saved revision. */
+export const storyKey=(save:Pick<PublicSave,'id'|'revision'|'mode'>,dialogue:Pick<Dialogue,'id'>|null)=>dialogue?'dialogue:'+dialogue.id:save.mode==='combat'?`${save.id}:${save.revision}:combat`:`${save.id}:${save.revision}`;
 
 /**
  * Issue #60: the ADV story box. Exploration pages through the current revision's passage, with the room's read-aloud page
@@ -51,11 +58,11 @@ interface StoryBoxProps {save:PublicSave;dialogue:Dialogue|null;reduced:boolean;
  */
 export default function StoryBox(props:StoryBoxProps){
  const {save,dialogue}=props;
- const id=dialogue?'dialogue:'+dialogue.id:!dialogue&&save.mode==='combat'?`${save.id}:${save.revision}:combat`:`${save.id}:${save.revision}`;
- return <StoryPages key={id} {...props}/>;
+ const id=storyKey(save,dialogue);
+ return <StoryPages key={id} storyId={id} {...props}/>;
 }
 
-function StoryPages({save,dialogue,reduced,autoAdvance,active,bark,onBacklog,voice,narrate}:StoryBoxProps){
+function StoryPages({storyId,save,dialogue,reduced,autoAdvance,active,bark,onBacklog,voice,narrate,onRead,holding}:StoryBoxProps&{storyId:string}){
  const box=useRef<HTMLElement>(null),os=useOSReducedMotion(),still=reduced||os;
  const combat=!dialogue&&save.mode==='combat';
  const [readAloud]=useState(()=>!dialogue&&!combat&&opensWithDescription(save)&&!readAloudSeen(save.id,save.scene.id));
@@ -65,13 +72,17 @@ function StoryPages({save,dialogue,reduced,autoAdvance,active,bark,onBacklog,voi
  const [view,setView]=useState(()=>({page:0,boxed:readAloud}));
  const [barkShown,setBarkShown]=useState(true);
  const last=pages.length-1,page=Math.min(view.page,last),current=pages[page]!,boxed=view.boxed&&!!current.readAloud;
- const {count,done,complete}=useReveal(current.text,still||resumed);
+ const [skipped,setSkipped]=useState(false);
+ const {count,done,complete}=useReveal(current.text,still||resumed||skipped);
  const more=page<last||boxed;
  useEffect(()=>{if(readAloud)markReadAloud(save.id,save.scene.id);},[]);// eslint-disable-line react-hooks/exhaustive-deps -- once, on the page's first showing
  useEffect(()=>{if(!bark)return;const t=setTimeout(()=>setBarkShown(false),BARK_MS);return()=>clearTimeout(t);},[bark]);
  /** First press completes the page; the next turns it. Past the last read-aloud page the box collapses to an ordinary page. */
  const advance=()=>{if(!done){complete();return;}if(page<last)setView({page:page+1,boxed:view.boxed});else if(boxed)setView({page,boxed:false});};
- const skip=()=>{if(!boxed)return;const next=pages.findIndex((p,i)=>i>page&&!p.readAloud);setView({page:next>=0?next:page,boxed:false});if(next<0)complete();};
+ /** Escape leaves a read-aloud box for the passage after it; on an ordinary passage it turns to the last page, shown whole. */
+ const skip=()=>{if(!boxed){setSkipped(true);setView({page:last,boxed:false});return;}const next=pages.findIndex((p,i)=>i>page&&!p.readAloud);setView({page:next>=0?next:page,boxed:false});if(next<0)complete();};
+ const read=combat||page===last&&!boxed&&done,reported=useRef(onRead);reported.current=onRead;
+ useEffect(()=>{if(read)reported.current?.(storyId);},[read,storyId]);
  const keys=useRef({advance,skip});keys.current={advance,skip};
  useEffect(()=>{
   if(!active||combat)return;
@@ -99,6 +110,7 @@ function StoryPages({save,dialogue,reduced,autoAdvance,active,bark,onBacklog,voi
     {pages.length>1&&<span className="page-indicator" aria-label={`Page ${page+1} of ${pages.length}`}>{page+1} / {pages.length}</span>}
     {dialogue&&<button className="story-link" disabled={!voice.speaking&&!voice.ready} title={!voice.ready?'Choose an AI mode in Settings to hear voices':undefined} onClick={voice.onToggle}>{voice.speaking?'■ Stop':voice.ready?'▷ Listen':'Voice unavailable'}</button>}
     {narrate&&<button className="story-link" onClick={narrate}>Let the DM narrate ✧</button>}
+    {holding&&!read&&<button className="story-link" onClick={skip} title="Turn to the last page" aria-keyshortcuts="Escape">Skip <kbd>Esc</kbd></button>}
     {journal}
     {more&&<button className="story-next" onClick={advance}>Go on <span aria-hidden="true">›</span></button>}
    </span>
