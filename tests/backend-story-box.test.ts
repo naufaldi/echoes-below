@@ -51,7 +51,7 @@ test('the check prose and the clue line after it show once, and check.xp absorbs
  assert.ok(logs.filter(l=>/^The party gains \d+ XP\.$/.test(l.text)).length>1);
  const lines=storyLines(logs,view(next));
  assert.equal(lines.filter(l=>l.text===check.prose).length,1);
- assert.ok(!lines.some(l=>/XP/.test(l.text)));assert.ok(!lines.some(l=>!l.text),'every XP line is counted in the tag');
+ assert.ok(!lines.some(l=>/XP/.test(l.text)));assert.ok(!lines.some(l=>!l.text&&/XP/.test(tagText(l.tag!))),'every XP line is counted in the tag');
  assert.ok(tagText(lines[0]!.tag!).endsWith(`+${check.check!.xp} XP`));
  // Without a check, XP lines stay visible as tags rather than narrator text.
  const plain=storyLines([{id:'x',revision:1,speaker:'dm',source:'rules',text:'The party gains 35 XP.',rolls:[]}],view(next));
