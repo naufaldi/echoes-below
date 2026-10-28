@@ -32,7 +32,9 @@ export function loadReading(store:Store|null):ReadingSettings{
  }catch{return {...DEFAULT_READING};}
 }
 export function saveReading(store:Pick<Storage,'setItem'>|null,settings:ReadingSettings){try{store?.setItem(READING_KEY,JSON.stringify(settings));}catch{/* blocked storage: the choice lasts this visit */}}
-/** Characters that fill the story box's three lines at a text size: the 200 measured at normal, fewer as the letters grow. */
-export const pageBudget=(size:TextSize,base=200)=>Math.floor(base/SIZE_SCALE[size]);
+/** Share of the normal page each size holds: three lines in the narrowest box with a portrait (1100px), long words included (measured). */
+export const PAGE_SHARE:Record<TextSize,number>={normal:1,large:.89,larger:.75};
+/** Characters a page holds at a text size: the 200 measured at normal, fewer as the letters grow. */
+export const pageBudget=(size:TextSize,base=200)=>Math.floor(base*PAGE_SHARE[size]);
 /** Auto-advance waits about 22 characters a second, never under 1.8s, scaled by the chosen pause. */
 export const readingPause=(text:string,pause:ReadingPause='normal')=>Math.round(Math.max(1800,900+text.length*45)*PAUSE_SCALE[pause]);

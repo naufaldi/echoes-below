@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {DEFAULT_READING,LEGACY_AUTO_ADVANCE_KEY,READING_KEY,loadReading,pageBudget,parseReading,readingPause,saveReading} from '../client/reading-settings.js';
 import {GUIDE_KEY,guideDue,guideSeen,markGuideSeen} from '../client/guide.js';
 import {PAGE_CHARS,readingDelay} from '../client/story-pages.js';
+import {createSave,publicSave} from '../server/game.js';
+import {CURATED_RULES_VERSION} from '../shared/curated-rules.js';
 
 /** A Storage stand-in; `blocked` throws on every call, like a browser with storage turned off. */
 function store(items:Record<string,string>={},blocked=false){
@@ -52,6 +54,9 @@ test('#68: the guide is due on a new adventure, after the Chapter I title page',
  assert.equal(due({...fresh,revision:3}),false,'a resumed adventure never brings it back');
  assert.equal(due({...fresh,scene:{id:'hall'}}),false);
  assert.equal(due(null),false);
+});
+test('#68: a brand-new adventure is due the guide in both rule sets',()=>{
+ for(const rulesVersion of [undefined,CURATED_RULES_VERSION])assert.equal(guideDue(publicSave(createSave({name:'Aria',classId:'adept',backgroundId:'envoy',appearanceId:'moon',...(rulesVersion?{rulesVersion}:{})})),{seen:false,chapterPage:false,busy:false}),true,rulesVersion??'echo');
 });
 test('#68: the guide shows once per browser, or once per visit when storage is blocked',()=>{
  const s=store(),memory={seen:false};
