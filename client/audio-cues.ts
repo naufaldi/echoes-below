@@ -1,4 +1,4 @@
-import type {Actor,PublicSave} from '../shared/types.js';
+import type {Actor,OutcomeCheck,PublicSave} from '../shared/types.js';
 
 /** Pure audio decisions, kept free of the DOM so they can be tested without a browser. */
 export type Sfx='dice-shake'|'die-throw'|'hit'|'miss'|'footstep'|'door-open'|'ui-click';
@@ -27,4 +27,9 @@ export function sceneCues(previous:Room|null,next:Room|null):Sfx[]{
  const was=new Map([...previous.party,...previous.enemies].map(a=>[a.id,a]));
  if([...next.party,...next.enemies].some(a=>{const b=was.get(a.id);return !!b&&(b.position[0]!==a.position[0]||b.position[1]!==a.position[1]||(!!a.motion&&a.motion.id!==b.motion?.id));}))cues.push('footstep');
  return cues;
+}
+/** A natural 20 or 1 on the d20 that decided an outcome is an event (#61): a burst or a crack on the world die, a sound and its own line. Initiative and damage dice carry no check, so they never count. */
+export type NaturalEvent='natural-20'|'natural-1';
+export function naturalEvent(check:Pick<OutcomeCheck,'sides'|'natural'>|undefined):NaturalEvent|null{
+ if(!check||check.sides!==20)return null;return check.natural===20?'natural-20':check.natural===1?'natural-1':null;
 }

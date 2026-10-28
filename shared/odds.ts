@@ -17,3 +17,8 @@ export function oddsFor(c:PublicCheck|undefined):Odds|null{
 }
 /** Signed modifier as the mechanics tag prints it: "+3", "−1", "+0". */
 export const signed=(n:number)=>(n<0?'−':'+')+Math.abs(n);
+/** The modifier breakdown shown before committing: ability + proficiency, then help, advantage and any bonus die. */
+export function checkBreakdown(c:PublicCheck):string[]{
+ return[...(c.parts??[]).map(p=>`${p.label} ${signed(p.value)}`),...(c.bonusDie?[`Bless +1d${c.bonusDie}`]:[]),...(c.dcHelp?[`Help: DC −${c.dcHelp}`]:[]),
+  ...(c.advantage?[`Advantage: ${c.advantage}`]:[]),...(c.disadvantage?[`Disadvantage: ${c.disadvantage}`]:[]),...(c.advantage&&c.disadvantage?['They cancel out']:[])];
+}

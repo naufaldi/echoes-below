@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {outcomeCue,parseAudioSettings,musicModeFor,sceneCues,DEFAULT_AUDIO_SETTINGS} from '../client/audio-cues.js';
+import {outcomeCue,parseAudioSettings,musicModeFor,sceneCues,naturalEvent,DEFAULT_AUDIO_SETTINGS} from '../client/audio-cues.js';
 import type {PublicSave} from '../shared/types.js';
 
 const actor=(id:string,hp:number,position:[number,number]=[0,0])=>({id,hp,position}) as any;
@@ -34,4 +34,12 @@ test('every audio author is credited in game and in the README',()=>{
  const app=readFileSync(new URL('../client/App.tsx',import.meta.url),'utf8'),readme=readFileSync(new URL('../README.md',import.meta.url),'utf8');
  for(const f of manifest.files){const author=f.author.replace(/ \(.*\)$/,'');assert.ok(app.includes(author)&&readme.includes(author),author);}
  for(const f of manifest.files.filter((f:any)=>f.licence==='CC-BY-4.0'))assert.ok(app.includes(f.title)&&app.includes('CC-BY 4.0')&&readme.includes(f.title),f.title);
+});
+test('only a saved natural 20 or 1 on a d20 becomes an event',()=>{
+ assert.equal(naturalEvent({sides:20,natural:20}),'natural-20');
+ assert.equal(naturalEvent({sides:20,natural:1}),'natural-1');
+ assert.equal(naturalEvent({sides:20,natural:19}),null);
+ assert.equal(naturalEvent({sides:20,natural:2}),null);
+ assert.equal(naturalEvent({sides:6,natural:1}),null);
+ assert.equal(naturalEvent(undefined),null);
 });

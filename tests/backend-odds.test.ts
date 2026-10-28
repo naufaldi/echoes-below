@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {bandFor,oddsFor,signed,successChance} from '../shared/odds.js';
+import {bandFor,checkBreakdown,oddsFor,signed,successChance} from '../shared/odds.js';
 const close=(actual:number,expected:number)=>assert.ok(Math.abs(actual-expected)<1e-9,`${actual} ≠ ${expected}`);
 test('a check succeeds on d20 + modifier ≥ DC, one face in twenty each',()=>{
  close(successChance({dc:10,modifier:0}),11/20);
@@ -47,3 +47,8 @@ test('without a public modifier there are no odds, only the DC',()=>{
  assert.equal(oddsFor({dc:13,attribute:'agility',modifier:0})?.percent,40);
 });
 test('signed modifiers print a true minus sign',()=>{assert.equal(signed(3),'+3');assert.equal(signed(-1),'−1');assert.equal(signed(0),'+0');});
+test('the breakdown lists ability, proficiency, help and advantage',()=>{
+ assert.deepEqual(checkBreakdown({dc:9,attribute:'might',modifier:4,parts:[{label:'Might',value:3},{label:'Proficiency',value:1}],advantage:'Evidence',dcHelp:3}),['Might +3','Proficiency +1','Help: DC −3','Advantage: Evidence']);
+ assert.deepEqual(checkBreakdown({dc:13,attribute:'attack',modifier:1,parts:[{label:'Strength',value:-1},{label:'Proficiency',value:2}],bonusDie:4,advantage:'Help',disadvantage:'Guarded',critOn:20}),['Strength −1','Proficiency +2','Bless +1d4','Advantage: Help','Disadvantage: Guarded','They cancel out']);
+ assert.deepEqual(checkBreakdown({dc:13,attribute:'agility'}),[]);
+});
