@@ -10,9 +10,9 @@ import type {ClassId} from '../shared/types.js';
 export type Profile = 'diplomatic'|'aggressive'|'reserved'|'breaker';
 export type Rules = 'echo-v1'|typeof CURATED_RULES_VERSION;
 export interface ForkSighting {room:string;variant:string;title:string;description:string;choices:string[];ledger:PlaystyleLedger;}
-export interface ProfileRun {profile:Profile;rules:Rules;classId:ClassId;mode:string;ending:string|null;endingId:string;finalLedger:PlaystyleLedger;forks:ForkSighting[];fights:number;actions:number;seed?:number;/** The finished run, for seeding a local game. */save:Save;}
+export interface ProfileRun {profile:Profile;rules:Rules;classId:ClassId;mode:string;ending:string|null;endingId:string;finalLedger:PlaystyleLedger;forks:ForkSighting[];fights:number;actions:number;seed?:number;/** #95: the most potions any one member carried at any point. */peakPotions:number;/** The finished run, for seeding a local game. */save:Save;}
 
-/** Seeds tried in order for the aggressive run. Curated starts with the attrition audit's seed. Echo Rules fights three defenders in every room and only some seeds survive all 42 fights (733 and 1466 fall in Chapter II); this audit is about routes and endings, not balance, so a later seed may stand in when a rules or XP change moves the survivable one. */
+/** Seeds tried in order for the aggressive run. Curated starts with the attrition audit's seed. Echo Rules fights three defenders in every room and only some seeds survive all 42 fights (733 and 1466 fall in Chapter II; since #95 moved the dice stream, 2199 falls at choir-3); this audit is about routes and endings, not balance, so a later seed may stand in when a rules or XP change moves the survivable one. */
 const SEEDS:Record<Rules,number[]>={'echo-v1':[2199,3665,733,1466,2932,4398],[CURATED_RULES_VERSION]:[733,1466,2199,2932,3665]};
 export function runProfile(profile:Profile,rules:Rules,classId:ClassId='guardian'):ProfileRun{
  if(peaceful(profile))return playProfile(profile,rules,classId);
@@ -26,8 +26,8 @@ function playProfile(profile:Profile,rules:Rules,classId:ClassId,seed?:number):P
  // The diplomatic run rolls high so its checks succeed; the aggressive run uses seeded dice for honest combat.
  const dice=peaceful(profile)?(n:number)=>n:seeded;
  let s=createSave({name:`${profile} audit`,classId,backgroundId:'envoy',appearanceId:'moon',rulesVersion:rules});
- const tactical=rules===CURATED_RULES_VERSION;let actions=0,fights=0;const forks:ForkSighting[]=[];
- const act=(id:string)=>{s=applyAction(s,id,dice);s=JSON.parse(JSON.stringify(s)) as Save;actions++;};
+ const tactical=rules===CURATED_RULES_VERSION;let actions=0,fights=0,peakPotions=0;const forks:ForkSighting[]=[];
+ const act=(id:string)=>{s=applyAction(s,id,dice);s=JSON.parse(JSON.stringify(s)) as Save;actions++;peakPotions=Math.max(peakPotions,...s.party.map(a=>a.potions));};
  const has=(id:string)=>legalActions(s).some(a=>a.id===id);
  const advance=()=>{for(let i=0;i<12;i++){const option=legalActions(s).find(a=>a.id.startsWith('advance:'));if(!option)return;act(option.id);}throw Error('Advancement loop did not terminate');};
  function fight(){
@@ -66,6 +66,6 @@ function playProfile(profile:Profile,rules:Rules,classId:ClassId,seed?:number):P
   if(has('exp_rest'))act('exp_rest');if(tactical)recover();advance();
   act('exp_next');
  }
- return {profile,rules,classId,mode:s.mode,ending:s.ending,endingId:selectEnding(s).id,finalLedger:playstyleLedger(s),forks,fights,actions,seed,save:s};
+ return {profile,rules,classId,mode:s.mode,ending:s.ending,endingId:selectEnding(s).id,finalLedger:playstyleLedger(s),forks,fights,actions,seed,peakPotions,save:s};
 }
 export const FORK_ROOMS=ROOM_FORKS.map(f=>f.room);

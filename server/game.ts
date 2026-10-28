@@ -1,4 +1,4 @@
-import {expeditionSupplyReward,collectExpeditionSupplies} from './expedition-supplies.js';
+import {expeditionSupplyReward,collectExpeditionSupplies,gainPotions,leftBehind} from './expedition-supplies.js';
 import {inkActions,resolveInk,inkPrepared,projectInk,INK_RESCUE} from './ink-garden.js';
 import {courierActions,resolveCourier} from './courier-inquiry.js';
 import {infirmaryActions,resolveInfirmary,infirmaryPrepared,projectInfirmary,PREPARED_RESCUE} from './infirmary.js';
@@ -669,15 +669,17 @@ function baseActions(s: Save): ActionOption[] {
     const dc=expedition.dc-effects.dcReduction;
     const defeated=!!f[`${prefix}:defendersDefeated`];
     if(!f[`${prefix}:resolved`])for(const help of availableConsequences(prefix,f))a.push(opt('exp_ally:'+help.id,help.label,help.arrival,'interact',help.name==='Mira'?'mira':'ally:'+help.id));
-    if(!f[`${prefix}:evidence`])a.push(opt('exp_evidence','Examine the evidence','Record an observable clue before committing to a choice.','inspect','evidence'));
+    const reading=f[`${prefix}:evidence`]?undefined:evidenceCheck(s);
+    if(reading?.actor){const terms=expeditionTerms(s,reading.actor,'insight',false),o=opt('exp_evidence','Examine the evidence',`One try. An Insight check, DC ${reading.dc}. ${f[`${prefix}:resolved`]?'Success reveals the whole clue; failure only part of it.':'Success reveals the clue and grants advantage on this room’s check; failure leaves only part of it.'}`,'inspect','evidence',reading.actor.id,reading.dc,'insight');o.check={...o.check!,modifier:terms.modifier,parts:terms.parts};a.push(o);}
     if(!f[`${prefix}:talk`])a.push(opt('exp_talk','Hear your companions','Listen to the party’s personal response.','interact','encounter'));
     if(!f[`${prefix}:supplies`])a.push(opt('exp_supplies','Search the supplies',expeditionSupplyReward(s).description,'inspect','supplies'));
     if(!f[`${prefix}:resolved`]){
       const named=prefix==='archive-3'&&!!f['index:solved'],prepared=infirmaryPrepared(s),garden=inkPrepared(s),certain=defeated||named||prepared||garden;
       const fightable=!defeated&&(!s.tactical||!!CURATED_ENCOUNTERS[s.sceneId]),unused=availableConsequences(prefix,f).map(c=>`help from ${c.name.replace(/^The /,'the ')} offered here`);
       const forgone=(choice:0|1)=>[...CAMPAIGN_CONSEQUENCES.filter(c=>c.source===prefix&&c.choice!==choice).map(c=>`help from ${c.name.replace(/^The /,'the ')} at ${baseScenes[c.target].title}`),...unused];
-      if(defeated||(h.hp>0&&(named||prepared||garden||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',prepared?'Help the medic from the lowered cot':garden?'Leave with the apprentice and protected pages':expedition.choice[0],closes(garden?'The lantern burns steadily and the pages are protected. Leave together without a check or destroying records.':prepared?'The cot is secured and the pocket drained. Rescue the medic without a check; his medicine remains with him.':named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`,[...(certain?[]:[`this option if the check fails${fightable?', unless you defeat the defenders':''}`]),...forgone(0)]), 'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:'hero',certain?undefined:dc,certain?undefined:expedition.challenge,!certain||forgone(0).length>0));
-      const attempt=a.find(o=>o.id==='exp_choice:0');if(attempt?.check){const terms=expeditionTerms(s,h,expedition.challenge);attempt.check={...attempt.check,modifier:terms.modifier,parts:terms.parts,...(terms.advantage?{advantage:'Evidence'}:{}),...(effects.dcReduction?{dcHelp:effects.dcReduction}:{})};}
+      const roller=roomRoller(s,expedition.challenge);
+      if(defeated||(roller&&(named||prepared||garden||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',prepared?'Help the medic from the lowered cot':garden?'Leave with the apprentice and protected pages':expedition.choice[0],closes(garden?'The lantern burns steadily and the pages are protected. Leave together without a check or destroying records.':prepared?'The cot is secured and the pocket drained. Rescue the medic without a check; his medicine remains with him.':named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`,[...(certain?[]:[`this option if the check fails${fightable?', unless you defeat the defenders':''}`]),...forgone(0)]), 'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:roller!.id,certain?undefined:dc,certain?undefined:expedition.challenge,!certain||forgone(0).length>0));
+      const attempt=a.find(o=>o.id==='exp_choice:0');if(attempt?.check){const terms=expeditionTerms(s,roller!,expedition.challenge);attempt.check={...attempt.check,modifier:terms.modifier,parts:terms.parts,...(terms.advantage?{advantage:'Evidence'}:{}),...(effects.dcReduction?{dcHelp:effects.dcReduction}:{})};}
       if(!prepared&&!garden)a.push(opt('exp_choice:1',expedition.choice[1],closes('Commit to this alternative and its consequences without a check.',forgone(1)),'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',undefined,undefined,undefined,forgone(1).length>0));
       if(!defeated&&(!s.tactical||CURATED_ENCOUNTERS[s.sceneId]))a.push(opt('exp_fight','Confront the chamber’s defenders','Resolve the obstruction in turn-based combat, then choose the outcome.','attack',s.tactical&&prefix==='archive-3'?'index-sentinel':'encounter',undefined,undefined,undefined,true));
     }else{
@@ -823,7 +825,8 @@ function baseActions(s: Save): ActionOption[] {
             true,
           ),
         );
-      if (h.hp > 0 && !f.distractTried)
+      const decoy = chapterRoller(s, "agility", "distract");
+      if (decoy && !f.distractTried)
         a.push(
           opt(
             "distract",
@@ -831,7 +834,7 @@ function baseActions(s: Save): ActionOption[] {
             closes("Agility DC13. Success gains passage, but no supplies. Failure raises alarm.", scritLoss(s), "Success"),
             "distract",
             "guards",
-            "hero",
+            decoy.id,
             13,
             "agility",
             true,
@@ -863,7 +866,8 @@ function baseActions(s: Save): ActionOption[] {
               "gate",
             ),
           );
-        if (h.hp > 0 && !f.pickTried)
+        const picker = chapterRoller(s, "agility", "pick");
+        if (picker && !f.pickTried)
           a.push(
             opt(
               "pick",
@@ -871,7 +875,7 @@ function baseActions(s: Save): ActionOption[] {
               "One Agility DC13 attempt. Failure costs a tick; you can then break the gate.",
               "interact",
               "gate",
-              "hero",
+              picker.id,
               13,
               "agility",
             ),
@@ -1021,6 +1025,7 @@ export function publicSave(s: Save): PublicSave {
   } = s;
   const scene=structuredClone(baseScenes[sceneId]);
   projectFork(s,scene);
+  if(sceneId==='aftermath'&&flags.aftermathUnhurt)scene.description=UNHURT_AFTERMATH;
   if(s.tactical&&sceneId==='archive-3'){scene.bellIndex=bellIndexState(flags);scene.entities.push({id:'index-console',name:scene.bellIndex.solved?'Catalogue · name recovered':'Catalogue plates',kind:'clue',position:[-3,-2],description:'Three bronze plates preserve the librarian’s identity.'});}
   if(s.tactical&&sceneId==='archive-3'&&s.mode!=='combat'){
    if(flags['archive-3:resolved'])scene.description=expeditionRoom(sceneId)!.outcomes[flags['archive-3:choice:0']?0:1];
@@ -1116,11 +1121,23 @@ export function checkTerms(a:Actor,attribute:keyof Actor["attributes"],training:
  const parts=[{label:titled(attribute),value:a.attributes[attribute]},...(TRAINED_BACKGROUND[training]===a.backgroundId?[{label:"Proficiency",value:2}]:[])];
  return{modifier:parts.reduce((n,p)=>n+p.value,0),parts};
 }
-/** A Chapter II–VI room's single check: the hero's attribute plus half the party level, with advantage once the evidence is examined. */
-function expeditionTerms(s:Save,h:Actor,attribute:keyof Actor["attributes"]){
+/** A Chapter II–VI room's single check: the roller's attribute plus half the party level, with advantage once the evidence has been read. */
+function expeditionTerms(s:Save,h:Actor,attribute:keyof Actor["attributes"],evidence=true){
  const parts=[{label:titled(attribute),value:h.attributes[attribute]},{label:"Proficiency",value:Math.floor((s.level??1)/2)}];
- return{modifier:parts.reduce((n,p)=>n+p.value,0),parts,advantage:!!s.flags[`${s.sceneId}:evidence`]};
+ return{modifier:parts.reduce((n,p)=>n+p.value,0),parts,advantage:evidence&&evidenceRead(s,s.sceneId)};
 }
+/** #95: a missed reading grants no advantage. Older saves only carry `:evidence`, which always meant the clue was read. */
+const evidenceRead=(s:Save,prefix:string)=>!!s.flags[`${prefix}:evidence`]&&!s.flags[`${prefix}:evidenceMissed`];
+/** #95: a party check is made by the living member with the best public modifier; ties keep the hero. */
+export function bestMember(s:Save,modifier:(a:Actor)=>number){let best:Actor|undefined;for(const a of s.party)if(a.hp>0&&!s.tactical?.actors[a.id]?.dead&&(!best||modifier(a)>modifier(best)))best=a;return best;}
+/** Presence stays with the hero, who speaks for the party. */
+const roomRoller=(s:Save,attribute:keyof Actor["attributes"])=>attribute==="presence"?s.party.find(a=>a.id==="hero"&&a.hp>0):bestMember(s,a=>expeditionTerms(s,a,attribute).modifier);
+/** #95: examining the evidence is one Insight check by the sharpest eye, two below the room's own check (minimum 8). */
+export function evidenceCheck(s:Save){const room=playedRoom(s,s.sceneId)!;return{dc:Math.max(8,room.dc-campaignEffects(s.sceneId,s.flags).dcReduction-2),actor:bestMember(s,a=>expeditionTerms(s,a,"insight",false).modifier)};}
+/** A missed reading keeps the clue's first sentence. */
+export function partialClue(clue:string){const [first,...rest]=clue.split(/(?<=[.!?])\s+/);return rest.length?`${first} The rest will not come together.`:'The signs are here, but they will not come together.';}
+/** #95: physical Chapter I checks go to the best-placed member; Presence stays with the hero, who speaks for the party. */
+const chapterRoller=(s:Save,attribute:keyof Actor["attributes"],training:string)=>bestMember(s,a=>checkTerms(a,attribute,training).modifier);
 /** Option kinds name the training their check uses (`inspect`, `disarm`, `persuade`, `distract`); "Pick the gate lock" is untrained. */
 function withOdds(s:Save,a:ActionOption):ActionOption{
  if(!a.check||a.check.modifier!==undefined||a.kind==="attack")return a;
@@ -1158,6 +1175,8 @@ function check(
   return success;
 }
 function enterScene(s: Save, id: SceneId) {
+  // #95: the aftermath only calls the party battered when someone is hurt; fixed on entry so the description stays stable.
+  if(id==='aftermath'){if(s.party.every(a=>a.hp>=a.maxHp))s.flags.aftermathUnhurt=true;else delete s.flags.aftermathUnhurt;}
   awardExperience(s,`entered:${id}`,50);
   delete s.flags.retreatRequested;
   s.sceneId = id;
@@ -1172,6 +1191,7 @@ function enterScene(s: Save, id: SceneId) {
   if(s.tactical)placeExplorationParty(s,s.party[0],[0,-1.5]);
   log(s, publicSave(s).scene.description, "dm", [], "authored");
 }
+const UNHURT_AFTERMATH = "The bell settles. In the silence, a deeper door unlocks beneath the relay. Your companions gather around the seal, unhurt and watchful. The next decision belongs to you.";
 const CAPTIVES = "The tracks show captives were marched alive into the relay.";
 const PLATE = "A pressure plate is connected to the wall slits. The side ledge avoids it.";
 const HALT = "You halt at a hidden pressure plate. The side ledge avoids it.";
@@ -1514,21 +1534,26 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
     approachTarget(s,option);
     if(kind==='exp_ally'){
       const help=availableConsequences(prefix,f).find(c=>c.id===actorId)!;f[`aid:${help.id}`]=true;
-      if(help.effect==='supplies')s.party.forEach(member=>member.potions++);
+      const supplies=help.effect==='supplies'?gainPotions(s,s.party.length,{each:true}):undefined;
       if(help.effect==='healing')s.party.forEach(member=>member.hp=member.maxHp);
-      fact(s,'consequence:'+help.id,help.result);
+      fact(s,'consequence:'+help.id,help.result);if(supplies?.left)log(s,leftBehind(supplies.given));
     }
-    else if(kind==='exp_evidence'){f[`${prefix}:evidence`]=true;fact(s,`evidence:${prefix}`,room.clue);}
+    else if(kind==='exp_evidence'){
+      const {dc,actor}=evidenceCheck(s),r=rollD20(dice,expeditionTerms(s,actor!,'insight',false).modifier,'Examine the evidence'),success=r.total>=dc,clue=success?room.clue:partialClue(room.clue);
+      f[`${prefix}:evidence`]=true;if(!success)f[`${prefix}:evidenceMissed`]=true;
+      log(s,`${actor!.name}: Examine the evidence ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,actor!.id,[r],'rules',undefined,undefined,{prose:clue,check:outcomeCheck('check',actor!.id,'insight',r,dc,success)});
+      fact(s,`evidence:${prefix}`,clue);
+    }
     else if(kind==='exp_talk'){f[`${prefix}:talk`]=true;log(s,room.voice,room.voice.startsWith('Mira')?'mira':'oren',[],'authored');}
     else if(kind==='exp_supplies'){f[`${prefix}:supplies`]=true;collectExpeditionSupplies(s);}
     else if(kind==='exp_rest'){f[`${prefix}:rest`]=true;s.party.forEach(member=>{member.hp=member.maxHp;member.focus=member.maxFocus;});log(s,'The party shares a sheltered rest. Health and focus are restored.');}
     else if(kind==='exp_fight')startCombat(s,dice);
     else if(kind==='exp_choice'){
       const choice=Number(actorId) as 0|1;
-      let success=true;
-      if(choice===0&&!f[`${prefix}:defendersDefeated`]&&!(prefix==='archive-3'&&f['index:solved'])&&!infirmaryPrepared(s)&&!inkPrepared(s)){f[`${prefix}:tried`]=true;const terms=expeditionTerms(s,h,room.challenge);const r=rollD20(dice,terms.modifier,room.choice[0],terms.advantage);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${h.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,'hero',[r],'rules',undefined,undefined,{prose:success?room.outcomes[choice]:'The attempt fails and leaves you hurt. You can choose the alternative or confront the defenders.',check:outcomeCheck('check','hero',room.challenge,r,dc,success,{advantage:!!f[`${prefix}:evidence`]})});}
+      let success=true,roller=h;
+      if(choice===0&&!f[`${prefix}:defendersDefeated`]&&!(prefix==='archive-3'&&f['index:solved'])&&!infirmaryPrepared(s)&&!inkPrepared(s)){f[`${prefix}:tried`]=true;roller=roomRoller(s,room.challenge)!;const terms=expeditionTerms(s,roller,room.challenge);const r=rollD20(dice,terms.modifier,room.choice[0],terms.advantage);const dc=room.dc-campaignEffects(prefix,f).dcReduction;success=r.total>=dc;log(s,`${roller.name}: ${room.choice[0]} ${success?'succeeded':'failed'} (${r.total} vs DC ${dc}).`,roller.id,[r],'rules',undefined,undefined,{prose:success?room.outcomes[choice]:roller.id==='hero'?'The attempt fails and leaves you hurt. You can choose the alternative or confront the defenders.':`The attempt fails and leaves ${roller.name} hurt. You can choose the alternative or confront the defenders.`,check:outcomeCheck('check',roller.id,room.challenge,r,dc,success,{advantage:terms.advantage})});}
       if(success){f[`${prefix}:resolved`]=true;f[`${prefix}:choice:${choice}`]=true;fact(s,`decision:${prefix}`,choice===0&&inkPrepared(s)?INK_RESCUE:choice===0&&infirmaryPrepared(s)?PREPARED_RESCUE:room.outcomes[choice]);awardExperience(s,`room:${prefix}`,room.xp);if(choice===0&&!f[`xp:encounter:${prefix}`]&&(!s.tactical||CURATED_ENCOUNTERS[prefix]))awardExperience(s,`resolution:${prefix}`,ROOM_ENCOUNTER_XP);s.relationships[choice===0?'mira':'oren']=Math.min(20,s.relationships[choice===0?'mira':'oren']+1);}
-      else{const r=damageRoll(dice,6,0,'Setback');h.hp=Math.max(1,h.hp-r.total);log(s,`The attempt costs ${r.total} health. You can choose the alternative or confront the defenders.`,'hero',[r]);}
+      else{const r=damageRoll(dice,6,0,'Setback');roller.hp=Math.max(1,roller.hp-r.total);log(s,`The attempt costs ${roller.id==='hero'?'':`${roller.name} `}${r.total} health. You can choose the alternative or confront the defenders.`,roller.id,[r]);}
     }else if(kind==='exp_next'){
       const next=EXPEDITION[EXPEDITION.findIndex(r=>r.id===s.sceneId)+1];
       if(next)enterScene(s,next.id);else{s.mode='complete';s.ending=endingText(s);log(s,'The descent is complete. Your choices remain in the journal.','dm',[],'authored');}
@@ -1591,7 +1616,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
       enterScene(s, expeditionRoom(s.sceneId)?s.sceneId:s.sceneId === "cookfire" ? "hall" : "prison");
       log(s, "The party retreats and recovers its downed members.");
     }
-  } else if (kind === "loot_cache") {s.flags[`cache:${s.sceneId}`]=true;h.potions++;log(s,"You find a sealed healing potion in the chest.");}
+  } else if (kind === "loot_cache") {s.flags[`cache:${s.sceneId}`]=true;const {left}=gainPotions(s,1,{first:h.id});log(s,left?`You find a sealed healing potion in the chest. ${leftBehind(0,true)}`:"You find a sealed healing potion in the chest.");}
   else if (kind === "campheal")
     heal(s, a, s.party.find((x) => x.id === id.split(":")[2])!, dice);
   else if (kind === "potion") heal(s, h, h, dice, true);
@@ -1714,7 +1739,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
           f.distractTried = true;
           f.guardsDistracted = false;
           if (
-            check(s, dice, h, "agility", 13, "distract", "Distract the guards", { pass: DISTRACTED, fail: "The guards do not take the bait." })
+            check(s, dice, chapterRoller(s, "agility", "distract")!, "agility", 13, "distract", "Distract the guards", { pass: DISTRACTED, fail: "The guards do not take the bait." })
           ) {
             f.passage = true;
             f.guardsDistracted = true;
@@ -1742,7 +1767,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
         if (kind === "unlock") rescue(s);
         else if (kind === "pick") {
           f.pickTried = true;
-          if (check(s, dice, h, "agility", 13, "pick", "Pick the gate", { pass: COURIER, fail: JAMMED }))
+          if (check(s, dice, chapterRoller(s, "agility", "pick")!, "agility", 13, "pick", "Pick the gate", { pass: COURIER, fail: JAMMED }))
             rescue(s);
           else {
             s.ticks++;
