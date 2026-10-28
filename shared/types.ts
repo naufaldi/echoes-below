@@ -55,6 +55,8 @@ export interface GameLog {
   /** Story-only consequence of the roll: no numbers, verdicts or XP. Absent on older saves; fall back to `text`. */
   prose?: string;
   check?: OutcomeCheck;
+  /** #64 U4: set on the level-up line. `maxHp`/`focus` are the per-member gains under Echo Rules; Curated gains vary by class, so they are absent. */
+  levelUp?: {level: number; maxHp?: number; focus?: number};
   actionKind?: 'reaction';
   animation?: AnimationCue;
   speakerName?: string;

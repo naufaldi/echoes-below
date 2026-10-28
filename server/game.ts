@@ -334,6 +334,7 @@ export function log(
   animation?: GameLog["animation"],
   actionKind?: GameLog["actionKind"],
   outcome?: Outcome,
+  levelUp?: GameLog["levelUp"],
 ) {
   s.logs.push({
     id: randomUUID(),
@@ -347,6 +348,7 @@ export function log(
     rolls,
     ...(outcome?.prose?{prose:outcome.prose}:{}),
     ...(outcome?.check?{check:outcome.check}:{}),
+    ...(levelUp?{levelUp}:{}),
   });
   if (s.logs.length > 250) s.logs.shift();
   if (s.presentation && (animation || rolls.length || /moves|guards|aims|runs|restores/.test(text))) {
@@ -441,7 +443,10 @@ function attempted(s: Save, key: string) {
 const listed=(items:string[])=>items.length>1?`${items.slice(0,-1).join(', ')} and ${items.at(-1)}`:items[0]??'';
 export function closes(text:string,lost:string[],when=''){return lost.length?`${text} ${when?`${when} closes`:'Closes'}: ${lost.join('; ')}.`:text;}
 // Echo Rules learns about the seal only from Scrit's meal; Curated tactics can also learn it from Scrit's or the courier's account.
-export function scritLoss(s:Save){return s.flags.fed||!s.party.some(a=>a.rations>0)?[]:[listed(['the ration to Scrit','his offer to guard the seal',...(s.tactical?[]:['the seal negotiation with Vark'])])];}
+// #64 G8: before the cookfire the party has not met Scrit or Vark, so the warning names neither.
+export function scritLoss(s:Save){return s.flags.fed||!s.party.some(a=>a.rations>0)?[]:['approach','hall'].includes(s.sceneId)?['the last ration, which someone below may need']:[listed(['the ration to Scrit','his offer to guard the seal',...(s.tactical?[]:['the seal negotiation with Vark'])])];}
+/** #64 U2: "An Insight check", "A Might check". */
+export const checkPhrase=(skill:string)=>`${/^[aeiou]/i.test(skill)?'An':'A'} ${skill.charAt(0).toUpperCase()}${skill.slice(1)} check`;
 export function rationLoss(s:Save,cost:number){return ['approach','hall','cookfire'].includes(s.sceneId)&&s.party.reduce((n,a)=>n+a.rations,0)-cost<1?scritLoss(s):[];}
 const ROOM_ENCOUNTER_XP=100;
 // Keep a broad triangle within the authored approach area. Tactical cells are
@@ -678,13 +683,13 @@ function baseActions(s: Save): ActionOption[] {
       const fightable=!defeated&&(!s.tactical||!!CURATED_ENCOUNTERS[s.sceneId]),unused=availableConsequences(prefix,f).map(c=>`help from ${c.name.replace(/^The /,'the ')} offered here`);
       const forgone=(choice:0|1)=>[...CAMPAIGN_CONSEQUENCES.filter(c=>c.source===prefix&&c.choice!==choice).map(c=>`help from ${c.name.replace(/^The /,'the ')} at ${baseScenes[c.target].title}`),...unused];
       const roller=roomRoller(s,expedition.challenge);
-      if(defeated||(roller&&(named||prepared||garden||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',prepared?'Help the medic from the lowered cot':garden?'Leave with the apprentice and protected pages':expedition.choice[0],closes(garden?'The lantern burns steadily and the pages are protected. Leave together without a check or destroying records.':prepared?'The cot is secured and the pocket drained. Rescue the medic without a check; his medicine remains with him.':named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`A ${expedition.challenge} check, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`,[...(certain?[]:[`this option if the check fails${fightable?', unless you defeat the defenders':''}`]),...forgone(0)]), 'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:roller!.id,certain?undefined:dc,certain?undefined:expedition.challenge,!certain||forgone(0).length>0));
+      if(defeated||(roller&&(named||prepared||garden||!f[`${prefix}:tried`])))a.push(opt('exp_choice:0',prepared?'Help the medic from the lowered cot':garden?'Leave with the apprentice and protected pages':expedition.choice[0],closes(garden?'The lantern burns steadily and the pages are protected. Leave together without a check or destroying records.':prepared?'The cot is secured and the pocket drained. Rescue the medic without a check; his medicine remains with him.':named?'The catalogue preserves Ilyra’s name. Choose to restore it without another check.':defeated?'The defenders are defeated. Choose this outcome without another check.':`${checkPhrase(expedition.challenge)}, DC ${dc}. Evidence grants advantage. Failure costs health; the alternative remains available.`,[...(certain?[]:[`this option if the check fails${fightable?', unless you defeat the defenders':''}`]),...forgone(0)]), 'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',certain?undefined:roller!.id,certain?undefined:dc,certain?undefined:expedition.challenge,!certain||forgone(0).length>0));
       const attempt=a.find(o=>o.id==='exp_choice:0');if(attempt?.check){const terms=expeditionTerms(s,roller!,expedition.challenge);attempt.check={...attempt.check,modifier:terms.modifier,parts:terms.parts,...(terms.advantage?{advantage:'Evidence'}:{}),...(effects.dcReduction?{dcHelp:effects.dcReduction}:{})};}
       if(!prepared&&!garden)a.push(opt('exp_choice:1',expedition.choice[1],closes('Commit to this alternative and its consequences without a check.',forgone(1)),'interact',s.tactical&&prefix==='archive-2'?'ink-apprentice':s.tactical&&prefix==='archive-4'?'field-medic':s.tactical&&prefix==='archive-3'?'index-librarian':'encounter',undefined,undefined,undefined,forgone(1).length>0));
       if(!defeated&&(!s.tactical||CURATED_ENCOUNTERS[s.sceneId]))a.push(opt('exp_fight','Confront the chamber’s defenders','Resolve the obstruction in turn-based combat, then choose the outcome.','attack',s.tactical&&prefix==='archive-3'?'index-sentinel':'encounter',undefined,undefined,undefined,true));
     }else{
       if(!f[`${prefix}:rest`])a.push(opt('exp_rest','Rest with your companions','Recover health and focus; the sheltered rest is available once.','rest','camp'));
-      a.push(opt('exp_next',EXPEDITION.at(-1)!.id===s.sceneId?'Finish the campaign':'Continue the descent','Travel onward with this decision recorded.','move','encounter'));
+      a.push(opt('exp_next',EXPEDITION.at(-1)!.id===s.sceneId?'Finish the campaign':'Continue the descent','Travel onward. What you chose here goes with you.','move','encounter'));
     }
     return a;
   }
@@ -697,7 +702,7 @@ function baseActions(s: Save): ActionOption[] {
           opt(
             "rest",
             "Rest at camp",
-            closes("Consume one ration per character; fully restore health and focus. Two ticks.", lost),
+            closes("Consume one ration per character; fully restore health and focus. This takes a while.", lost),
             "rest",
             "camp",
             undefined,
@@ -740,7 +745,7 @@ function baseActions(s: Save): ActionOption[] {
         opt(
           "ledge",
           "Take the side ledge",
-          "A safe longer route. Four exploration ticks.",
+          "A safe longer route. This takes a long while.",
           "move",
           "ledge",
         ),
@@ -749,7 +754,7 @@ function baseActions(s: Save): ActionOption[] {
         opt(
           "cautious",
           "Cross cautiously",
-          "Two ticks. When undiscovered, one Insight DC13 check can detect the trap and halt travel.",
+          "This takes a while. When undiscovered, one Insight DC13 check can detect the trap and halt travel.",
           "move",
           "floor",
         ),
@@ -759,8 +764,8 @@ function baseActions(s: Save): ActionOption[] {
           "quick",
           "Cross quickly",
           f.trapSpent
-            ? "The spent mechanism is safe. One tick."
-            : "One tick. An active pressure plate may trigger.",
+            ? "The spent mechanism is safe. This is quick."
+            : "This is quick. An active pressure plate may trigger.",
           "move",
           "floor",
           undefined,
@@ -872,7 +877,7 @@ function baseActions(s: Save): ActionOption[] {
             opt(
               "pick",
               "Pick the gate lock",
-              "One Agility DC13 attempt. Failure costs a tick; you can then break the gate.",
+              "One Agility DC13 attempt. A failure costs time; you can then break the gate.",
               "interact",
               "gate",
               picker.id,
@@ -884,7 +889,7 @@ function baseActions(s: Save): ActionOption[] {
           opt(
             "force",
             "Break open the gate",
-            closes("Free the courier without a roll. One tick; noise raises alarm.", f.alarm ? [] : ["a quiet approach to Vark (an extra sentry joins him, and the alarm can no longer be called off)"]),
+            closes("Free the courier without a roll. This is quick, but the noise raises the alarm.", f.alarm ? [] : ["a quiet approach to Vark (an extra sentry joins him, and the alarm can no longer be called off)"]),
             "force",
             "gate",
             undefined,
@@ -1102,11 +1107,14 @@ function awardExperience(s:Save,key:string,amount:number){
       if(s.tactical){const old=s.tactical.actors[member.id],next=makeCharacter(old.classId,level,old.improvements);const increase=next.maxHp-old.maxHp;next.hp=old.dead||old.hp<=0?0:Math.min(next.maxHp,old.hp+increase);next.slots=next.maxSlots.map((n,i)=>Math.min(n,(old.slots[i]??0)+n-(old.maxSlots[i]??0)));next.features={...classResources(old),secondWind:classResources(old).secondWind+Math.max(0,classResources(next).secondWind-(old.classId==="fighter"?(old.level>=4?3:2):0)),actionSurge:classResources(old).actionSurge+(old.classId==="fighter"&&old.level<2&&level>=2?1:0)};next.death=next.hp>0?{successes:0,failures:0,stable:false}:old.death;next.dead=old.dead;next.concentration=old.concentration;s.tactical.actors[member.id]=next;member.hp=next.hp;member.maxHp=next.maxHp;}
       else{member.maxHp+=gained*6;member.hp=Math.min(member.maxHp,member.hp+gained*6);member.maxFocus+=gained;member.focus+=gained;}
     }
-    log(s,s.tactical?`Level ${level}! Your class health and spell slot capacity increase.`:`Level ${level}! Everyone gains ${gained*6} maximum health and ${gained} focus.`, 'dm');
+    // #64 U4: its own line with a structured `levelUp`, so the story box can show it as a tag instead of prose. The text stays for older clients and the journal.
+    log(s,s.tactical?`Level ${level}! Your class health and spell slot capacity increase.`:`Level ${level}! Everyone gains ${gained*6} maximum health and ${gained} focus.`,'dm',[],'rules',undefined,undefined,undefined,s.tactical?{level}:{level,maxHp:gained*6,focus:gained});
   }
   s.level=level;
   if(gained>0&&s.tactical)projectTactical(s,false);
 }
+/** #64 U7: companion memories are written about "the hero"; the journal uses the hero's name. */
+export const heroNamed=(s:Save,text:string)=>{const name=s.party.find(a=>a.id==='hero')?.name;return name?text.replace(/\bthe hero\b/g,name).replace(/^The hero\b/,name):text;};
 function trust(s: Save, who: "mira" | "oren", key: string) {
   if (!s.flags[`trust:${key}`]) {
     s.flags[`trust:${key}`] = true;
@@ -1269,7 +1277,7 @@ export function finishCheck(s: Save) {
   if (s.party.every((a) => a.hp === 0)) {
     s.mode = "defeat";
     s.turn = null;
-    log(s, "The party falls. Your story can continue from a saved checkpoint.");
+    log(s, "The party falls. The story can resume from an earlier moment.");
     return true;
   }
   if (s.enemies.every((a) => a.hp === 0)) {
@@ -1524,7 +1532,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
     log(s,story.responses[choice].label,'hero',[],'authored');log(s,story.responses[choice].answer,story.speaker,[],'authored');
     s.flags[`bond:${story.id}`]=true;s.companionStoryId=null;s.relationships[story.speaker]=Math.min(20,s.relationships[story.speaker]+1);
     const member=s.party.find(member=>member.id===story.speaker)!;if(story.speaker==='mira'){member.maxHp+=2;member.hp+=2;}else{member.maxFocus++;member.focus++;}
-    s.facts.push({id:`bond:${story.id}`,text:story.memory[choice]});log(s,story.speaker==='mira'?`${member.name} gains Steady Nerves: +2 maximum health from your strengthened bond.`:`${member.name} gains Shared Resolve: +1 maximum focus from your strengthened bond.`,story.speaker);
+    s.facts.push({id:`bond:${story.id}`,text:heroNamed(s,story.memory[choice])});log(s,story.speaker==='mira'?`${member.name} gains Steady Nerves: +2 maximum health from your strengthened bond.`:`${member.name} gains Shared Resolve: +1 maximum focus from your strengthened bond.`,story.speaker);
     s.revision++;s.updatedAt=new Date().toISOString();return s;
   }
   if(kind==='continue_campaign'){
