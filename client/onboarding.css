@@ -7,18 +7,18 @@
 .guide .modal.guide-card[data-side]{bottom:auto;transform:none}
 .guide .guide-card h2{margin:8px 0 6px;font-size:var(--fs-2xl);line-height:1.15}
 .guide .guide-card p{margin:0;font-size:var(--fs-lg);line-height:1.5}
-.guide .guide-card kbd{display:inline-block;min-width:18px;padding:0 5px;border:1px solid var(--border-default);border-radius:3px;font:600 var(--fs-2xs)/1.5 var(--font-ui);text-align:center;color:var(--text-primary);vertical-align:1px}
-.guide .guide-card b{font-weight:600;color:var(--text-primary)}
+.guide .guide-card kbd{display:inline-block;min-width:18px;padding:0 5px;border:1px solid var(--border-default);border-radius:3px;font:500 var(--fs-2xs)/1.5 var(--font-ui);text-align:center;color:var(--text-primary);vertical-align:1px}
+.guide .guide-card b{font-weight:500;color:var(--text-primary)}
 .guide .guide-demo{display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 12px;border:1px solid var(--border-subtle);border-radius:3px;background:var(--accent-wash)}
 .guide .guide-story{justify-content:space-between}.guide .guide-story p{font-size:var(--fs-md);color:var(--text-primary)}
-.guide .guide-next{flex:none;font:600 var(--fs-sm) var(--font-ui);color:var(--gold-strong)}
+.guide .guide-next{flex:none;font:500 var(--fs-sm) var(--font-ui);color:var(--gold-strong)}
 .guide .guide-odds{justify-content:space-between;font:500 var(--fs-xs)/1.35 var(--font-ui);color:var(--text-muted)}.guide .guide-odds .odds-line{margin:0}
-.guide .guide-die{display:grid;place-items:center;flex:none;width:30px;height:30px;border:1px solid var(--gold);border-radius:6px;background:var(--surface-2);font:var(--fs-xl) var(--font-display);font-variant-numeric:lining-nums tabular-nums;color:var(--gold-strong)}
+.guide .guide-die{display:grid;place-items:center;flex:none;width:30px;height:30px;border:1px solid var(--gold);border-radius:6px;background:var(--surface-2);font:500 var(--fs-xl) var(--font-ui);font-variant-numeric:lining-nums tabular-nums;color:var(--gold-strong)}
 .guide .guide-dots{display:flex;gap:6px;margin:16px 0 0}.guide .guide-dots span{width:18px;height:3px;border-radius:2px;background:var(--border-default)}.guide .guide-dots .done{background:color-mix(in srgb,var(--accent) 50%,transparent)}.guide .guide-dots .on{background:var(--accent)}
 
 .guide .guide-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px}.guide .guide-actions>span{display:flex;align-items:center;gap:14px}
 .guide .guide-skip,.guide .guide-back{min-height:24px;padding:0;font-size:var(--fs-sm);color:var(--text-muted)}.guide .guide-back{color:var(--text-secondary)}
-.guide .guide-actions .primary{min-height:36px;padding:8px 16px;font-size:var(--fs-md)}
+.guide .guide-actions .primary{min-height:36px;padding:8px 16px;font-size:var(--fs-xl)}
 /* Narrow or short windows (200% zoom, #97): the card centres in the window and scrolls inside itself, so its heading is never cut off. */
 @media(max-width:999px),(max-height:640px){.guide .modal.guide-card:not([data-side]){top:50%;bottom:auto;transform:translate(-50%,-50%);max-height:calc(100dvh - 24px);overflow:auto;padding:18px 20px 16px}.guide .guide-card h2{font-size:var(--fs-xl)}.guide .guide-card p{font-size:var(--fs-md)}}
 .reduced .guide .guide-spot{transition:none}

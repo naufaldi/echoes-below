@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-// WCAG 2 contrast check for the identity tokens (#59, colour roles #110). Reads the tokens from client/style.css (the :root block and the
-// .app[data-chapter=…] blocks), so it cannot drift from the stylesheet. Glass surfaces are measured at their opaque base;
-// the 3D scene behind them only ever darkens a 88–94% surface further. Each chapter re-tints the HUD stones, so every
-// HUD pair is measured on that chapter's own stones. Exits 1 when a required pair fails.
+// WCAG 2 contrast for the shared iron/paper ramps, brass interaction and chapter accents.
+// Read :root and every chapter block directly from CSS; measure translucent chrome against a white scene
+// as well as its opaque base. Exits 1 when a required pair fails.
 import {readFileSync} from 'node:fs';
 const css=readFileSync(new URL('../client/style.css',import.meta.url),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
 const props=body=>Object.fromEntries([...body.matchAll(/(--[\w-]+)\s*:\s*([^;]+?)\s*(?:;|$)/g)].map(m=>[m[1],m[2]]));
@@ -25,18 +24,18 @@ for(const [chapter,scope] of Object.entries(chapters)){const on=s=>resolve(s,sco
  for(const s of stone){check(`accent · ${chapter}`,`accent ${hex(accent)}`,accent,`${s} ${hex(on(s))}`,on(s),4.5);}
  for(const s of paper){check(`accent · ${chapter}`,`accent ${hex(accent)}`,accent,s,on(s),4.5);check(`accent · ${chapter}`,`accent-strong ${hex(strong)}`,strong,s,on(s),4.5);}
  check(`accent · ${chapter}`,'accent-ink',ink,`accent fill ${hex(accent)}`,accent,4.5);
- // Mist: the HUD's quiet accent (eyebrows, LEVEL, the brand, focus rings, selected rows) on the chapter's stones.
+ // Brass: the same quiet interactive accent across every chapter.
  const mist=on('--chapter-mist'),mistStrong=on('--chapter-mist-strong'),mistInk=on('--chapter-mist-ink');
  for(const s of stone){check(`mist · ${chapter}`,`mist ${hex(mist)}`,mist,`${s} ${hex(on(s))}`,on(s),4.5);check(`mist · ${chapter}`,`mist-strong ${hex(mistStrong)}`,mistStrong,`${s} ${hex(on(s))}`,on(s),4.5);}
  check(`mist · ${chapter}`,'mist-ink',mistInk,`mist fill ${hex(mist)}`,mist,4.5);
  check(`mist · ${chapter}`,'text-primary',on('--text-primary'),'selected row (mist 20% on stone-1)',over([...mist.slice(0,3),.2],stone1),4.5);
  // HUD text on the chapter's stones, and the state colours on its panels.
  for(const t of ['--text-primary','--text-secondary','--text-muted'])for(const s of stone)check(`text on stone · ${chapter}`,t,on(t),`${s} ${hex(on(s))}`,on(s),4.5);
- for(const t of ['--ally','--enemy','--danger'])check(`state · ${chapter}`,t,on(t),`--stone-1 ${hex(stone1)}`,stone1,3);
- // Gold: what you choose or roll. Gold text on the stones, and row text on a hovered or chosen action (gold 11% over stone-2 at 55%, measured on full stone-2, which is lighter).
+ for(const t of ['--ally','--enemy','--danger'])check(`state · ${chapter}`,t,on(t),`--stone-1 ${hex(stone1)}`,stone1,4.5);
+ // Gold remains readable for dice and the framed primary control.
  for(const s of stone){check(`gold · ${chapter}`,'gold',gold,`${s} ${hex(on(s))}`,on(s),4.5);check(`gold · ${chapter}`,'gold-strong',goldStrong,`${s} ${hex(on(s))}`,on(s),4.5);}
- for(const t of ['--text-primary','--text-muted'])check(`gold · ${chapter}`,t,on(t),'hovered or chosen action (gold 11% on stone-2)',over([...gold.slice(0,3),.11],on('--stone-2')),4.5);}
-// Gold on paper: Go on, the read-aloud die, the primary button on a page.
+ for(const t of ['--text-primary','--text-muted'])check(`brass · ${chapter}`,t,on(t),'hovered or chosen action (brass 16% on stone-2)',over([...mist.slice(0,3),.16],on('--stone-2')),4.5);}
+// Dice on paper and the framed primary button.
 for(const s of paper){check('gold','gold',gold,s,resolve(s,{}),4.5);check('gold','gold-strong',goldStrong,s,resolve(s,{}),4.5);}
 check('gold','gold-ink',goldInk,'gold fill',gold,4.5);check('gold','gold-ink',goldInk,'gold-strong fill (hover)',goldStrong,4.5);
 // Ink accent: eyebrows, headings and selected rows on story surfaces.
@@ -46,10 +45,12 @@ check('ink accent','ink-accent-ink',resolve('--ink-accent-ink',{}),'ink accent f
 for(const t of ['--ink','--ink-soft','--ink-faint'])for(const s of paper)check('ink on paper',t,resolve(t,{}),s,resolve(s,{}),4.5);
 // Character name plates and state colours on paper (UI glyphs and short labels).
 for(const t of ['--palette-ember','--palette-moss','--palette-moon'])for(const s of paper)check('name plate',t,resolve(t,{}),s,resolve(s,{}),4.5);
-for(const t of ['--ally','--enemy','--danger'])check('state',t,resolve(t,{}),'--paper-1',resolve('--paper-1',{}),3);
+for(const t of ['--ally','--enemy','--danger'])check('state',t,resolve(t,{}),'--paper-1',resolve('--paper-1',{}),4.5);
+for(const s of ['--primary-fill','--primary-hover','--primary-pressed'])check('primary','gold-strong',goldStrong,s,resolve(s,{}),4.5);
+for(const [base,alpha] of [['--stone-0',.94],['--stone-1',.97]])for(const t of ['--text-primary','--text-secondary','--text-muted','--chapter-mist'])check('chrome over white',t,resolve(t,{}),base,over([...resolve(base,{}).slice(0,3),alpha],[255,255,255]),4.5);
 
 const w=[0,1,2,3,4,5].map(i=>Math.max(...[['group','foreground','background','ratio','needs','result'],...rows].map(r=>String(r[i]).length)));
 const line=r=>'| '+r.map((c,i)=>String(c).padEnd(w[i])).join(' | ')+' |';
 console.log(line(['group','foreground','background','ratio','needs','result']));console.log('|'+w.map(n=>'-'.repeat(n+2)).join('|')+'|');for(const r of rows)console.log(line(r));
-console.log(`\n${rows.length} pairs, ${failures} failing. Glass surfaces measured at their opaque base.`);
+console.log(`\n${rows.length} pairs, ${failures} failing. Includes translucent chrome over a white scene.`);
 process.exit(failures?1:0);
