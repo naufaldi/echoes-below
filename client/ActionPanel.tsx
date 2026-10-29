@@ -1,5 +1,5 @@
 import {useEffect,useRef,type ReactNode} from 'react';
-import {focusedActions,actionRows,verbGroups,bestChoice,answersStory,type ActionRow} from './action-focus';
+import {panelRows,oddsWho,bestChoice,answersStory,type ActionRow} from './action-focus';
 import {pendingLevelUps} from './level-up';
 import TacticalControls from './TacticalControls';
 import {actorDisplayName} from '../shared/visual-identity';
@@ -17,18 +17,14 @@ export function OddsBand({odds,always=false}:{odds:Odds;always?:boolean}){
 }
 function CheckTag({row,party}:{row:ActionRow;party:{id:string;name:string}[]}){
  const check=row.kind==='single'?row.action.check:row.check;if(!check)return null;
- const best=bestChoice(row,party),members=row.kind==='choices'&&row.options.every(o=>party.some(m=>m.id===o.id));
- return <><small>{checkName(check)}{edge(check)}{members?' · one try each':''}</small>{best&&<span className="odds-line" title={checkBreakdown(best.action.check!).join(' · ')}>{best.name&&check.attribute!=='attack'&&<span className="odds-who">{members&&row.kind==='choices'&&row.options.length>1?'Best: ':''}{best.name}</span>}<OddsBand odds={best.odds}/></span>}</>;
+ const best=bestChoice(row,party),members=row.kind==='choices'&&row.options.every(o=>party.some(m=>m.id===o.id)),who=best?oddsWho(row,party,best):'';
+ return <><small>{checkName(check)}{edge(check)}{members?' · one try each':''}</small>{best&&<span className="odds-line" title={checkBreakdown(best.action.check!).join(' · ')}>{who&&<span className="odds-who">{who}</span>}<OddsBand odds={best.odds}/></span>}</>;
 }
 /** The action panel (#62): story choices grouped under Look, Talk, Act and Move. Combat keeps one ordered list. Number keys 1–9 pick rows in the order shown. */
 /** `reading`: the story box has not reached its last page, so replies to it stay visible but disabled. */
 /** `onReveal`: the panel is a closed drawer (narrow windows, #97); a number key that needs to focus a choice opens it first. */
 export default function ActionPanel({save,selected,onSelect,busy,pendingId,keysEnabled,reading=false,onChoose,onReveal,onLevelUp,children}:{save:PublicSave;selected:string;onSelect:(id:string)=>void;busy:boolean;pendingId?:string;keysEnabled:boolean;reading?:boolean;onChoose:Choose;onReveal?:()=>void;onLevelUp?:()=>void;children?:ReactNode}){
- /** #113 A finished chapter waits on its closing card: the card owns the way on, so the panel lists nothing. */
- const available=save.mode==='complete'?[]:save.actions.filter(a=>a.kind!=='inventory'&&a.kind!=='quest').filter(a=>!save.tactical||save.mode!=='combat'||a.kind!=='move');
- const manyActions=actionRows(available.filter(a=>!a.id.startsWith('checkin:')),save.party,{tend:save.mode!=='combat'}).length>6;
- const focusResult=focusedActions(available,selected),rows=actionRows(focusResult.actions.filter(a=>!a.id.startsWith('checkin:')),save.party,{tend:save.mode!=='combat'});
- const groups=save.mode==='combat'?[{verb:null,rows}]:verbGroups(rows),ordered=groups.flatMap(g=>g.rows);
+ const {focus:focusResult,many:manyActions,groups,ordered}=panelRows(save,selected);
  const list=useRef<HTMLDivElement>(null),keyed=useRef<ActionRow[]>([]),reveal=useRef(onReveal);keyed.current=ordered;reveal.current=onReveal;
  useEffect(()=>{if(!keysEnabled)return;
   const press=(e:KeyboardEvent)=>{
