@@ -2,7 +2,7 @@ import {fixed,slabs} from './parts';
 import {useEffect,useMemo,useRef,type ReactNode} from 'react';
 import {useFrame} from '@react-three/fiber';
 import * as THREE from 'three';
-import {Solid,SolidKit,type RoomCtx,mapTint,Instances,KitInstances,Flame,mat,decal,geo,noRaycast,rand,type MoodOverride,type Part,type RoomProps} from './kit';
+import {Solid,SolidKit,type RoomCtx,mapTint,Instances,KitInstances,Flame,mat,decal,geo,noRaycast,rand,type Part,type RoomProps} from './kit';
 
 // Hollow Choir (#50): a vast hollow cathedral where echoes sing. Every room shares the same four anchors
 // (evidence -2,0 · way forward 0,-3.5 · supplies 3,0 · camp -3,2 in world x,z), so each room's identity lives on the
@@ -376,15 +376,3 @@ function DoorBeneathSong({ctx,reduced}:{ctx:RoomCtx;reduced:boolean}){
 
 const ROOMS:Record<string,(p:{ctx:RoomCtx;reduced:boolean})=>ReactNode>={'choir-1':HallOfBreaths,'choir-2':ResonanceLibrary,'choir-3':SilentRefectory,'choir-4':ChoirOfStone,'choir-5':PilgrimStair,'choir-6':UnfinishedDuet,'choir-7':LastConductor,'choir-8':DoorBeneathSong};
 export default function HollowChoir({scene,save,reduced}:RoomProps){const Room=ROOMS[scene]??HallOfBreaths;return <Room key={scene} ctx={{save,scene}} reduced={reduced}/>;}
-/** Per-room light over the chapter's cold indigo mood: blue at the stair, violet at the conductor's cage, warmer in the refectory. */
-const MOODS:Record<string,MoodOverride>={
- 'choir-1':{background:'#151a30',ambient:'#b8c6ea',sun:'#e2e6ff'},
- 'choir-2':{background:'#17162a',ambient:'#c4c2e2',sun:'#e8e2ff'},
- 'choir-3':{background:'#1a1822',ambient:'#cfc6c4',sun:'#efe2d4',fog:[22,48]},
- 'choir-4':{background:'#10172c',ambient:'#aec2ea',sun:'#d8e6ff',fog:[26,56]},
- 'choir-5':{background:'#0b1530',ambient:'#a4bce8',sun:'#cfe0ff',fog:[26,58]},
- 'choir-6':{background:'#191628',ambient:'#c6c0dc',sun:'#ece2f4'},
- 'choir-7':{background:'#150f26',ambient:'#bcb0e0',sun:'#e2d6ff'},
- 'choir-8':{background:'#121a2a',ambient:'#b8c4e2',sun:'#f0e6d0'},
-};
-export const mood=(scene:string):MoodOverride=>MOODS[scene]??{};

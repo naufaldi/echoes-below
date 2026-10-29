@@ -2,7 +2,7 @@ import {fixed} from './parts';
 import {useEffect,useMemo,type ReactElement,type ReactNode} from 'react';
 import {useFrame} from '@react-three/fiber';
 import * as THREE from 'three';
-import {Solid,SolidKit,type RoomCtx,Instances,KitInstances,Flame,chain,mat,decal,geo,noRaycast,rand,type Part,type MoodOverride,type RoomProps} from './kit';
+import {Solid,SolidKit,type RoomCtx,Instances,KitInstances,Flame,chain,mat,decal,geo,noRaycast,rand,type Part,type RoomProps} from './kit';
 
 // Drowned Archive rooms (archive-1 … archive-8), #47: a flooded library. Each room is an island of floor in black water.
 // The play footprint (±5.4 m) carries only floors and decals; every solid piece stands outside it, tall pieces at −x/−z, and the
@@ -351,15 +351,3 @@ function FerryOfNames({p}:{p:P}){
 
 const ROOMS:Record<string,(props:{p:P})=>ReactElement>={'archive-1':SluiceStair,'archive-2':InkGarden,'archive-3':BellIndex,'archive-4':FloodedInfirmary,'archive-5':WitnessVault,'archive-6':GlassCauseway,'archive-7':KeeperOfDebts,'archive-8':FerryOfNames};
 export default function DrownedArchive(props:RoomProps){const Room=ROOMS[props.scene]??SluiceStair;return <Room key={props.scene} p={props}/>;}
-/** Each room keeps the chapter's drowned palette but shifts it: green ink, bronze, clinical cyan, cold vault, deep glass, gold, dusk. */
-const MOODS:Record<string,MoodOverride>={
- 'archive-1':{background:'#0a1a22',ambient:'#94bccb',sun:'#c6dde0',fog:[22,48]},
- 'archive-2':{background:'#08140f',ambient:'#9cc4ac',sun:'#cfe3c6',fog:[18,44]},
- 'archive-3':{background:'#0e141c',ambient:'#b8b6b0',sun:'#ecd8b0',fog:[22,48]},
- 'archive-4':{background:'#0a1c20',ambient:'#acd4d0',sun:'#dcefe8',fog:[20,46]},
- 'archive-5':{background:'#0d1117',ambient:'#b4bccb',sun:'#dfe6f2',fog:[20,44]},
- 'archive-6':{background:'#040a12',ambient:'#8cb0cc',sun:'#b8d4ea',fog:[18,44]},
- 'archive-7':{background:'#140f0b',ambient:'#d0bc9c',sun:'#f2d6a8',fog:[22,48]},
- 'archive-8':{background:'#151a2a',ambient:'#c6c0c8',sun:'#ffd9b0',fog:[24,52]},
-};
-export const mood=(scene:string):MoodOverride=>MOODS[scene]??{};

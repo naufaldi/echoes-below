@@ -2,7 +2,7 @@ import {fixed,thin,wallRow,wallColumn,slabs} from './parts';
 import {useEffect,useMemo,useRef,type ReactNode} from 'react';
 import {useFrame} from '@react-three/fiber';
 import * as THREE from 'three';
-import {Solid,SolidKit,type RoomCtx,TintedKit,Light,cached,mapTint,Instances,KitInstances,Flame,chain,mat,decal,geo,noRaycast,rand,type MoodOverride,type Part,type RoomProps,type Vec3} from './kit';
+import {Solid,SolidKit,type RoomCtx,TintedKit,Light,cached,mapTint,Instances,KitInstances,Flame,chain,mat,decal,geo,noRaycast,rand,type Part,type RoomProps,type Vec3} from './kit';
 
 // Last Descent (depth-1 … depth-8): the deep core below Briarwatch. Raw cavern, the founders' machine, the bell's resonance and glowing seams.
 // Every room shares one encounter footprint (±5.4 m) and the same markers, so solid dressing stands outside it:
@@ -403,15 +403,3 @@ function FirstMorning({room,reduced}:{room:RoomCtx;reduced:boolean}){
 const ROOMS:Record<number,(p:{room:RoomCtx;reduced:boolean})=>ReactNode>={1:FoundersDescent,2:AbandonedWatch,3:EngineOfHunger,4:LastLivingKeeper,5:FractureGallery,6:SixthStone,7:HeartBelow,8:FirstMorning};
 /** The eight Last Descent rooms, chosen by scene id. */
 export default function LastDescent({scene,save,reduced}:RoomProps){const Room=ROOMS[Number(scene.split('-')[1])]??FoundersDescent;return <Room key={scene} room={{save,scene}} reduced={reduced}/>;}
-const MOODS:Record<number,MoodOverride>={
- 1:{background:'#0c0e12',ambient:'#aab2bf',sun:'#dfe5ee',fog:[18,44]},
- 2:{background:'#16100c',ambient:'#c4ad92',sun:'#f0c494',fog:[16,40]},
- 3:{background:'#150807',ambient:'#c6a69e',sun:'#f2bea6',fog:[16,40]},
- 4:{background:'#14120e',ambient:'#cbbd9a',sun:'#f4dca8',fog:[18,44]},
- 5:{background:'#070a10',ambient:'#9fb2c8',sun:'#cfe2ff',fog:[18,60]},
- 6:{background:'#140c08',ambient:'#c2a080',sun:'#ffcf96',fog:[16,42]},
- 7:{background:'#0c0510',ambient:'#a68cb8',sun:'#e3b0ff',fog:[18,50]},
- 8:{background:'#3a3340',ambient:'#e6d2bf',sun:'#ffe0b4',fog:[22,62]},
-};
-/** Per-room light: cold grey stone, a guard fire, the red hungry glass, the keeper's candles, a chasm, the blade forge, the core, and dawn. */
-export const mood=(scene:string):MoodOverride=>MOODS[Number(scene.split('-')[1])]??{};

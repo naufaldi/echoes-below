@@ -17,7 +17,7 @@ import {characterAsset,actorHeight,actorDisplayName} from '../shared/visual-iden
 import WorldDie,{type WorldRoll} from './WorldDie';
 import CombatCues,{type WorldCue} from './CombatCues';
 import SceneFraming from './SceneFraming';
-import {memo,useEffect,useMemo,useRef,useState,type ElementRef} from 'react';
+import {Suspense,memo,useEffect,useMemo,useRef,useState,type ElementRef} from 'react';
 import {Canvas,useFrame,useThree} from '@react-three/fiber';
 import {OrbitControls,useGLTF,useAnimations,ContactShadows,Billboard} from '@react-three/drei';
 import * as THREE from 'three';
@@ -67,7 +67,7 @@ function Scene({onAction,save,selected,onSelect,reduced,heroClass,heroRace,heroA
  const party=save?.party??[{...demoActor('hero',heroClass,[0,1]),raceId:heroRace,appearanceId:heroAppearance},{...demoActor('mira',companions.mira.classId,[-2,2]),...companions.mira},{...demoActor('oren',companions.oren.classId,[2,2]),...companions.oren}];
  const face=useMemo(()=>save?facePoints({party:save.party,enemies:save.enemies,entities:save.scene.entities,combat:save.mode==='combat',selected}):new Map<string,Point>(),[save,selected]);
  const sceneId=save?.scene.id??'approach',room=roomFor(sceneId),mood={...chapterMood(sceneId),...room.mood?.(sceneId)};
- return <><color attach="background" args={[mood.background]}/><fog attach="fog" args={[mood.background,...mood.fog]}/><ambientLight intensity={.65} color={mood.ambient}/><hemisphereLight args={['#b9cec5','#64553b',1.1]}/><directionalLight position={[3,12,5]} intensity={2.5} color={mood.sun} castShadow shadow-mapSize={[1024,1024]} shadow-camera-left={-10} shadow-camera-right={10} shadow-camera-top={10} shadow-camera-bottom={-10}/><room.Room scene={sceneId} save={save} reduced={reduced}/>
+ return <><color attach="background" args={[mood.background]}/><fog attach="fog" args={[mood.background,...mood.fog]}/><ambientLight intensity={.65} color={mood.ambient}/><hemisphereLight args={['#b9cec5','#64553b',1.1]}/><directionalLight position={[3,12,5]} intensity={2.5} color={mood.sun} castShadow shadow-mapSize={[1024,1024]} shadow-camera-left={-10} shadow-camera-right={10} shadow-camera-top={10} shadow-camera-bottom={-10}/><Suspense fallback={null}><room.Room scene={sceneId} save={save} reduced={reduced}/></Suspense>
 
  {save?.tactical&&save.mode==='combat'&&<TacticalTerrain grid={save.tactical.grid}/>}
  {save?.tactical&&save.mode==='combat'&&<TacticalOverlay save={save} onAction={onAction}/>}
