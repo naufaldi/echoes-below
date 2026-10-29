@@ -1,4 +1,4 @@
-import type {ActionOption} from '../shared/types.js';
+import type {ActionOption,PublicSave} from '../shared/types.js';
 import {oddsFor,type Odds} from '../shared/odds.js';
 /** Keep global controls usable without silently substituting a different target. */
 export function focusedActions(available:ActionOption[],selected:string){
@@ -62,6 +62,10 @@ export function verbFor(a:Pick<ActionOption,'id'|'kind'>):Verb{
 export const rowAction=(r:ActionRow)=>r.kind==='single'?r.action:r.options[0]!.action;
 /** Rows under Look, Talk, Act and Move, in that order; each group keeps the engine's order. Empty groups are dropped. */
 export function verbGroups(rows:ActionRow[]):{verb:Verb;rows:ActionRow[]}[]{return VERBS.map(verb=>({verb,rows:rows.filter(r=>verbFor(rowAction(r))===verb)})).filter(g=>g.rows.length>0);}
+/** The action panel's rows in the order shown (#62): exploration under Look, Talk, Act and Move, combat as one list; check-ins sit with the party, inventory and quests in their own panels. A finished chapter lists nothing (#113). The guide's odds sample reads the same rows (#119). */
+export function panelRows(save:Pick<PublicSave,'actions'|'mode'|'tactical'|'party'>,selected:string){const available=save.mode==='complete'?[]:save.actions.filter(a=>a.kind!=='inventory'&&a.kind!=='quest').filter(a=>!save.tactical||save.mode!=='combat'||a.kind!=='move'),rowsOf=(list:ActionOption[])=>actionRows(list.filter(a=>!a.id.startsWith('checkin:')),save.party,{tend:save.mode!=='combat'});const focus=focusedActions(available,selected),rows=rowsOf(focus.actions),groups:{verb:Verb|null;rows:ActionRow[]}[]=save.mode==='combat'?[{verb:null,rows}]:verbGroups(rows);return {focus,many:rowsOf(available).length>6,groups,ordered:groups.flatMap(g=>g.rows)};}
+/** The row's member label: attacks name no member, while a choice between party members names the best. */
+export function oddsWho(row:ActionRow,party:{id:string;name:string}[],best:Best){const check=row.kind==='single'?row.action.check:row.check;return check?.attribute==='attack'?'':(row.kind==='choices'&&row.options.length>1&&row.options.every(o=>party.some(m=>m.id===o.id))?'Best: ':'')+best.name;}
 export interface Best {id:string;name:string;action:ActionOption;odds:Odds}
 /** The best-placed member (or target) for a row's check: the highest public odds, ties keeping the listed order. Null when the row advertises no odds. */
 export function bestChoice(row:ActionRow,party:{id:string;name:string}[]):Best|null{

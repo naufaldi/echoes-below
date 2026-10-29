@@ -1,9 +1,11 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {DEFAULT_READING,LEGACY_AUTO_ADVANCE_KEY,READING_KEY,loadReading,pageBudget,parseReading,readingPause,saveReading} from '../client/reading-settings.js';
-import {GUIDE_KEY,guideDue,guideSeen,markGuideSeen} from '../client/guide.js';
+import {GUIDE_KEY,guideDue,guideSeen,markGuideSeen,oddsSample} from '../client/guide.js';
 import {PAGE_CHARS,readingDelay} from '../client/story-pages.js';
 import {createSave,publicSave} from '../server/game.js';
+import {panelRows,bestChoice,oddsWho} from '../client/action-focus.js';
+import type {PublicSave} from '../shared/types.js';
 import {CURATED_RULES_VERSION} from '../shared/curated-rules.js';
 
 /** A Storage stand-in; `blocked` throws on every call, like a browser with storage turned off. */
@@ -65,4 +67,22 @@ test('#68: the guide shows once per browser, or once per visit when storage is b
  const blocked=store({},true),visit={seen:false};
  assert.equal(guideSeen(blocked,visit),false);markGuideSeen(blocked,visit);
  assert.equal(guideSeen(blocked,visit),true,'the rest of this visit');assert.equal(guideSeen(blocked,{seen:false}),false,'a new visit shows it again');
+});
+
+for(const rulesVersion of [undefined,CURATED_RULES_VERSION])test(`#119: the guide sample matches the first odds row (${rulesVersion??'echo'})`,()=>{
+ const save=publicSave(createSave({name:'Alden',classId:'adept',backgroundId:'envoy',appearanceId:'moon',...(rulesVersion?{rulesVersion}:{})})),sample=oddsSample(save,''),row=panelRows(save,'').ordered.find(r=>bestChoice(r,save.party));
+ assert.ok(sample);assert.ok(row);const best=bestChoice(row,save.party);assert.ok(best);
+ assert.equal(sample.who,oddsWho(row,save.party,best));assert.deepEqual(sample.odds,best.odds);
+ const check=row.kind==='single'?row.action.check:row.check;assert.ok(check);assert.ok(sample.label.startsWith(check.attribute[0]!.toUpperCase()+check.attribute.slice(1)));
+});
+test('#119: an attack sample names defense without a party member',()=>{
+ const save={mode:'combat',actions:[{id:'attack:guard',kind:'attack',label:'Attack Guard',check:{attribute:'attack',dc:11,modifier:4}}],party:[{id:'hero',name:'Alden'}]} as unknown as PublicSave,sample=oddsSample(save,'');
+ assert.ok(sample);assert.equal(sample.who,'');assert.equal(sample.label,'Defense 11');
+});
+test('#119: no adventure or no odds rows leaves a generic guide sample',()=>{
+ assert.equal(oddsSample(null,''),null);assert.equal(oddsSample({actions:[],party:[],mode:'explore'} as unknown as PublicSave,''),null);
+});
+test('#113: a finished chapter keeps the action panel empty',()=>{
+ const save=publicSave(createSave({name:'Alden',classId:'adept',backgroundId:'envoy',appearanceId:'moon'}));
+ assert.ok(panelRows(save,'').ordered.length>0);assert.deepEqual(panelRows({...save,mode:'complete'},'').ordered,[]);
 });
