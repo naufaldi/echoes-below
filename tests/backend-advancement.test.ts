@@ -1,6 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {createSave,applyAction,legalActions,fact} from '../server/game.js';
+import {createSave,applyAction,legalActions,fact,publicSave} from '../server/game.js';
+import {pendingLevelUps} from '../client/level-up.js';
 import {makeCharacter,CURATED_RULES_VERSION} from '../shared/curated-rules.js';
 import {projectTactical} from '../server/tactical.js';
 function prepare(level=4){
@@ -48,4 +49,18 @@ test('XP level-up preserves a downed state and equipped defenses',()=>{
  fact(s,'advancement-downed-fixture','The companions make a discovery.');
  assert.equal(s.party[0].hp,0);assert.deepEqual(s.tactical!.actors.hero.death,{successes:1,failures:2,stable:false});
  assert.equal(s.party[2].defense,19);assert.equal(s.tactical!.actors.oren.armorClass,19);
+});
+
+test('pending level-ups show each eligible member once in party order and leave after improvement',()=>{
+ const s=prepare(),view=publicSave(s);
+ assert.deepEqual(pendingLevelUps(view.actions,view.party),view.party.map(m=>({id:m.id,name:m.name,level:4})));
+ const advances=view.actions.filter(a=>a.id.startsWith('advance:'));assert.ok(advances.length>view.party.length);assert.ok(advances.every(a=>a.kind==='inventory'));
+ const next=publicSave(applyAction(s,'advance:mira:4:dexterity:dexterity',()=>{assert.fail('Advancement must not roll');}));
+ assert.deepEqual(pendingLevelUps(next.actions,next.party),next.party.filter(m=>m.id!=='mira').map(m=>({id:m.id,name:m.name,level:4})));
+});
+test('pending level-ups are absent in combat, companion stories and Echo',()=>{
+ const combat=prepare();combat.mode='combat';assert.deepEqual(pendingLevelUps(legalActions(combat),combat.party),[]);
+ const story=prepare();story.companionStoryId='test';assert.deepEqual(pendingLevelUps(legalActions(story),story.party),[]);
+ const echo=createSave({name:'Echo advancement QA',classId:'guardian',backgroundId:'delver',appearanceId:'ember'});
+ assert.deepEqual(pendingLevelUps(legalActions(echo),echo.party),[]);
 });
