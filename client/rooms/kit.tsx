@@ -13,7 +13,7 @@ export type Vec3=[number,number,number];
 export type Part=[number,number,number,number,number,number,number?,number?,number?];// x,y,z,sx,sy,sz,ry,rx,rz
 /** What World passes every room. `save` is null only on the creation screen, which shows Chapter I's approach. */
 export type RoomProps={scene:string;save:PublicSave|null;reduced:boolean};
-/** Partial override merged over chapterMood(scene): background, fog, ambient, sun and the legacy floor colour. */
+/** Partial override merged over chapterMood(scene): background, fog, ambient and sun. */
 export type MoodOverride=Partial<Omit<Mood,'kind'>>;
 
 export const smooth=THREE.MathUtils.smoothstep,rand=(i:number)=>{const v=Math.sin(i*12.9898)*43758.5453;return v-Math.floor(v);};

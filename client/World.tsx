@@ -7,7 +7,6 @@ import TacticalTerrain from './TacticalTerrain';
 import TacticalOverlay from './TacticalOverlay';
 import {chapterMood} from './ChapterAtmosphere';
 import {roomFor} from './rooms/registry';
-import {Torch} from './rooms/LegacyShell';
 import CounterweightMechanism from './CounterweightMechanism';
 import {advanceMovement,type Point} from '../shared/movement';
 import {facePoints,yawToward,turnToward} from './actor-facing';
@@ -27,6 +26,7 @@ import {npcModelClass,npcAppearance} from './portrait-look';
 import type {Actor,ActionOption,Entity,PublicSave,Speaker,CompanionSetup} from '../shared/types';
 
 /** Compact always-facing HP bar shown over combatants during combat. */
+function Torch({position}:{position:[number,number,number]}){const fire=useRef<THREE.Mesh>(null);useFrame(({clock})=>{if(fire.current)fire.current.scale.set(1+Math.sin(clock.elapsedTime*7+position[0])*.13,1+Math.sin(clock.elapsedTime*11)*.15,1);});return <group position={position}><mesh position={[0,.65,0]}><cylinderGeometry args={[.07,.1,1.3,6]}/><meshStandardMaterial color="#58412b"/></mesh><mesh position={[0,1.22,0]}><cylinderGeometry args={[.19,.12,.15,6]}/><meshStandardMaterial color="#34302a"/></mesh><mesh ref={fire} position={[0,1.55,0]}><coneGeometry args={[.14,.48,5]}/><meshBasicMaterial color="#ffd287"/></mesh><pointLight position={[0,1.8,0]} color="#ffc27b" intensity={12} distance={9} decay={2}/></group>;}
 function HealthBar({hp,maxHp,enemy,height}:{hp:number;maxHp:number;enemy:boolean;height:number}){const ratio=Math.max(0,Math.min(1,hp/Math.max(1,maxHp)));return <Billboard position={[0,height,0]}><mesh renderOrder={10}><planeGeometry args={[.86,.11]}/><meshBasicMaterial color="#0b1412" transparent opacity={.85} depthTest={false}/></mesh><mesh renderOrder={11} position={[-.4*(1-ratio),0,.001]} scale={[ratio,1,1]}><planeGeometry args={[.8,.06]}/><meshBasicMaterial color={enemy?'#d0634c':'#74c2a8'} transparent depthTest={false} toneMapped={false}/></mesh></Billboard>;}
 
 function CharacterModel({actor,selected,onSelect,reduced,labelMode='actor',attackId='',attackCue='melee',showHp=false,face}:{face?:Point,actor:Actor,selected:boolean,onSelect:()=>void,reduced:boolean,labelMode?:'actor'|'entity'|'none',attackId?:string,attackCue?:AnimationCue,showHp?:boolean}){

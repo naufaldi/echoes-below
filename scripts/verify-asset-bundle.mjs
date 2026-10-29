@@ -107,7 +107,7 @@ for(const [folder,entries] of modelManifests){
 const modelFiles=[...modelManifests.values()].reduce((n,e)=>n+e.size,0);
 // Verify literal model references too: scanning existing files alone cannot catch a typo in rendering code.
 // Chapter room files (client/rooms/) must name env models as full '/assets/env/<kit>/<file>' literals so this scan can follow them.
-for(const name of ['shared/visual-identity.ts','client/DungeonDressing.tsx','client/ChapterOneRooms.tsx',...readdirSync(resolve(root,'client/rooms')).filter(f=>/\.tsx?$/.test(f)).map(f=>'client/rooms/'+f)]){
+for(const name of ['shared/visual-identity.ts','client/ChapterOneRooms.tsx',...readdirSync(resolve(root,'client/rooms')).filter(f=>/\.tsx?$/.test(f)).map(f=>'client/rooms/'+f)]){
  const text=readFileSync(resolve(root,name),'utf8');
  for(const match of text.matchAll(/['"]([^'"\n]+\.(?:glb|gltf))['"]/g)){
   const path=match[1];verifyCopy(resolve(source,path.startsWith('/assets/')?path.slice(1):'assets/expansion/'+path));
