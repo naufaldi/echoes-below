@@ -331,7 +331,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .initiative-strip small{display:block;font-size:var(--fs-xs);color:var(--text-muted);margin-top:2px}
 .initiative-strip .current{border-color:var(--accent-strong);background:color-mix(in srgb,var(--accent) 22%,var(--surface-1))}.initiative-strip .current small{color:var(--accent-strong)}.initiative-strip .fallen{color:var(--text-muted);text-decoration:line-through}
 .initiative-strip{scrollbar-width:none}
-.initiative-strip span{max-width:220px;overflow:hidden;text-overflow:ellipsis}
+.initiative-strip span{flex:none;max-width:220px;overflow:hidden;text-overflow:ellipsis} /* flex:none: overflow:hidden would otherwise let the row squeeze every name to an ellipsis instead of scrolling */
 /* #112 A turn order wider than its room scrolls sideways: a cut edge fades, as the side panels' bottoms do, and App keeps whoever acts now in full view. The fade is not motion, so it stays under reduced motion. */
 @property --more-start{syntax:'<length>';inherits:false;initial-value:0px}@property --more-end{syntax:'<length>';inherits:false;initial-value:0px}@keyframes more-across{from{--more-start:0px;--more-end:32px}to{--more-start:32px;--more-end:0px}}
 @supports (animation-timeline:scroll()){.initiative-strip{mask-image:linear-gradient(to right,transparent,#000 var(--more-start),#000 calc(100% - var(--more-end)),transparent);animation:more-across linear both;animation-timeline:scroll(self inline)}.reduced .initiative-strip{animation-name:more-across!important}}
