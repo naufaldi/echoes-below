@@ -6,17 +6,20 @@ import IsolatedAsset from '../IsolatedAsset';
 import type {Mood} from '../ChapterAtmosphere';
 import {encounterTerrain} from '../../shared/encounter-terrain';
 import type {Cell,TacticalGrid} from '../../shared/tactical-grid';
+import {rand,type Part} from './parts';
+export type {Part} from './parts';
+export {rand} from './parts';
 import type {PublicSave} from '../../shared/types';
 
 // Shared building blocks for every room file (Chapter I and client/rooms/<Chapter>.tsx). Contract and budget: ./README.md.
 export type Vec3=[number,number,number];
-export type Part=[number,number,number,number,number,number,number?,number?,number?];// x,y,z,sx,sy,sz,ry,rx,rz
 /** What World passes every room. `save` is null only on the creation screen, which shows Chapter I's approach. */
+export type RoomCtx=Pick<RoomProps,'save'|'scene'>;
 export type RoomProps={scene:string;save:PublicSave|null;reduced:boolean};
 /** Partial override merged over chapterMood(scene): background, fog, ambient and sun. */
 export type MoodOverride=Partial<Omit<Mood,'kind'>>;
 
-export const smooth=THREE.MathUtils.smoothstep,rand=(i:number)=>{const v=Math.sin(i*12.9898)*43758.5453;return v-Math.floor(v);};
+export const smooth=THREE.MathUtils.smoothstep;
 // Materials are shared by key, so rooms never pay for duplicate shader programs or per-mesh material uploads.
 const materials=new Map<string,THREE.Material>();
 export function mat(color:string,roughness=.95,metalness=0,flat=false){const key=[color,roughness,metalness,flat].join();let m=materials.get(key);if(!m){m=new THREE.MeshStandardMaterial({color,roughness,metalness,flatShading:flat});materials.set(key,m);}return m;}
@@ -74,11 +77,26 @@ export function roomGrid(save:PublicSave|null,scene:string):TacticalGrid{return 
 export function walkableCells(save:PublicSave|null,scene:string):Cell[]{const grid=roomGrid(save,scene),echo=!!save&&!save.tactical,blocked=new Set(echo?[]:grid.blocked.map(c=>c.join()));const cells:Cell[]=[];for(let x=0;x<grid.width;x++)for(let y=0;y<grid.height;y++)if(!blocked.has(x+','+y))cells.push([x,y]);return cells;}
 /** True when a solid footprint of `radius` metres at world (x,z) overlaps no walkable cell and no interactable marker. Blocked Curated cells and everything beyond ±5.4 m are free for dressing. */
 export function clearOfPlay(save:PublicSave|null,scene:string,x:number,z:number,radius=.5){
- const half=CELL/2,hit=walkableCells(save,scene).some(c=>{const [cx,,cz]=cellToWorld(c),dx=Math.max(Math.abs(x-cx)-half,0),dz=Math.max(Math.abs(z-cz)-half,0);return dx*dx+dz*dz<radius*radius;});
+ return clearOfCells(save,walkableCells(save,scene),x,z,radius);
+}
+function clearOfCells(save:PublicSave|null,cells:Cell[],x:number,z:number,radius:number){
+ const half=CELL/2,hit=cells.some(c=>{const [cx,,cz]=cellToWorld(c),dx=Math.max(Math.abs(x-cx)-half,0),dz=Math.max(Math.abs(z-cz)-half,0);return dx*dx+dz*dz<radius*radius;});
  return !hit&&!(save?.scene.entities??[]).some(e=>{const [ex,,ez]=entityToWorld(e);return Math.hypot(x-ex,z-ez)<radius+.7;});
 }
 /** Filter a solid Part list to the parts clear of play, memoised per room layout so instanced meshes are not rebuilt every render. Default footprint: half the larger of sx/sz (unit-box parts); pass `radius` for models. Dropped parts are logged in development. */
 export function useSolidParts(save:PublicSave|null,scene:string,parts:Part[],radius?:(p:Part)=>number):Part[]{
  const grid=roomGrid(save,scene),key=JSON.stringify([scene,!!save&&!save.tactical,grid.blocked,save?.scene.entities.map(e=>[e.id,...e.position])]);
- return useMemo(()=>{const kept=parts.filter(p=>clearOfPlay(save,scene,p[0],p[2],radius?radius(p):Math.max(p[3],p[5])/2));if(import.meta.env.DEV&&kept.length<parts.length)console.warn(`[rooms] ${scene}: ${parts.length-kept.length} solid part(s) dropped from walkable tiles`);return kept;},[key,parts]);
+ return useMemo(()=>{const cells=walkableCells(save,scene),kept=parts.filter(p=>clearOfCells(save,cells,p[0],p[2],radius?radius(p):Math.max(p[3],p[5])/2));if(import.meta.env.DEV&&kept.length<parts.length)console.warn(`[rooms] ${scene}: ${parts.length-kept.length} solid part(s) dropped from walkable tiles`);return kept;},[key,parts]);
 }
+
+export const cached=<M extends THREE.Material>(key:string,make:()=>M):M=>{let m=materials.get(key);if(!m)materials.set(key,m=make());return m as M;};
+const colormaps=new Map<string,THREE.Texture>();
+export function mapTint(url:string,tint:string,roughness:number){return cached(JSON.stringify(['mapTint',url,tint,roughness]),()=>{let map=colormaps.get(url);if(!map){map=Object.assign(new THREE.TextureLoader().load(url),{flipY:false,colorSpace:THREE.SRGBColorSpace});colormaps.set(url,map);}return new THREE.MeshStandardMaterial({map,color:tint,roughness});});}
+function TintedInstances({url,parts,tint,shadow}:{url:string;parts:Part[];tint:string;shadow?:boolean}){
+ const {scene}=useGLTF(url),material=cached('kay'+url+tint,()=>{let base:THREE.Material|undefined;scene.traverse(n=>{const mesh=n as THREE.Mesh;if(mesh.isMesh&&!base)base=mesh.material as THREE.Material;});const m=(base as THREE.MeshStandardMaterial).clone();m.color.set(tint);return m;});
+ return <KitInstances url={url} parts={parts} shadow={shadow} material={material}/>;
+}
+export function TintedKit({url,parts,tint,shadow}:{url:string;parts:Part[];tint:string;shadow?:boolean}){if(!parts.length)return null;const [x,y,z]=parts[0];return <IsolatedAsset url={url} id={'tinted:'+url+tint} name="Scenery" position={[x,y+1,z]}><TintedInstances url={url} parts={parts} tint={tint} shadow={shadow}/></IsolatedAsset>;}
+export function Solid({ctx,parts,radius,...rest}:{ctx:RoomCtx;parts:Part[];radius:((p:Part)=>number)|undefined}&Omit<Parameters<typeof Instances>[0],'parts'>){const kept=useSolidParts(ctx.save,ctx.scene,parts,radius);return kept.length?<Instances parts={kept} {...rest}/>:null;}
+export function SolidKit({ctx,parts,radius,tint,...rest}:{ctx:RoomCtx;parts:Part[];radius:((p:Part)=>number)|undefined;tint?:string}&Omit<Parameters<typeof KitInstances>[0],'parts'>){const kept=useSolidParts(ctx.save,ctx.scene,parts,radius);return tint?<TintedKit parts={kept} tint={tint} {...rest}/>:<KitInstances parts={kept} {...rest}/>;}
+export function Light({position,color,intensity=8,distance=8}:{position:Vec3;color:string;intensity?:number;distance?:number}){return <pointLight position={position} color={color} intensity={intensity} distance={distance} decay={2}/>;}

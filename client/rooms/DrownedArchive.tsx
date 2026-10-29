@@ -1,7 +1,8 @@
+import {fixed} from './parts';
 import {useEffect,useMemo,type ReactElement,type ReactNode} from 'react';
 import {useFrame} from '@react-three/fiber';
 import * as THREE from 'three';
-import {Instances,KitInstances,Flame,chain,mat,decal,geo,noRaycast,rand,useSolidParts,type Part,type MoodOverride,type RoomProps} from './kit';
+import {Solid,SolidKit,type RoomCtx,Instances,KitInstances,Flame,chain,mat,decal,geo,noRaycast,rand,type Part,type MoodOverride,type RoomProps} from './kit';
 
 // Drowned Archive rooms (archive-1 … archive-8), #47: a flooded library. Each room is an island of floor in black water.
 // The play footprint (±5.4 m) carries only floors and decals; every solid piece stands outside it, tall pieces at −x/−z, and the
@@ -33,10 +34,6 @@ function Tint({parts,colors,geometry=geo.box,roughness=.9,metalness=0}:{parts:Pa
  useEffect(()=>()=>{mesh.dispose();},[mesh]);return parts.length?<primitive object={mesh}/>:null;
 }
 type P=RoomProps;
-/** A solid kit list filtered by the placement rule; r is the footprint radius in metres. */
-function Kit({p,url,parts,r=.5,shadow=true,material}:{p:P;url:string;parts:Part[];r?:number;shadow?:boolean;material?:THREE.Material}){const kept=useSolidParts(p.save,p.scene,parts,()=>r);return <KitInstances url={url} parts={kept} shadow={shadow} material={material}/>;}
-/** A solid primitive list filtered by the placement rule. */
-function Solid({p,parts,r=.4,...rest}:{p:P;parts:Part[];r?:number}&Omit<Parameters<typeof Instances>[0],'parts'>){const kept=useSolidParts(p.save,p.scene,parts,()=>r);return kept.length?<Instances parts={kept} {...rest}/>:null;}
 /** Thin floor marks (no shadow, not raycast). Opaque marks use a depth-writing unlit material: an opaque kit decal (depthWrite off) can be painted over by whichever mesh three.js sorts after it. */
 function Marks({parts,color,opacity=1,material,geometry=plane}:{parts:Part[];color:string;opacity?:number;material?:THREE.Material;geometry?:THREE.BufferGeometry}){return <Instances parts={parts} geometry={geometry} color={color} jitter={0} shadow={false} material={material??(opacity<1?decal(color,opacity):glow(color))}/>;}
 
@@ -111,8 +108,8 @@ function SluiceStair({p}:{p:P}){
   <Instances parts={s1Steps} color="#4f5753" jitter={.1} shadow={false}/>
   <group><Marks parts={s1Current} color="#2f6f80" material={sheen('#2f6f80',.72)}/><Marks parts={s1Spill} color="#123039" material={sheen('#16404b',.6)}/><Marks parts={s1Bridge} color="#7a807a"/><Marks parts={s1Pages} color="#8f8a74" opacity={.6}/></group>
   <group userData={{blocksLabels:true}}>
-   <Kit p={p} url={K.wall} parts={s1Walls}/><Kit p={p} url={K.gated} parts={s1Gate}/><Kit p={p} url={K.broken} parts={s1Broken2}/><Kit p={p} url={K.stairs} parts={s1Stairs} r={.6}/>
-   <Kit p={p} url={K.torch} parts={s1Torches} shadow={false}/><Kit p={p} url={K.crates} parts={s1Crates} r={.6}/><Kit p={p} url={K.barrel} parts={s1Barrels}/>
+   <SolidKit ctx={p} url={K.wall} parts={s1Walls} radius={fixed(.5)}/><SolidKit ctx={p} url={K.gated} parts={s1Gate} radius={fixed(.5)}/><SolidKit ctx={p} url={K.broken} parts={s1Broken2} radius={fixed(.5)}/><SolidKit ctx={p} url={K.stairs} parts={s1Stairs} radius={fixed(.6)}/>
+   <SolidKit ctx={p} url={K.torch} parts={s1Torches} shadow={false} radius={fixed(.5)}/><SolidKit ctx={p} url={K.crates} parts={s1Crates} radius={fixed(.6)}/><SolidKit ctx={p} url={K.barrel} parts={s1Barrels} radius={fixed(.5)}/>
    {/* The sluice: a wheel on the gate and three brass plates whose numbers are a date. */}
    <mesh position={[-6.5,2.9,-.6]} rotation={[0,PI/2,0]} geometry={wheel} material={mat('#6f5a3a',.5,.6)} castShadow/>
    <Instances parts={s1Spokes} color="#5b4a32" roughness={.5} metalness={.6} shadow={false}/><Instances parts={s1Plates} color="#a7884f" roughness={.4} metalness={.7} shadow={false}/><Instances parts={s1Numerals} color="#2a2117" material={glow('#2a2117')} shadow={false}/>
@@ -147,7 +144,7 @@ function InkGarden({p}:{p:P}){
   <Tint parts={inkFloor} colors={['#3b3326','#342d22','#40372a','#2f2a20','#3a3a2a']} roughness={1}/>
   <group><Marks parts={inkBed} color="#141c17" opacity={.92}/><Marks parts={inkStubble} color="#0b100d"/><Marks parts={inkPages} color="#8f8a74" opacity={.6}/></group>
   <group userData={{blocksLabels:true}}>
-   <Solid p={p} parts={inkFrames} color="#3c2e22" r={.3}/>
+   <Solid ctx={p} parts={inkFrames} color="#3c2e22" radius={fixed(.3)}/>
   </group>
   <Tint parts={inkBooks} colors={['#2d3d33','#3b4a3c','#1f2a24','#55634f','#7d7a62','#2a3530']} roughness={.85}/>
   <Instances parts={inkReeds} geometry={geo.cyl} color="#2c3b31" jitter={.4} shadow={false}/>
@@ -177,7 +174,7 @@ function BellIndex({p}:{p:P}){
    {[[2.15,2.25],[3.9,3.97]].map(([a,b])=><mesh key={a} position={[0,.005,0]} rotation={[-PI/2,0,0]} material={decal('#a88a52',.5)} raycast={noRaycast}><ringGeometry args={[a,b,48]}/></mesh>)}
   </group>
   <group userData={{blocksLabels:true}}>
-   <Kit p={p} url={K.wallPillar} parts={idxWalls}/>
+   <SolidKit ctx={p} url={K.wallPillar} parts={idxWalls} radius={fixed(.5)}/>
    <Instances parts={idxBacking} color="#14100c" shadow={false}/><Tint parts={idxDrawers} colors={['#3b2a1c','#46311f','#3f2d1d','#4a3522']} roughness={.7}/><Instances parts={idxPulls} color="#d4ad62" roughness={.3} metalness={.85} shadow={false}/><Instances parts={idxCards} color="#ddd4bb" material={glow('#ddd4bb')} shadow={false}/>
    {/* The bronze librarian: silent, hands held out for the missing drawer. */}
    <Instances parts={idxBronze} color="#8a6a3c" material={bronze}/><Instances parts={idxRobe} geometry={geo.cone} color="#8a6a3c" material={bronze}/><Instances parts={idxHead} geometry={ball} color="#8a6a3c" material={bronze}/>
@@ -207,8 +204,8 @@ function FloodedInfirmary({p}:{p:P}){
   <KitInstances url={K.grate} parts={infGrates} shadow={false}/>
   <group><Marks parts={infPuddles} color="#2b5560" material={sheen('#24505b',.55)}/><Marks parts={current(1.05,.003)} color="#2b5560" material={sheen('#1f4650',.45)}/></group>
   <group userData={{blocksLabels:true}}>
-   <Kit p={p} url={K.window} parts={infWalls}/><Kit p={p} url={K.barrier} parts={infLow}/>
-   <Kit p={p} url={K.bed} parts={infCots} r={.7}/>
+   <SolidKit ctx={p} url={K.window} parts={infWalls} radius={fixed(.5)}/><SolidKit ctx={p} url={K.barrier} parts={infLow} radius={fixed(.5)}/>
+   <SolidKit ctx={p} url={K.bed} parts={infCots} radius={fixed(.7)}/>
    <Instances parts={infBoard} color="#1d2724"/><Instances parts={infChalk} color="#d8dccd" material={decal('#d8dccd',.85)} shadow={false}/>
    <Instances parts={infShelf} color="#59625a"/><Tint parts={infBottles} geometry={geo.cyl} colors={['#5d8a7a','#a1b8a4','#7c5a3e','#c9c6a8']} roughness={.3}/>
    <Instances parts={infCurtains} color="#8fa79a" shadow={false}/><Instances parts={infRails} color="#6f7770" metalness={.6} shadow={false}/>
@@ -235,7 +232,7 @@ function WitnessVault({p}:{p:P}){
   <KitInstances url={K.tileLarge} parts={vaultFloor} shadow={false} material={mat('#3a404a',.22,.3)}/>
   <group><Marks parts={vaultInlay} color="#c9d2dc" opacity={.4}/>{[[3.3,3.36],[4.9,4.94]].map(([a,b])=><mesh key={a} position={[0,.005,0]} rotation={[-PI/2,0,0]} material={decal('#aeb9c6',.35)} raycast={noRaycast}><ringGeometry args={[a,b,48]}/></mesh>)}</group>
   <group userData={{blocksLabels:true}}>
-   <Kit p={p} url={K.wall} parts={vaultWalls}/><Kit p={p} url={K.pillarDeco} parts={vaultPillars} r={.9}/><Kit p={p} url={K.candles} parts={vaultStands} r={.3} shadow={false}/>
+   <SolidKit ctx={p} url={K.wall} parts={vaultWalls} radius={fixed(.5)}/><SolidKit ctx={p} url={K.pillarDeco} parts={vaultPillars} radius={fixed(.9)}/><SolidKit ctx={p} url={K.candles} parts={vaultStands} radius={fixed(.3)} shadow={false}/>
    <Tint parts={vaultMasks} geometry={ball} colors={['#d9d2c0','#c8c1ae','#b9b4a6','#e2dccb','#9d978a']} roughness={.55}/>
    <Instances parts={vaultFeatures} color="#121417" material={glow('#121417')} shadow={false}/>
    <Instances parts={tavin} geometry={ball} color="#e9e4d4" material={mat('#ece6d4',.4)} shadow={false}/><Instances parts={tavinCrack} color="#1a1c1f" material={glow('#1a1c1f')} shadow={false}/>
@@ -269,8 +266,8 @@ function GlassCauseway({p}:{p:P}){
   <group><Marks parts={glassSeams} color="#cdf6ff" opacity={.35}/><Marks parts={glassShadows} geometry={geo.disc} color="#0a1a22" opacity={.28}/><Marks parts={glassHeads} geometry={geo.disc} color="#0a1a22" opacity={.28}/><Marks parts={current(1.05,.003)} color="#bff0f6" opacity={.12}/></group>
   <Instances parts={glassDeep} geometry={ball} color="#010203" material={decal('#010203',.85)} shadow={false}/>
   <group userData={{blocksLabels:true}}>
-   <Kit p={p} url={K.pillar} parts={glassRuins} r={.8}/><Kit p={p} url={K.arched} parts={glassArch}/>
-   <Solid p={p} parts={glassRails} geometry={geo.cyl} color="#4a3d2c" r={.1} shadow={false}/>
+   <SolidKit ctx={p} url={K.pillar} parts={glassRuins} radius={fixed(.8)}/><SolidKit ctx={p} url={K.arched} parts={glassArch} radius={fixed(.5)}/>
+   <Solid ctx={p} parts={glassRails} geometry={geo.cyl} color="#4a3d2c" radius={fixed(.1)} shadow={false}/>
   </group>
   <Instances parts={glassRope} color="#9b8455" shadow={false}/>
   <mesh position={[0,1.6,-17.2]} raycast={noRaycast}><planeGeometry args={[2.2,3]}/><meshBasicMaterial color="#ffb366"/></mesh>
@@ -295,12 +292,12 @@ function KeeperOfDebts({p}:{p:P}){
   <KitInstances url={K.woodDark} parts={debtFloor} shadow={false}/>
   <group><Marks parts={debtGilt} color="#c9a45c" opacity={.7}/><Marks parts={debtLedger} color="#d7ccb0" opacity={.9}/>{[[1.55,1.62]].map(([a,b])=><mesh key={a} position={[0,.005,0]} rotation={[-PI/2,0,0]} material={decal('#c9a45c',.6)} raycast={noRaycast}><ringGeometry args={[a,b,40]}/></mesh>)}</group>
   <group userData={{blocksLabels:true}}>
-   <Kit p={p} url={K.wall} parts={debtWalls}/><Kit p={p} url={K.banner} parts={debtBanners} shadow={false}/>
+   <SolidKit ctx={p} url={K.wall} parts={debtWalls} radius={fixed(.5)}/><SolidKit ctx={p} url={K.banner} parts={debtBanners} shadow={false} radius={fixed(.5)}/>
    <Instances parts={debtBoards} color="#4a3423"/><Tint parts={debtBooks} colors={['#6f2b22','#3f2a1f','#8a6a32','#2f3a2c','#5b2430','#a68c5a']} roughness={.8}/>
    {/* The rib cage: bronze ribs around the second tuning stone. */}
    <Instances parts={debtRibs} geometry={arc} color="#b08a4c" material={bronze}/><Instances parts={debtHoops} geometry={arc} color="#b08a4c" material={bronze} shadow={false}/><Instances parts={debtSpine} geometry={geo.cyl} color="#b08a4c" material={bronze}/>
    <mesh position={[0,2.3,-7.6]} scale={[.32,.5,.32]} geometry={gem} material={glow('#8ff0d6')} raycast={noRaycast}/>
-   <Kit p={p} url={K.table} parts={debtDesk} r={.6}/><Kit p={p} url={K.chair} parts={debtChair}/><Kit p={p} url={K.candles} parts={debtCandles} r={.3} shadow={false}/><Kit p={p} url={K.coins} parts={debtCoins}/>
+   <SolidKit ctx={p} url={K.table} parts={debtDesk} radius={fixed(.6)}/><SolidKit ctx={p} url={K.chair} parts={debtChair} radius={fixed(.5)}/><SolidKit ctx={p} url={K.candles} parts={debtCandles} radius={fixed(.3)} shadow={false}/><SolidKit ctx={p} url={K.coins} parts={debtCoins} radius={fixed(.5)}/>
    <Tint parts={debtStacks} colors={['#6f2b22','#3f2a1f','#8a6a32']}/>
    <Instances parts={debtLectern} color="#3d2a1c"/><Instances parts={debtContract} color="#e2d7b8" shadow={false}/><Instances parts={debtStrike} color="#8e1f1a" material={glow('#8e1f1a')} shadow={false}/>
   </group>
@@ -337,8 +334,8 @@ function FerryOfNames({p}:{p:P}){
   <PaintedSky/>
   <Instances parts={skyStars} geometry={ball} color="#f4ead0" material={glow('#f4ead0',.85)} shadow={false}/><Instances parts={skyStrokes} color="#e3c49a" material={glow('#e3c49a',.18)} shadow={false}/><Instances parts={skyMoon} geometry={ball} color="#f6ecd2" material={glow('#f6ecd2',.9)} shadow={false}/>
   <group userData={{blocksLabels:true}}>
-   <Solid p={p} parts={ferryBollards} geometry={geo.cyl} color="#3b2d20" r={.2}/><Instances parts={ferryRopes} geometry={geo.cyl} color="#9b8455" shadow={false}/>
-   <Kit p={p} url={K.arched} parts={ferryArch}/><Kit p={p} url={K.crates} parts={ferryCargo} r={.6}/><Kit p={p} url={K.box} parts={ferryBoxes}/><Kit p={p} url={K.barrel} parts={ferryBarrels}/>
+   <Solid ctx={p} parts={ferryBollards} geometry={geo.cyl} color="#3b2d20" radius={fixed(.2)}/><Instances parts={ferryRopes} geometry={geo.cyl} color="#9b8455" shadow={false}/>
+   <SolidKit ctx={p} url={K.arched} parts={ferryArch} radius={fixed(.5)}/><SolidKit ctx={p} url={K.crates} parts={ferryCargo} radius={fixed(.6)}/><SolidKit ctx={p} url={K.box} parts={ferryBoxes} radius={fixed(.5)}/><SolidKit ctx={p} url={K.barrel} parts={ferryBarrels} radius={fixed(.5)}/>
    {/* The ferryman waits in his boat, pole in hand, lantern on the prow. */}
    <Boat position={[7.3,WATER-.05,-2.4]} list={.03}>
     <mesh position={[0,.95,-.6]} scale={[.32,1.1,.32]} geometry={geo.cone} material={mat('#2a2a30')}/><mesh position={[0,1.6,-.6]} scale={.17} geometry={ball} material={mat('#3a3640')}/>
