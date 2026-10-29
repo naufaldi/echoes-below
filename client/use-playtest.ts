@@ -1,7 +1,8 @@
+import {getFrameTime} from './frame-time';
 import {timingBreakdown} from './playtest-report';
 import {useEffect,useRef,useState} from 'react';
 import {PlayClock,activeMilliseconds,emptyTiming,sumTiming,validTiming,type PlayPhase,type PlayTiming} from './playtest-clock';
-interface Options{saveId:string|null;phase:PlayPhase;playing:boolean;sceneId:string|null;completed:boolean;frameTime:number;}
+interface Options{saveId:string|null;phase:PlayPhase;playing:boolean;sceneId:string|null;completed:boolean;}
 interface RecordV1{version:1;timing:PlayTiming;sceneTimings?:Record<string,PlayTiming>;scenes:string[];completed:boolean;latestFrameP95Ms:number;}
 const prefix=(id:string)=>'echoes-playtest-v1:'+id+':';
 function readRecords(id:string){const rows:RecordV1[]=[];try{for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(!key?.startsWith(prefix(id)))continue;try{const r=JSON.parse(localStorage.getItem(key)??'null');if(r?.version===1&&validTiming(r.timing)&&Array.isArray(r.scenes)&&r.scenes.every((s:unknown)=>typeof s==='string')&&typeof r.completed==='boolean')rows.push(r);}catch{}}}catch{}return rows;}
@@ -16,7 +17,7 @@ export function usePlaytest(options:Options){
   const state=()=>({visible:!document.hidden,focused:document.hasFocus(),playing:latest.current.playing,phase:latest.current.phase,sceneId:latest.current.sceneId});
   const clock=new PlayClock(performance.now(),state());
   const record:RecordV1={version:1,timing:clock.timing,sceneTimings:clock.sceneTimings,scenes:[],completed:false,latestFrameP95Ms:0};
-  const flush=()=>{clock.tick(performance.now());const o=latest.current;if(o.saveId===id){if(o.sceneId&&!record.scenes.includes(o.sceneId))record.scenes.push(o.sceneId);record.completed ||= o.completed;record.latestFrameP95Ms=o.frameTime;}
+  const flush=()=>{clock.tick(performance.now());const o=latest.current;if(o.saveId===id){if(o.sceneId&&!record.scenes.includes(o.sceneId))record.scenes.push(o.sceneId);record.completed ||= o.completed;record.latestFrameP95Ms=getFrameTime();}
    try{localStorage.setItem(key,JSON.stringify(record));const rows=readRecords(id);setTotals(sumTiming(rows.map(r=>r.timing)));setBreakdown(timingBreakdown(rows));setStorageAvailable(true);}catch{setStorageAvailable(false);setTotals({...clock.timing});setBreakdown(timingBreakdown([record]));}
   };
   live.current={clock,record,flush};
@@ -35,7 +36,7 @@ export function usePlaytest(options:Options){
   live.current?.flush();if(!options.saveId)return;
   const records=readRecords(options.saveId);const rows=storageAvailable?records:live.current?[live.current.record]:[];
   const timing=sumTiming(rows.map(r=>r.timing));
-  const report={game:'Echoes Below',measurementVersion:2,exportedAt:new Date().toISOString(),scope:'This adventure in this browser only; restored checkpoint branches are separate adventures.',units:'milliseconds',activePlay:activeMilliseconds(timing),timing,...timingBreakdown(rows),measurementSegments:rows.length,visitedScenes:[...new Set(rows.flatMap(r=>r.scenes))],reachedEnding:rows.some(r=>r.completed),latestFrameP95Ms:options.frameTime,method:'Observed focused foreground intervals; idle after 120 seconds without input; gaps over 5 seconds excluded. Waiting is not active play. Room and chapter breakdowns cover newly measured segments only; legacy time remains unattributed. Long reading/listening may be undercounted. This is an estimate, not independently verified human campaign duration.'};
+  const report={game:'Echoes Below',measurementVersion:2,exportedAt:new Date().toISOString(),scope:'This adventure in this browser only; restored checkpoint branches are separate adventures.',units:'milliseconds',activePlay:activeMilliseconds(timing),timing,...timingBreakdown(rows),measurementSegments:rows.length,visitedScenes:[...new Set(rows.flatMap(r=>r.scenes))],reachedEnding:rows.some(r=>r.completed),latestFrameP95Ms:getFrameTime(),method:'Observed focused foreground intervals; idle after 120 seconds without input; gaps over 5 seconds excluded. Waiting is not active play. Room and chapter breakdowns cover newly measured segments only; legacy time remains unattributed. Long reading/listening may be undercounted. This is an estimate, not independently verified human campaign duration.'};
   const url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='echoes-below-playtest.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  return{totals,breakdown,storageAvailable,download};

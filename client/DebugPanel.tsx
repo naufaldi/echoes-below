@@ -1,10 +1,12 @@
+import {useFrameTime} from './frame-time';
 import {formatPlaytime,type usePlaytest} from './use-playtest';
 
 // #68 Developer figures move out of the player's Settings: they show only with `?debug` in the address, or under the Vite dev server.
 export function debugView(search=typeof location==='undefined'?'':location.search){return new URLSearchParams(search).has('debug')||!!import.meta.env?.DEV;}
 
 /** AI spend, frame time and the playtest timer, for playtests. Its wording is for developers, so the copy scan skips this file. */
-export default function DebugPanel({usage,hosted,personal,frameTime,playtest,hasSave}:{usage:number;hosted:boolean;personal:boolean;frameTime:number;playtest:ReturnType<typeof usePlaytest>;hasSave:boolean}){
+export default function DebugPanel({usage,hosted,personal,playtest,hasSave}:{usage:number;hosted:boolean;personal:boolean;playtest:ReturnType<typeof usePlaytest>;hasSave:boolean}){
+ const frameTime=useFrameTime();
  if(!debugView())return null;
  return <section className="settings-section debug-panel" aria-labelledby="settings-debug"><h3 id="settings-debug">Debug</h3>
   <div className="settings-note">{personal?'Personal charges are billed by OpenAI and are not measured here.':`${hosted?'Host allowance reserved today':'Local campaign budget accounted (estimated)'}: $${usage.toFixed(4)}.`}<br/>Recent p95 frame time: {frameTime.toFixed(1)}ms.</div>
