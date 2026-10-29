@@ -11,7 +11,7 @@ From #46 on, each chapter owns one file. `World.tsx` asks `roomFor(sceneId)` in 
 | `choir` | `choir-1` … `choir-8` | `HollowChoir.tsx` | #50 |
 | `depth` | `depth-1` … `depth-8` | `LastDescent.tsx` | #51 |
 
-Each Chapter II–VI file starts as a stub that renders `LegacyShell`, the old shared shell, so nothing looks different until a chapter replaces it. **Edit only your chapter file and your kit folder.** Don't edit `registry.ts`, `kit.tsx`, `LegacyShell.tsx`, `World.tsx`, `DungeonDressing.tsx` or `ChapterAtmosphere.tsx`. If you need a new shared helper, put it in your own file and say so in your PR.
+Each Chapter II–VI file owns its bespoke room layouts. Unknown scene ids fall back to the Chapter I aftermath room. **Edit only your chapter file and your kit folder.** Don't edit `registry.ts`, `kit.tsx`, `World.tsx` or `ChapterAtmosphere.tsx`. If you need a new shared helper, put it in your own file and say so in your PR.
 
 ## Contract
 
@@ -26,7 +26,7 @@ export const mood=(scene:string):MoodOverride=>({…});                       //
   - `scene` is the scene id, e.g. `archive-3`. Branch on it to make each of the 8 rooms distinct.
   - `save` is the `PublicSave`. It's never null in Chapters II–VI. Read `save.mode`, `save.scene.entities`, `save.scene.description` (Track B fork variant text), `save.tactical` and the mechanism states from it.
   - `reduced` is true when the player asked for reduced motion. When it's set: no particle drift, no camera shake, no animated flicker.
-- **Mood.** `mood(scene)` is merged over `chapterMood(scene)`. Keys: `background`, `fog: [near, far]`, `ambient`, `sun`. The legacy `floor` key is only read by `LegacyShell`. The scene's lights stay in `World`: ambient, hemisphere and one shadow-casting sun, with a ±10 m shadow box. Add point lights inside your room.
+- **Mood.** `mood(scene)` is merged over `chapterMood(scene)`. Keys: `background`, `fog: [near, far]`, `ambient`, `sun`. The scene's lights stay in `World`: ambient, hemisphere and one shadow-casting sun, with a ±10 m shadow box. Add point lights inside your room.
 - **What `World` already draws.** Don't draw these again:
   - party, enemies and NPC models;
   - entity markers and labels;
@@ -83,7 +83,7 @@ export const mood=(scene:string):MoodOverride=>({…});                       //
 
 ## Budget
 
-- **Draw calls.** No room may exceed the Phase 0 baseline of about 550 per frame. Chapter I rooms measure 265–351. Today's shell measures at about the same level as Chapter I; see the #46 PR for the numbers.
+- **Draw calls.** No room may exceed the Phase 0 baseline of about 550 per frame. Chapter I rooms measure 265–351. The retired shared shell measured at about the same level as Chapter I; see the #46 PR for the historical numbers.
 - Record draw calls and p95 frame time for every room in your PR, measured with `scripts/perf/frame-sampler.js` (`docs/PERF_BASELINE.md`).
 - Every shadow-casting mesh is drawn twice. Instance repeats, and set `shadow={false}` on decals and small far props.
 

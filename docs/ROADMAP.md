@@ -157,6 +157,8 @@ Characters (#11) slot in whenever the models arrive and never block a release.
 - The confirm card closes on camera drag, tightly packed actors lose their labels, and the projectile was never confirmed visually → #58.
 - Dead CSS → part of #59.
 
+**D14. Which room handles an unknown scene id?** Use the Chapter I registry entry, which draws its aftermath room for an unknown id. Owner delegated this pick in #130. All campaign scenes keep their existing chapter layouts; the unused legacy shell is removed. The local `?scene=` API still rejects unknown ids.
+
 ## 4. Phases
 
 Phases overlap where the file scopes don't. The chapter agents work only in `client/rooms/` and `public/assets/env/`, so issues touching `server/`, `shared/` or `client/*.tsx` outside `rooms/` can run beside them. Issues that touch `App.tsx`, `TurnPlayback.tsx` or `style.css` conflict with each other and are queued one at a time, or given to the same agent.
