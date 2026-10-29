@@ -1,0 +1,15 @@
+import {PortraitImage} from './Portrait';
+import {CLASS_BY_ID} from './classes';
+import type {ReactNode} from 'react';
+import type {PublicSave,ActionOption,Speaker} from '../shared/types';
+
+export function PartyExtras({save,busy,aiReady,setSpeaker,talk,choose,setPackOpen}:{save:PublicSave;busy:string;aiReady:boolean;setSpeaker:(who:Speaker)=>void;talk:(who:Speaker)=>void;choose:(action:ActionOption)=>void;setPackOpen:(open:boolean)=>void}){
+ const potions=save.party.reduce((n,a)=>n+a.potions,0),rations=save.party.reduce((n,a)=>n+a.rations,0);
+ /** Only offer a conversation that can start now; a check-in is never available in combat, so its row disappears instead of sitting disabled. */
+ const talkers=(['mira','oren'] as const).flatMap(who=>{const checkIn=save.actions.find(a=>a.id===`checkin:${who}`),standing=save.party.some(a=>a.id===who&&a.hp>0);return standing&&(aiReady||checkIn)?[{who,checkIn}]:[];});
+ const partyExtras=<>{talkers.length>0&&<div className="companion-chat">{talkers.map(({who,checkIn})=><button key={who} disabled={!!busy} onClick={()=>{setSpeaker(who);if(aiReady)void talk(who);else if(checkIn)choose(checkIn);}}>{aiReady?'Talk to':'Check in with'} {who==='mira'?'Mira':'Oren'}</button>)}</div>}{(()=>{const counts=<span className="pack-counts"><b>PACK</b> {potions} {potions===1?'potion':'potions'} · {rations} {rations===1?'ration':'rations'}</span>;return save.logistics?<button className="pack-row" disabled={!!busy} onClick={()=>setPackOpen(true)}>{counts}<span className="pack-open-label">{save.actions.some(a=>a.id.startsWith('advance:'))?'Level up available · Inventory':'Inventory & camp'}</span></button>:<div className="pack-row">{counts}</div>;})()}<section className="objective" aria-label="Current objective"><h2>Objective</h2><p>{save.scene.objective}</p></section></>;
+ return partyExtras;
+}
+export default function PartyPanel({save,selected,setSelected,narrow,children}:{save:PublicSave;selected:string;setSelected:(id:string)=>void;narrow:boolean;children:ReactNode}){
+ return <aside className="party-panel"><div className="panel-label"><span title="Shared party experience from quests and discoveries">Level {save.level??1} · {(save.xp??0).toLocaleString('en-US')} XP</span></div>{save.party.map(a=><button key={a.id} className={'party-card '+(selected===a.id?'active':'')+(a.hp<=0?' downed':'')+(save.turn?.actorId===a.id?' taking-turn':'')} onClick={()=>setSelected(selected===a.id?'':a.id)}><div className={'portrait '+a.classId}><PortraitImage subject={a} fallback={CLASS_BY_ID.get(a.classId)?.icon??'♜'}/></div><div className="party-info"><div><strong>{a.name}</strong><small>{a.id==='hero'?'You':CLASS_BY_ID.get(a.classId)?.name}</small></div><div className="health-track"><i style={{transform:`scaleX(${Math.max(0,Math.min(1,a.hp/(a.maxHp||1)))})`}}/></div><div className="party-stats"><span>{narrow?`${a.hp}/${a.maxHp}`:`${a.hp} / ${a.maxHp} HP`}</span><span>{save.tactical?`AC ${a.defense}`:`◆ ${a.focus}/${a.maxFocus}`}</span></div></div></button>)}{!narrow&&children}</aside>;
+}
