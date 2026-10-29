@@ -39,10 +39,9 @@ export default function Onboarding({onClose}:{onClose:()=>void}){
  return <div className={'guide'+(spot?' lit':'')}>
   {spot&&<div className="guide-spot" style={{top:spot.top,left:spot.left,width:spot.width,height:spot.height}} aria-hidden="true"/>}
   <section ref={card} tabIndex={-1} className="modal guide-card" style={side??undefined} data-side={side?'':undefined} role="dialog" aria-modal="true" aria-labelledby="guide-title" aria-describedby="guide-body">
-   <div className="eyebrow">HOW TO PLAY · {step+1} OF {STEPS.length}</div>
+   <div className="guide-head"><span className="eyebrow">How to play</span><span className="guide-steps"><span className="sr-only">Step {step+1} of {STEPS.length}</span>{STEPS.map((_,i)=><i key={i} aria-hidden="true" className={i===step?'on':i<step?'done':undefined}/>)}</span></div>
    <h2 id="guide-title">{current.title}</h2>
    <div id="guide-body" aria-live="polite"><p>{current.body}</p>{current.demo}</div>
-   <div className="guide-dots" aria-hidden="true">{STEPS.map((_,i)=><span key={i} className={i===step?'on':i<step?'done':undefined}/>)}</div>
    <div className="guide-actions"><button className="guide-skip" onClick={onClose}>Skip guide</button><span>{step>0&&<button className="guide-back" onClick={()=>setStep(step-1)}>Back</button>}<button data-autofocus className="primary" onClick={()=>last?onClose():setStep(step+1)}>{last?'Begin':<>Next <span aria-hidden="true">›</span></>}</button></span></div>
   </section>
  </div>;
