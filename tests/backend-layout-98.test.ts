@@ -4,6 +4,13 @@ import {createSave,applyAction,publicSave,legalActions,type Save} from '../serve
 import {feetFromMetres} from '../shared/movement.js';
 import {combatLines,tagText} from '../client/story-pages.js';
 import {npcAppearance,portraitSubjectFor} from '../client/portrait-look.js';
+import {centreScroll} from '../client/turn-order.js';
+
+test('turn order keeps an already centred entry at its offset (#112)',()=>{assert.equal(centreScroll(440,120,600,1000),200);});
+test('turn order clamps the first entry to the start (#112)',()=>{assert.equal(centreScroll(0,120,600,1000),0);});
+test('turn order clamps the last entry to the end (#112)',()=>{assert.equal(centreScroll(880,120,600,1000),400);});
+test('turn order does not scroll content narrower than its view (#112)',()=>{assert.equal(centreScroll(200,120,600,400),0);});
+test('turn order centres an entry within overflowing content (#112)',()=>{assert.equal(centreScroll(400,120,600,1000),160);});
 
 const make=()=>createSave({name:'Aria',classId:'scout',backgroundId:'envoy',appearanceId:'moon',raceId:'elf'});
 /** An Echo fight at the cookfire that lasts: everyone has 200 health. */
