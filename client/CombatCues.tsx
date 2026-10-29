@@ -11,7 +11,7 @@ const lift=(a:Actor)=>actorHeight(a)+.35;
 const at=(a:Actor,y:number):[number,number,number]=>[a.position[0],y,-a.position[1]];
 
 function Floater({actor,text,tone,reduced}:{actor:Actor;text:string;tone:'damage'|'heal'|'miss';reduced:boolean}){
- return <TextSprite text={text} color={tone==='damage'?'#ff9a7f':tone==='heal'?'#9be0b8':'#e2dccd'} italic={tone==='miss'} position={at(actor,lift(actor)+.35)} height={tone==='miss'?.8:.95} rise={.9} life={1.5} reduced={reduced}/>;
+ return <TextSprite text={text} color={tone==='damage'?'#ff9a7f':tone==='heal'?'#9be0b8':'#e8ebf0'} italic={tone==='miss'} position={at(actor,lift(actor)+.35)} height={tone==='miss'?.8:.95} rise={.9} life={1.5} reduced={reduced}/>;
 }
 
 /** Drawn over bodies like the floaters: a shot in melee range starts and ends inside the two characters. */
