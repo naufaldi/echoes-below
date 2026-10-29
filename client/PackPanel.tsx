@@ -4,7 +4,7 @@ import type {ActionOption,PublicSave} from '../shared/types';
 import {ABILITIES,modifier,pendingImprovements,type Ability} from '../shared/curated-rules';
 import {ITEMS,usedCopies,type ItemId} from '../shared/logistics';
 export default function PackPanel({save,onChoose,onClose}:{save:PublicSave;onChoose:(a:ActionOption)=>void;onClose:()=>void}){
- const [actorId,setActorId]=useState('hero');const [first,setFirst]=useState<Ability>('strength'),[second,setSecond]=useState<Ability>('strength');const panel=useRef<HTMLElement>(null);useModal(panel,{onClose});const pack=save.logistics;if(!pack)return null;const actor=save.party.find(a=>a.id===actorId)!;const equipment=pack.equipped[actorId];const gear=save.actions.filter(a=>a.kind==='inventory'&&a.actorId===actorId&&!a.id.startsWith('advance:')),camp=save.actions.filter(a=>a.kind==='camp');
+ const [actorId,setActorId]=useState(()=>save.actions.find(a=>a.id.startsWith('advance:'))?.actorId??'hero');const [first,setFirst]=useState<Ability>('strength'),[second,setSecond]=useState<Ability>('strength');const panel=useRef<HTMLElement>(null);useModal(panel,{onClose});const pack=save.logistics;if(!pack)return null;const actor=save.party.find(a=>a.id===actorId)!;const equipment=pack.equipped[actorId];const gear=save.actions.filter(a=>a.kind==='inventory'&&a.actorId===actorId&&!a.id.startsWith('advance:')),camp=save.actions.filter(a=>a.kind==='camp');
  const character=save.tactical?.actors[actorId],milestone=character?pendingImprovements(character)[0]:undefined;
  const pair=[first,second].sort((a,b)=>ABILITIES.indexOf(a)-ABILITIES.indexOf(b));
  const improvement=save.actions.find(a=>a.id===`advance:${actorId}:${milestone}:${pair[0]}:${pair[1]}`);

@@ -1,0 +1,3 @@
+// #115 A pending level-up as a story choice. Read from the advance:<member>:<level>:… choices the engine offers; nothing is decided here.
+/** Party members with an ability improvement on offer now, in party order, each with its oldest pending level. */
+export function pendingLevelUps(actions:readonly {id:string}[],party:readonly {id:string;name:string}[]){const levels=new Map<string,number>();for(const a of actions){const[k,member,level]=a.id.split(':');if(k==='advance'&&member&&!levels.has(member))levels.set(member,Number(level));}return party.filter(m=>levels.has(m.id)).map(m=>({id:m.id,name:m.name,level:levels.get(m.id)!}));}
