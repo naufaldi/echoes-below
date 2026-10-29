@@ -2,7 +2,7 @@ import { DatabaseSync } from "node:sqlite";
 import { randomUUID, createHash } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
-import { GameError, publicSave, assertSaveVersion, type Save } from "./game.js";
+import { GameError, publicSave, sceneTitle, assertSaveVersion, type Save } from "./game.js";
 import type { PublicSave, Preview, Dialogue } from "../shared/types.js";
 export class Storage {
   db: DatabaseSync;
@@ -77,7 +77,7 @@ export class Storage {
         return {
           id: s.id,
           name: s.name,
-          sceneTitle: publicSave(s).scene.title,
+          sceneTitle: sceneTitle(s.sceneId),
           mode: s.mode,
           updatedAt: s.updatedAt,
         };
@@ -180,7 +180,9 @@ export class Storage {
     };
   }
   usage(saveId: string) {
-    const campaignId = this.read(saveId).campaignId ?? saveId;
+    return this.usageFor(this.read(saveId).campaignId ?? saveId);
+  }
+  private usageFor(campaignId: string) {
     const campaign = Number(
       this.db
         .prepare(
@@ -204,7 +206,8 @@ export class Storage {
   }
   reserve(saveId: string, cost: number, role: string) {
     return this.transaction(() => {
-      const u = this.usage(saveId);
+      const campaignId = this.read(saveId).campaignId ?? saveId;
+      const u = this.usageFor(campaignId);
       if (
         u.campaignUsd + cost > this.limits.campaignUsd ||
         u.hourUsd + cost > this.limits.hourUsd
@@ -219,7 +222,7 @@ export class Storage {
         .prepare("INSERT INTO usage VALUES(?,?,?,?,?,?)")
         .run(
           id,
-          this.read(saveId).campaignId ?? saveId,
+          campaignId,
           Date.now(),
           cost,
           role,

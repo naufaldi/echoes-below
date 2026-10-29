@@ -1,15 +1,16 @@
 import {planningOnce} from './planning-once.js';
 import {creation} from '../shared/character-creation.js';
+import {commandSchema,speakerSchema} from '../shared/api-schemas.js';
 import {z} from 'zod';
 import {Store,hash,type Database} from './db.js';
-import {applyAction,createSave,GameError,legalActions,log,publicSave,type Save} from '../server/game.js';
+import {applyAction,createSave,GameError,legalActions,log,publicSave,sceneTitle,wantsCompanionPlans,type Save} from '../server/game.js';
 import {cryptoDice} from '../server/rules.js';
 import {dialogue,plans,provider,structured,type AIEnv} from './ai.js';
-import {narrativeContext} from '../shared/ai-context.js';
+import {narrativeContext,voices} from '../shared/ai-context.js';
 import type {Preview} from '../shared/types.js';
 interface Env extends AIEnv{DB:Database;ASSETS:{fetch(request:Request):Promise<Response>}}
-const uuid=z.string().uuid(),commandSchema=z.object({companionPlans:z.record(z.string().max(40),z.string().max(100)).optional(),commandId:uuid,expectedRevision:z.number().int().min(0),actionId:z.string().min(1).max(100)}).strict();
-const say=z.object({speaker:z.enum(['dm','mira','oren']),text:z.string().trim().min(1).max(1000)}).strict();
+const uuid=z.string().uuid();
+const say=z.object({speaker:speakerSchema,text:z.string().trim().min(1).max(1000)}).strict();
 function json(value:unknown,status=200,headers:Record<string,string>={}){return Response.json(value,{status,headers:{'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff',...headers}});}
 async function readBody(request:Request){if(!request.headers.get('content-type')?.startsWith('application/json'))throw new GameError(415,'TYPE','JSON is required.');const max=1450000;if(Number(request.headers.get('content-length')??0)>max)throw new GameError(413,'SIZE','The request is too large.');const reader=request.body?.getReader(),chunks:Uint8Array[]=[];let total=0;if(reader)while(true){const part=await reader.read();if(part.done)break;total+=part.value.length;if(total>max){await reader.cancel();throw new GameError(413,'SIZE','The request is too large.');}chunks.push(part.value);}const bytes=new Uint8Array(total);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}const text=new TextDecoder().decode(bytes);try{return JSON.parse(text);}catch{throw new GameError(400,'JSON','The request could not be read.');}}
 async function execute(env:Env,store:Store,id:string,input:unknown){
@@ -17,7 +18,7 @@ async function execute(env:Env,store:Store,id:string,input:unknown){
  const before=await store.read(id);if(before.revision!==body.expectedRevision)throw new GameError(409,'STALE','The story moved on. Reload your adventure.');
  if(!legalActions(before).some(a=>a.id===body.actionId))throw new GameError(422,'ACTION','That action is not available.');
  if(body.companionPlans)before.plans=body.companionPlans;
- if(!body.companionPlans&&env.OPENAI_API_KEY&&before.mode==='combat'&&(!before.tactical||before.party.some(a=>a.id===before.turn?.actorId&&a.id!=='hero'&&a.hp>0))&&!before.flags.retreatRequested&&['end_turn','continue','tactical:auto'].includes(body.actionId))try{before.plans=await planningOnce(store,body.commandId,digest,()=>plans(env,store,before));}catch(error){if(error instanceof GameError&&['AI_PENDING','COMMAND_REUSED'].includes(error.code))throw error;log(before,'Companion AI is unavailable. The party uses protective tactical rules.');}
+ if(!body.companionPlans&&env.OPENAI_API_KEY&&wantsCompanionPlans(before,body.actionId))try{before.plans=await planningOnce(store,body.commandId,digest,()=>plans(env,store,before));}catch(error){if(error instanceof GameError&&['AI_PENDING','COMMAND_REUSED'].includes(error.code))throw error;log(before,'Companion AI is unavailable. The party uses protective tactical rules.');}
  const after=applyAction(before,body.actionId,cryptoDice);delete after.plans;return store.commit(before,after,body.commandId,digest);
 }
 export default {async fetch(request:Request,env:Env):Promise<Response>{
@@ -31,17 +32,18 @@ export default {async fetch(request:Request,env:Env):Promise<Response>{
   if(path==='/api/health')return json({ok:true,aiConfigured:!!env.OPENAI_API_KEY,hosted:true});
   if(request.headers.get('x-echoes-ai-mode')!=='sponsored')env={...env,OPENAI_API_KEY:undefined};
   if(!token)throw new GameError(403,'SESSION','Refresh the page to open your private session.');
-  if(request.method==='POST'&&request.headers.get('x-csrf-token')!==await hash('csrf:'+token))throw new GameError(403,'CSRF','Refresh your adventure before retrying.');
-  const store=new Store(env.DB,await hash('owner:'+token));
+  const [csrf,owner]=await Promise.all([request.method==='POST'?hash('csrf:'+token):Promise.resolve(null),hash('owner:'+token)]);
+  if(request.method==='POST'&&request.headers.get('x-csrf-token')!==csrf)throw new GameError(403,'CSRF','Refresh your adventure before retrying.');
+  const store=new Store(env.DB,owner);
   const body=request.method==='POST'?await readBody(request):null;
-  if(path==='/api/saves'&&request.method==='GET'){const rows=await env.DB.prepare('SELECT body FROM saves WHERE owner=? ORDER BY updated_at DESC LIMIT 30').bind(store.owner).all<{body:string}>();return json({saves:rows.results.map(row=>{const s=JSON.parse(row.body) as Save;return{id:s.id,name:s.name,sceneTitle:publicSave(s).scene.title,mode:s.mode};})});}
+  if(path==='/api/saves'&&request.method==='GET'){const rows=await env.DB.prepare('SELECT body FROM saves WHERE owner=? ORDER BY updated_at DESC LIMIT 30').bind(store.owner).all<{body:string}>();return json({saves:rows.results.map(row=>{const s=JSON.parse(row.body) as Save;return{id:s.id,name:s.name,sceneTitle:sceneTitle(s.sceneId),mode:s.mode};})});}
   if(path==='/api/saves'&&request.method==='POST'){const count=await env.DB.prepare('SELECT count(*) AS n FROM saves WHERE owner=?').bind(store.owner).first<{n:number}>();if((count?.n??0)>=30)throw new GameError(429,'SAVE_LIMIT','This device has reached 30 adventures. Continue an existing adventure.');return json(await store.create(createSave(creation.parse(body))));}
   const match=path.match(/^\/api\/saves\/([^/]+)(?:\/(.*))?$/);
   if(match){const id=uuid.parse(match[1]),suffix=match[2];if(suffix==='actions'&&request.method==='POST')return json(await execute(env,store,id,body));const save=await store.read(id);
    if(!suffix&&request.method==='GET')return json(publicSave(save));
    if(suffix==='dialogue'&&request.method==='POST'){const b=say.parse(body);return json(await dialogue(env,store,save,b.speaker,b.text));}
    if(suffix==='dialogue/local'&&request.method==='POST'){const b=say.extend({reply:z.string().trim().min(1).max(1200)}).parse(body);return json(await store.dialogue(id,b.speaker,b.text,b.reply));}
-   if((suffix==='dialogues'||suffix==='dialogue')&&request.method==='GET'){const history=await store.history(id);const speaker=url.searchParams.get('speaker');return json({history:suffix==='dialogue'&&speaker?history.filter(h=>h.speaker===z.enum(['dm','mira','oren']).parse(speaker)):history});}
+   if((suffix==='dialogues'||suffix==='dialogue')&&request.method==='GET'){const history=await store.history(id);const speaker=url.searchParams.get('speaker');return json({history:suffix==='dialogue'&&speaker?history.filter(h=>h.speaker===speakerSchema.parse(speaker)):history});}
    const restore=suffix?.match(/^checkpoints\/([^/]+)\/restore$/);if(restore&&request.method==='POST'){const checkpoint=await env.DB.prepare('SELECT body FROM checkpoints WHERE id=? AND owner=? AND save_id=?').bind(uuid.parse(restore[1]),store.owner,id).first<{body:string}>();if(!checkpoint)throw new GameError(404,'CHECKPOINT','Checkpoint unavailable.');const branch=JSON.parse(checkpoint.body) as Save;branch.id=crypto.randomUUID();branch.campaignId=save.campaignId??save.id;branch.name=save.name+' · restored';branch.checkpointIds=[];branch.revision=0;branch.presentation=[];branch.updatedAt=new Date().toISOString();return json(await store.create(branch));}
   }
   if(path==='/api/actions/preview'&&request.method==='POST'){
@@ -56,7 +58,7 @@ export default {async fetch(request:Request,env:Env):Promise<Response>{
    if(Date.parse(p.expiresAt)<Date.now())throw new GameError(409,'EXPIRED','Prepare your action again.');return json(await execute(env,store,p.saveId,action));
   }
   const audio=path.match(/^\/api\/narrations\/([^/]+)\/audio$/);
-  if(audio&&request.method==='POST'){const row=await env.DB.prepare('SELECT reply_text,speaker FROM dialogues WHERE id=? AND owner=?').bind(uuid.parse(audio[1]),store.owner).first<{reply_text:string;speaker:string}>();if(!row)throw new GameError(404,'AUDIO','Dialogue unavailable.');const response=await provider(env,store,'audio/speech',{model:'gpt-4o-mini-tts-2025-12-15',voice:row.speaker==='mira'?'coral':row.speaker==='oren'?'onyx':'ash',input:row.reply_text.slice(0,1200),response_format:'mp3'},.12);return new Response(response.body,{headers:{'Content-Type':'audio/mpeg','Cache-Control':'no-store'}});}
+  if(audio&&request.method==='POST'){const row=await env.DB.prepare('SELECT reply_text,speaker FROM dialogues WHERE id=? AND owner=?').bind(uuid.parse(audio[1]),store.owner).first<{reply_text:string;speaker:string}>();if(!row)throw new GameError(404,'AUDIO','Dialogue unavailable.');const response=await provider(env,store,'audio/speech',{model:'gpt-4o-mini-tts-2025-12-15',voice:Object.hasOwn(voices,row.speaker)?voices[row.speaker as keyof typeof voices]:voices.dm,input:row.reply_text.slice(0,1200),response_format:'mp3'},.12);return new Response(response.body,{headers:{'Content-Type':'audio/mpeg','Cache-Control':'no-store'}});}
   if(path==='/api/transcriptions'&&request.method==='POST'){
    const b=z.object({saveId:uuid,audioBase64:z.string().min(4).max(1300000),mimeType:z.literal('audio/wav'),durationSeconds:z.number().positive().max(30)}).strict().parse(body);await store.read(b.saveId);const bytes=Uint8Array.from(atob(b.audioBase64),c=>c.charCodeAt(0)),view=new DataView(bytes.buffer);
    const text=(a:number,n:number)=>new TextDecoder().decode(bytes.slice(a,a+n));
