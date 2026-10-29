@@ -1,10 +1,11 @@
-import {useMemo,useState,type KeyboardEvent} from 'react';
+import {useEffect,useMemo,useState,type KeyboardEvent} from 'react';
 import type {PublicSave} from '../shared/types';
 import {CHAPTER_PAGES} from '../shared/chapter-pages';
 import {CAMPAIGN_MAP} from '../shared/campaign-map';
 import {dueChapterPage,markPageSeen,recapRows,seenPages,type ChapterPageView} from './chapter-flow';
 import {CHAPTER_ONE} from './descent-map';
 import {Dialog,Overlay} from './Modal';
+import {prefetch} from './rooms/registry';
 import {chapterMood} from './ChapterAtmosphere';
 
 import './chapter-page.css';
@@ -24,6 +25,9 @@ export function useChapterPage(save:PublicSave|null,waiting:boolean){
  const[turned,setTurned]=useState(0),id=save?.id??'';
  const seen=useMemo(()=>id?seenPages(store(),id):[],[id,turned]);// eslint-disable-line react-hooks/exhaustive-deps -- `turned` re-reads after a page is dismissed
  const page=save?dueChapterPage(save,seen,waiting):null;
+ const scene=save?.scene.id,title=page?.kind==='title'?page.chapter:null;
+ useEffect(()=>{if(scene)prefetch(scene.split('-')[0]);},[scene]);
+ useEffect(()=>{if(title){const next=CAMPAIGN_MAP.find(r=>r.chapter===title+1);if(next)prefetch(next.id.split('-')[0]);}},[title]);
  const done=(p:ChapterPageView)=>{if(!save)return;markPageSeen(store(),save.id,p);setTurned(n=>n+1);
   // Past the title page the room's first passage takes focus, as it does when the journal closes.
   if(p.kind==='title')requestAnimationFrame(()=>document.querySelector<HTMLElement>('.story-box')?.focus({preventScroll:true}));};

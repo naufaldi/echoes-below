@@ -161,6 +161,8 @@ Characters (#11) slot in whenever the models arrive and never block a release.
 
 **D15. How are tinted room assets identified?** Use `'tinted:'+url+tint` for the shared TintedKit isolation boundary. Owner delegated this pick in #133; each file and tint has its own retry identity.
 
+**D16. How do lazy rooms keep their first-frame mood?** Use option (a): eager `<Chapter>.mood.ts` modules, with room layouts loaded on demand. Owner delegated this mood and README contract pick in #134.
+
 ## 4. Phases
 
 Phases overlap where the file scopes don't. The chapter agents work only in `client/rooms/` and `public/assets/env/`, so issues touching `server/`, `shared/` or `client/*.tsx` outside `rooms/` can run beside them. Issues that touch `App.tsx`, `TurnPlayback.tsx` or `style.css` conflict with each other and are queued one at a time, or given to the same agent.
