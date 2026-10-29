@@ -2,14 +2,14 @@
 .guide{position:fixed;inset:0;z-index:45;background:var(--scrim);animation:fade-in var(--enter-duration) var(--ease-out) both}
 .guide.lit{background:none}
 /* The lit part: torchlight on it, with the rest of the screen dimmed by the frame's own shadow, so the part itself stays clear. */
-.guide .guide-spot{position:fixed;border:1px solid var(--gold-edge);border-radius:8px;box-shadow:0 0 0 100vmax color-mix(in srgb,var(--surface-0) 80%,transparent),0 0 0 4px var(--gold-tint),0 0 32px rgb(221 180 106 / .2);pointer-events:none;transition:top .2s var(--ease-out),left .2s var(--ease-out),width .2s var(--ease-out),height .2s var(--ease-out)}
+.guide .guide-spot{position:fixed;border:1px solid var(--gold-edge);border-radius:8px;box-shadow:0 0 0 100vmax color-mix(in srgb,var(--surface-0) 80%,transparent),0 0 0 4px var(--gold-tint),0 0 32px rgb(231 169 72 / .2);pointer-events:none;transition:top .2s var(--ease-out),left .2s var(--ease-out),width .2s var(--ease-out),height .2s var(--ease-out)}
 /* A lifted page: a lighter top falling to the page tone, an inked edge, and a deep shadow, so the card never melts into the dimmed room. */
-.guide .modal.guide-card{position:fixed;left:50%;bottom:214px;transform:translateX(-50%);width:372px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 90px);padding:22px 24px 18px;background:linear-gradient(var(--paper-2),var(--paper-1) 140px);border:1px solid var(--border-default);box-shadow:inset 0 1px 0 rgb(228 216 191 / .08),0 24px 64px var(--shadow-deep)}
+.guide .modal.guide-card{position:fixed;left:50%;bottom:214px;transform:translateX(-50%);width:372px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 90px);padding:22px 24px 18px;background:linear-gradient(var(--paper-2),var(--paper-1) 140px);border:1px solid var(--border-default);box-shadow:inset 0 1px 0 rgb(226 232 240 / .08),0 24px 64px var(--shadow-deep)}
 .guide .modal.guide-card[data-side]{bottom:auto;transform:none}
 /* Instructions speak in the UI face; only the title and the story sample keep the book's serif. */
 .guide .guide-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.guide .guide-head .eyebrow{color:var(--accent)}
 .guide .guide-steps{display:flex;gap:4px}.guide .guide-steps i{width:14px;height:3px;border-radius:2px;background:var(--border-default)}.guide .guide-steps .done{background:var(--accent)}.guide .guide-steps .on{width:22px;background:var(--gold)}
-.guide .guide-card h2{margin:10px 0 8px;font-size:var(--fs-2xl);line-height:1.15;color:var(--text-primary);text-wrap:balance}
+.guide .guide-card h2{font-weight:500;margin:10px 0 8px;font-size:var(--fs-2xl);line-height:1.15;color:var(--text-primary);text-wrap:balance}
 .guide .guide-card p{margin:0;font:var(--fs-md)/1.6 var(--font-ui);color:var(--text-secondary);text-wrap:pretty}
 .guide .guide-card kbd{display:inline-block;min-width:20px;padding:0 5px;border:1px solid var(--border-default);border-bottom-width:2px;border-radius:4px;background:var(--paper-0);font:500 var(--fs-2xs)/18px var(--font-ui);text-align:center;color:var(--text-primary);vertical-align:1px}
 .guide .guide-card b{font-weight:500;color:var(--text-primary)}
@@ -17,7 +17,7 @@
 .guide .guide-story{justify-content:space-between}.guide .guide-story p{font:italic var(--fs-md)/1.45 var(--font-body);color:var(--text-primary)}
 .guide .guide-next{flex:none;font:500 var(--fs-sm) var(--font-ui);color:var(--gold-strong)}
 .guide .guide-odds{justify-content:space-between;font:500 var(--fs-xs)/1.35 var(--font-ui);color:var(--text-muted)}.guide .guide-odds .odds-line{margin:0}
-.guide .guide-die{display:grid;place-items:center;flex:none;width:32px;height:32px;border:1px solid var(--gold);border-radius:6px;background:var(--surface-2);font:500 var(--fs-xl) var(--font-ui);font-variant-numeric:lining-nums tabular-nums;color:var(--gold-strong);box-shadow:0 0 14px rgb(221 180 106 / .18)}
+.guide .guide-die{display:grid;place-items:center;flex:none;width:32px;height:32px;border:1px solid var(--gold);border-radius:6px;background:var(--surface-2);font:500 var(--fs-xl) var(--font-ui);font-variant-numeric:lining-nums tabular-nums;color:var(--gold-strong);box-shadow:0 0 14px rgb(231 169 72 / .18)}
 
 .guide .guide-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border-subtle)}.guide .guide-actions>span{display:flex;align-items:center;gap:6px}
 .guide .guide-skip,.guide .guide-back{min-height:36px;padding:0 10px;font:var(--fs-sm) var(--font-ui);color:var(--text-muted)}.guide .guide-skip{margin-left:-10px}.guide .guide-back{color:var(--text-secondary)}

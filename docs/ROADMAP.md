@@ -66,9 +66,9 @@ Each entry gives the decision, the recommendation, the reason, and what it chang
 *Changes:* new story box (#60). Narration and dialogue leave the generic panel.
 
 **D3. Whose voice is speaking?** Three voices, each with its own type treatment:
-- the **Narrator/DM**: Alegreya at 19px, no name plate;
-- **characters**: an IM Fell English name plate at 20px or above, with a portrait; the plate shares the warm iron/paper palette so character colour stays in the portrait;
-- **mechanics**: Alegreya Sans with lining tabular figures; labels use the real Alegreya Sans SC cut because Google Fonts’ Sans cut has no `smcp`. Small caps tags such as `INSIGHT 22 vs 10 · +35 XP` keep prose and numbers apart.
+- the **Narrator/DM**: Fraunces at 19px, no name plate;
+- **characters**: a Fraunces name plate at 20px or above, with a portrait; the plate shares the night-slate/paper palette so character colour stays in the portrait;
+- **mechanics**: Plus Jakarta Sans with lining tabular figures; labels use uppercase Jakarta at weight 600 with .08em tracking. Tags such as `INSIGHT 22 vs 10 · +35 XP` keep prose and numbers apart.
 
 System and implementation wording ("engine", "presentation", "saved", "AI charge") never appears in story surfaces. Where it is still needed, it moves to tooltips or Settings.
 *Changes:* wording pass (#64) and a copy guide in this file (§6).
@@ -114,9 +114,9 @@ System and implementation wording ("engine", "presentation", "saved", "AI charge
 *Changes:* #66 (chapter pages) and #63 (descent map). *Override note:* if the owner wants survival pressure in v1.0, add one issue for a light/torch mechanic and expect engine and balance work.
 
 **D9. What is the visual identity?** **"An adventurer's journal under torchlight."**
-- One warm iron/soot neutral family carries all chrome; story paper is slightly warmer and lighter. Bone text has secondary and muted steps. A desaturated brass edge marks interaction and selection.
-- IM Fell English gives room, chapter and panel titles their worn print character, at 20px and above. IM Fell English SC carries the wordmark; Alegreya carries prose and Alegreya Sans carries controls. Fonts load through Google Fonts links with preconnect and `display=swap`.
-- Bevelled corners repeat across panels, cards, controls, cartouches and name plates (`corner-shape:bevel`, small rounded fallback). A low brass inner top highlight and a soft shadow provide depth. Choice rows remain borderless.
+- Night slate carries all chrome; story paper is slightly lighter and bluer. Pale text has secondary and muted steps. Slate mist marks interaction and selection; candle amber marks gold accents.
+- Fraunces carries titles and narration; Plus Jakarta Sans carries controls and mechanics, with uppercase tracked labels. IM Fell English SC carries only the wordmark. Fonts load through Google Fonts links with preconnect and `display=swap`.
+- Bevelled corners repeat across panels, cards, controls, cartouches and name plates (`corner-shape:bevel`, small rounded fallback). A low slate inner top highlight and a soft shadow provide depth. Choice rows remain borderless.
 - **Chapter colour is limited to chapter title/recap pages and the current descent marker.** The HUD no longer re-tints its stone and mist tokens per chapter. This deliberately departs from #110 to keep one material over the six environments.
 - Gold is kept for dice, natural 20s and the primary call to action. The primary control has a deep fill, a 1px gold frame and a gold label. State colour stays on meaningful health, hostility and error indicators.
 - Compact individual party cards, a quest tracker, borderless verb groups and a slim descent line leave the scene open. Playback hides the empty action panel. Creation sits below a large game-title lockup, with no feature strip or repeated eyebrows.
@@ -191,7 +191,7 @@ Every row must hold:
 
 - **Narrator.** Second person, present tense, concrete and sensory. Describe only what the party can perceive. No numbers.
 - **Characters.** Short lines in their own voice: Mira is dry and observant; Oren is patient and protective.
-- **Mechanics.** A small caps tag, with no verbs: `INSIGHT · 22 vs DC 10 · +35 XP`.
+- **Mechanics.** An uppercase tracked tag, with no verbs: `INSIGHT · 22 vs DC 10 · +35 XP`.
 - **Never in story surfaces:** engine, presentation, saved, server, AI charge, "authored". Use Settings or a tooltip when the fact matters.
 - **Buttons.** Use story verbs, such as "Go on", "Descend" or "Ask Mira". Avoid system verbs such as "Take action" or "Continue adventure".
 
