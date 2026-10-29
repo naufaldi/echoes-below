@@ -1,26 +1,21 @@
+import {fixed,slabs} from './parts';
 import {useEffect,useMemo,useRef,type ReactNode} from 'react';
 import {useFrame} from '@react-three/fiber';
 import * as THREE from 'three';
-import {Instances,KitInstances,Prop,Flame,chain,mat,decal,geo,noRaycast,rand,useSolidParts,type MoodOverride,type Part,type RoomProps} from './kit';
+import {Solid,SolidKit,type RoomCtx,mapTint,Instances,KitInstances,Prop,Flame,chain,mat,decal,geo,noRaycast,rand,type MoodOverride,type Part,type RoomProps} from './kit';
 
 // Ash Market (#48): a burned market in a cavern around the old furnace. Every room shares the same four anchors
 // (evidence -2,0 · way forward 0,-3.5 · supplies 3,0 · camp -3,2 in world x,z), so each room's identity lives on the
 // perimeter: tall landmarks behind the door (-z) and along the west wall (-x), low dressing east (+x) and south (+z).
 // Solid lists stand outside the ±5.4 m footprint and pass through useSolidParts; inside it there are only floor decals.
-// Kenney Fantasy Town pieces share one colormap; kenney(tint) is this file's cached, darkened copy of that material,
+// Kenney Fantasy Town pieces share one colormap; mapTint(url,tint,roughness) is this file's cached, darkened copy of that material,
 // so burned and intact stalls cost one shader program. Contract: ./README.md.
 const DUNGEON={wall:'/assets/env/kaykit-dungeon/wall.glb',wallGated:'/assets/env/kaykit-dungeon/wall_gated.glb',wallArched:'/assets/env/kaykit-dungeon/wall_arched.glb',pillar:'/assets/env/kaykit-dungeon/pillar.glb',crates:'/assets/env/kaykit-dungeon/crates_stacked.glb',box:'/assets/env/kaykit-dungeon/box_large.glb',banner:'/assets/env/kaykit-dungeon/banner_thin_brown.glb'};
 const TOWN={stall:'/assets/env/kenney-fantasy-town/stall.glb',stallRed:'/assets/env/kenney-fantasy-town/stall-red.glb',stallGreen:'/assets/env/kenney-fantasy-town/stall-green.glb',bench:'/assets/env/kenney-fantasy-town/stall-bench.glb',cart:'/assets/env/kenney-fantasy-town/cart.glb',cartHigh:'/assets/env/kenney-fantasy-town/cart-high.glb',lantern:'/assets/env/kenney-fantasy-town/lantern.glb',fountain:'/assets/env/kenney-fantasy-town/fountain-round.glb',post:'/assets/env/kenney-fantasy-town/pillar-wood.glb',planks:'/assets/env/kenney-fantasy-town/planks.glb'};
 
-const tints=new Map<string,THREE.Material>();let colormap:THREE.Texture|undefined;
-/** The Kenney colormap under a multiply tint: '#ffffff' keeps the market's paint, darker tints read as soot and char. */
-function kenney(tint:string){let m=tints.get(tint);if(!m){colormap??=Object.assign(new THREE.TextureLoader().load('/assets/env/kenney-fantasy-town/Textures/colormap.png'),{flipY:false,colorSpace:THREE.SRGBColorSpace});m=new THREE.MeshStandardMaterial({map:colormap,color:tint,roughness:.92});tints.set(tint,m);}return m;}
 const orb=new THREE.IcosahedronGeometry(1,1),ground=new THREE.CircleGeometry(24,32).rotateX(-Math.PI/2);
 // Footprint radii for solid lists: pieces behind the room measure their depth, pieces beside it their width.
-const back=(p:Part)=>p[5]/2,side=(p:Part)=>p[3]/2,round=(p:Part)=>Math.max(p[3],p[5]),fixed=(r:number)=>()=>r;
-type Ctx={save:RoomProps['save'];scene:string};
-function Solid({ctx,parts,r,...rest}:{ctx:Ctx;parts:Part[];r?:(p:Part)=>number}&Omit<Parameters<typeof Instances>[0],'parts'>){const kept=useSolidParts(ctx.save,ctx.scene,parts,r);return kept.length?<Instances parts={kept} {...rest}/>:null;}
-function SolidKit({ctx,parts,r,...rest}:{ctx:Ctx;parts:Part[];r?:(p:Part)=>number}&Omit<Parameters<typeof KitInstances>[0],'parts'>){const kept=useSolidParts(ctx.save,ctx.scene,parts,r);return <KitInstances parts={kept} {...rest}/>;}
+const back=(p:Part)=>p[5]/2,side=(p:Part)=>p[3]/2,round=(p:Part)=>Math.max(p[3],p[5]);
 
 // ── Shared pieces: cavern rock, ash, charred beams, embers ──
 /** Rock walls ringing the market: tall behind (-z) and west (-x), low east and south so the camera keeps the party. `gap` leaves the back clear for the room's landmark. */
@@ -35,9 +30,9 @@ function cavern(seed:number,gap:[number,number],tall=1,west=5.6):Part[]{
 /** Grey ash drifts: flat decals anywhere (they never block), low mounds only outside the footprint. */
 const drifts=(seed:number,n=9):Part[]=>Array.from({length:n},(_,i)=>{const a=rand(seed*3+i)*Math.PI*2,r=1.5+rand(seed+i*7)*4.5;return [Math.cos(a)*r,.004+i*.0004,Math.sin(a)*r,.4+rand(seed+i)*.7,1,.25+rand(seed+i+9)*.4,a] as Part;});
 const mounds=(seed:number):Part[]=>Array.from({length:12},(_,i)=>{const s=.4+rand(seed+i*5)*.5,edge=i%3,t=-6+rand(seed+i*11)*12;return (edge===0?[t,s*.12,-5.5-s*1.3,s*1.3,s*.25,s]:edge===1?[-5.5-s*1.3,s*.12,t*.8,s,s*.25,s*1.3]:[5.5+s*1.3,s*.12,t*.8,s,s*.22,s*1.2]) as Part;});
-function Ash({ctx,seed,n}:{ctx:Ctx;seed:number;n?:number}){
+function Ash({ctx,seed,n}:{ctx:RoomCtx;seed:number;n?:number}){
  const flat=useMemo(()=>drifts(seed,n),[seed,n]),heaps=useMemo(()=>mounds(seed),[seed]);
- return <><Instances parts={flat} geometry={geo.disc} color="#7a746c" material={decal('#8a847b',.22)} shadow={false}/><group userData={{blocksLabels:true}}><Solid ctx={ctx} parts={heaps} geometry={geo.rock} color="#5f5953" flat jitter={.2} r={round} shadow={false}/></group></>;
+ return <><Instances parts={flat} geometry={geo.disc} color="#7a746c" material={decal('#8a847b',.22)} shadow={false}/><group userData={{blocksLabels:true}}><Solid ctx={ctx} parts={heaps} geometry={geo.rock} color="#5f5953" flat jitter={.2} radius={round} shadow={false}/></group></>;
 }
 const emberMaterials=new Map<string,THREE.PointsMaterial>();
 /** Rising embers: one Points draw. Each ember is stored twice, one cycle apart, so lifting the cloud loops seamlessly. Frozen when `reduced`. */
@@ -50,9 +45,7 @@ function Embers({count,color='#ff9a4a',speed=.35,size=.09,reduced}:{count:number
  return <primitive object={points}/>;
 }
 /** Floor: kit tiles across the room (receive shadows, cast none) plus the dark cavern ground beyond. */
-/** Square slabs on the 1.2 m tactical grid (or a finer cobble), so the cells read in Echo too. `pick` splits a checker or drops slabs for broken ground. */
-const slabs=(size:number,pick:(i:number,j:number)=>boolean=()=>true,extent=8.4):Part[]=>{const out:Part[]=[],n=Math.round(extent/size);for(let i=-n;i<=n;i++)for(let j=-n;j<=n;j++)if(pick(i,j))out.push([i*size,-.1-rand(i*31+j)*.02,j*size,size-.05,.2,size-.05]);return out;};
-const grid12=slabs(1.2),cobbles=slabs(.6),brokenGrid=slabs(1.2,(i,j)=>rand(i*7+j*13)>.12),ashPits=slabs(1.2,(i,j)=>rand(i*7+j*13)<=.12).map(p=>[p[0],-.16,p[2],p[3],p[4],p[5]] as Part),checkA=slabs(1.2,(i,j)=>(i+j)%2===0),checkB=slabs(1.2,(i,j)=>(i+j)%2!==0);
+const grid12=slabs(1.2,{gap:.05,jitter:.02,seed:(i,j)=>i*31+j}),cobbles=slabs(.6,{gap:.05,jitter:.02,seed:(i,j)=>i*31+j}),brokenGrid=slabs(1.2,{gap:.05,jitter:.02,seed:(i,j)=>i*31+j,pick:(i,j)=>rand(i*7+j*13)>.12}),ashPits=slabs(1.2,{gap:.05,jitter:.02,seed:(i,j)=>i*31+j,pick:(i,j)=>rand(i*7+j*13)<=.12}).map(p=>[p[0],-.16,p[2],p[3],p[4],p[5]] as Part),checkA=slabs(1.2,{gap:.05,jitter:.02,seed:(i,j)=>i*31+j,pick:(i,j)=>(i+j)%2===0}),checkB=slabs(1.2,{gap:.05,jitter:.02,seed:(i,j)=>i*31+j,pick:(i,j)=>(i+j)%2!==0});
 function Floor({parts,color,jitter=.22,ground:groundColor='#1d1714'}:{parts:Part[];color:string;jitter?:number;ground?:string}){return <><mesh geometry={ground} material={mat(groundColor,1)} position={[0,-.12,0]} receiveShadow raycast={noRaycast}/><Instances parts={parts} color={color} jitter={jitter} shadow={false}/>{parts===brokenGrid&&<Instances parts={ashPits} color="#4d4741" jitter={.15} shadow={false}/>}</>;}
 const plankGrid:Part[]=[-7,-5,-3,-1,1,3,5,7].flatMap(x=>[-7,-5,-3,-1,1,3,5,7].map((z,i)=>[x,-.07,z,2,1.1,2,i%2?0:Math.PI] as Part));
 
@@ -67,22 +60,22 @@ const bedrolls:Part[]=[[6.5,.16,-3.6,.16,1.3,.16,0,0,Math.PI/2],[6.7,.16,-1.4,.1
 const bundles:Part[]=[[7.1,.25,-2.7,.32,.28,.3,1],[6.3,.22,-.4,.28,.24,.26,2],[7,.3,.4,.36,.32,.32,3],[6.5,.24,2.3,.3,.26,.3,4],[7.2,.22,4,.27,.22,.26,5],[6.3,.2,-4.6,.26,.22,.24,6]];
 const queueCart:Part[]=[[6.8,0,6.4,1.6,1.6,1.6,.3]];
 const gateBeams:Part[]=[[-6.6,1.5,-6.3,.32,3.6,.32,.2,0,.7],[6.4,1,-6.2,.3,3.2,.3,-.4,0,-.9],[-7.2,.25,1.8,.3,.3,3.6,.3]];
-function CinderGate({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
+function CinderGate({ctx,reduced}:{ctx:RoomCtx;reduced:boolean}){
  const rock=useMemo(()=>cavern(11,[-6.2,6.2],.9,8),[]);
  return <>
   <Floor parts={brokenGrid} color="#5a4c41" jitter={.3}/><Ash ctx={ctx} seed={1} n={11}/>
   <group userData={{blocksLabels:true}}>
-   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#4d4641" flat jitter={.22} r={round}/>
-   <SolidKit ctx={ctx} url={DUNGEON.wall} parts={gateWalls} r={fixed(.6)}/><SolidKit ctx={ctx} url={DUNGEON.wallGated} parts={gateBars} r={fixed(.6)}/>
+   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#4d4641" flat jitter={.22} radius={round}/>
+   <SolidKit ctx={ctx} url={DUNGEON.wall} parts={gateWalls} radius={fixed(.6)}/><SolidKit ctx={ctx} url={DUNGEON.wallGated} parts={gateBars} radius={fixed(.6)}/>
    {/* The cold furnace the market grew around, dark above the toll wall. */}
    <group position={[1.5,0,-14]}><mesh position={[0,3.5,0]} material={mat('#39332f')} castShadow><cylinderGeometry args={[3.4,4,7,10]}/></mesh><mesh position={[0,8,0]} material={mat('#332e2b')}><coneGeometry args={[3.6,2.4,10]}/></mesh><mesh position={[1.4,11,0]} material={mat('#2d2926')}><cylinderGeometry args={[.8,1,6,8]}/></mesh><mesh position={[0,2,3.62]} material={decal('#14100e')}><planeGeometry args={[2.4,2.6]}/></mesh></group>
    {/* The toll booth: a counter of water jars and the tally board that carries the new tax. */}
-   <SolidKit ctx={ctx} url={TOWN.stall} parts={tollBooth} r={fixed(.8)} material={kenney('#a38b76')}/>
-   <Solid ctx={ctx} parts={waterJars} geometry={geo.cyl} color="#8a6448" r={fixed(.25)}/><Solid ctx={ctx} parts={tally} color="#3a2c22" r={side}/>
-   <SolidKit ctx={ctx} url={TOWN.post} parts={queuePosts} r={fixed(.2)} material={kenney('#9b8270')}/><Solid ctx={ctx} parts={queueRope} color="#9b8562" r={fixed(.05)} shadow={false}/>
-   <Solid ctx={ctx} parts={bedrolls} geometry={geo.cyl} color="#6a5a48" jitter={.5} r={fixed(.2)}/><Solid ctx={ctx} parts={bundles} geometry={geo.rock} color="#75644f" jitter={.4} flat r={round}/>
-   <SolidKit ctx={ctx} url={TOWN.cartHigh} parts={queueCart} r={fixed(1.2)} material={kenney('#8c7766')}/>
-   <Solid ctx={ctx} parts={gateBeams} color="#2a1e18" r={fixed(.4)}/>
+   <SolidKit ctx={ctx} url={TOWN.stall} parts={tollBooth} radius={fixed(.8)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#a38b76',.92)}/>
+   <Solid ctx={ctx} parts={waterJars} geometry={geo.cyl} color="#8a6448" radius={fixed(.25)}/><Solid ctx={ctx} parts={tally} color="#3a2c22" radius={side}/>
+   <SolidKit ctx={ctx} url={TOWN.post} parts={queuePosts} radius={fixed(.2)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#9b8270',.92)}/><Solid ctx={ctx} parts={queueRope} color="#9b8562" radius={fixed(.05)} shadow={false}/>
+   <Solid ctx={ctx} parts={bedrolls} geometry={geo.cyl} color="#6a5a48" jitter={.5} radius={fixed(.2)}/><Solid ctx={ctx} parts={bundles} geometry={geo.rock} color="#75644f" jitter={.4} flat radius={round}/>
+   <SolidKit ctx={ctx} url={TOWN.cartHigh} parts={queueCart} radius={fixed(1.2)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#8c7766',.92)}/>
+   <Solid ctx={ctx} parts={gateBeams} color="#2a1e18" radius={fixed(.4)}/>
   </group>
   <group><Instances parts={tallyMarks} color="#ddd5c2" material={decal('#d9d2bf')} shadow={false}/><Instances parts={altered} color="#b5432f" material={decal('#b4442f')} shadow={false}/></group>
   <pointLight position={[-5.6,2.4,-3.6]} color="#ffb871" intensity={9} distance={8}/><pointLight position={[0,2.2,-7.6]} color="#8fa6c4" intensity={6} distance={7}/>
@@ -100,18 +93,18 @@ const brokenLamps:Part[]=[[.6,.9,-6.6,.12,.15,.12],[0,.9,-6.8,.1,.13,.1],[-.5,.9
 const kiln:Part[]=[[5.6,.9,-8,1.5,1.8,1.5]],kilnDome:Part[]=[[5.6,1.8,-8,1.5,1.2,1.5]],kilnPipe:Part[]=[[6.1,4.2,-8.4,.3,4.8,.3]];
 const glassShards:Part[]=Array.from({length:14},(_,i)=>[3.6+rand(i+3)*2.6,.006,-5.2-rand(i+9)*1.6,.06+rand(i)*.08,1,.04,i] as Part);
 const crateStack:Part[]=[[-6.9,0,4.7,.7,.7,.7,.4]];
-function GlassblowerStall({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
+function GlassblowerStall({ctx,reduced}:{ctx:RoomCtx;reduced:boolean}){
  const rock=useMemo(()=>cavern(23,[-5,7.4],1.05,8.1),[]);
  return <>
   <Floor parts={cobbles} color="#5f5248" jitter={.35}/><Ash ctx={ctx} seed={2} n={7}/>
   <group userData={{blocksLabels:true}}>
-   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#4f4741" flat jitter={.22} r={round}/>
-   <SolidKit ctx={ctx} url={TOWN.stallRed} parts={laneStalls} r={fixed(1.15)} material={kenney('#ffffff')}/><SolidKit ctx={ctx} url={TOWN.stallGreen} parts={laneGreen} r={fixed(1.15)} material={kenney('#e8dcd2')}/>
-   <SolidKit ctx={ctx} url={TOWN.stall} parts={glassBench} r={fixed(1)} material={kenney('#c9b6a4')}/>
-   <SolidKit ctx={ctx} url={TOWN.lantern} parts={lampPosts} r={fixed(.2)} material={kenney('#a99482')}/>
-   <SolidKit ctx={ctx} url={DUNGEON.crates} parts={crateStack} r={fixed(.85)}/>
+   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#4f4741" flat jitter={.22} radius={round}/>
+   <SolidKit ctx={ctx} url={TOWN.stallRed} parts={laneStalls} radius={fixed(1.15)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#ffffff',.92)}/><SolidKit ctx={ctx} url={TOWN.stallGreen} parts={laneGreen} radius={fixed(1.15)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#e8dcd2',.92)}/>
+   <SolidKit ctx={ctx} url={TOWN.stall} parts={glassBench} radius={fixed(1)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#c9b6a4',.92)}/>
+   <SolidKit ctx={ctx} url={TOWN.lantern} parts={lampPosts} radius={fixed(.2)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#a99482',.92)}/>
+   <SolidKit ctx={ctx} url={DUNGEON.crates} parts={crateStack} radius={fixed(.85)}/>
    {/* The glassblower's kiln: a brick bell with a bright mouth, its flue lost in the smoke above. */}
-   <Solid ctx={ctx} parts={kiln} geometry={geo.cyl} color="#6a4636" r={round}/><Solid ctx={ctx} parts={kilnDome} geometry={orb} color="#5d3e31" r={round}/><Solid ctx={ctx} parts={kilnPipe} geometry={geo.cyl} color="#3b302b" r={round}/>
+   <Solid ctx={ctx} parts={kiln} geometry={geo.cyl} color="#6a4636" radius={round}/><Solid ctx={ctx} parts={kilnDome} geometry={orb} color="#5d3e31" radius={round}/><Solid ctx={ctx} parts={kilnPipe} geometry={geo.cyl} color="#3b302b" radius={round}/>
   </group>
   <group>
    <mesh position={[5.6,.95,-6.48]} material={decal('#ffb35a')} raycast={noRaycast}><circleGeometry args={[.55,12]}/></mesh><mesh position={[5.6,.95,-6.47]} material={decal('#fff0b8')} raycast={noRaycast}><circleGeometry args={[.28,10]}/></mesh>
@@ -137,19 +130,19 @@ const bones:Part[]=Array.from({length:22},(_,i)=>{const pile=i%3,c=[[-6.5,-5.9],
 const skulls:Part[]=[[-6.4,.18,-5.7,.17,.16,.19],[-6.9,.17,-6.2,.16,.15,.18],[4.2,1.02,-6.6,.15,.14,.17]];
 const lotTags:Part[]=[[-6.4,1.4,-3.4,.04,.3,.24],[-6.4,1.4,-2.2,.04,.3,.24]];
 const auctionChains=[...chain(-1.8,-7,1.4,3.6),...chain(-.6,-7,1.6,3.6)].map(p=>[p[0],p[1],p[2],p[3],p[4],p[5],p[6]] as Part);
-function BoneAuction({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
+function BoneAuction({ctx,reduced}:{ctx:RoomCtx;reduced:boolean}){
  const rock=useMemo(()=>cavern(37,[-5.4,5.4],1.1,8.2),[]);
  return <>
-  <mesh geometry={ground} material={mat('#251c17',1)} position={[0,-.06,0]} receiveShadow raycast={noRaycast}/><KitInstances url={TOWN.planks} parts={plankGrid} shadow={false} material={kenney('#5e4b3e')}/>
+  <mesh geometry={ground} material={mat('#251c17',1)} position={[0,-.06,0]} receiveShadow raycast={noRaycast}/><KitInstances url={TOWN.planks} parts={plankGrid} shadow={false} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#5e4b3e',.92)}/>
   <Ash ctx={ctx} seed={3} n={8}/>
   <group userData={{blocksLabels:true}}>
-   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#4a433e" flat jitter={.2} r={round}/>
-   <Solid ctx={ctx} parts={auctionStage} color="#4a3626" r={back}/><Solid ctx={ctx} parts={stageSteps} color="#57402d" r={back}/>
-   <Solid ctx={ctx} parts={displayFrame} color="#3a2a1f" r={fixed(.3)}/><Solid ctx={ctx} parts={lectern} color="#5b412c" r={fixed(.5)}/>
-   <Solid ctx={ctx} parts={companyBanners} color="#6b2a24" r={back} jitter={.05}/>
-   <SolidKit ctx={ctx} url={TOWN.bench} parts={bidderBenches} r={fixed(1.15)} material={kenney('#9a8676')}/>
+   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#4a433e" flat jitter={.2} radius={round}/>
+   <Solid ctx={ctx} parts={auctionStage} color="#4a3626" radius={back}/><Solid ctx={ctx} parts={stageSteps} color="#57402d" radius={back}/>
+   <Solid ctx={ctx} parts={displayFrame} color="#3a2a1f" radius={fixed(.3)}/><Solid ctx={ctx} parts={lectern} color="#5b412c" radius={fixed(.5)}/>
+   <Solid ctx={ctx} parts={companyBanners} color="#6b2a24" radius={back} jitter={.05}/>
+   <SolidKit ctx={ctx} url={TOWN.bench} parts={bidderBenches} radius={fixed(1.15)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#9a8676',.92)}/>
    <Prop file="Cage_Small.gltf" position={[-6.9,0,-3.9]} height={1.5} rotation={.4}/>
-   <Solid ctx={ctx} parts={lotTags} color="#c9b28a" r={fixed(.15)} shadow={false}/>
+   <Solid ctx={ctx} parts={lotTags} color="#c9b28a" radius={fixed(.15)} shadow={false}/>
   </group>
   <group>
    <Instances parts={insignia} geometry={geo.cyl} color="#b4904c" roughness={.4} metalness={.6} shadow={false}/>
@@ -171,20 +164,20 @@ const stairRail:Part[]=[[-6.3,1.9,-2.3,.06,.06,8.4,0,-.47]];
 const forge:Part[]=[[6.5,.55,-6.6,1.8,1.1,1.6]],forgeHood:Part[]=[[6.5,2.2,-6.7,1.3,1.4,1.2]],anvil:Part[]=[[6.4,.3,-3.6,.4,.6,.4],[6.4,.7,-3.6,.9,.22,.36]];
 const guildRed:Part[]=[[6.3,2.2,-1.4,.06,1.9,1,0,0,0],[6.3,1.6,-1.4,.12,3.2,.12]],guildBlue:Part[]=[[-6.9,3.8,-2.2,.06,1.9,1],[-6.9,3.8,1.8,.06,1.9,1]];
 const buckets:Part[]=[[-1.9,.2,-6.1,.22,.4,.22],[1.9,.2,-6.2,.2,.38,.2],[6.4,.2,-1.8,.2,.36,.2],[6.6,.2,.6,.22,.4,.22]];
-function WellUnderForge({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
+function WellUnderForge({ctx,reduced}:{ctx:RoomCtx;reduced:boolean}){
  const rock=useMemo(()=>cavern(41,[-6.5,6.5],1.15,8.1),[]);
  return <>
   <Floor parts={grid12} color="#4a4d48" jitter={.25} ground="#161a19"/><Ash ctx={ctx} seed={4} n={6}/>
   <group userData={{blocksLabels:true}}>
-   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#474641" flat jitter={.2} r={round}/>
-   <SolidKit ctx={ctx} url={TOWN.fountain} parts={well} r={fixed(1.6)} material={kenney('#a6a29a')}/>
-   <Solid ctx={ctx} parts={winch} color="#3e3024" r={fixed(.2)}/><Solid ctx={ctx} parts={bucket} geometry={geo.cyl} color="#5a4532" r={fixed(.2)}/>
-   <SolidKit ctx={ctx} url={DUNGEON.wall} parts={forgeWall} r={fixed(.6)}/>
-   <Solid ctx={ctx} parts={coolingPipe} geometry={geo.cyl} color="#5c4b3e" roughness={.5} metalness={.6} r={fixed(.5)}/>
-   <Solid ctx={ctx} parts={childStair} color="#5b5750" jitter={.14} r={side}/>
-   <Solid ctx={ctx} parts={forge} color="#3d3330" r={fixed(.9)}/><Solid ctx={ctx} parts={forgeHood} geometry={geo.tent} color="#2e2826" r={fixed(.9)}/><Solid ctx={ctx} parts={anvil} color="#3b3c3e" roughness={.5} metalness={.6} r={fixed(.5)}/>
-   <Solid ctx={ctx} parts={guildRed} color="#7a2c22" r={fixed(.2)} jitter={0}/><Solid ctx={ctx} parts={guildBlue} color="#2c4a68" r={side} jitter={0}/>
-   <Solid ctx={ctx} parts={buckets} geometry={geo.cyl} color="#5e4834" r={fixed(.25)}/>
+   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#474641" flat jitter={.2} radius={round}/>
+   <SolidKit ctx={ctx} url={TOWN.fountain} parts={well} radius={fixed(1.6)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#a6a29a',.92)}/>
+   <Solid ctx={ctx} parts={winch} color="#3e3024" radius={fixed(.2)}/><Solid ctx={ctx} parts={bucket} geometry={geo.cyl} color="#5a4532" radius={fixed(.2)}/>
+   <SolidKit ctx={ctx} url={DUNGEON.wall} parts={forgeWall} radius={fixed(.6)}/>
+   <Solid ctx={ctx} parts={coolingPipe} geometry={geo.cyl} color="#5c4b3e" roughness={.5} metalness={.6} radius={fixed(.5)}/>
+   <Solid ctx={ctx} parts={childStair} color="#5b5750" jitter={.14} radius={side}/>
+   <Solid ctx={ctx} parts={forge} color="#3d3330" radius={fixed(.9)}/><Solid ctx={ctx} parts={forgeHood} geometry={geo.tent} color="#2e2826" radius={fixed(.9)}/><Solid ctx={ctx} parts={anvil} color="#3b3c3e" roughness={.5} metalness={.6} radius={fixed(.5)}/>
+   <Solid ctx={ctx} parts={guildRed} color="#7a2c22" radius={fixed(.2)} jitter={0}/><Solid ctx={ctx} parts={guildBlue} color="#2c4a68" radius={side} jitter={0}/>
+   <Solid ctx={ctx} parts={buckets} geometry={geo.cyl} color="#5e4834" radius={fixed(.25)}/>
   </group>
   <group>
    <Instances parts={rope} geometry={geo.cyl} color="#9a8664" shadow={false}/><Instances parts={stairRail} color="#3e3024" shadow={false}/>
@@ -207,17 +200,17 @@ const costumes:Part[]=[[6.8,1.25,.1,.12,1,.42],[6.8,1.3,.6,.12,.9,.38],[6.8,1.2,
 const writerDesk:Part[]=[[7,0,-4.8,1.6,2.2,1.4,0]],scripts:Part[]=[[6.9,.84,-5.1,.3,1,.4,.3],[7.1,.84,-4.6,.28,1,.36,-.2]];
 const audience:Part[]=[[-6.9,0,-3.2,2.4,2.4,2.4,Math.PI/2],[-6.9,0,-1.2,2.4,2.4,2.4,Math.PI/2],[-6.9,0,.8,2.4,2.4,2.4,Math.PI/2],[-6.9,0,2.8,2.4,2.4,2.4,Math.PI/2],[-1.4,0,6.6,2.4,2.4,2.4,0],[1.6,0,6.6,2.4,2.4,2.4,0]];
 const aisle:Part[]=[[0,.005,.6,2.2,.01,11.6]];
-function EmberTheatre({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
+function EmberTheatre({ctx,reduced}:{ctx:RoomCtx;reduced:boolean}){
  const rock=useMemo(()=>cavern(53,[-6.8,6.8],1.2,8.2),[]);
  return <>
   <Floor parts={grid12} color="#4d3f3a" jitter={.25} ground="#1a1314"/><Ash ctx={ctx} seed={5} n={7}/>
   <group userData={{blocksLabels:true}}>
-   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#463d3a" flat jitter={.2} r={round}/>
-   <Solid ctx={ctx} parts={stage} color="#3d2a20" r={back}/><Solid ctx={ctx} parts={proscenium} color="#5a3b2a" r={fixed(.4)}/><Solid ctx={ctx} parts={curtains} color="#7c1f24" jitter={.08} r={back}/>
-   <Solid ctx={ctx} parts={backdrop} color="#40303d" r={back} shadow={false}/>
-   <Solid ctx={ctx} parts={wing} color="#56473b" r={side}/><Solid ctx={ctx} parts={costumeRack} geometry={geo.cyl} color="#3c3027" r={fixed(.1)}/><Solid ctx={ctx} parts={costumes} color="#8a4a5c" jitter={.6} r={side}/>
-   <SolidKit ctx={ctx} url={TOWN.stall} parts={writerDesk} r={fixed(.8)} material={kenney('#a08a78')}/>
-   <SolidKit ctx={ctx} url={TOWN.bench} parts={audience} r={fixed(1.15)} material={kenney('#8a7666')}/>
+   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#463d3a" flat jitter={.2} radius={round}/>
+   <Solid ctx={ctx} parts={stage} color="#3d2a20" radius={back}/><Solid ctx={ctx} parts={proscenium} color="#5a3b2a" radius={fixed(.4)}/><Solid ctx={ctx} parts={curtains} color="#7c1f24" jitter={.08} radius={back}/>
+   <Solid ctx={ctx} parts={backdrop} color="#40303d" radius={back} shadow={false}/>
+   <Solid ctx={ctx} parts={wing} color="#56473b" radius={side}/><Solid ctx={ctx} parts={costumeRack} geometry={geo.cyl} color="#3c3027" radius={fixed(.1)}/><Solid ctx={ctx} parts={costumes} color="#8a4a5c" jitter={.6} radius={side}/>
+   <SolidKit ctx={ctx} url={TOWN.stall} parts={writerDesk} radius={fixed(.8)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#a08a78',.92)}/>
+   <SolidKit ctx={ctx} url={TOWN.bench} parts={audience} radius={fixed(1.15)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#8a7666',.92)}/>
   </group>
   <group>
    <Instances parts={apron} color="#b4904c" roughness={.4} metalness={.6} shadow={false}/>
@@ -242,19 +235,19 @@ const coalCart:Part[]=[[-6.65,0,5.6,1.7,1.7,1.7]],engineerBench:Part[]=[[6.9,0,-
 const grates:Part[]=[[-4.3,.006,-6.4,1.2,1,1.2],[4.3,.006,-6.4,1.2,1,1.2]],draw:Part[]=[[-2.2,.007,-6.1,.06,.01,3.4,1.25],[2.2,.007,-6.1,.06,.01,3.4,-1.25],[-4.3,.006,-7.8,.06,.01,2,0],[4.3,.006,-7.8,.06,.01,2,0]];
 const prisonerChains=[...chain(-4.3,-6.4,.2,9),...chain(4.3,-6.4,.2,9),...chain(-4.7,-6.8,.2,9)];
 const scorch:Part[]=[[0,.004,-5.2,4.5,1,1.8],[0,.005,-3.8,2.4,1,1.2]];
-function FurnaceHeart({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
+function FurnaceHeart({ctx,reduced}:{ctx:RoomCtx;reduced:boolean}){
  const rock=useMemo(()=>cavern(67,[-4.4,4.4],1.25,7.5),[]),stone=useRef<THREE.Mesh>(null);
  useFrame(({clock})=>{if(stone.current&&!reduced)stone.current.rotation.y=clock.elapsedTime*.6;});
  return <>
   <Floor parts={brokenGrid} color="#5c4034" jitter={.3} ground="#2a1813"/><Ash ctx={ctx} seed={6} n={10}/>
   <group userData={{blocksLabels:true}}>
-   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#4a3832" flat jitter={.22} r={round}/>
-   <Solid ctx={ctx} parts={furnace} geometry={geo.cyl} color="#4a342b" r={round}/><Solid ctx={ctx} parts={furnaceCone} geometry={geo.cone} color="#3d2c25" r={round}/><Solid ctx={ctx} parts={flue} geometry={geo.cyl} color="#2f2522" r={round}/>
-   <Solid ctx={ctx} parts={furnaceBands} color="#2b2522" roughness={.5} metalness={.6} r={fixed(.2)}/>
-   <Solid ctx={ctx} parts={stoneCage} geometry={geo.cyl} color="#3a3330" roughness={.5} metalness={.5} r={fixed(.6)}/><Solid ctx={ctx} parts={cageRibs} color="#3a3330" roughness={.5} metalness={.6} r={fixed(.1)}/>
-   <Solid ctx={ctx} parts={coalTrough} color="#3b302a" r={side}/><Solid ctx={ctx} parts={coal} geometry={geo.rock} color="#1d1916" flat r={fixed(.2)}/>
-   <SolidKit ctx={ctx} url={TOWN.cart} parts={coalCart} r={fixed(1.2)} material={kenney('#6e5c50')}/>
-   <SolidKit ctx={ctx} url={TOWN.stall} parts={engineerBench} r={fixed(1)} material={kenney('#a2907f')}/>
+   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#4a3832" flat jitter={.22} radius={round}/>
+   <Solid ctx={ctx} parts={furnace} geometry={geo.cyl} color="#4a342b" radius={round}/><Solid ctx={ctx} parts={furnaceCone} geometry={geo.cone} color="#3d2c25" radius={round}/><Solid ctx={ctx} parts={flue} geometry={geo.cyl} color="#2f2522" radius={round}/>
+   <Solid ctx={ctx} parts={furnaceBands} color="#2b2522" roughness={.5} metalness={.6} radius={fixed(.2)}/>
+   <Solid ctx={ctx} parts={stoneCage} geometry={geo.cyl} color="#3a3330" roughness={.5} metalness={.5} radius={fixed(.6)}/><Solid ctx={ctx} parts={cageRibs} color="#3a3330" roughness={.5} metalness={.6} radius={fixed(.1)}/>
+   <Solid ctx={ctx} parts={coalTrough} color="#3b302a" radius={side}/><Solid ctx={ctx} parts={coal} geometry={geo.rock} color="#1d1916" flat radius={fixed(.2)}/>
+   <SolidKit ctx={ctx} url={TOWN.cart} parts={coalCart} radius={fixed(1.2)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#6e5c50',.92)}/>
+   <SolidKit ctx={ctx} url={TOWN.stall} parts={engineerBench} radius={fixed(1)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#a2907f',.92)}/>
   </group>
   <group>
    {/* The furnace mouth and the third tuning stone burning in its cage. */}
@@ -280,17 +273,17 @@ const hallStair:Part[]=Array.from({length:8},(_,i)=>[-7.1,(i+1)*.21,.6-i*.6,1.6,
 const sideBanners:Part[]=[[-7.95,0,-2,1.2,1.3,1.2,Math.PI/2],[-7.95,0,2,1.2,1.3,1.2,Math.PI/2]];
 const carpet:Part[]=[[0,.005,.2,2.2,.01,10.4]],carpetEdge:Part[]=[[-1.15,.006,.2,.1,.01,10.4],[1.15,.006,.2,.1,.01,10.4]];
 const sootStreaks:Part[]=[[-4,1.6,-9.05,1.6,2.6,.01],[3.2,1.4,-9.05,1.2,2.2,.01]];
-function CouncilOfThree({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
+function CouncilOfThree({ctx,reduced}:{ctx:RoomCtx;reduced:boolean}){
  return <>
   <Floor parts={checkA} color="#6a5c4c" jitter={.12}/><Instances parts={checkB} color="#3a302a" jitter={.12} shadow={false}/><Ash ctx={ctx} seed={7} n={4}/>
   <group userData={{blocksLabels:true}}>
-   <SolidKit ctx={ctx} url={DUNGEON.wallArched} parts={hallBack} r={fixed(.6)}/><SolidKit ctx={ctx} url={DUNGEON.wall} parts={hallSide} r={fixed(.6)}/>
-   <SolidKit ctx={ctx} url={DUNGEON.pillar} parts={hallColumns} r={fixed(.4)}/>
-   <Solid ctx={ctx} parts={balcony} color="#4a3b30" r={back}/><Solid ctx={ctx} parts={balustrade} color="#6b5a46" r={fixed(.1)}/>
-   <Solid ctx={ctx} parts={seats} color="#3c2a20" r={fixed(.6)}/><Solid ctx={ctx} parts={ledgerTable} color="#4e3828" r={back}/><Solid ctx={ctx} parts={ledgers} color="#6d2f26" jitter={.5} r={fixed(.3)}/>
-   {councilBanners.map(([color,parts])=><Solid key={color} ctx={ctx} parts={parts} color={color} jitter={0} r={back}/>)}
-   <Solid ctx={ctx} parts={hallStair} color="#5a5248" jitter={.12} r={side}/>
-   <SolidKit ctx={ctx} url={DUNGEON.banner} parts={sideBanners} r={fixed(.6)}/>
+   <SolidKit ctx={ctx} url={DUNGEON.wallArched} parts={hallBack} radius={fixed(.6)}/><SolidKit ctx={ctx} url={DUNGEON.wall} parts={hallSide} radius={fixed(.6)}/>
+   <SolidKit ctx={ctx} url={DUNGEON.pillar} parts={hallColumns} radius={fixed(.4)}/>
+   <Solid ctx={ctx} parts={balcony} color="#4a3b30" radius={back}/><Solid ctx={ctx} parts={balustrade} color="#6b5a46" radius={fixed(.1)}/>
+   <Solid ctx={ctx} parts={seats} color="#3c2a20" radius={fixed(.6)}/><Solid ctx={ctx} parts={ledgerTable} color="#4e3828" radius={back}/><Solid ctx={ctx} parts={ledgers} color="#6d2f26" jitter={.5} radius={fixed(.3)}/>
+   {councilBanners.map(([color,parts])=><Solid key={color} ctx={ctx} parts={parts} color={color} jitter={0} radius={back}/>)}
+   <Solid ctx={ctx} parts={hallStair} color="#5a5248" jitter={.12} radius={side}/>
+   <SolidKit ctx={ctx} url={DUNGEON.banner} parts={sideBanners} radius={fixed(.6)}/>
   </group>
   <group>
    <Instances parts={carpet} color="#5c1e1c" material={decal('#561d1b',.85)} shadow={false}/><Instances parts={carpetEdge} color="#b08a3a" material={decal('#a7843a',.85)} shadow={false}/>
@@ -316,17 +309,17 @@ function Roots(){
  useEffect(()=>()=>geometries.forEach(g=>g.dispose()),[geometries]);
  return <>{geometries.map((g,i)=><mesh key={i} geometry={g} material={mat('#6a5038',1)} castShadow={i<2} receiveShadow raycast={noRaycast}/>)}</>;
 }
-function Rootlift({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
+function Rootlift({ctx,reduced}:{ctx:RoomCtx;reduced:boolean}){
  const rock=useMemo(()=>cavern(83,[-3.4,3.4],1.3,8),[]);
  return <>
   <Floor parts={brokenGrid} color="#4c4538" jitter={.3} ground="#16140f"/><Ash ctx={ctx} seed={8} n={6}/>
   <group userData={{blocksLabels:true}}>
-   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#48433a" flat jitter={.2} r={round}/>
-   <SolidKit ctx={ctx} url={TOWN.post} parts={cagePosts} r={fixed(.3)} material={kenney('#8e7a68')}/>
-   <Solid ctx={ctx} parts={cageFrame} color="#3e3026" r={back}/><Solid ctx={ctx} parts={headPosts} color="#3a2d24" r={fixed(.3)}/>
-   <Solid ctx={ctx} parts={counterweight} color="#3d3d3c" roughness={.5} metalness={.6} r={fixed(.4)}/>
-   <SolidKit ctx={ctx} url={DUNGEON.crates} parts={freight} r={fixed(.85)}/><SolidKit ctx={ctx} url={DUNGEON.box} parts={freightBoxes} r={fixed(.6)}/>
-   <Solid ctx={ctx} parts={letterSacks} geometry={geo.rock} color="#8c7a5e" flat jitter={.2} r={round}/>
+   <Solid ctx={ctx} parts={rock} geometry={geo.rock} color="#48433a" flat jitter={.2} radius={round}/>
+   <SolidKit ctx={ctx} url={TOWN.post} parts={cagePosts} radius={fixed(.3)} material={mapTint('/assets/env/kenney-fantasy-town/Textures/colormap.png','#8e7a68',.92)}/>
+   <Solid ctx={ctx} parts={cageFrame} color="#3e3026" radius={back}/><Solid ctx={ctx} parts={headPosts} color="#3a2d24" radius={fixed(.3)}/>
+   <Solid ctx={ctx} parts={counterweight} color="#3d3d3c" roughness={.5} metalness={.6} radius={fixed(.4)}/>
+   <SolidKit ctx={ctx} url={DUNGEON.crates} parts={freight} radius={fixed(.85)}/><SolidKit ctx={ctx} url={DUNGEON.box} parts={freightBoxes} radius={fixed(.6)}/>
+   <Solid ctx={ctx} parts={letterSacks} geometry={geo.rock} color="#8c7a5e" flat jitter={.2} radius={round}/>
    <Roots/>
   </group>
   <group>
@@ -341,7 +334,7 @@ function Rootlift({ctx,reduced}:{ctx:Ctx;reduced:boolean}){
  </>;
 }
 
-const ROOMS:Record<string,(p:{ctx:Ctx;reduced:boolean})=>ReactNode>={'market-1':CinderGate,'market-2':GlassblowerStall,'market-3':BoneAuction,'market-4':WellUnderForge,'market-5':EmberTheatre,'market-6':FurnaceHeart,'market-7':CouncilOfThree,'market-8':Rootlift};
+const ROOMS:Record<string,(p:{ctx:RoomCtx;reduced:boolean})=>ReactNode>={'market-1':CinderGate,'market-2':GlassblowerStall,'market-3':BoneAuction,'market-4':WellUnderForge,'market-5':EmberTheatre,'market-6':FurnaceHeart,'market-7':CouncilOfThree,'market-8':Rootlift};
 export default function AshMarket({scene,save,reduced}:RoomProps){const Room=ROOMS[scene]??CinderGate;return <Room key={scene} ctx={{save,scene}} reduced={reduced}/>;}
 /** Per-room light over the chapter's ember-brown mood: colder at the gate, green at the well, red at the furnace heart. */
 const MOODS:Record<string,MoodOverride>={
