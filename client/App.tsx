@@ -5,6 +5,7 @@ import {naturalEvent,type NaturalEvent} from './audio-cues';
 import StoryBox,{storyKey} from './StoryBox';
 import {answersStory} from './action-focus';
 import {continuesTurn,TURN_CHAIN_LIMIT} from './turn-chain';
+import {centreScroll} from './turn-order';
 import StoryBoxBacklog from './StoryBoxBacklog';
 import {useBarks} from './use-barks';
 import QuestJournal from './QuestJournal';
@@ -163,6 +164,8 @@ export default function App(){
  const barks=useBarks(turnPair?.before??null,turnPair?.after??null),settledBark=!playback&&save&&turnPair?.after.id===save.id&&turnPair.after.revision===save.revision?barks.find(b=>b.step===null)??null:null;
  const room=save?expeditionRoom(save.scene.id):undefined,chapterName=room?.chapterName??'The Bell Beneath Briarwatch',mood=save&&save.scene.subtitle.toLowerCase()!==chapterName.toLowerCase()?save.scene.subtitle:'';
  const potions=save?.party.reduce((n,a)=>n+a.potions,0)??0,rations=save?.party.reduce((n,a)=>n+a.rations,0)??0;
+ /** #112 Whoever acts now stays in full view in a turn order wider than its room; at once under reduced motion. */
+ useLayoutEffect(()=>{const keep=()=>{const el=document.querySelector<HTMLElement>('.initiative-strip .current'),strip=el?.parentElement;if(el&&strip)strip.scrollTo({left:centreScroll(el.offsetLeft,el.offsetWidth,strip.clientWidth,strip.scrollWidth),behavior:reduced?'auto':'smooth'});};keep();addEventListener('resize',keep);return()=>removeEventListener('resize',keep);},[save?.mode,save?.turn?.actorId,save?.activeReaction,save?.turn?.round,reduced,narrow]);
  /** Replies wait for the question's last page (#96); the chapter card waits for this visit's closing playback and pages, while a reloaded ending shows at once. */
  const reading=!!save?.companionStoryId&&!dialogue&&readKey!==storyKey(save,null);
  const endingWaits=!!save&&save.mode==='complete'&&(!!playback||!dialogue&&closing===storyKey(save,null)&&readKey!==closing);

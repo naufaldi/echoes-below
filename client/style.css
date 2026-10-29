@@ -330,6 +330,12 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 .initiative-strip span{background:var(--glass-0);border:1px solid var(--border-default);padding:8px 14px;font-size:var(--fs-md);white-space:nowrap}
 .initiative-strip small{display:block;font-size:var(--fs-xs);color:var(--text-muted);margin-top:2px}
 .initiative-strip .current{border-color:var(--accent-strong);background:color-mix(in srgb,var(--accent) 22%,var(--surface-1))}.initiative-strip .current small{color:var(--accent-strong)}.initiative-strip .fallen{color:var(--text-muted);text-decoration:line-through}
+.initiative-strip{scrollbar-width:none}
+.initiative-strip span{max-width:220px;overflow:hidden;text-overflow:ellipsis}
+/* #112 A turn order wider than its room scrolls sideways: a cut edge fades, as the side panels' bottoms do, and App keeps whoever acts now in full view. The fade is not motion, so it stays under reduced motion. */
+@property --more-start{syntax:'<length>';inherits:false;initial-value:0px}@property --more-end{syntax:'<length>';inherits:false;initial-value:0px}@keyframes more-across{from{--more-start:0px;--more-end:32px}to{--more-start:32px;--more-end:0px}}
+@supports (animation-timeline:scroll()){.initiative-strip{mask-image:linear-gradient(to right,transparent,#000 var(--more-start),#000 calc(100% - var(--more-end)),transparent);animation:more-across linear both;animation-timeline:scroll(self inline)}.reduced .initiative-strip{animation-name:more-across!important}}
+@media(prefers-reduced-motion:reduce){@supports (animation-timeline:scroll()){.initiative-strip{animation-name:more-across!important}}}
 @media(max-width:1000px){.initiative-strip{max-width:calc(100% - 420px)}}
 
 /* Chapter track: the rooms of the current chapter along the bottom edge. */
@@ -469,6 +475,7 @@ input[type=range]{accent-color:var(--accent);cursor:pointer}
 
 /* #98 Windows 1000–1280px wide: both side panels narrow and the party cards go compact (portrait, name with the class under it, health), so the scene keeps at least 55% at 1100×800 and 1280×720. Panel heights leave the lower middle of the stage open. */
 @media(min-width:1000px) and (max-width:1280px){
+  .initiative-strip{max-width:calc(100% - 496px)}.initiative-strip span{padding:6px 10px;font-size:var(--fs-sm)}
   .scene-heading{width:55%;max-width:calc(100% - 460px)}
   .party-panel{left:12px;width:184px;padding:0;max-height:calc(100dvh - 330px)}.party-panel .panel-label{margin-bottom:9px}
   .party-card{padding:6px 7px;gap:8px;margin-bottom:5px}.party-card .portrait{width:34px;height:34px;font-size:var(--fs-xl)}
