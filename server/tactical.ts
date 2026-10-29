@@ -5,7 +5,7 @@ import {enemyRole} from '../shared/enemy-roles.js';
 import {ITEMS} from '../shared/logistics.js';
 import type {Actor,ActionOption,ClassId,AnimationCue,PublicCheck,Roll} from '../shared/types.js';
 import {CURATED_RULES_VERSION,CURATED_CLASS_IDS,classResources,resetTurnResources,makeCharacter,modifier,spendAction,spendSlot,takeDamage,heal,deathSave,type CuratedClass} from '../shared/curated-rules.js';
-import {findPath,lineOfSight,approachTarget,type Cell} from '../shared/tactical-grid.js';
+import {findPath,reachable,lineOfSight,approachTarget,type Cell} from '../shared/tactical-grid.js';
 import {actorDisplayName} from '../shared/visual-identity.js';
 import type {CompanionDirective} from '../shared/tactical-state.js';
 import {GameError,log,finishCheck,type Save} from './game.js';
@@ -76,7 +76,7 @@ function optionsForActor(s:Save,id:string){
   if(c.classId==='wizard'&&c.economy.action)for(const target of targets.filter(x=>range(s,id,x.id)<=120&&lineOfSight(t.grid,t.cells[id],t.cells[x.id])))result.push(option(spellId('missile',target.id),`Magic Missile · ${cost} · ${actorDisplayName(target,s.enemies)}`,'spell',id,target.id,`${rank+2} darts automatically hit this target for 1d4 + 1 force damage each. Spend one ${cost} and an action.`));
   if(c.classId==='cleric'&&c.economy.bonus)for(const ally of s.party.filter(x=>x.hp<x.maxHp&&!t.actors[x.id].dead&&range(s,id,x.id)<=60&&lineOfSight(t.grid,t.cells[id],t.cells[x.id])))result.push(option(spellId('healing_word',ally.id),`Healing Word · ${cost} · ${ally.name}`,'heal',id,ally.id,`Restore ${rank*2}d4 + Wisdom health, plus supported Life Domain healing. Spend a bonus action and one ${cost}.`));
  }
- if(c.economy.movementFeet>=5){const grid=gridFor(s,id);for(let x=0;x<grid.width;x++)for(let y=0;y<grid.height;y++){if(t.cells[id][0]===x&&t.cells[id][1]===y)continue;const path=findPath(grid,t.cells[id],[x,y],c.economy.movementFeet);if(path){const threats=opportunityThreats(s,id,path.cells);result.push({...option(`tactical:move:${x},${y}`,`Move to ${x+1}, ${y+1} · ${path.costFeet} ft${threats.length?' · threatened':''}`,'move',id,undefined,`Follow a legal path of ${path.costFeet} feet. Remaining movement: ${c.economy.movementFeet-path.costFeet} feet.${threats.length?' Opportunity attack possible from '+threats.map(a=>actorDisplayName(a,s.enemies)).join(', ')+'. Disengage first to avoid it. Being downed stops the move.':''}`),dangerous:threats.length>0});}}}
+ if(c.economy.movementFeet>=5){const grid=gridFor(s,id),paths=reachable(grid,t.cells[id],c.economy.movementFeet);for(let x=0;x<grid.width;x++)for(let y=0;y<grid.height;y++){if(t.cells[id][0]===x&&t.cells[id][1]===y)continue;const path=paths.get(`${x},${y}`);if(path){const threats=opportunityThreats(s,id,path.cells);result.push({...option(`tactical:move:${x},${y}`,`Move to ${x+1}, ${y+1} · ${path.costFeet} ft${threats.length?' · threatened':''}`,'move',id,undefined,`Follow a legal path of ${path.costFeet} feet. Remaining movement: ${c.economy.movementFeet-path.costFeet} feet.${threats.length?' Opportunity attack possible from '+threats.map(a=>actorDisplayName(a,s.enemies)).join(', ')+'. Disengage first to avoid it. Being downed stops the move.':''}`),dangerous:threats.length>0});}}}
  result.push(option('tactical:end','End turn','turn',id));return result;
 }
 export function tacticalActions(s:Save):ActionOption[]{
