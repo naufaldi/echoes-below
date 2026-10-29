@@ -23,7 +23,8 @@ function CheckTag({row,party}:{row:ActionRow;party:{id:string;name:string}[]}){
 /** `reading`: the story box has not reached its last page, so replies to it stay visible but disabled. */
 /** `onReveal`: the panel is a closed drawer (narrow windows, #97); a number key that needs to focus a choice opens it first. */
 export default function ActionPanel({save,selected,onSelect,busy,pendingId,keysEnabled,reading=false,onChoose,onReveal,children}:{save:PublicSave;selected:string;onSelect:(id:string)=>void;busy:boolean;pendingId?:string;keysEnabled:boolean;reading?:boolean;onChoose:Choose;onReveal?:()=>void;children?:ReactNode}){
- const available=save.actions.filter(a=>a.kind!=='inventory'&&a.kind!=='quest').filter(a=>!save.tactical||save.mode!=='combat'||a.kind!=='move');
+ /** #113 A finished chapter waits on its closing card: the card owns the way on, so the panel lists nothing. */
+ const available=save.mode==='complete'?[]:save.actions.filter(a=>a.kind!=='inventory'&&a.kind!=='quest').filter(a=>!save.tactical||save.mode!=='combat'||a.kind!=='move');
  const manyActions=actionRows(available.filter(a=>!a.id.startsWith('checkin:')),save.party,{tend:save.mode!=='combat'}).length>6;
  const focusResult=focusedActions(available,selected),rows=actionRows(focusResult.actions.filter(a=>!a.id.startsWith('checkin:')),save.party,{tend:save.mode!=='combat'});
  const groups=save.mode==='combat'?[{verb:null,rows}]:verbGroups(rows),ordered=groups.flatMap(g=>g.rows);
