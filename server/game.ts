@@ -63,6 +63,11 @@ export interface Save
   campaignId?: string;
   plans?: Record<string, string>;
 }
+function stamp(s:Save):Save{s.revision++;s.updatedAt=new Date().toISOString();return s;}
+export function resolveOffered(original:Save,id:string,offered:(s:Save)=>ActionOption[],code:string,message:string,apply:(s:Save)=>void):Save{
+ if(!offered(original).some(a=>a.id===id))throw new GameError(422,code,message);
+ const s=structuredClone(original);s.presentation=[];apply(s);return stamp(s);
+}
 export function assertSaveVersion(s:Save){
  const tactical=s.rulesVersion==='curated-srd-5.2.1-v1';
  if(s.schemaVersion!==1||s.contentVersion!=='briarwatch-1'||(!tactical&&s.rulesVersion!=='echo-v1')||tactical!==!!s.tactical||tactical&&s.party.some(a=>!s.tactical!.actors[a.id]))throw new GameError(409,'INCOMPATIBLE_SAVE','This save uses an unsupported or incomplete rules version.');
@@ -1492,18 +1497,21 @@ export function applyAction(original: Save, id: string, dice: Dice): Save {
  for(const frame of result.presentation??[])if(!existing.has(frame.log.id))frame.log.revision=result.revision;
  return result;
 }
+const PREFIX_RESOLVERS:ReadonlyArray<readonly[string,(s:Save,id:string,dice:Dice)=>Save]>=[
+ ['ink:',resolveInk],
+ ['courier:',resolveCourier],
+ ['infirmary:',resolveInfirmary],
+ ['index:',resolveIndex],
+ ['scrit:',resolveScrit],
+ ['parley:',resolveParley],
+ ['counterweight:',resolveCounterweight],
+ ['checkin:',resolveCheckIn],
+ ['recover:',resolveExplorationHealing],
+ ['side:',resolveSide],
+ ['quest:',declineQuest],
+];
 function resolveAction(original: Save, id: string, dice: Dice): Save {
-  if(id.startsWith("ink:"))return resolveInk(original,id);
-  if(id.startsWith("courier:"))return resolveCourier(original,id);
-  if(id.startsWith("infirmary:"))return resolveInfirmary(original,id);
-  if(id.startsWith("index:"))return resolveIndex(original,id);
-  if(id.startsWith("scrit:"))return resolveScrit(original,id);
-  if(id.startsWith("parley:"))return resolveParley(original,id);
-  if(id.startsWith("counterweight:"))return resolveCounterweight(original,id);
-  if(id.startsWith("checkin:"))return resolveCheckIn(original,id);
-  if(id.startsWith("recover:"))return resolveExplorationHealing(original,id,dice);
-  if(id.startsWith("side:"))return resolveSide(original,id);
-  if(id.startsWith("quest:"))return declineQuest(original,id);
+  for(const [prefix,resolve] of PREFIX_RESOLVERS)if(id.startsWith(prefix))return resolve(original,id,dice);
   if(original.tactical&&id.startsWith('advance:'))return applyAdvancement(original,id);
   if(original.tactical&&(id.startsWith('gear:')||id.startsWith('camp:')))return applyLogistics(original,id,dice);
   if(original.tactical&&original.mode==='combat')return applyTactical(original,id,dice);
@@ -1534,7 +1542,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
   const a = s.party.find((x) => x.id === actorId) ?? h;
   const leader = s.party.find((x) => x.hp > 0) ?? h;
   if(kind==='bond_begin'){
-    const story=COMPANION_STORIES.find(story=>story.id===actorId)!;s.companionStoryId=story.id;log(s,story.opening,story.speaker,[],'authored');s.revision++;s.updatedAt=new Date().toISOString();return s;
+    const story=COMPANION_STORIES.find(story=>story.id===actorId)!;s.companionStoryId=story.id;log(s,story.opening,story.speaker,[],'authored');return stamp(s);
   }
   if(kind==='bond_reply'){
     const story=COMPANION_STORIES.find(story=>story.id===s.companionStoryId)!;const choice=Number(actorId) as 0|1;
@@ -1542,7 +1550,7 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
     s.flags[`bond:${story.id}`]=true;s.companionStoryId=null;s.relationships[story.speaker]=Math.min(20,s.relationships[story.speaker]+1);
     const member=s.party.find(member=>member.id===story.speaker)!;if(story.speaker==='mira'){member.maxHp+=2;member.hp+=2;}else{member.maxFocus++;member.focus++;}
     s.facts.push({id:`bond:${story.id}`,text:heroNamed(s,story.memory[choice])});log(s,story.speaker==='mira'?`${member.name} gains Steady Nerves: +2 maximum health from your strengthened bond.`:`${member.name} gains Shared Resolve: +1 maximum focus from your strengthened bond.`,story.speaker);
-    s.revision++;s.updatedAt=new Date().toISOString();return s;
+    return stamp(s);
   }
   if(kind==='continue_campaign'){
     s.ending=null;enterScene(s,'archive-1');s.party.forEach(member=>{member.hp=member.maxHp;member.focus=member.maxFocus;});
@@ -1576,9 +1584,9 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
       if(next)enterScene(s,next.id);else{s.mode='complete';s.ending=endingText(s);log(s,'The descent is complete. Your choices remain in the journal.','dm',[],'authored');}
     }
     creditCheckXp(s,original);
-    s.revision++;s.updatedAt=new Date().toISOString();return s;
+    return stamp(s);
   } else if (s.mode === "explore") approachTarget(s, option);
-  if(kind==="continue_campaign"){s.revision++;s.updatedAt=new Date().toISOString();return s;}
+  if(kind==="continue_campaign"){return stamp(s);}
   if (s.mode === "combat") {
     if (kind === "regroup") {
       s.flags.retreatRequested = true;
@@ -1858,7 +1866,5 @@ function applyLegacyAction(original: Save, id: string, dice: Dice): Save {
     log(s, "The party falls. Restore a checkpoint to continue.");
   }
   creditCheckXp(s, original);
-  s.revision++;
-  s.updatedAt = new Date().toISOString();
-  return s;
+  return stamp(s);
 }

@@ -1,4 +1,4 @@
-import {GameError,log,type Save} from './game.js';
+import {resolveOffered,log,type Save} from './game.js';
 import type {ActionOption,Scene} from '../shared/types.js';
 export const INK_RESCUE='The apprentice lifts the repaired lantern while you carry the sleeved reeds clear of its heat. The living pages remain intact. She chooses to leave with you, carrying the light, and offers to witness Sel’s contracts when you reach his desk. No name needs to burn for the road ahead.';
 /** The rescue option's label once the lantern is ready; the chapter recap repeats it. */
@@ -15,15 +15,16 @@ export function inkActions(s:Save):ActionOption[]{
  return result;
 }
 export function resolveInk(original:Save,id:string):Save{
- if(!inkActions(original).some(a=>a.id===id))throw new GameError(422,'INK_UNAVAILABLE','That garden preparation is unavailable.');
- const s=structuredClone(original);s.presentation=[];s.flags[id]=true;
+ return resolveOffered(original,id,inkActions,'INK_UNAVAILABLE','That garden preparation is unavailable.',s=>{
+ s.flags[id]=true;
  const texts:Record<string,string>={
  inspect:'The reservoir still contains oil. A bent wick stands too high above its brass guide, producing smoke instead of a steady flame. Empty clay sleeves lie beneath the reeds; they once protected the pages from heat. Repair is possible, but first you need the apprentice to stop feeding the flame long enough to work.',
  ask:'“The shapes at the shelves stop moving when the lantern is bright,” the apprentice says. “I fed it a blank margin first. Then a date. I told myself nobody would miss a date.” She looks at the cut stems. “I tried turning the wick up. It only made more smoke. If you can keep the light steady, I can stop cutting. Please tell me what you need me to hold.”',
  sleeve:'With the apprentice holding the lantern away, you slide each reed into its open-topped clay sleeve. The writing remains visible through narrow slots. The existing sleeves will keep the leaves clear of the flame while you adjust the wick; no pages are cut.',
  wick:'You straighten the wick guide, lower the flame into the hood, and open its air holes. The oil burns with a steady gold light. The apprentice lowers her shears. “That was all it needed? I wish someone had looked with me.” The lantern can now travel without burning the sleeved pages. She waits for your decision.'
  };
- const text=texts[id.split(':')[1]];s.facts.push({id,text});log(s,text,id==='ink:ask'?'apprentice':'dm',[],'authored');s.revision++;s.updatedAt=new Date().toISOString();return s;
+ const text=texts[id.split(':')[1]];s.facts.push({id,text});log(s,text,id==='ink:ask'?'apprentice':'dm',[],'authored');
+ });
 }
 export function projectInk(s:Save,scene:Scene){
  if(!s.tactical||s.sceneId!=='archive-2'||s.mode==='combat')return;

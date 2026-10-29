@@ -1,5 +1,5 @@
 import type {ActionOption} from '../shared/types.js';
-import {GameError,log,type Save} from './game.js';
+import {resolveOffered,log,type Save} from './game.js';
 const exchanges={
  account:{label:'Ask the courier why Vark detained them',text:'“I counted flour sacks under spear racks and called it a raiding store,” the courier says. “Vark asked who I had told. When I said nobody yet, he locked the gate.” They flex the fingers beneath their bandage. “I tried to stop it closing. That is how this happened. Whatever he is keeping beneath the bell, he chose to keep me here too.”',fact:'The courier says Vark detained them after they mistook stored supplies for preparations for a raid. Their hand was injured while trying to stop the gate closing.'},
  ward:{label:'Ask what the courier actually saw at the bell',text:'“Before the gate, I saw his sentry change watch. One hand stayed on a metal brace until another took its place. When both let go for a moment, the ring lifted and the sound came through the floor.” The courier pauses. “Vark shoved it down. The sound stopped. I cannot tell you what made it. I can tell you the ring must stay seated.” They point toward the desk. “His stores clerk wrote down every replacement brace. Let me show you once I am out.”',fact:'The courier witnessed a watch transfer: releasing the brace let the ring rise and a sound emerge from below; reseating it stopped the sound. They have not seen the force beneath it.'},
@@ -12,12 +12,12 @@ export function courierActions(s:Save):ActionOption[]{
   .map(key=>({id:`courier:${key}`,label:exchanges[key].label,description:key==='corroborate'?'Match witnessed events with a document you have read. Establish a safe-transfer lead without a roll.':'Hear a witnessed account. No roll or resource cost; this does not open the gate.',kind:'talk',targetId:'courier'}));
 }
 export function resolveCourier(original:Save,id:string):Save{
- if(!courierActions(original).some(a=>a.id===id))throw new GameError(422,'COURIER_UNAVAILABLE','That courier conversation is unavailable.');
- const s=structuredClone(original);s.presentation=[];
+ return resolveOffered(original,id,courierActions,'COURIER_UNAVAILABLE','That courier conversation is unavailable.',s=>{
  const key=id.split(':')[1] as keyof typeof exchanges,exchange=exchanges[key];s.flags[id]=true;
  s.facts.push({id,text:exchange.fact});
  if(key==='corroborate'){s.flags.sealKnowledge=true;if(!s.facts.some(f=>f.id==='seal-purpose'))s.facts.push({id:'seal-purpose',text:exchange.fact});}
  let text=exchange.text;
  if(key==='ward'&&s.flags.rescued)text=text.replace('Let me show you once I am out.','We can check it together.');
- log(s,text,'courier',[],'authored');s.revision++;s.updatedAt=new Date().toISOString();return s;
+ log(s,text,'courier',[],'authored');
+ });
 }

@@ -1,5 +1,5 @@
 import type {ActionOption} from '../shared/types.js';
-import {GameError,log,type Save} from './game.js';
+import {resolveOffered,log,type Save} from './game.js';
 const fact=(s:Save,id:string,text:string)=>{if(!s.facts.some(f=>f.id===id))s.facts.push({id,text});};
 const questions={
  supplies:{label:'Ask Scrit who stopped the supply carts',text:'Scrit lifts the lid of an almost empty pot. “The last driver would not cross the ridge after dark. Said the road hummed through his teeth.” He points at sacks patched with three different merchants’ marks. “We bought what we could. Vark took the rest on credit nobody agreed to give him. Hunger explains the theft. It does not turn it into a gift.”',fact:'Scrit says frightened drivers stopped crossing the ridge, and Vark took supplies without the merchants’ consent. Scrit does not excuse the theft.'},
@@ -19,8 +19,8 @@ export function scritActions(s:Save):ActionOption[]{
  return options;
 }
 export function resolveScrit(original:Save,id:string):Save{
- if(!scritActions(original).some(a=>a.id===id))throw new GameError(422,'SCRIT_UNAVAILABLE','That conversation or offer is unavailable.');
- const s=structuredClone(original);s.presentation=[];s.flags[id]=true;
+ return resolveOffered(original,id,scritActions,'SCRIT_UNAVAILABLE','That conversation or offer is unavailable.',s=>{
+ s.flags[id]=true;
  if(id==='scrit:standdown'){
   s.party.find(a=>a.rations>0)!.rations--;s.flags.alarm=false;
   fact(s,id,'The party shared an additional ration. Scrit persuaded the guards to cancel the current alarm; later disturbances can still raise a new alarm.');
@@ -31,5 +31,5 @@ export function resolveScrit(original:Save,id:string):Save{
   const text=key==='captive'&&s.inventory.guardKey?'“Vark ordered the gate locked,” Scrit says. “I brought the prisoner water. I should have brought that key sooner.” He glances at the key now in your keeping. “You can open it. The guards still fear punishment for disregarding an alarm.”':question.text;
   log(s,text,'scrit',[],'authored');
  }
- s.revision++;s.updatedAt=new Date().toISOString();return s;
+ });
 }

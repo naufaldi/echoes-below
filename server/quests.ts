@@ -2,7 +2,7 @@ import {SIDE_ADVENTURES,sideNextMeeting} from './side-adventures.js';
 import {EXPEDITION} from '../shared/campaign.js';
 import type {QuestProgress} from '../shared/quests.js';
 import type {ActionOption} from '../shared/types.js';
-import {GameError,log,type Save} from './game.js';
+import {resolveOffered,log,type Save} from './game.js';
 
 const opening=['approach','hall','cookfire','prison','bell','aftermath'];
 const position=(s:Save)=>opening.includes(s.sceneId)?opening.indexOf(s.sceneId):6+EXPEDITION.findIndex(r=>r.id===s.sceneId);
@@ -62,6 +62,7 @@ export function questActions(s:Save):ActionOption[]{
  return questProgress(s).filter(q=>q.kind==='side'&&q.status==='active').map(q=>({id:`quest:decline:${q.id}`,label:`Leave aside: ${q.title}`,kind:'quest',description:'Leave this optional objective aside for this save. The main story remains available; this quest will not grant its bonus supplies.'}));
 }
 export function declineQuest(original:Save,id:string):Save{
- if(!questActions(original).some(a=>a.id===id))throw new GameError(422,'QUEST_UNAVAILABLE','That optional quest can no longer be declined.');
- const s=structuredClone(original);s.presentation=[];s.quests=questProgress(s);const q=s.quests.find(q=>q.id===id.slice('quest:decline:'.length))!;q.status='declined';log(s,`You leave aside ${q.title}. The main descent remains open.`);s.revision++;s.updatedAt=new Date().toISOString();return s;
+ return resolveOffered(original,id,questActions,'QUEST_UNAVAILABLE','That optional quest can no longer be declined.',s=>{
+ s.quests=questProgress(s);const q=s.quests.find(q=>q.id===id.slice('quest:decline:'.length))!;q.status='declined';log(s,`You leave aside ${q.title}. The main descent remains open.`);
+ });
 }
