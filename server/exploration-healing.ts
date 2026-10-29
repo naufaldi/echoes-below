@@ -1,6 +1,6 @@
 import {classResources,heal,modifier,spendSlot} from '../shared/curated-rules.js';
 import type {ActionOption} from '../shared/types.js';
-import {GameError,log,type Save} from './game.js';
+import {resolveOffered,log,type Save} from './game.js';
 import {projectTactical} from './tactical.js';
 import {damageRoll,type Dice} from './rules.js';
 export function explorationHealingActions(s:Save):ActionOption[]{
@@ -17,8 +17,8 @@ export function explorationHealingActions(s:Save):ActionOption[]{
  return result;
 }
 export function resolveExplorationHealing(original:Save,id:string,dice:Dice):Save{
- if(!explorationHealingActions(original).some(a=>a.id===id))throw new GameError(422,'HEAL_UNAVAILABLE','That recovery is unavailable. Check the character, target and remaining resources.');
- const s=structuredClone(original);s.presentation=[];const[,kind,actorId,targetId,rankText]=id.split(':');const rank=Number(rankText??1);const t=s.tactical!,c=t.actors[actorId],a=s.party.find(a=>a.id===actorId)!;
+ return resolveOffered(original,id,explorationHealingActions,'HEAL_UNAVAILABLE','That recovery is unavailable. Check the character, target and remaining resources.',s=>{
+ const[,kind,actorId,targetId,rankText]=id.split(':');const rank=Number(rankText??1);const t=s.tactical!,c=t.actors[actorId],a=s.party.find(a=>a.id===actorId)!;
  const bonus=kind==='wind'?c.level:kind==='cure'?modifier(c.abilities.wisdom)+(c.level>=3?2+rank:0):2;
  const r=damageRoll(dice,kind==='wind'?10:kind==='cure'?8:4,bonus,kind==='wind'?'Second Wind':kind==='cure'?'Cure Wounds':'Healing potion');
  for(let i=1;i<(kind==='wind'?1:kind==='cure'?rank*2:2);i++){const extra=dice(r.sides);r.values.push(extra);r.kept+=extra;r.total+=extra;}
@@ -27,5 +27,5 @@ export function resolveExplorationHealing(original:Save,id:string,dice:Dice):Sav
  const before=t.actors[targetId].hp;t.actors[targetId]=heal(t.actors[targetId],r.total);
  if(kind==='cure'&&c.level>=6&&actorId!==targetId)t.actors[actorId]=heal(t.actors[actorId],2+rank);
  projectTactical(s,false);log(s,`${a.name} uses ${r.purpose}${kind==='cure'?` (level ${rank} slot)`: ''} on ${s.party.find(a=>a.id===targetId)!.name}, restoring ${t.actors[targetId].hp-before} health.`,actorId,[r]);
- s.revision++;s.updatedAt=new Date().toISOString();return s;
+ });
 }

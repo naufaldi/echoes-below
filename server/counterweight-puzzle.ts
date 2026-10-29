@@ -1,4 +1,4 @@
-import {GameError,fact,log,type Save} from './game.js';
+import {resolveOffered,fact,log,type Save} from './game.js';
 import type {ActionOption} from '../shared/types.js';
 const controls=[['pawl','Release the pawl'],['weight','Seat the counterweight'],['pin','Lock the safety pin']] as const;
 function stage(s:Save){return s.flags['counterweight:weight']?2:s.flags['counterweight:pawl']?1:0;}
@@ -14,8 +14,8 @@ export function counterweightActions(s:Save):ActionOption[]{
  return result;
 }
 export function resolveCounterweight(original:Save,id:string):Save{
- if(!counterweightActions(original).some(a=>a.id===id))throw new GameError(422,'PUZZLE_ACTION','That control is not available now.');
- const s=structuredClone(original);s.presentation=[];const choice=id.split(':')[1];
+ return resolveOffered(original,id,counterweightActions,'PUZZLE_ACTION','That control is not available now.',s=>{
+ const choice=id.split(':')[1];
  if(choice==='read'){
   s.flags['counterweight:read']=true;
   fact(s,'counterweight-procedure','The keeper’s plate instructs: release the pawl before seating the counterweight; seat the weight before locking the safety pin. The wrong order rings the warning chain.');
@@ -36,5 +36,5 @@ export function resolveCounterweight(original:Save,id:string):Save{
   fact(s,'maintenance','A relay diagram marks a maintenance entrance into the bell chamber.');
   log(s,'The safety pin slides home. The chain slackens and the pressure plate locks safely in place. Behind the handle, a service diagram shows another entrance to the bell chamber.');
  }
- s.revision++;s.updatedAt=new Date().toISOString();return s;
+ });
 }

@@ -1,6 +1,6 @@
 import {EXPEDITION} from '../shared/campaign.js';
 import type {ActionOption,Entity,SceneId} from '../shared/types.js';
-import {GameError,log,type Save} from './game.js';
+import {resolveOffered,log,type Save} from './game.js';
 import {gainPotions,leftBehind} from './expedition-supplies.js';
 
 interface SideAdventure {
@@ -82,11 +82,11 @@ export function sideActions(s:Save):ActionOption[]{
  });
 }
 export function resolveSide(original:Save,id:string):Save{
- if(!sideActions(original).some(a=>a.id===id))throw new GameError(422,'SIDE_UNAVAILABLE','That meeting or decision is no longer available.');
- const s=structuredClone(original);s.presentation=[];const[,adventureId,phase]=id.split(':');const a=SIDE_ADVENTURES.find(a=>a.id===adventureId)!;
+ return resolveOffered(original,id,sideActions,'SIDE_UNAVAILABLE','That meeting or decision is no longer available.',s=>{
+ const[,adventureId,phase]=id.split(':');const a=SIDE_ADVENTURES.find(a=>a.id===adventureId)!;
  if(phase==='accept'){s.flags[key(a,'accepted')]=true;log(s,a.introduction,a.name,[],'authored');}
  else if(phase==='investigate'){s.flags[key(a,'evidence')]=true;s.facts.push({id:key(a,'evidence'),text:a.investigation});log(s,a.investigation,'dm',[],'authored');}
  else{const i=Number(phase.slice('choose-'.length)),choice=a.choices[i];s.flags[key(a,'done')]=true;s.flags[key(a,`choice:${i}`)]=true;let cost=choice.costRations??0;for(const member of s.party){const spent=Math.min(cost,member.rations);member.rations-=spent;cost-=spent;}if(choice.rations)s.party[0].rations+=choice.rations;const supplies=choice.potions?gainPotions(s,choice.potions):undefined;s.facts.push({id:key(a,'outcome'),text:choice.result});log(s,choice.result,a.name,[],'authored');if(supplies?.left)log(s,leftBehind(supplies.given));}
- s.revision++;s.updatedAt=new Date().toISOString();return s;
+ });
 }
 export function sidePreparation(sceneId:string,flags:Record<string,boolean>){return SIDE_ADVENTURES.some(a=>a.choices.some((c,i)=>c.preparation===sceneId&&flags[key(a,`choice:${i}`)]))?3:0;}

@@ -1,4 +1,4 @@
-import {GameError,log,type Save} from './game.js';
+import {resolveOffered,log,type Save} from './game.js';
 import type {ActionOption,Scene} from '../shared/types.js';
 export const PREPARED_RESCUE='The braced cot settles gently as you guide the medic out. His medicine remains dry in its secured case. He thanks you for making a place for him before opening the water, and keeps the medicine for his patients.';
 /** The rescue option's label once the cot is braced; the chapter recap repeats it. */
@@ -15,15 +15,16 @@ export function infirmaryActions(s:Save):ActionOption[]{
  return result;
 }
 export function resolveInfirmary(original:Save,id:string):Save{
- if(!infirmaryActions(original).some(a=>a.id===id))throw new GameError(422,'INFIRMARY_UNAVAILABLE','That infirmary action is unavailable.');
- const s=structuredClone(original);s.presentation=[];const part=id.split(':')[1];s.flags[id]=true;
+ return resolveOffered(original,id,infirmaryActions,'INFIRMARY_UNAVAILABLE','That infirmary action is unavailable.',s=>{
+ const part=id.split(':')[1];s.flags[id]=true;
  const texts:Record<string,string>={
  inspect:'The release plate shows a cot above two floor anchors. A red stroke crosses the open drain; beneath it, a second drawing shows the cot tethered before the valve turns. The medicine case is strapped to the cot. You can brace the cot, drain slowly, and guide the medic out without a risky catch.',
  signal:'The medic presses a slate against the water: “Still breathing. The pocket holds air around the cot.” He points to its straps, then the floor anchors. Under that he writes: “Those vials are for whoever needs them. Leave the case with me.” His breathing remains steady as you study the mechanism.',
  brace:'You pull the cot’s tether through the floor anchors and lock its existing cleat. The slack tether tightens as the cot stops drifting. The medicine case remains strapped shut. The valve can now lower the cot without dropping it.',
  drain:'You turn the valve a little at a time. Water runs into the maintenance channel while the tether lowers the cot. The medic waits at its edge, coughing but able to breathe. His medicine is dry. He reaches toward you, waiting for a steady hand before he tries to stand.'
  };
- const text=texts[part];s.facts.push({id:'infirmary-'+part,text});log(s,text,'dm',[],'authored');s.revision++;s.updatedAt=new Date().toISOString();return s;
+ const text=texts[part];s.facts.push({id:'infirmary-'+part,text});log(s,text,'dm',[],'authored');
+ });
 }
 export function projectInfirmary(s:Save,scene:Scene){
  if(!s.tactical||s.sceneId!=='archive-4'||s.mode==='combat')return;
