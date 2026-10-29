@@ -50,3 +50,12 @@ test('hosted Worker does not expose the local scene preview',async()=>{
  const db=new DB(),a=await client(db);
  try{await a.request('/api/session');for(const body of [{},undefined]){const r=await a.request('/api/dev/preview/archive-1?rules=curated',body);assert.equal(r.status,404);assert.equal(r.data.error,'NOT_FOUND');}assert.equal(db.sql.prepare('SELECT count(*) AS n FROM saves').get()!.n,0);}finally{db.sql.close();}
 });
+
+test('dialogue routes read the requesting owner once before reading or writing history',async()=>{
+ const db=new DB(),a=await client(db),b=await client(db);let reads=0;const prepare=db.prepare.bind(db);
+ db.prepare=(sql:string)=>{if(sql==='SELECT body FROM saves WHERE id=? AND owner=?')reads++;return prepare(sql);};
+ try{await a.request('/api/session');await b.request('/api/session');const save=(await a.request('/api/saves',input)).data;
+ for(const [path,body] of [[`/api/saves/${save.id}/dialogue/local`,{speaker:'mira',text:'Hello',reply:'Stay close.'}],[`/api/saves/${save.id}/dialogues`,undefined],[`/api/saves/${save.id}/dialogue?speaker=mira`,undefined]] as const){reads=0;assert.equal((await a.request(path,body)).status,200);assert.equal(reads,1);reads=0;const denied=await b.request(path,body);assert.equal(denied.status,404);assert.equal(denied.data.error,'NOT_FOUND');assert.equal(reads,1);}
+ reads=0;assert.equal((await b.request(`/api/saves/${save.id}/dialogue`,{speaker:'mira',text:'Hello'})).status,404);assert.equal(reads,1);assert.equal(db.sql.prepare('SELECT count(*) AS n FROM dialogues').get()!.n,1);
+ }finally{db.sql.close();}
+});

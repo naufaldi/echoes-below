@@ -1,3 +1,4 @@
+import {companionAttackReach,companionHealReach} from '../shared/companion-options.js';
 import {expeditionSupplyReward,collectExpeditionSupplies,gainPotions,leftBehind} from './expedition-supplies.js';
 import {inkActions,resolveInk,inkPrepared,projectInk,INK_RESCUE,INK_RESCUE_LABEL} from './ink-garden.js';
 import {courierActions,resolveCourier} from './courier-inquiry.js';
@@ -459,6 +460,7 @@ function placeExplorationParty(s:Save,leader:Actor,anchor:[number,number]){
   member.position=[Math.max(-3,Math.min(3,anchor[0]+side*1.4)),anchor[1]-1.4];
  }
 }
+export const wantsCompanionPlans=(s:Save,actionId:string)=>s.mode==='combat'&&(!s.tactical||s.party.some(a=>a.id===s.turn?.actorId&&a.id!=='hero'&&a.hp>0))&&!s.flags.retreatRequested&&['end_turn','continue','tactical:auto'].includes(actionId);
 export const sceneTitle=(id:SceneId)=>baseScenes[id].title;
 // Authored interaction anchors stay inside each room's walkable approach area.
 // In the hall, inspection never steps across the unresolved pressure-plate line.
@@ -1409,7 +1411,7 @@ function autoTurns(s: Save, dice: Dice, skipHero = false) {
           choice === "attack" &&
           target?.side === "enemy" &&
           target.hp > 0 &&
-          distance(a, target) <= 6 + (a.classId === "scout" ? 8 : 1.5)
+          distance(a, target) <= companionAttackReach(a)
         ) {
           moveToward(a, target, 6, a.classId === "scout" ? 7 : 1.2);
           strike(s, a, target, dice);
@@ -1420,7 +1422,7 @@ function autoTurns(s: Save, dice: Dice, skipHero = false) {
           a.focus > 0 &&
           target?.side === "party" &&
           target.hp < target.maxHp &&
-          distance(a, target) <= 7.5
+          distance(a, target) <= companionHealReach
         ) {
           moveToward(a, target);
           heal(s, a, target, dice);

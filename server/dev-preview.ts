@@ -1,6 +1,6 @@
 import type {FastifyInstance} from 'fastify';
 import {z} from 'zod';
-import {applyAction,createSave,GameError,legalActions,publicSave,type Save} from './game.js';
+import {applyAction,createSave,GameError,legalActions,publicSave,sceneTitle,type Save} from './game.js';
 import type {Storage} from './storage.js';
 import {EXPEDITION} from '../shared/campaign.js';
 import {CURATED_RULES_VERSION} from '../shared/curated-rules.js';
@@ -31,6 +31,6 @@ export function registerDevPreview(app:FastifyInstance,storage:Storage){
   if(!LOOPBACK.has(req.socket.remoteAddress??''))throw new GameError(403,'LOCAL_ONLY','Scene preview is available on this computer only.');
   const {sceneId}=z.object({sceneId:z.string().max(20)}).parse(req.params),{rules,choice}=query.parse(req.query);
   z.object({}).strict().parse(req.body??{});
-  return storage.transaction(()=>{const s=previewSave(sceneId,rules,Number(choice) as 0|1);storage.checkpoint(s,`Preview: ${publicSave(s).scene.title}`);storage.put(s);return publicSave(s);});
+  return storage.transaction(()=>{const s=previewSave(sceneId,rules,Number(choice) as 0|1);storage.checkpoint(s,`Preview: ${sceneTitle(s.sceneId)}`);storage.put(s);return publicSave(s);});
  });
 }

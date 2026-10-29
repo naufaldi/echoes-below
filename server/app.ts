@@ -12,21 +12,16 @@ import {
   legalActions,
   log,
   publicSave,
+  sceneTitle,
+  wantsCompanionPlans,
 } from "./game.js";
 import { cryptoDice, type Dice } from "./rules.js";
 import { Storage } from "./storage.js";
 import { OpenAIProvider, type AIProvider } from "./ai.js";
 import { registerDevPreview } from "./dev-preview.js";
 import type { Preview, PublicSave } from "../shared/types.js";
+import {commandSchema,speakerSchema} from '../shared/api-schemas.js';
 const id = z.string().uuid();
-const actionSchema = z
-  .object({
-    companionPlans: z.record(z.string().max(40),z.string().max(100)).optional(),
-    commandId: id,
-    expectedRevision: z.number().int().min(0),
-    actionId: z.string().min(1).max(100),
-  })
-  .strict();
 const previewSchema = z.union([
   z
     .object({
@@ -140,7 +135,7 @@ export async function buildApp(
         `The story moved on in another window. Reload before choosing another action.`,
       );
   };
-  async function execute(saveId: string, body: z.infer<typeof actionSchema>, allowAI=false) {
+  async function execute(saveId: string, body: z.infer<typeof commandSchema>, allowAI=false) {
     const duplicate = storage.duplicate(body.commandId, saveId, body);
     if (duplicate) return duplicate;
     const hash = storage.hash({ saveId, ...body });
@@ -167,10 +162,7 @@ export async function buildApp(
       let aiFailed = false;
       if (
         allowAI && !plans && ai.configured &&
-        before.mode === "combat" &&
-        (!before.tactical || before.party.some(a=>a.id===before.turn?.actorId&&a.id!=="hero"&&a.hp>0)) &&
-        !before.flags.retreatRequested &&
-        ["end_turn", "continue", "tactical:auto"].includes(body.actionId)
+        wantsCompanionPlans(before,body.actionId)
       ) {
         try {
           plans = await ai.plans(before);
@@ -194,7 +186,7 @@ export async function buildApp(
         if (after.sceneId !== current.sceneId && after.mode === "explore")
           storage.checkpoint(
             after,
-            `Arrival: ${publicSave(after).scene.title}`,
+            `Arrival: ${sceneTitle(after.sceneId)}`,
           );
         const result = publicSave(after);
         storage.commit(body.commandId, after, body, result);
@@ -227,7 +219,7 @@ export async function buildApp(
     publicSave(storage.read(saveId(req))),
   );
   app.post("/api/saves/:id/actions", async (req) =>
-    execute(saveId(req), actionSchema.parse(req.body),req.headers['x-echoes-ai-mode']==='sponsored'),
+    execute(saveId(req), commandSchema.parse(req.body),req.headers['x-echoes-ai-mode']==='sponsored'),
   );
   app.post("/api/actions/preview", async (req) => {
     const input = previewSchema.parse(req.body);
@@ -275,7 +267,7 @@ export async function buildApp(
     requireSponsored(req);
     const body = z
       .object({
-        speaker: z.enum(["dm", "mira", "oren"]),
+        speaker: speakerSchema,
         text: z.string().trim().min(1).max(1000),
       })
       .strict()
@@ -283,7 +275,7 @@ export async function buildApp(
     return ai.dialogue(storage.read(saveId(req)), body.speaker, body.text);
   });
   app.post('/api/saves/:id/dialogue/local',async(req)=>{
-    const body=z.object({speaker:z.enum(['dm','mira','oren']),text:z.string().min(1).max(1000),reply:z.string().min(1).max(1200)}).strict().parse(req.body);
+    const body=z.object({speaker:speakerSchema,text:z.string().min(1).max(1000),reply:z.string().min(1).max(1200)}).strict().parse(req.body);
     const s=storage.read(saveId(req));
     const id=randomUUID(),createdAt=new Date().toISOString();
     storage.dialogue({id,speaker:body.speaker,text:body.reply,source:'ai',createdAt},s.id,body.text);
@@ -291,7 +283,7 @@ export async function buildApp(
   });
   app.get("/api/saves/:id/dialogue", async (req) => {
     const query = z
-      .object({ speaker: z.enum(["dm", "mira", "oren"]) })
+      .object({ speaker: speakerSchema })
       .strict()
       .parse(req.query);
     const s = storage.read(saveId(req));

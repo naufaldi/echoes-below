@@ -183,11 +183,6 @@ export interface CreateSaveRequest {
   backgroundId: BackgroundId;
   appearanceId: "ember" | "moss" | "moon";
 }
-export interface ActionRequest {
-  commandId: string;
-  expectedRevision: number;
-  actionId: string;
-}
 export interface Preview {
   previewId: string;
   saveId: string;
@@ -201,9 +196,4 @@ export interface Dialogue {
   text: string;
   source: "ai";
   createdAt: string;
-}
-export interface ApiError {
-  error: string;
-  message: string;
-  currentRevision?: number;
 }

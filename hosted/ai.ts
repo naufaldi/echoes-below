@@ -1,6 +1,6 @@
 import {tacticalRequest,tacticalPrompt,checkedTacticalPlan} from '../shared/tactical-planning.js';
 import {GameError,publicSave,type Save} from '../server/game.js';
-import {distance} from '../server/rules.js';
+import {companionOptions} from '../shared/companion-options.js';
 import {narrativeContext,voiceInstructions,groundedDialogueSchema,dialogueParticipants} from '../shared/ai-context.js';
 import type {Speaker} from '../shared/types.js';
 import {Store} from './db.js';
@@ -26,20 +26,15 @@ export async function structured(env:AIEnv,store:Store,instructions:string,input
  try{return JSON.parse(text);}catch{throw new GameError(503,'AI_RESPONSE','The AI response was incomplete. Please try again.');}
 }
 export async function dialogue(env:AIEnv,store:Store,s:Save,speaker:Speaker,text:string){
- const history=(await store.history(s.id)).filter(h=>h.speaker===speaker).slice(-6);
- const value=await structured(env,store,voiceInstructions(speaker),{participants:dialogueParticipants(publicSave(s),speaker),context:narrativeContext(publicSave(s)),history,playerText:text},groundedDialogueSchema(publicSave(s)));
+ const visible=publicSave(s),history=(await store.history(s.id)).filter(h=>h.speaker===speaker).slice(-6);
+ const value=await structured(env,store,voiceInstructions(speaker),{participants:dialogueParticipants(visible,speaker),context:narrativeContext(visible),history,playerText:text},groundedDialogueSchema(visible));
  if(typeof value.text!=='string'||value.text.length>1200||!Array.isArray(value.factIds)||value.factIds.some((id:unknown)=>!s.facts.some(f=>f.id===id)))throw new GameError(503,'AI_RESPONSE','The narrator could not ground its reply in your adventure. Try again.');
  return store.dialogue(s.id,speaker,text,value.text);
 }
 export async function plans(env:AIEnv,store:Store,s:Save){
  if(s.tactical){const visible=publicSave(s),request=tacticalRequest(visible);if(!request)return{};const value=await structured(env,store,tacticalPrompt,request.context,request.schema);return checkedTacticalPlan(visible,value);}
 
- const choices:Record<string,string[]>={};
- for(const a of s.party.filter(a=>a.id!=='hero'&&a.hp>0)){
-  const attacks=s.enemies.filter(e=>e.hp>0&&distance(a,e)<=6+(a.classId==='scout'?8:1.5)).map(e=>`attack:${e.id}`);
-  const heals=a.classId==='guardian'&&a.focus>0?s.party.filter(e=>e.hp<e.maxHp/2&&distance(a,e)<=7.5).map(e=>`heal:${e.id}`):[];
-  choices[a.id]=[...attacks,...heals,...attacks.length?[]:['guard']];
- }
+ const choices=companionOptions(s.party,s.enemies);
  if(!Object.keys(choices).length)return{};
  const result=await structured(env,store,'Choose one offered legal action for each companion. Mira attacks vulnerable targets. Oren heals downed or badly hurt allies first, otherwise attacks. Attack includes movement. Guard gives only self Defense, never ally protection. Never invent an action or target.',{party:s.party,enemies:s.enemies,choices},{type:'object',properties:Object.fromEntries(Object.entries(choices).map(([id,legal])=>[id,{type:'string',enum:legal}])),required:Object.keys(choices),additionalProperties:false});
  if(Object.entries(choices).some(([id,legal])=>!legal.includes(result[id])))throw new Error('Invalid plan');return result as Record<string,string>;
