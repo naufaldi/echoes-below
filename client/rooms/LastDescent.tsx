@@ -1,9 +1,8 @@
+import {fixed,thin,wallRow,wallColumn,slabs} from './parts';
 import {useEffect,useMemo,useRef,type ReactNode} from 'react';
 import {useFrame} from '@react-three/fiber';
-import {useGLTF} from '@react-three/drei';
 import * as THREE from 'three';
-import {Instances,KitInstances,Flame,chain,mat,decal,geo,noRaycast,rand,useSolidParts,type MoodOverride,type Part,type RoomProps,type Vec3} from './kit';
-import IsolatedAsset from '../IsolatedAsset';
+import {Solid,SolidKit,type RoomCtx,TintedKit,Light,cached,mapTint,Instances,KitInstances,Flame,chain,mat,decal,geo,noRaycast,rand,type MoodOverride,type Part,type RoomProps,type Vec3} from './kit';
 
 // Last Descent (depth-1 … depth-8): the deep core below Briarwatch. Raw cavern, the founders' machine, the bell's resonance and glowing seams.
 // Every room shares one encounter footprint (±5.4 m) and the same markers, so solid dressing stands outside it:
@@ -16,11 +15,6 @@ const A={bed:'/assets/env/kaykit-archive/bed_frame.glb',grate:'/assets/env/kayki
 const G={obelisk:'/assets/env/kenney-graveyard-descent/pillar-obelisk.glb',plaque:'/assets/env/kenney-graveyard-descent/gravestone-wide.glb',broken:'/assets/env/kenney-graveyard-descent/gravestone-broken.glb',square:'/assets/env/kenney-graveyard-descent/pillar-square.glb',column:'/assets/env/kenney-graveyard-descent/column-large.glb',altar:'/assets/env/kenney-graveyard-descent/altar-stone.glb',brazier:'/assets/env/kenney-graveyard-descent/fire-basket.glb',lantern:'/assets/env/kenney-graveyard-descent/lantern-candle.glb',urn:'/assets/env/kenney-graveyard-descent/urn-round.glb',debris:'/assets/env/kenney-graveyard-descent/debris.glb'};
 
 // ── Materials: shared per key, like kit mat() ──
-const cache=new Map<string,THREE.Material>();
-const cached=<M extends THREE.Material>(key:string,make:()=>M):M=>{let m=cache.get(key);if(!m)cache.set(key,m=make());return m as M;};
-let colormap:THREE.Texture|undefined;
-/** Kenney Graveyard pieces share one colormap; this is the cached copy under a multiply tint, so every tint costs one material. */
-const grave=(tint:string)=>cached('grave'+tint,()=>{colormap??=Object.assign(new THREE.TextureLoader().load('/assets/env/kenney-graveyard-descent/Textures/colormap.png'),{flipY:false,colorSpace:THREE.SRGBColorSpace});return new THREE.MeshStandardMaterial({map:colormap,color:tint,roughness:.9});});
 /** Static emissive: seams, crystals and tuning stones. Nothing here pulses. */
 const glow=(color:string,emissive:string,intensity=1,opacity=1)=>cached(['glow',color,emissive,intensity,opacity].join(),()=>new THREE.MeshStandardMaterial({color,emissive,emissiveIntensity:intensity,roughness:.3,metalness:.1,transparent:opacity<1,opacity,depthWrite:opacity>=1}));
 const lit=(color:string,opacity=1)=>cached(['lit',color,opacity].join(),()=>new THREE.MeshBasicMaterial({color,transparent:opacity<1,opacity,depthWrite:opacity>=1}));
@@ -43,31 +37,11 @@ const GEAR=gearGeo(14),GEAR_SMALL=gearGeo(9);
 const BELL=new THREE.LatheGeometry([[0,1.32],[.24,1.3],[.36,1.22],[.42,1.02],[.45,.74],[.52,.42],[.66,.18],[.84,.04],[.9,0],[.86,-.03],[.8,0]].map(([x,y])=>new THREE.Vector2(x,y)),28);
 
 // ── Layout helpers ──
-type Ctx={save:RoomProps['save'];scene:string};
-const thin=(p:Part)=>Math.min(p[3],p[5])/2,fixed=(r:number)=>()=>r;
-/** Instanced primitives that stand on the floor: kept only clear of walkable tiles and markers (useSolidParts). */
-function Solid({room,parts,r=thin,...rest}:{room:Ctx;parts:Part[];r?:(p:Part)=>number}&Omit<Parameters<typeof Instances>[0],'parts'>){const kept=useSolidParts(room.save,room.scene,parts,r);return kept.length?<Instances parts={kept} {...rest}/>:null;}
-/** Kit model instances that stand on the floor; `size` is the model's native half-footprint in metres, scaled per part. */
-function SolidKit({room,url,parts,size=.5,shadow,material}:{room:Ctx;url:string;parts:Part[];size?:number;shadow?:boolean;material?:THREE.Material}){const kept=useSolidParts(room.save,room.scene,parts,p=>size*Math.min(p[3],p[5]));return <KitInstances url={url} parts={kept} shadow={shadow} material={material}/>;}
-// Kaykit atlases are pale; a cloned, tinted copy of the kit material darkens it without losing the texture. Cached per file and tint.
-function TintedInstances({url,parts,tint,shadow}:{url:string;parts:Part[];tint:string;shadow?:boolean}){
- const {scene}=useGLTF(url),material=cached('kay'+url+tint,()=>{let base:THREE.Material|undefined;scene.traverse(n=>{const mesh=n as THREE.Mesh;if(mesh.isMesh&&!base)base=mesh.material as THREE.Material;});const m=(base as THREE.MeshStandardMaterial).clone();m.color.set(tint);return m;});
- return <KitInstances url={url} parts={parts} shadow={shadow} material={material}/>;
-}
-/** Same loading and retry boundary as KitInstances: TintedInstances reads the GLB itself. Floors and wall-hung pieces use this directly. */
-function TintedKit({url,parts,tint,shadow}:{url:string;parts:Part[];tint:string;shadow?:boolean}){if(!parts.length)return null;const [x,y,z]=parts[0];return <IsolatedAsset url={url} id={'tinted:'+url+tint} name="Scenery" position={[x,y+1,z]}><TintedInstances url={url} parts={parts} tint={tint} shadow={shadow}/></IsolatedAsset>;}
-/** Tinted kit pieces that stand on the floor, filtered like SolidKit. */
-function Tinted({room,parts,size=.5,...rest}:{room:Ctx;url:string;parts:Part[];tint:string;shadow?:boolean;size?:number}){const kept=useSolidParts(room.save,room.scene,parts,p=>size*Math.min(p[3],p[5]));return <TintedKit parts={kept} {...rest}/>;}
-/** Kit walls: pieces centred on x along a back line at z, or on z along a side line at x. */
-const back=(z:number,xs:number[],sy=1):Part[]=>xs.map(x=>[x,0,z,1,sy,1]),side=(x:number,zs:number[],sy=1):Part[]=>zs.map(z=>[x,0,z,1,sy,1,Math.PI/2]);
 /** 4 m kit floor tiles over ±8 m. */
 const kitFloor=(y=-.05):Part[]=>[-6,-2,2,6].flatMap((x,i)=>[-6,-2,2,6].map((z,k)=>[x,y,z,1,1,1,((i+k)%4)*Math.PI/2] as Part));
-function Light({position,color,intensity=8,distance=8}:{position:Vec3;color:string;intensity?:number;distance?:number}){return <pointLight position={position} color={color} intensity={intensity} distance={distance} decay={2}/>;}
 /** Turns its children about one axis; holds still under reduced motion. */
 function Spin({position,rotation,speed,axis='z',reduced,children}:{position:Vec3;rotation?:Vec3;speed:number;axis?:'y'|'z';reduced:boolean;children:ReactNode}){const ref=useRef<THREE.Group>(null);useFrame((_,dt)=>{if(ref.current&&!reduced)ref.current.rotation[axis]+=dt*speed;});return <group position={position} rotation={rotation}><group ref={ref}>{children}</group></group>;}
 
-/** Square stone slabs on the 1.2 m tactical grid (or larger plates), so cells read in Echo too. The gaps show the seam plane beneath. */
-const slabs=(size:number,extent=8.4,gap=.07,pick:(i:number,j:number)=>boolean=()=>true):Part[]=>{const out:Part[]=[],n=Math.round(extent/size);for(let i=-n;i<=n;i++)for(let j=-n;j<=n;j++)if(pick(i,j))out.push([i*size,-.1-rand(i*31+j*7)*.015,j*size,size-gap,.2,size-gap]);return out;};
 /** Floor: slabs over a static glowing seam plane (or plain dark ground) and the cavern floor beyond. */
 function Floor({parts,color,seam,base='#0c0a10',jitter=.16,extent=8.4,roughness=.9,metalness=0}:{parts:Part[];color:string;seam?:string;base?:string;jitter?:number;extent?:number;roughness?:number;metalness?:number}){
  const w=extent*2+1.2;
@@ -84,7 +58,7 @@ function cavern(seed:number,{back=-7.6,gap=[0,0] as [number,number],tall=1,west=
  for(let i=0;i<10;i++){const x=-7+i*1.5,s=(.35+rand(seed+i+80)*.4)*low;out.push([x,s*.22,south+s*1.1,s*1.3,s*.6,s,seed+i]);}
  return out;
 }
-function Cavern({room,parts,color,shadow=true}:{room:Ctx;parts:Part[];color:string;shadow?:boolean}){return <Solid room={room} parts={parts} geometry={geo.rock} color={color} flat jitter={.22} shadow={shadow}/>;}
+function Cavern({room,parts,color,shadow=true}:{room:RoomCtx;parts:Part[];color:string;shadow?:boolean}){return <Solid ctx={room} parts={parts} geometry={geo.rock} color={color} flat jitter={.22} shadow={shadow} radius={thin}/>;}
 /** A crystal cluster: tilted shards half-sunk at (x,z). */
 const cluster=(x:number,z:number,n:number,seed:number,s=1,y=0):Part[]=>Array.from({length:n},(_,i)=>{const h=(.5+rand(seed+i)*.9)*s,a=rand(seed+i+5)*Math.PI*2,d=rand(seed+i+9)*.45*s;return [x+Math.cos(a)*d,y+h*.35,z+Math.sin(a)*d,h*.22,h,h*.22,rand(seed+i+2)*3,Math.cos(a)*.45,Math.sin(a)*.45] as Part;});
 /** Thin bright lines on the floor (decals, free to cross the footprint): [x0,z0,x1,z1,width]. */
@@ -108,9 +82,9 @@ const fdObelisks:Part[]=[[-4.1,5.8,-6.4,3,3.4,3],[4.1,5.8,-6.4,3,3.4,3],[-4.1,5.
 const fdArrows:Part[]=[-3.6,-4.6,-5.6,-6.6].flatMap(x=>[[x+.18,.005,-1.45,.06,.002,.5,.75],[x+.18,.005,-1.15,.06,.002,.5,-.75]] as Part[]);
 const fdSeams=lines([...crack(0,-5.5,0,3.4,5,11),...crack(-2,-5.5,-.45,2.8,4,21),...crack(2.1,-5.5,.4,2.6,4,31)],.006);
 const fdRock=cavern(101,{back:-10.5,gap:[-5,5],tall:1.3,west:-8.6});
-function FoundersDescent({room}:{room:Ctx;reduced:boolean}){
+function FoundersDescent({room}:{room:RoomCtx;reduced:boolean}){
  return <>
-  <Floor parts={slabs(1.2)} color="#36383e" seam="#3c4858" base="#0b0c0f"/>
+  <Floor parts={slabs(1.2,{gap:.07,jitter:.015,seed:(i,j)=>i*31+j*7})} color="#36383e" seam="#3c4858" base="#0b0c0f"/>
   <group>
    <Instances parts={fdSeams} color="#d8e2ee" material={lit('#c9d6e6',.7)} shadow={false}/><Instances parts={fdNosing} color="#c4d0de" material={lit('#b8c6d8',.85)} shadow={false}/>
    <Instances parts={fdArrows} color="#d6cfb6" material={decal('#cfc8b0',.5)} shadow={false}/>
@@ -121,11 +95,11 @@ function FoundersDescent({room}:{room:Ctx;reduced:boolean}){
   </group>
   <group userData={{blocksLabels:true}}>
    <Cavern room={room} parts={fdRock} color="#2d2f34"/>
-   <Solid room={room} parts={fdSteps} color="#131417" jitter={.06} roughness={.25} metalness={.2}/>
-   <Solid room={room} parts={[...fdCheeks,...fdNameWalls]} color="#191a1e" jitter={.05} roughness={.45} metalness={.1}/>
-   <KitInstances url={G.plaque} parts={fdPlaques} material={grave('#5c5e64')} shadow={false}/>
-   <SolidKit room={room} url={G.obelisk} parts={fdObelisks} size={.17} material={grave('#3e4046')}/>
-   <Tinted room={room} url={K.arched} parts={[[-8.9,0,-1.3,.8,.85,.8,Math.PI/2]]} tint="#56585f"/>
+   <Solid ctx={room} parts={fdSteps} color="#131417" jitter={.06} roughness={.25} metalness={.2} radius={thin}/>
+   <Solid ctx={room} parts={[...fdCheeks,...fdNameWalls]} color="#191a1e" jitter={.05} roughness={.45} metalness={.1} radius={thin}/>
+   <KitInstances url={G.plaque} parts={fdPlaques} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#5c5e64',.9)} shadow={false}/>
+   <SolidKit ctx={room} url={G.obelisk} parts={fdObelisks} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#3e4046',.9)} radius={p=>.17*Math.min(p[3],p[5])}/>
+   <SolidKit ctx={room} url={K.arched} parts={[[-8.9,0,-1.3,.8,.85,.8,Math.PI/2]]} tint="#56585f" radius={p=>.5*Math.min(p[3],p[5])}/>
   </group>
   <Light position={[0,5,-10]} color="#d2def2" intensity={20} distance={14}/><Light position={[-7,3,-5.4]} color="#d8dde6" intensity={6} distance={7}/><Light position={[7,3,-5.4]} color="#d8dde6" intensity={6} distance={7}/>
   <Light position={[-7.6,1.6,-1.3]} color="#8fe0b0" intensity={6} distance={6}/><Light position={[2,3.4,2]} color="#b6bec9" intensity={4} distance={10}/>
@@ -133,7 +107,7 @@ function FoundersDescent({room}:{room:Ctx;reduced:boolean}){
 }
 
 // ── depth-2 The Abandoned Watch: a guard room in the rock, bunks and a room full of packed bags, spears racked by the way up ──
-const awWalls:Part[]=[...back(-7.2,[-8,-4,4,8]),...side(-7.8,[-4.7,-.7,3.3])],awLow=side(7.8,[-4.7,-.7,3.3],.3);
+const awWalls:Part[]=[...wallRow(-7.2,[-8,-4,4,8]),...wallColumn(-7.8,[-4.7,-.7,3.3])],awLow=wallColumn(7.8,[-4.7,-.7,3.3],.3);
 const awBeds:Part[]=[-4.4,-1.4].flatMap(z=>[[-6.6,0,z,.8,.8,.8],[-6.6,1.15,z,.8,.8,.8]] as Part[]),awPosts:Part[]=[-4.4,-1.4].flatMap(z=>[-1,1].flatMap(a=>[-1,1].map(b=>[-6.6+a*.55,1.1,z+b*1.15,.05,2.2,.05] as Part)));
 const awRolls:Part[]=[[-6.6,.98,-5.2,.17,.9,.17,0,0,Math.PI/2],[-6.6,2.13,-2.2,.17,.9,.17,0,0,Math.PI/2]];
 /** Packed bags: two rows along the back wall, a heap by the door and a few on the bunks. */
@@ -147,7 +121,7 @@ const awShieldsWall:Part[]=[-5.4,-4.2,-3,4,5.2].map(x=>[x,2.5,-6.64,.42,.05,.42,
 const awTable:Part[]=[[6.5,0,-1.2,.55,.55,.55]],awMugs:Part[]=[[6.3,.6,-1.4,.06,.12,.06],[6.75,.6,-1,.06,.12,.06],[6.5,.6,-.9,.05,.1,.05]],awCrates:Part[]=[[-6.5,0,-6.3,.6,.6,.6,.3]],awBoxes:Part[]=[[6.4,0,-4.4,.45,.45,.45,.2],[6.5,.68,-4.4,.3,.3,.3,.8]],awBarrels:Part[]=[[6.9,0,-3.1,.35,.35,.35]];
 const awBrazier:Part[]=[[6.3,1,-6.3,3.5,3.5,3.5]],awStand:Part[]=[[6.3,.5,-6.3,.12,1,.12]];
 const awScrit:Part[]=[[0,3.15,-6.67,1.6,1,.02]];
-function AbandonedWatch({room,reduced}:{room:Ctx;reduced:boolean}){
+function AbandonedWatch({room,reduced}:{room:RoomCtx;reduced:boolean}){
  // Track B Scrit fork: with Scrit's runner (ally) the spears are laid down, shields hung and Scrit's mark hangs in the doorway; wary guards keep spears racked and shields up in a line.
  const ally=!!room.save?.scene.description.includes('Scrit');
  return <>
@@ -163,13 +137,13 @@ function AbandonedWatch({room,reduced}:{room:Ctx;reduced:boolean}){
    <Instances parts={awMugs} geometry={geo.cyl} color="#8d7a5a" shadow={false}/>
   </group>
   <group userData={{blocksLabels:true}}>
-   <Tinted room={room} url={K.wall} parts={awWalls} tint="#9a9284"/><Tinted room={room} url={K.door} parts={back(-7.2,[0])} tint="#9a9284"/><Tinted room={room} url={K.broken} parts={awLow} tint="#8a8274"/>
-   <SolidKit room={room} url={A.bed} parts={awBeds} size={.75}/><Solid room={room} parts={awPosts} geometry={geo.cyl} r={fixed(.06)} color="#4a3624"/><Instances parts={awRolls} geometry={geo.cyl} color="#5a6470" shadow={false}/>
-   <Solid room={room} parts={awBags} geometry={geo.rock} color="#7a6248" jitter={.35} flat r={fixed(.22)}/>
-   <Solid room={room} parts={awRack} r={fixed(.06)} color="#4a3624"/>
-   <SolidKit room={room} url={K.crates} parts={awCrates} size={1.1}/><SolidKit room={room} url={K.box} parts={awBoxes} size={.75}/><SolidKit room={room} url={K.barrel} parts={awBarrels} size={.9}/>
-   <SolidKit room={room} url={K.table} parts={awTable} size={1}/>
-   <Solid room={room} parts={awStand} geometry={geo.cyl} r={fixed(.15)} color="#2e2a26" roughness={.5} metalness={.6}/><KitInstances url={G.brazier} parts={awBrazier} material={grave('#5a5048')} shadow={false}/>
+   <SolidKit ctx={room} url={K.wall} parts={awWalls} tint="#9a9284" radius={p=>.5*Math.min(p[3],p[5])}/><SolidKit ctx={room} url={K.door} parts={wallRow(-7.2,[0])} tint="#9a9284" radius={p=>.5*Math.min(p[3],p[5])}/><SolidKit ctx={room} url={K.broken} parts={awLow} tint="#8a8274" radius={p=>.5*Math.min(p[3],p[5])}/>
+   <SolidKit ctx={room} url={A.bed} parts={awBeds} radius={p=>.75*Math.min(p[3],p[5])}/><Solid ctx={room} parts={awPosts} geometry={geo.cyl} radius={fixed(.06)} color="#4a3624"/><Instances parts={awRolls} geometry={geo.cyl} color="#5a6470" shadow={false}/>
+   <Solid ctx={room} parts={awBags} geometry={geo.rock} color="#7a6248" jitter={.35} flat radius={fixed(.22)}/>
+   <Solid ctx={room} parts={awRack} radius={fixed(.06)} color="#4a3624"/>
+   <SolidKit ctx={room} url={K.crates} parts={awCrates} radius={p=>1.1*Math.min(p[3],p[5])}/><SolidKit ctx={room} url={K.box} parts={awBoxes} radius={p=>.75*Math.min(p[3],p[5])}/><SolidKit ctx={room} url={K.barrel} parts={awBarrels} radius={p=>.9*Math.min(p[3],p[5])}/>
+   <SolidKit ctx={room} url={K.table} parts={awTable} radius={p=>1*Math.min(p[3],p[5])}/>
+   <Solid ctx={room} parts={awStand} geometry={geo.cyl} radius={fixed(.15)} color="#2e2a26" roughness={.5} metalness={.6}/><KitInstances url={G.brazier} parts={awBrazier} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#5a5048',.9)} shadow={false}/>
   </group>
   <Flame position={[6.3,1.42,-6.3]} size={1.1} reduced={reduced}/>
   <Light position={[6,2,-5.8]} color="#ff9a4e" intensity={16} distance={11}/><Light position={[0,2.2,-7.6]} color="#7f9fd8" intensity={5} distance={6}/>
@@ -189,9 +163,9 @@ const ehCracks=lines([...crack(0,-6.4,0,5.4,6,41),...crack(-.9,-6.4,-.25,4.2,5,5
 const ehCloth:Part[]=[[5.7,2.75,-7.66,1.3,3.4,.06,.04,.05,.03],[6.45,2.9,-7.62,1.2,3.2,.06,-.06,.08,-.05]],ehHeap:Part[]=[[6.5,.22,-6.3,.9,.36,.7,.4]];
 const ehRock=cavern(301,{back:-9.4,gap:[-9,9],west:-8});
 const ehGears:[number,number,number,number][]=[[-6,5.85,1.25,.22],[-8.15,4.55,.85,-.33],[6,5.85,1.25,-.22],[8.15,4.55,.85,.33]];
-function EngineOfHunger({room,reduced}:{room:Ctx;reduced:boolean}){
+function EngineOfHunger({room,reduced}:{room:RoomCtx;reduced:boolean}){
  return <>
-  <Floor parts={slabs(1.2)} color="#30272a" seam="#5c1612" base="#0e0808" roughness={.55} metalness={.45} jitter={.1}/>
+  <Floor parts={slabs(1.2,{gap:.07,jitter:.015,seed:(i,j)=>i*31+j*7})} color="#30272a" seam="#5c1612" base="#0e0808" roughness={.55} metalness={.45} jitter={.1}/>
   <group>
    <Instances parts={ehCracks} color="#ff6a4a" material={lit('#ff5236',.85)} shadow={false}/>
    <mesh position={[0,3,-7.86]} geometry={discZ} scale={2.62} material={darkGlass} raycast={noRaycast}/>
@@ -202,11 +176,11 @@ function EngineOfHunger({room,reduced}:{room:Ctx;reduced:boolean}){
   </group>
   <group userData={{blocksLabels:true}}>
    <Cavern room={room} parts={ehRock} color="#2a2221"/>
-   <Solid room={room} parts={ehWall} color="#221918" jitter={0} roughness={.7}/><Solid room={room} parts={ehButtress} color="#3c302c" roughness={.5} metalness={.6} jitter={.05}/>
+   <Solid ctx={room} parts={ehWall} color="#221918" jitter={0} roughness={.7} radius={thin}/><Solid ctx={room} parts={ehButtress} color="#3c302c" roughness={.5} metalness={.6} jitter={.05} radius={thin}/>
    <mesh position={[0,3,-7.78]} scale={2.78} geometry={ring} material={iron} castShadow raycast={noRaycast}/><Instances parts={ehRivets} geometry={geo.rock} color="#7c665a" roughness={.4} metalness={.7} shadow={false}/>
    <Instances parts={ehPanes} color="#40332d" roughness={.45} metalness={.7} shadow={false}/><Instances parts={ehPipes} geometry={geo.cyl} color="#5a4c3c" roughness={.4} metalness={.7} shadow={false}/>
-   <Solid room={room} parts={ehPistons} geometry={geo.cyl} r={fixed(.25)} color="#504139" roughness={.4} metalness={.7}/>
-   <Solid room={room} parts={ehHeap} geometry={geo.rock} color="#5a5040" flat r={fixed(.45)}/>
+   <Solid ctx={room} parts={ehPistons} geometry={geo.cyl} radius={fixed(.25)} color="#504139" roughness={.4} metalness={.7}/>
+   <Solid ctx={room} parts={ehHeap} geometry={geo.rock} color="#5a5040" flat radius={fixed(.45)}/>
    {ehGears.map(([x,y,r,v])=><Spin key={x+':'+y} position={[x,y,-7.82]} speed={v} reduced={reduced}><mesh geometry={GEAR} scale={[r,r,1]} material={iron} castShadow raycast={noRaycast}/></Spin>)}
   </group>
   <Light position={[0,3,-6.4]} color="#ff3a26" intensity={18} distance={11}/><Light position={[5,5,-2]} color="#ffb27a" intensity={8} distance={14}/><Light position={[0,6.4,-5.6]} color="#ff6236" intensity={10} distance={10}/><Light position={[-6.4,2.6,-1.6]} color="#c4503a" intensity={4} distance={7}/>
@@ -221,13 +195,13 @@ const lkSpokes=lines(Array.from({length:6},(_,i)=>{const a=i/6*Math.PI*2+.26;ret
 /** Names of every replacement who never arrived, cut in rows into the alcove walls, and her tallies beside them. */
 const lkNames:Part[]=[-1,1].flatMap(s=>Array.from({length:8},(_,r)=>Array.from({length:6},(_,c)=>{const i=r*6+c+(s>0?60:0);return [s*(2.1+c*.62+rand(i)*.08),.75+r*.36,-8.38,.3+rand(i+5)*.25,.05,.01] as Part;})).flat());
 const lkTallies:Part[]=[-1,1].flatMap(s=>Array.from({length:5},(_,g)=>[...Array.from({length:4},(_,k)=>[s*(1.95+g*.4+k*.07),3.85,-8.38,.025,.26,.01] as Part),[s*(2.05+g*.4),3.85,-8.37,.025,.34,.01,0,0,s*1.1] as Part]).flat());
-const lkWalls:Part[]=back(-8.9,[-4,4]),lkUrns:Part[]=[[-2.3,0,-7.4,3,3,3],[-3,0,-7.7,2.4,2.4,2.4],[3,0,-7.5,3,3,3]];
+const lkWalls:Part[]=wallRow(-8.9,[-4,4]),lkUrns:Part[]=[[-2.3,0,-7.4,3,3,3],[-3,0,-7.7,2.4,2.4,2.4],[3,0,-7.5,3,3,3]];
 const lkCandles:Part[]=[[-1.6,0,-7.1,.6,.6,.6],[1.6,0,-7.2,.6,.6,.6],[-.5,.98,-7.55,.45,.45,.45],[.45,.98,-7.45,.45,.45,.45],[-3.8,0,-7.4,.5,.5,.5],[3.9,0,-7.6,.5,.5,.5]];
 const lkBedroll:Part[]=[[2.1,.15,-7.15,.19,1.3,.19,0,0,Math.PI/2]],lkBlanket:Part[]=[[2.1,.06,-6.9,1.4,.06,.7,.1]];
 const lkRock=cavern(401,{back:-10.4,gap:[-6.5,6.5],tall:1.2,west:-9.4});
-function LastLivingKeeper({room}:{room:Ctx;reduced:boolean}){
+function LastLivingKeeper({room}:{room:RoomCtx;reduced:boolean}){
  return <>
-  <Floor parts={slabs(1.2)} color="#5b554b" seam="#1d1914" base="#14110d" jitter={.2}/>
+  <Floor parts={slabs(1.2,{gap:.07,jitter:.015,seed:(i,j)=>i*31+j*7})} color="#5b554b" seam="#1d1914" base="#14110d" jitter={.2}/>
   <group>
    {[[2.1,2.24,0,Math.PI*2],[3.86,4,.3,Math.PI*1.7],[5.02,5.16,-.4,Math.PI*1.5],[5.02,5.16,Math.PI*1.25,Math.PI*.6]].map(([a,b,t0,tl])=><mesh key={a+':'+t0} position={[0,.005,0]} rotation={[-Math.PI/2,0,0]} material={lit('#e7c878',.75)} raycast={noRaycast}><ringGeometry args={[a,b,72,1,t0,tl]}/></mesh>)}
    <Instances parts={[...lkRunes,...lkSpokes]} color="#e7c878" material={lit('#e7c878',.75)} shadow={false}/>
@@ -237,19 +211,19 @@ function LastLivingKeeper({room}:{room:Ctx;reduced:boolean}){
   </group>
   <group userData={{blocksLabels:true}}>
    <Cavern room={room} parts={lkRock} color="#3c362e"/>
-   <Tinted room={room} url={K.wall} parts={lkWalls} tint="#bdb096"/><Tinted room={room} url={K.arched} parts={back(-8.9,[0])} tint="#bdb096"/>
-   <SolidKit room={room} url={G.square} parts={lkStones} size={.17} material={grave('#9c968a')}/><SolidKit room={room} url={G.broken} parts={lkStubs} size={.28} material={grave('#8c867a')}/>
-   <SolidKit room={room} url={G.altar} parts={[[0,0,-7.6,2,2,2]]} size={.33} material={grave('#a39c8e')}/>
-   <SolidKit room={room} url={G.urn} parts={lkUrns} size={.13} material={grave('#d8c4a4')} shadow={false}/>
+   <SolidKit ctx={room} url={K.wall} parts={lkWalls} tint="#bdb096" radius={p=>.5*Math.min(p[3],p[5])}/><SolidKit ctx={room} url={K.arched} parts={wallRow(-8.9,[0])} tint="#bdb096" radius={p=>.5*Math.min(p[3],p[5])}/>
+   <SolidKit ctx={room} url={G.square} parts={lkStones} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#9c968a',.9)} radius={p=>.17*Math.min(p[3],p[5])}/><SolidKit ctx={room} url={G.broken} parts={lkStubs} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#8c867a',.9)} radius={p=>.28*Math.min(p[3],p[5])}/>
+   <SolidKit ctx={room} url={G.altar} parts={[[0,0,-7.6,2,2,2]]} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#a39c8e',.9)} radius={p=>.33*Math.min(p[3],p[5])}/>
+   <SolidKit ctx={room} url={G.urn} parts={lkUrns} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#d8c4a4',.9)} shadow={false} radius={p=>.13*Math.min(p[3],p[5])}/>
    <KitInstances url={K.candle} parts={lkCandles} shadow={false}/>
-   <Solid room={room} parts={lkBedroll} geometry={geo.cyl} r={fixed(.2)} color="#5f5a4c"/>
+   <Solid ctx={room} parts={lkBedroll} geometry={geo.cyl} radius={fixed(.2)} color="#5f5a4c"/>
   </group>
   <Light position={[0,1.8,-7]} color="#ffcf8a" intensity={14} distance={9}/><Light position={[0,3.4,-1.5]} color="#ecd9a4" intensity={5} distance={10}/><Light position={[-5.6,5,-5]} color="#8fd8d0" intensity={6} distance={10}/>
  </>;
 }
 
 // ── depth-5 The Fracture Gallery: a cracked landing over the chasm, three broken bridges to the core, the counterweights that mend them ──
-const fgLanding=slabs(1.2,6);
+const fgLanding=slabs(1.2,{gap:.07,jitter:.015,seed:(i,j)=>i*31+j*7,extent:6});
 const fgBridges:[number,[number,number][]][]=[[-4,[[5,7]]],[0,[[9,10],[15,99]]],[4,[[3,4],[12,99]]]];
 const fgDeck:Part[]=fgBridges.flatMap(([x,gaps],b)=>Array.from({length:17},(_,i)=>{if(gaps.some(([a,c])=>i>=a&&i<=c))return [];const before=gaps.some(([a])=>i===a-1),after=gaps.some(([,c])=>i===c+1),sag=Math.sin(i/16*Math.PI)*.35;return [[x+(rand(i+b*20)-.5)*.12,-.15-sag-(before||after?.25:0),-7.2-i*1.02,1.8,.26,.94,(rand(i+b*7)-.5)*.06,before?-.32:after?.32:0,(rand(i+b*3)-.5)*.05] as Part];}).flat());
 const fgRails:Part[]=fgDeck.filter((_,i)=>i%2===0).flatMap(([x,y,z,,,,ry,rx])=>[-1,1].map(s=>[x+s*.88,y+.5,z,.05,.95,.05,ry,rx] as Part));
@@ -264,7 +238,7 @@ const fgGlass:Part[]=[...cluster(-6.2,-6.1,6,551),...cluster(6.1,4.6,5,561,.8),.
 const fgBones:Part[]=Array.from({length:14},(_,i)=>{const s=i%2?1:-1,z=-5+i*.75;return [s*(6.15+rand(i)*.3),.25,z,.07,.6+rand(i+1)*.5,.07,rand(i+2)*6,(rand(i+3)-.5)*.8,s*(.4+rand(i+4)*.5)] as Part;});
 const fgCliffs:Part[]=[...[-1,1].flatMap(s=>Array.from({length:8},(_,i)=>[s*(13+rand(i+s*5)*3),-8,-32+i*5.5,5+rand(i)*3,16+rand(i+2)*6,5,rand(i+4)*6] as Part)),...Array.from({length:5},(_,i)=>[-10+i*5,-6,-38,6,18,5,i] as Part)];
 const fgIsland:Part[]=[[0,-2,-27,4.6,3.4,3.8,.4],[-1.8,-3.4,-26,2.6,2.6,2.4,1.2]];
-function FractureGallery({room,reduced}:{room:Ctx;reduced:boolean}){
+function FractureGallery({room,reduced}:{room:RoomCtx;reduced:boolean}){
  return <>
   {/* No cavern floor: the landing is a block over the chasm. */}
   <mesh position={[0,-32,0]} geometry={plane} scale={[120,1,120]} material={lit('#020306')} raycast={noRaycast}/>
@@ -283,11 +257,11 @@ function FractureGallery({room,reduced}:{room:Ctx;reduced:boolean}){
   </group>
   <group userData={{blocksLabels:true}}>
    <Instances parts={fgDeck} color="#5a4a3a" jitter={.25}/><Instances parts={fgWeights} color="#4a4e56" jitter={.1}/><Instances parts={fgBands} color="#2e3036" roughness={.4} metalness={.7} shadow={false}/>
-   <Solid room={room} parts={fgParapet} color="#3e424c" jitter={.12}/>
-   <Solid room={room} parts={fgGantry} r={fixed(.2)} color="#4a3c30"/>
-   <SolidKit room={room} url={G.square} parts={fgAbut} size={.17} material={grave('#6a6e7a')}/>
-   <Solid room={room} parts={fgGlass} geometry={shard} r={fixed(.3)} color="#d8f2ff" material={glow('#d8f2ff','#5fb8ff',.7,.82)} shadow={false}/>
-   <Solid room={room} parts={fgBones} geometry={geo.cone} r={fixed(.1)} color="#d8d0bc" jitter={.1} shadow={false}/>
+   <Solid ctx={room} parts={fgParapet} color="#3e424c" jitter={.12} radius={thin}/>
+   <Solid ctx={room} parts={fgGantry} radius={fixed(.2)} color="#4a3c30"/>
+   <SolidKit ctx={room} url={G.square} parts={fgAbut} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#6a6e7a',.9)} radius={p=>.17*Math.min(p[3],p[5])}/>
+   <Solid ctx={room} parts={fgGlass} geometry={shard} radius={fixed(.3)} color="#d8f2ff" material={glow('#d8f2ff','#5fb8ff',.7,.82)} shadow={false}/>
+   <Solid ctx={room} parts={fgBones} geometry={geo.cone} radius={fixed(.1)} color="#d8d0bc" jitter={.1} shadow={false}/>
   </group>
   <Light position={[0,1.2,-1]} color="#7fd6ff" intensity={7} distance={9}/><Light position={[0,4,-23]} color="#ff7ae0" intensity={60} distance={30}/><Light position={[5,6,3]} color="#c8d8ff" intensity={5} distance={14}/>
  </>;
@@ -302,7 +276,7 @@ const ssKnobs:Part[]=[-.9,-.45,0,.45,.9].map(x=>[x,1.67,-5.9,.07,.07,.07]);
 const ssScrap:Part[]=[[6.6,0,1.8,3,3,3,.4],[6.9,0,-2.6,2.6,2.6,2.6,1.6],[-6.8,0,3.2,3,3,3,2.4]],ssParts:Part[]=[[6.7,.08,1.3,.5,.5,1,0,Math.PI/2],[6.4,.12,2.4,.35,.35,1,.6,Math.PI/2-.3],[-6.9,.08,2.6,.45,.45,1,0,Math.PI/2],[7.1,.1,-2.1,.38,.38,1,0,Math.PI/2+.2]];
 const ssBands:Part[]=[0,2.4,4.8,7.2].map(y=>[0,y+.6,-8.75,24,.18,.06]);
 const ssRock=cavern(601,{back:-10,gap:[-10,10],west:-9.4});
-function SixthStone({room,reduced}:{room:Ctx;reduced:boolean}){
+function SixthStone({room,reduced}:{room:RoomCtx;reduced:boolean}){
  return <>
   <mesh position={[0,-1.1,0]} geometry={plane} scale={[40,1,40]} material={mat('#0e0a08',1)} raycast={noRaycast}/>
   <mesh position={[0,-.7,0]} geometry={plane} scale={[16,1,16]} material={lit('#c4501c')} raycast={noRaycast}/>
@@ -315,7 +289,7 @@ function SixthStone({room,reduced}:{room:Ctx;reduced:boolean}){
   </group>
   <group userData={{blocksLabels:true}}>
    <Cavern room={room} parts={ssRock} color="#2e241e"/>
-   <Solid room={room} parts={[[0,4.5,-9.4,24,9,1.2]]} color="#221c18" jitter={0} roughness={.7}/>
+   <Solid ctx={room} parts={[[0,4.5,-9.4,24,9,1.2]]} color="#221c18" jitter={0} roughness={.7} radius={thin}/>
    <mesh position={[0,3.3,-8.5]} rotation={[Math.PI/2,0,0]} material={iron} castShadow raycast={noRaycast}><cylinderGeometry args={[3.5,3.5,.4,40]}/></mesh>
    {/* The ring of blades and the sixth stone at its heart. */}
    <Spin position={[0,3.3,-7.95]} speed={.22} reduced={reduced}>
@@ -323,11 +297,11 @@ function SixthStone({room,reduced}:{room:Ctx;reduced:boolean}){
     <Instances parts={ssBlades} geometry={geo.tent} color="#c4c7cf" material={steel}/>
    </Spin>
    <Spin position={[0,3.3,-7.8]} axis="y" speed={.7} reduced={reduced}><mesh scale={.62} geometry={shard} material={glow('#fff3cf','#ffc45a',2.4)} raycast={noRaycast}/></Spin>
-   <SolidKit room={room} url={G.column} parts={ssColumns} size={.2} material={grave('#9a7a5a')}/>
+   <SolidKit ctx={room} url={G.column} parts={ssColumns} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#9a7a5a',.9)} radius={p=>.2*Math.min(p[3],p[5])}/>
    {([[-6.6,5,1.6,.18],[-6.6,1.9,1,-.29],[6.6,5,1.6,-.18],[6.6,1.9,1,.29]] as const).map(([x,y,r,v])=><Spin key={x+':'+y} position={[x,y,-8.75]} speed={v} reduced={reduced}><mesh geometry={GEAR} scale={[r,r,1]} material={iron} castShadow raycast={noRaycast}/></Spin>)}
-   <Solid room={room} parts={ssPistons} geometry={geo.cyl} r={fixed(.25)} color="#5a4c3c" roughness={.4} metalness={.7}/>
-   <Solid room={room} parts={ssConsole} r={fixed(.38)} color="#3a302a" roughness={.5} metalness={.5}/><Instances parts={ssLevers} geometry={geo.cyl} color="#a07a3e" material={brass} shadow={false}/>
-   <SolidKit room={room} url={G.debris} parts={ssScrap} size={.3} material={grave('#7a6250')} shadow={false}/>
+   <Solid ctx={room} parts={ssPistons} geometry={geo.cyl} radius={fixed(.25)} color="#5a4c3c" roughness={.4} metalness={.7}/>
+   <Solid ctx={room} parts={ssConsole} radius={fixed(.38)} color="#3a302a" roughness={.5} metalness={.5}/><Instances parts={ssLevers} geometry={geo.cyl} color="#a07a3e" material={brass} shadow={false}/>
+   <SolidKit ctx={room} url={G.debris} parts={ssScrap} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#7a6250',.9)} shadow={false} radius={p=>.3*Math.min(p[3],p[5])}/>
   </group>
   <Light position={[0,3.3,-6.6]} color="#ffe0a0" intensity={24} distance={12}/><Light position={[-6,3,-3]} color="#ff9a50" intensity={7} distance={9}/><Light position={[5,4,2]} color="#ffb070" intensity={4} distance={12}/>
  </>;
@@ -344,9 +318,9 @@ const hbBulges:Part[]=Array.from({length:9},(_,i)=>{const a=i/9*Math.PI*2+.3;ret
 const hbStalactites:Part[]=Array.from({length:22},(_,i)=>{const x=-12+rand(i+700)*24,z=-8-rand(i+710)*12;return [x,10.5,z,.35+rand(i+720)*.4,2.5+rand(i+730)*3.5,.35+rand(i+720)*.4,rand(i)*3,Math.PI] as Part;});
 const hbRock=cavern(701,{back:-19.5,gap:[-9,9],tall:1.8,west:-9.8});
 const voidMat=new THREE.MeshStandardMaterial({color:'#040208',emissive:'#3a0f5c',emissiveIntensity:.9,roughness:.12,metalness:.85});
-function HeartBelow({room}:{room:Ctx;reduced:boolean}){
+function HeartBelow({room}:{room:RoomCtx;reduced:boolean}){
  return <>
-  <Floor parts={slabs(1.2)} color="#25212b" seam="#5a1a50" base="#09070c" jitter={.14} roughness={.6}/>
+  <Floor parts={slabs(1.2,{gap:.07,jitter:.015,seed:(i,j)=>i*31+j*7})} color="#25212b" seam="#5a1a50" base="#09070c" jitter={.14} roughness={.6}/>
   <group>
    <Instances parts={hbCircuit} color="#ffe9a8" material={lit('#ffe6a0')} shadow={false}/><Instances parts={hbFractures} color="#c070ff" material={lit('#b45cff',.85)} shadow={false}/>
    <mesh position={[0,.006,0]} rotation={[-Math.PI/2,0,0]} material={lit('#ffe6a0',.85)} raycast={noRaycast}><ringGeometry args={[1.55,1.66,48]}/></mesh>
@@ -361,7 +335,7 @@ function HeartBelow({room}:{room:Ctx;reduced:boolean}){
    <Cavern room={room} parts={hbRock} color="#221d27"/>
    <mesh position={[HOLLOW[0],.2,HOLLOW[1]]} scale={[2.7,1.9,2.7]} geometry={orb} material={voidMat} castShadow raycast={noRaycast}/>
    <Instances parts={hbBulges} geometry={geo.rock} color="#07050b" material={voidMat}/>
-   <SolidKit room={room} url={G.square} parts={hbPylons} size={.17} material={grave('#4a4258')}/>
+   <SolidKit ctx={room} url={G.square} parts={hbPylons} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#4a4258',.9)} radius={p=>.17*Math.min(p[3],p[5])}/>
   </group>
   <Light position={[HOLLOW[0],1.8,HOLLOW[1]]} color="#b45cff" intensity={40} distance={18}/><Light position={[0,3.4,-8.6]} color="#ffd27a" intensity={26} distance={13}/><Light position={[-3,2.6,-2]} color="#9a6ad0" intensity={6} distance={9}/><Light position={[4,4,2]} color="#c8a0e8" intensity={4} distance={12}/>
  </>;
@@ -394,9 +368,9 @@ function Motes({reduced}:{reduced:boolean}){
  useFrame(({clock})=>{if(!reduced)points.position.y=-(clock.elapsedTime*.12)%H;});
  return <primitive object={points}/>;
 }
-function FirstMorning({room,reduced}:{room:Ctx;reduced:boolean}){
+function FirstMorning({room,reduced}:{room:RoomCtx;reduced:boolean}){
  return <>
-  <Floor parts={slabs(1.2)} color="#776c5c" seam="#2c251f" base="#1e1a17" jitter={.2}/>
+  <Floor parts={slabs(1.2,{gap:.07,jitter:.015,seed:(i,j)=>i*31+j*7})} color="#776c5c" seam="#2c251f" base="#1e1a17" jitter={.2}/>
   <group>
    <mesh position={[0,.005,0]} rotation={[-Math.PI/2,0,0]} material={decal('#b9a47c',.45)} raycast={noRaycast}><ringGeometry args={[3.24,3.34,64]}/></mesh>
    <Instances parts={fmInlays} geometry={geo.disc} color="#a9946c" material={decal('#9c8a66',.9)} shadow={false}/>
@@ -409,9 +383,9 @@ function FirstMorning({room,reduced}:{room:Ctx;reduced:boolean}){
    {fmBanners.map(([c,p])=><Instances key={c} parts={p} color={c} jitter={.1} shadow={false}/>)}
   </group>
   <group userData={{blocksLabels:true}}>
-   <Cavern room={room} parts={fmRock} color="#5a4c40"/><Solid room={room} parts={fmLedge} color="#6e6253" jitter={.1}/>
-   <Solid room={room} parts={fmSteps} color="#8d8170" jitter={.08}/><Solid room={room} parts={fmStairWalls} color="#6f6456" jitter={.08}/>
-   <SolidKit room={room} url={G.column} parts={fmColumns} size={.2} material={grave('#b8a68a')}/>
+   <Cavern room={room} parts={fmRock} color="#5a4c40"/><Solid ctx={room} parts={fmLedge} color="#6e6253" jitter={.1} radius={thin}/>
+   <Solid ctx={room} parts={fmSteps} color="#8d8170" jitter={.08} radius={thin}/><Solid ctx={room} parts={fmStairWalls} color="#6f6456" jitter={.08} radius={thin}/>
+   <SolidKit ctx={room} url={G.column} parts={fmColumns} material={mapTint('/assets/env/kenney-graveyard-descent/Textures/colormap.png','#b8a68a',.9)} radius={p=>.2*Math.min(p[3],p[5])}/>
    <Instances parts={fmYoke} color="#4a3a2c" jitter={.05}/>
    {/* Briarwatch's bell, hung still over the road: for once only a bell. */}
    <mesh position={[0,4.3,SHAFT_Z]} scale={1.75} geometry={BELL} material={bronze} castShadow raycast={noRaycast}/>
@@ -426,7 +400,7 @@ function FirstMorning({room,reduced}:{room:Ctx;reduced:boolean}){
 }
 
 // ── Rooms by number ──
-const ROOMS:Record<number,(p:{room:Ctx;reduced:boolean})=>ReactNode>={1:FoundersDescent,2:AbandonedWatch,3:EngineOfHunger,4:LastLivingKeeper,5:FractureGallery,6:SixthStone,7:HeartBelow,8:FirstMorning};
+const ROOMS:Record<number,(p:{room:RoomCtx;reduced:boolean})=>ReactNode>={1:FoundersDescent,2:AbandonedWatch,3:EngineOfHunger,4:LastLivingKeeper,5:FractureGallery,6:SixthStone,7:HeartBelow,8:FirstMorning};
 /** The eight Last Descent rooms, chosen by scene id. */
 export default function LastDescent({scene,save,reduced}:RoomProps){const Room=ROOMS[Number(scene.split('-')[1])]??FoundersDescent;return <Room key={scene} room={{save,scene}} reduced={reduced}/>;}
 const MOODS:Record<number,MoodOverride>={
