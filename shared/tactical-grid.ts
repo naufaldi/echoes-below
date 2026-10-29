@@ -5,21 +5,28 @@ const key=([x,y]:Cell)=>`${x},${y}`;
 const equal=(a:Cell,b:Cell)=>a[0]===b[0]&&a[1]===b[1];
 function valid(grid:TacticalGrid,p:Cell){return p.every(Number.isInteger)&&p[0]>=0&&p[1]>=0&&p[0]<grid.width&&p[1]<grid.height;}
 function traversable(grid:TacticalGrid,p:Cell,walls:Set<string>){return valid(grid,p)&&!walls.has(key(p));}
-export function findPath(grid:TacticalGrid,start:Cell,end:Cell,budgetFeet:number):{cells:Cell[];costFeet:number}|null{
+function search(grid:TacticalGrid,start:Cell,budgetFeet:number,end?:Cell){
  const walls=new Set(grid.blocked.map(key));const difficult=new Set((grid.difficult??[]).map(key));
- if(!Number.isFinite(budgetFeet)||budgetFeet<0||!traversable(grid,start,walls)||!traversable(grid,end,walls))return null;
- const queue=[{cell:start,cost:0}];const costs=new Map([[key(start),0]]);const parent=new Map<string,Cell>();
- while(queue.length){queue.sort((a,b)=>a.cost-b.cost||key(a.cell).localeCompare(key(b.cell)));const current=queue.shift()!;
-  if(current.cost!==costs.get(key(current.cell)))continue;
-  if(equal(current.cell,end)){const cells:Cell[]=[end];let cursor=end;while(!equal(cursor,start)){cursor=parent.get(key(cursor))!;cells.unshift(cursor);}return{cells,costFeet:current.cost};}
+ if(!Number.isFinite(budgetFeet)||budgetFeet<0||!traversable(grid,start,walls)||(end&&!traversable(grid,end,walls)))return null;
+ const queue=[{cell:start,cost:0,key:key(start)}];const costs=new Map([[key(start),0]]);const parent=new Map<string,Cell>();
+ while(queue.length){queue.sort((a,b)=>a.cost-b.cost||a.key.localeCompare(b.key));const current=queue.shift()!;
+  if(current.cost!==costs.get(current.key))continue;
+  if(end&&equal(current.cell,end))break;
   for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){
    if(dx===0&&dy===0)continue;const next:Cell=[current.cell[0]+dx,current.cell[1]+dy];if(!traversable(grid,next,walls))continue;
    if(dx&&dy&&(!traversable(grid,[current.cell[0]+dx,current.cell[1]],walls)||!traversable(grid,[current.cell[0],current.cell[1]+dy],walls)))continue;
-   const cost=current.cost+(difficult.has(key(next))?10:5);if(cost>budgetFeet||cost>=(costs.get(key(next))??Infinity))continue;
-   costs.set(key(next),cost);parent.set(key(next),current.cell);queue.push({cell:next,cost});
+   const nextKey=key(next),cost=current.cost+(difficult.has(nextKey)?10:5);if(cost>budgetFeet||cost>=(costs.get(nextKey)??Infinity))continue;
+   costs.set(nextKey,cost);parent.set(nextKey,current.cell);queue.push({cell:next,cost,key:nextKey});
   }
  }
- return null;
+ return {costs,parent};
+}
+function rebuild(start:Cell,end:Cell,costFeet:number,parent:Map<string,Cell>){const cells:Cell[]=[end];let cursor=end;while(!equal(cursor,start)){cursor=parent.get(key(cursor))!;cells.unshift(cursor);}return{cells,costFeet};}
+export function findPath(grid:TacticalGrid,start:Cell,end:Cell,budgetFeet:number):{cells:Cell[];costFeet:number}|null{
+ const result=search(grid,start,budgetFeet,end),cost=result?.costs.get(key(end));return result&&cost!==undefined?rebuild(start,end,cost,result.parent):null;
+}
+export function reachable(grid:TacticalGrid,start:Cell,budgetFeet:number):Map<string,{cells:Cell[];costFeet:number}>{
+ const result=search(grid,start,budgetFeet),paths=new Map<string,{cells:Cell[];costFeet:number}>();if(result)for(const [id,cost] of result.costs)paths.set(id,rebuild(start,id.split(',').map(Number) as Cell,cost,result.parent));return paths;
 }
 /** Supercover ray: touching a blocked corner counts as blocked in this curated ruleset. */
 export function lineOfSight(grid:TacticalGrid,start:Cell,end:Cell):boolean{
