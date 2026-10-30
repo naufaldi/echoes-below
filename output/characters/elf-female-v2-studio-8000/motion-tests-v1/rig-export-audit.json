@@ -1,0 +1,33 @@
+{
+  "file": "exports/rigged/unpacked/tripo_convert_c0fc6445-98f0-43ca-85cb-adfc494d6842.fbx",
+  "fbx_version": 7200,
+  "animation_stacks": [
+    [
+      95394024835648,
+      "walk.001\u0000\u0001AnimStack",
+      ""
+    ],
+    [
+      95394025900048,
+      "slash.001\u0000\u0001AnimStack",
+      ""
+    ],
+    [
+      95394025437264,
+      "idle.001\u0000\u0001AnimStack",
+      ""
+    ]
+  ],
+  "bone_count": 65,
+  "animation_curve_nodes": 585,
+  "animation_curves": 1755,
+  "textures": [
+    {
+      "file": "exports/rigged/unpacked/tripo_convert_c0fc6445-98f0-43ca-85cb-adfc494d6842.fbm/tripo_rgb_49562103-b2c8-4da6-a41a-ea015ed22ae8.png",
+      "resolution": [
+        2048,
+        2048
+      ]
+    }
+  ]
+}

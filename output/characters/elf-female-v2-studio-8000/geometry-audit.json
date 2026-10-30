@@ -1,0 +1,44 @@
+[
+  {
+    "file": "output/characters/elf-female-v1/tripo-out/elf-female-base-v1-4b07e5ca/model.fbx",
+    "bytes": 551020,
+    "sha256": "d45d5d805740f04fd05a9c08bfa31a9a80767427f344e70c8573a8c45763ce07",
+    "fbx_version": 7400,
+    "polygon_sides": {
+      "3": 1336,
+      "4": 3609
+    },
+    "polygon_total": 4945,
+    "quad_percent": 72.98,
+    "triangulated_count": 8554,
+    "control_points": 4309,
+    "nonfinite_coordinates": 0,
+    "faces_with_repeated_vertex_index": 0,
+    "uv_layers": 1,
+    "uv_coordinate_pairs": 9114,
+    "materials": 1,
+    "textures": 1,
+    "note": "Read-only structural check. Does not establish manifoldness, absence of intersections, UV quality or animation readiness."
+  },
+  {
+    "file": "output/characters/elf-female-v2-studio-8000/exports/elf-female-v2-p2-8000-geometry.fbx",
+    "bytes": 362864,
+    "sha256": "87eca0fa4c9a52bf04437bb8352aa4a7a9c253fcbbb05d187b3853c85a5e0458",
+    "fbx_version": 7400,
+    "polygon_sides": {
+      "3": 1762,
+      "4": 7321
+    },
+    "polygon_total": 9083,
+    "quad_percent": 80.6,
+    "triangulated_count": 16404,
+    "control_points": 8313,
+    "nonfinite_coordinates": 0,
+    "faces_with_repeated_vertex_index": 0,
+    "uv_layers": 0,
+    "uv_coordinate_pairs": 0,
+    "materials": 1,
+    "textures": 0,
+    "note": "Read-only structural check. Does not establish manifoldness, absence of intersections, UV quality or animation readiness."
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "file": "output/characters/elf-female-v2-studio-8000/exports/textured/elf-female-v2-p2-8000-textured.fbx",
+  "bytes": 555072,
+  "sha256": "b9a865d7d3ec949ae3234115d85eaf9a9a0241bc0e8a37f37b9b0c018f491370",
+  "polygon_sides": {
+    "3": 1762,
+    "4": 7321
+  },
+  "polygon_total": 9083,
+  "quad_percent": 80.6,
+  "triangulated_count": 16404,
+  "control_points": 8313,
+  "nonfinite_coordinates": 0,
+  "faces_with_repeated_vertex_index": 0,
+  "uv_layers": 1,
+  "uv_coordinate_pairs": 15820,
+  "materials": 1,
+  "textures": 1,
+  "geometry_vertices_equal_before_texture": true,
+  "polygon_indices_equal_before_texture": true,
+  "texture_dimensions": [
+    {
+      "width": 2048,
+      "height": 2048
+    }
+  ],
+  "texture_file": "output/characters/elf-female-v2-studio-8000/exports/textured/elf-female-v2-p2-8000-textured.fbm/elf-female-v2-p2-8000-textured_basecolor.jpg",
+  "limitations": "Structural validation and Studio visual inspection only. No rig, animation, game integration, detailed UV distortion or manifoldness test."
+}

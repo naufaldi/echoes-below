@@ -1,0 +1,3 @@
+file 'idle-full.mp4'
+file 'walk.mp4'
+file 'slash.mp4'

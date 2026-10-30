@@ -11,6 +11,8 @@ What v2.1 adds:
 
 KayKit placeholder characters are acceptable at v1.0 (ROADMAP D11), so these models never block a release.
 
+Production update, 30 October 2026: the owner approved a female heroic-chibi Elf exploration. The base, Fighter variant, and v2 Studio rig/animation tests are archived in `output/characters/`. See §7 for completed work and remaining integration requirements. These prototypes do not replace the four-class delivery contract or the current KayKit assets.
+
 This document says what 3D characters the game needs, how they must be built, and how they plug into the code. It has two audiences:
 
 - **Part A — model production.** For whoever generates the models (the owner with Tripo, plus any cleanup tool such as Blender).
@@ -274,3 +276,54 @@ If the owner wants illustrated portraits for named characters, the game prefers 
 | P-02 | Changing a palette at creation changes the portrait accent |
 | P-03 | A painted override, if present, replaces only that character and expression; missing expressions fall back to `neutral`, then to the render |
 | P-04 | Portrait rendering adds no second WebGL canvas and costs < 2 ms per snapshot |
+
+## 7. Elf production record — 29–30 October 2026
+
+### 7.1 Approved direction and preserved versions
+
+The owner chose a **female heroic-chibi Elf**, with large readable ears and simple colour blocks for the isometric camera. Production started with a neutral base before armour. This is an owner-approved race-specific exploration alongside the human Phase A roster, not a completed replacement for that roster.
+
+- [Original reference and character sheet](../output/characters/elf-female-v1/): `elf-front.png` and `character-sheet.png`.
+- Original generated master: `elf-female-v1/tripo-out/elf-female-base-v1-4b07e5ca/model.fbx`. Preserve this source. Its SHA-256 is `d45d5d805740f04fd05a9c08bfa31a9a80767427f344e70c8573a8c45763ce07`.
+- [Fighter production files](../output/characters/elf-fighter-v1/): armour exploration kept separate from the base. Studio asset `1447de15-fb60-4516-a6db-1384f4a9e5a7` was rigged and previewed earlier. It is not the v2 base shown in the final motion video.
+- Studio's older base remains asset `42de814c-14cc-41b0-ab42-083ca7a22778`. Do not assume this is byte-identical to the original local master.
+- [Elf v2 production archive](../output/characters/elf-female-v2-studio-8000/README.md): Studio asset `8193d3b0-b4cc-48fc-be79-4f9adb51262b`. Generation, texture, rig and animation previews used **Tripo Studio in Chrome**, following the owner's preference after the initial plugin workflow.
+
+### 7.2 V2 mesh, texture and rig results
+
+| Stage | Verified result |
+|---|---|
+| Generation | P2.0 Smart Mesh, Quad mode, target 8,000 faces; one candidate |
+| Actual pre-rig geometry | 9,083 polygons: 7,321 quads, 1,762 triangles, no n-gons; 80.60% quads; 8,313 control points; 16,404 triangles when triangulated |
+| Mesh inspection | Front, back and both sides inspected for gross defects. No localized mesh edit was needed. Manifoldness and detailed self-intersections were not certified |
+| Texture | Approved front reference, 2K texture, Remove Lighting enabled, style None. Vertex positions and polygon indices matched the untextured export |
+| Rig | Humanoid / Mixamo. Local exported FBX contains 65 bones |
+| Motion presets | `idle`, `walk`, `slash` played in Studio. Export contains `idle.001`, `walk.001`, `slash.001` animation stacks |
+| Export | FBX with skeleton and all three clips, plus a 2048×2048 PNG texture. “Animation stay in Place” was off |
+| Credits | Generation 100 + texture 10 + rig 20 = 130 for v2. No further observed charge for preset previews or export. Balance after this work: 25,030 |
+
+Quad mode did **not** produce an all-quad mesh or exactly 8,000 faces. The geometry counts above describe the audited pre-rig model; the rig export audit verifies bones, animation stacks and texture, not an independent topology comparison after rigging.
+
+The pre-rig geometry and textured exports remain separate from the [rigged FBX package](../output/characters/elf-female-v2-studio-8000/exports/rigged/elf-female-v2-rigged-idle-walk-slash.zip). Audit details: [geometry](../output/characters/elf-female-v2-studio-8000/geometry-audit.json), [texture](../output/characters/elf-female-v2-studio-8000/textured-audit.json), and [rig export](../output/characters/elf-female-v2-studio-8000/motion-tests-v1/rig-export-audit.json).
+
+### 7.3 Selected videos and recording limitations
+
+- **Selected motion cut:** [25-second video](../output/characters/elf-female-v2-studio-8000/motion-tests-v1/elf-v2-motion-tests-15-40.mp4). The owner selected source seconds 15–40 and discarded the first 15 seconds from the presentation. Resolution 560×550; encoded at 30 fps; no UI, captions or audio.
+- [Full motion test](../output/characters/elf-female-v2-studio-8000/motion-tests-v1/elf-v2-motion-tests-clean.mp4): 40.07 seconds, idle → walk → unarmed slash. Source capture was approximately 18.5–18.8 fps; timestamp-based repeated frames produce the 30 fps file. This is not native 30 fps capture.
+- [Clean orbit](../output/characters/elf-female-v2-studio-8000/elf-v2-clean-smooth-orbit-final.mp4): 12.53 seconds, 568×540 at 30 fps, using equally stepped camera angles. This is an image-sequence orbit, not real-time animation capture. The final crop removes a small blue UI fragment at the edge.
+- Raw frames, individual clips, earlier cuts and proof screenshots are retained. The first walk recording had insufficient headroom; the full montage uses `walk-wide` instead.
+- `INVALID-wrong-tab-workflow-do-not-use.mp4`, `proof-labeled/`, and early generation-stage recordings are retained for provenance only. Some captured the older tab. They are **not evidence of v2 generation** and must not be used as the final showcase. No paid regeneration was used to recreate that missing evidence.
+
+In inspected motion samples, limbs remained attached and there was no gross shoulder/elbow tearing or hip/knee inversion. This is limited visual evidence. Fine skin weights, finger poses, self-intersections and weapon grip remain unverified. Walk moves forward and resets at the loop boundary. Foot sliding cannot be reliably judged without a ground-contact reference. Slash is unarmed. See the [motion report](../output/characters/elf-female-v2-studio-8000/motion-tests-v1/report.json).
+
+### 7.4 Remaining work before game integration
+
+These are **production prototypes, not game-ready assets**. Nothing was added to `public/assets/characters/`, and the game still uses its existing assets.
+
+1. Resolve licence evidence and the repository's asset allow-list before bundling or distributing generated files. Tripo commercial-use rights do not by themselves establish CC0 or permission to redistribute raw assets. No public release was performed.
+2. Convert and validate embedded-texture GLB output against §4.1 and §4.5, including orientation, ground position, size and final triangle/skin budgets.
+3. Produce in-place motion and the required clip names/timing in §4.4. The current three `.001` clips do not satisfy that contract; hit, death, item, dodge and class-specific clips are still missing.
+4. Verify the `Head` bone, `Accent` material and separate weapon/shield mesh names. Add equipment and test grip rather than treating the unarmed slash as a finished Fighter attack.
+5. Test palette/race scaling, portraits, floor contact, transitions and combat in `?asset-review` and the game. Complete Part B acceptance before replacing any KayKit fallback.
+
+The archive manifests record file SHA-256 hashes for reproducibility. They are production inventory, not the runtime licence manifest or proof that Part B acceptance has passed.

@@ -1,0 +1,151 @@
+[
+  {
+    "stage": "Start: Studio setup before reference upload",
+    "at": 1793279235492
+  },
+  {
+    "stage": "01-settings-upload-pending",
+    "started": 1793279295264,
+    "ended": 1793279305280,
+    "frames": 383,
+    "failure": null
+  },
+  {
+    "stage": "02-reference-upload-retry",
+    "started": 1793279337730,
+    "ended": 1793279357730,
+    "frames": 760,
+    "failure": null
+  },
+  {
+    "stage": "03-native-reference-upload",
+    "started": 1793279409155,
+    "ended": 1793279429170,
+    "frames": 778,
+    "failure": null
+  },
+  {
+    "stage": "04-reference-retry-user-request",
+    "started": 1793279689742,
+    "ended": 1793279704769,
+    "frames": 527,
+    "failure": null
+  },
+  {
+    "stage": "05-clean-tab-reference-upload",
+    "started": 1793279735006,
+    "ended": 1793279755009,
+    "frames": 728,
+    "failure": null
+  },
+  {
+    "stage": "06-upload-ready-settings",
+    "started": 1793279833846,
+    "ended": 1793279837877,
+    "frames": 149,
+    "failure": null
+  },
+  {
+    "stage": "07-set-8000-quad",
+    "started": 1793279844065,
+    "ended": 1793279849088,
+    "frames": 188,
+    "failure": null
+  },
+  {
+    "stage": "08-generate-original-click",
+    "started": 1793279856249,
+    "ended": 1793279876252,
+    "frames": 770,
+    "failure": null
+  },
+  {
+    "stage": "09-generation-result",
+    "started": 1793279881422,
+    "ended": 1793279901439,
+    "frames": 774,
+    "failure": null
+  },
+  {
+    "stage": "10-mesh-side-inspection",
+    "started": 1793279923669,
+    "ended": 1793279928672,
+    "frames": 193,
+    "failure": null
+  },
+  {
+    "stage": "11-mesh-back-inspection",
+    "started": 1793279944615,
+    "ended": 1793279949622,
+    "frames": 190,
+    "failure": null
+  },
+  {
+    "stage": "12-mesh-other-side-inspection",
+    "started": 1793279955213,
+    "ended": 1793279959222,
+    "frames": 153,
+    "failure": null
+  },
+  {
+    "stage": "13-geometry-export",
+    "started": 1793279990379,
+    "ended": 1793279995389,
+    "frames": 192,
+    "failure": null
+  },
+  {
+    "stage": "14-texture-reference-upload",
+    "started": 1793280104246,
+    "ended": 1793280119270,
+    "frames": 569,
+    "failure": null
+  },
+  {
+    "stage": "15-texture-upload-progress",
+    "started": 1793280177371,
+    "ended": 1793280197377,
+    "frames": 754,
+    "failure": null
+  },
+  {
+    "stage": "16-texture-original-submit",
+    "started": 1793280333506,
+    "ended": 1793280353508,
+    "frames": 716,
+    "failure": null
+  },
+  {
+    "stage": "17-texture-result",
+    "started": 1793280359616,
+    "ended": 1793280379643,
+    "frames": 734,
+    "failure": null
+  },
+  {
+    "stage": "18-texture-completion",
+    "started": 1793280387238,
+    "ended": 1793280397244,
+    "frames": 369,
+    "failure": null
+  },
+  {
+    "stage": "19-textured-result-front",
+    "started": 1793280469296,
+    "ended": 1793280474304,
+    "frames": 183,
+    "failure": null
+  },
+  {
+    "stage": "20-textured-orbit",
+    "started": 1793280499866,
+    "ended": 1793280521876,
+    "frames": 550
+  },
+  {
+    "stage": "21-post-generation-wireframe-orbit",
+    "started": 1793280841457,
+    "ended": 1793280863482,
+    "frames": 492
+  }
+]

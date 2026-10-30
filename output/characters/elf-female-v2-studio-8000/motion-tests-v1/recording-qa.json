@@ -1,0 +1,35 @@
+{
+  "idle": {
+    "captured_frames": 297,
+    "capture_seconds": 16.046,
+    "capture_fps": 18.509285803315468,
+    "output_fps": 30,
+    "median_frame_difference": 0.4518831168831169,
+    "identical_frames": 0,
+    "width": 560,
+    "height": 550,
+    "audio": false
+  },
+  "walk-wide": {
+    "captured_frames": 189,
+    "capture_seconds": 10.036,
+    "capture_fps": 18.83220406536469,
+    "output_fps": 30,
+    "median_frame_difference": 1.1890395021645022,
+    "identical_frames": 0,
+    "width": 560,
+    "height": 550,
+    "audio": false
+  },
+  "slash": {
+    "captured_frames": 262,
+    "capture_seconds": 14.021,
+    "capture_fps": 18.68625632979103,
+    "output_fps": 30,
+    "median_frame_difference": 0.6821666666666667,
+    "identical_frames": 0,
+    "width": 560,
+    "height": 550,
+    "audio": false
+  }
+}
