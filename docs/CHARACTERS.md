@@ -327,3 +327,11 @@ These are **production prototypes, not game-ready assets**. Nothing was added to
 5. Test palette/race scaling, portraits, floor contact, transitions and combat in `?asset-review` and the game. Complete Part B acceptance before replacing any KayKit fallback.
 
 The archive manifests record file SHA-256 hashes for reproducibility. They are production inventory, not the runtime licence manifest or proof that Part B acceptance has passed.
+
+### 7.5 Tripo Fighter equipment preparation — 30 October 2026
+
+The owner confirmed the original steel-armored Tripo Fighter (`1447de15-fb60-4516-a6db-1384f4a9e5a7`). An audit of `docs/elf-character-production` at `d9b7aef` found only reference images and recordings for that Fighter: **no Fighter mesh, texture atlas, skeleton or animation export**. The available v1/v2 FBXs are unarmored bases and were not substituted. Earlier statements that the Fighter was rigged refer to Studio previews, not a usable rig committed here.
+
+[Separate sword and shield GLBs](../output/characters/elf-fighter-equipment-v1/README.md) are prepared with `Weapon_Main` / `Shield` names, grip-centered pivots and a light `Accent` shield panel. They total 654 triangles / 37,252 bytes and have no external dependencies. The original archives are preserved. The package includes reproducible Blender source, a geometry/hash verifier, a render of the re-imported exports, and the source audit.
+
+Hand fitting, actual rig/weight validation, in-place walk editing and combined character budget checks remain blocked on an export of that exact Fighter with texture and idle/walk/slash clips. No Fighter animation or game integration was changed. These props are newly authored CC0 equipment; that does not resolve the Tripo character's license evidence.

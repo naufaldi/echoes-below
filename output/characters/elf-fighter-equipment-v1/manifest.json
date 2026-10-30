@@ -1,0 +1,65 @@
+{
+  "status": "production-only; not fitted or integrated",
+  "source": {
+    "tool": "Blender 4.3.2, original procedural equipment",
+    "generator": "../../../scripts/characters/generate-fighter-equipment.py",
+    "target_character": "Tripo Studio 1447de15-fb60-4516-a6db-1384f4a9e5a7; mesh export absent"
+  },
+  "license": {
+    "equipment": "CC0-1.0",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "scope": "New equipment only; no Tripo relicensing"
+  },
+  "files": [
+    {
+      "file": "LICENSE.txt",
+      "sha256": "d4eccd12072c02e2d8350a943344ac6ac4ddb1b79f1b6ed5d35473c94a25abf8",
+      "bytes": 454
+    },
+    {
+      "file": "README.md",
+      "sha256": "6fb993ae8780ab62f28a69ca5fe4f0336943d349392aea0dbd1147e8fa8cd744",
+      "bytes": 7884
+    },
+    {
+      "file": "equipment-preview.png",
+      "sha256": "a0e7db71d2b9d194a4d254d65c60b5ca50b94c465ccb49f9895da70c64d11f53",
+      "bytes": 775051
+    },
+    {
+      "file": "geometry-audit.json",
+      "sha256": "229aa50ca4356e82f4bb02650c07ca362e89aae931f967d4f4cb80f950fa8e4e",
+      "bytes": 1226
+    },
+    {
+      "file": "shield.glb",
+      "sha256": "93ce735f24eb7c4c50e9ad0eb7a12e0830fb808db1611f46c1993b8c512fcba3",
+      "bytes": 19168
+    },
+    {
+      "file": "source-audit.json",
+      "sha256": "0576498b95f95025f8e3e631a12ebbb1f6a1dcb857c90eba723ebeae8ceb3c99",
+      "bytes": 2816
+    },
+    {
+      "file": "sword.glb",
+      "sha256": "effe84115cec9490ea594e3bbf5c33222a7d0213202044f3a51013247b7ad6ae",
+      "bytes": 18084
+    },
+    {
+      "file": "validation.json",
+      "sha256": "2ee239e7f7cc86be4c6835d933577b74be1c27228e6d6e2ff788b1588cb49899",
+      "bytes": 830
+    },
+    {
+      "file": "../../../scripts/characters/generate-fighter-equipment.py",
+      "sha256": "f585b8df0b5570da8a79bbb8827e1ef9c89029f447d4c9f063656b56e57d092a",
+      "bytes": 7199
+    },
+    {
+      "file": "../../../scripts/characters/verify-fighter-equipment.py",
+      "sha256": "d0720d67dc73d1b2a186f113cc354d0e27c1b746053c2c7b27aae259df18b32c",
+      "bytes": 3801
+    }
+  ]
+}
