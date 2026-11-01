@@ -1,0 +1,194 @@
+{
+  "source": {
+    "mesh": "ff0ddad5088cd3e5c05b67a5495bccb663dd554ca1d5a1493cac7c03939944b3",
+    "bones": "10cdd5a295bf846b069f034749b9cac14f327d80f0307758d05dd2f90653e428",
+    "actions": {
+      "Armature|idle.001|Base Layer": "e54945a74ee5b93cb133dffd69994e68ba1d93c7b64c0159374626f5deefc438",
+      "Armature|slash.001|Base Layer": "f4491917007aa1a8bb3449471c936e42d8188a23cf6f0e1750192ea196a235dc",
+      "Armature|walk.001|Base Layer": "06aa3682487febb5d442b77115c918ea01185a574384ea4344d898e81a5b9804"
+    },
+    "materials": "b78cc4ddaac0a0ae61e906c0475cd28e5e6281d10fea31678317acba195e3b56",
+    "body_transform": [
+      [
+        0.009999999776482582,
+        1.776356601172234e-16,
+        -2.9799512857309196e-10,
+        3.5067568848745623e-09
+      ],
+      [
+        -2.8103760367059055e-14,
+        -3.3306690738754696e-16,
+        -0.009999999776482582,
+        -3.6538847503209126e-09
+      ],
+      [
+        1.776356601172234e-16,
+        0.009999999776482582,
+        2.7755575615628914e-16,
+        1.6117803758319837e-09
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "rig_transform": [
+      [
+        0.009999999776482582,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.009999999776482582,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.009999999776482582,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "counts": {
+      "vertices": 8313,
+      "faces": 9083,
+      "bones": 65
+    }
+  },
+  "armored": {
+    "mesh": "ff0ddad5088cd3e5c05b67a5495bccb663dd554ca1d5a1493cac7c03939944b3",
+    "bones": "10cdd5a295bf846b069f034749b9cac14f327d80f0307758d05dd2f90653e428",
+    "actions": {
+      "Armature|idle.001|Base Layer": "e54945a74ee5b93cb133dffd69994e68ba1d93c7b64c0159374626f5deefc438",
+      "Armature|slash.001|Base Layer": "f4491917007aa1a8bb3449471c936e42d8188a23cf6f0e1750192ea196a235dc",
+      "Armature|walk.001|Base Layer": "06aa3682487febb5d442b77115c918ea01185a574384ea4344d898e81a5b9804"
+    },
+    "materials": "b78cc4ddaac0a0ae61e906c0475cd28e5e6281d10fea31678317acba195e3b56",
+    "body_transform": [
+      [
+        0.009999999776482582,
+        1.776356601172234e-16,
+        -2.9799512857309196e-10,
+        3.5067568848745623e-09
+      ],
+      [
+        -2.8103760367059055e-14,
+        -3.3306690738754696e-16,
+        -0.009999999776482582,
+        -3.6538847503209126e-09
+      ],
+      [
+        1.776356601172234e-16,
+        0.009999999776482582,
+        2.7755575615628914e-16,
+        1.6117803758319837e-09
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "rig_transform": [
+      [
+        0.009999999776482582,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.009999999776482582,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.009999999776482582,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "counts": {
+      "vertices": 8313,
+      "faces": 9083,
+      "bones": 65
+    }
+  },
+  "preserved": {
+    "mesh": true,
+    "bones": true,
+    "actions": true,
+    "materials": true,
+    "body_transform": true,
+    "rig_transform": true
+  },
+  "armor_objects": 212,
+  "invalid_groups": [],
+  "unweighted_armor_vertices": 0,
+  "pose_checks": [
+    {
+      "action": "idle",
+      "frame": 60,
+      "all_finite": true,
+      "moving_armor_objects": 211,
+      "max_vertex_displacement": 0.18245757970403073,
+      "different_evaluated_topology_objects": [
+        "Cuirass | backplate"
+      ]
+    },
+    {
+      "action": "walk",
+      "frame": 20,
+      "all_finite": true,
+      "moving_armor_objects": 209,
+      "max_vertex_displacement": 0.5305059614283347,
+      "different_evaluated_topology_objects": [
+        "High padded collar",
+        "Right | ivory front tabard",
+        "Cuirass | backplate"
+      ]
+    },
+    {
+      "action": "slash",
+      "frame": 80,
+      "all_finite": true,
+      "moving_armor_objects": 208,
+      "max_vertex_displacement": 0.41997578491100845,
+      "different_evaluated_topology_objects": [
+        "Cuirass | sculpted front | continuous perimeter trim",
+        "High padded collar",
+        "Left | ivory front tabard",
+        "Cuirass | backplate"
+      ]
+    }
+  ],
+  "note": "Read-only test; no blend save. Finite displacement does not establish collision-free motion.",
+  "visual_review": {
+    "front_three_quarter_review": "Reviewed preceding front/three-quarter renders: torso patches, greave cut-through and toe gaps resolved. Those views predate rear-only backplate replacement.",
+    "latest_slash_review": "Reviewed updated slash render after backplate replacement: rear plate follows curved back without previous conspicuous lifted flap.",
+    "remaining_notes": [
+      "Selected views and sampled actions only; not an all-frame collision guarantee"
+    ],
+    "collision_guarantee": false
+  },
+  "tested_blend_mtime_utc": "2026-11-01T12:07:21.707111+00:00"
+}

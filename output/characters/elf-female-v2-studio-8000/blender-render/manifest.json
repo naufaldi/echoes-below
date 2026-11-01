@@ -1,0 +1,37 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 2290,
+    "sha256": "89bf383fe578214dce317b761556ade2f89363ec4f3f308985510ce4ff93bdc3"
+  },
+  {
+    "path": "blender-render-front.png",
+    "bytes": 1899171,
+    "sha256": "7dc40a286fe8b10474bc005f828df8987220124a406556458830d121abf1501a"
+  },
+  {
+    "path": "blender-render-slash.png",
+    "bytes": 1886387,
+    "sha256": "b1a47479dc7cb6694027d60243a26e59dc2d837b1f3fb21383c07b3e6f0b8f05"
+  },
+  {
+    "path": "blender-render-three-quarter.png",
+    "bytes": 1882585,
+    "sha256": "6efbb1b3db43d14b9833b89cf51c75e2b8b413f8c70ea968d33f83e8635a0da8"
+  },
+  {
+    "path": "blender-render-walk.png",
+    "bytes": 1894898,
+    "sha256": "4bed6ef74090040e53c393ab438b55eb12b88c65ad96150d5dcadab456ee3b46"
+  },
+  {
+    "path": "blender-render.blend",
+    "bytes": 7956745,
+    "sha256": "6beef911970bcdb99b5339f6a2a3486054775611aabb727ea1a0d7e16309b913"
+  },
+  {
+    "path": "preservation-qa.json",
+    "bytes": 5081,
+    "sha256": "e514aa69fb93f154324c744e664baa0eef1044a19aae02be289712d97e22a189"
+  }
+]
