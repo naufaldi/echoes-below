@@ -1,0 +1,75 @@
+{
+  "status": "completed_showcase_rig_motion_tests_and_export",
+  "new_asset_id": "8193d3b0-b4cc-48fc-be79-4f9adb51262b",
+  "new_export": "exports/elf-female-v2-p2-8000-textured.zip",
+  "reference": {
+    "path": "/Users/naufaldi.satriya/WebApps/echoes-below/output/characters/elf-female-v1/elf-front.png",
+    "bytes": 1263975,
+    "sha256": "4359ecc1ae8c23c30a492af8c064d2f0844616461f056c3c325405698ac6614e"
+  },
+  "master": {
+    "path": "/Users/naufaldi.satriya/WebApps/echoes-below/output/characters/elf-female-v1/tripo-out/elf-female-base-v1-4b07e5ca/model.fbx",
+    "bytes": 551020,
+    "sha256": "d45d5d805740f04fd05a9c08bfa31a9a80767427f344e70c8573a8c45763ce07"
+  },
+  "master_unchanged": true,
+  "requested": {
+    "model": "P2.0",
+    "mode": "Quad",
+    "target_faces": 8000,
+    "candidate_count": 1
+  },
+  "settings_verified_in_prior_setup": true,
+  "generation_price_shown": 100,
+  "credits_spent": 130,
+  "balance_before": 25160,
+  "balance_last_observed": 25030,
+  "old_studio_base_id": "42de814c-14cc-41b0-ab42-083ca7a22778",
+  "fighter_id": "1447de15-fb60-4516-a6db-1384f4a9e5a7",
+  "current_url": "https://studio.tripo3d.ai/workspace/animate/8193d3b0-b4cc-48fc-be79-4f9adb51262b",
+  "mesh_inspected": true,
+  "mesh_edited": false,
+  "texture_started": true,
+  "recording_note": "Video validation found stages 06-12 captured the older tab despite successful actions on the new asset. These and early screenshots are NOT proof of new generation or its pre-texture inspection. Initial generation video is unavailable. Actual generation and settings were observed through live AX state/tool screenshots and confirmed by export. Valid final proof contains texture process plus post-generation shaded/wireframe orbits, with gaps omitted. Invalid labeled assembly retained with INVALID prefix; do not use. No paid regeneration was performed to fabricate evidence.",
+  "content_context": "Building a game using Tripo-generated assets; future intention to share assets free. Nothing published or sent.",
+  "redistribution": "Unverified. Confirm Tripo plan/license and input rights before distributing raw assets. Commercial-use rights do not establish raw-asset redistribution rights or CC0 status.",
+  "cost_breakdown": {
+    "P2_generation": 100,
+    "texture_2K_remove_lighting": 10,
+    "mesh_edit": 0,
+    "export_observed_balance_change": 0,
+    "humanoid_mixamo_rig": 20
+  },
+  "texture_completed": true,
+  "actual_polygons": {
+    "quad": 7321,
+    "triangle": 1762,
+    "ngon": 0,
+    "total": 9083,
+    "quad_percent": 80.6,
+    "triangulated": 16404
+  },
+  "texture": {
+    "resolution": [
+      2048,
+      2048
+    ],
+    "remove_lighting": true,
+    "style": "None",
+    "reference": "reference-elf-front.png"
+  },
+  "edit_decision": "No obvious gross defect found in front, back and both sides. No localized Edit Mesh was needed based on limited visual inspection.",
+  "verified_proof": "verified-texture-and-mesh-proof.mp4",
+  "initial_generation_video_valid": false,
+  "clean_showcase": "elf-v2-clean-smooth-orbit-final.mp4",
+  "rig": {
+    "type": "Humanoid",
+    "skeleton": "Mixamo",
+    "completed": true,
+    "evidence": "motion-tests-v1/rig-completed.jpg",
+    "export_audit": "motion-tests-v1/rig-export-audit.json"
+  },
+  "animation_report": "motion-tests-v1/report.json",
+  "clean_motion_video": "motion-tests-v1/elf-v2-motion-tests-clean.mp4",
+  "rigged_export": "exports/rigged/elf-female-v2-rigged-idle-walk-slash.zip"
+}

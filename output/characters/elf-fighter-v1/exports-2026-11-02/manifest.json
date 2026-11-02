@@ -1,0 +1,60 @@
+{
+  "purpose": "Production archive, not runtime licence manifest",
+  "files": [
+    {
+      "file": "README.md",
+      "sha256": "61161992aea152ce308faf7466c8aa0c9abeed70039b4500f64a08b7fd56677c",
+      "bytes": 1918
+    },
+    {
+      "file": "armored-elf-geometry-four-views.png",
+      "sha256": "c2a98557dfd37d6f26d16ac220cc81f05d9f51c2f73ae821d1ee42207e93df66",
+      "bytes": 1054774
+    },
+    {
+      "file": "elf-fighter-armored-rigged-v1.glb",
+      "sha256": "4acddda9154e2022bff2312d7ca26a337bed73e2bd20919b285aaf84dba7dee8",
+      "bytes": 2233224
+    },
+    {
+      "file": "elf-fighter-armored-textured-source-v1.zip",
+      "sha256": "07c8303faa2d60f5e05bde929d89ddbbe28dfcd7de3305b29884b2ad402e8c45",
+      "bytes": 1256536
+    },
+    {
+      "file": "geometry-audit.json",
+      "sha256": "87aef2f9e08445ecb8d1424f67de689c59aa594659a45a6d60065d71a283a169",
+      "bytes": 133
+    },
+    {
+      "file": "inspection-geometry.json",
+      "sha256": "aadec294e6afd5a84c8b8bd1764999ce57c80d1aae4048dbc8805951622fc3ac",
+      "bytes": 527612
+    },
+    {
+      "file": "rigged-glb-audit.json",
+      "sha256": "99f143c5521367bae4cb137ef89f92a0bd7fabfa9f16d8ca364bec566a550701",
+      "bytes": 134
+    },
+    {
+      "file": "source-fbx/tripo_convert_d8680742-589d-461e-a586-f98dd679cc23.fbm/tripo_rgb_a41cbb82-b386-4dbe-9597-808fc34dd247.jpg",
+      "sha256": "1a95b9bdbf0f4919d7a8689789fe20527b8e2effda66fb1b493f18981e37dd3a",
+      "bytes": 874948
+    },
+    {
+      "file": "source-fbx/tripo_convert_d8680742-589d-461e-a586-f98dd679cc23.fbx",
+      "sha256": "0ba37f8b05241a766e6f4b32cb1daf27d2d07386cbaabe11557fb55f9c8696c0",
+      "bytes": 400972
+    },
+    {
+      "file": "studio-idle-proof.png",
+      "sha256": "ad8394b93324cd10d6b8cfaa2bd615a739ded02dfa36e5ae03b04ae151e11ec0",
+      "bytes": 102666
+    },
+    {
+      "file": "texture-audit.json",
+      "sha256": "3223f026d6dc34b75208ec34951ed026724be239a5cdf20e0399f44d4d20b84e",
+      "bytes": 187
+    }
+  ]
+}

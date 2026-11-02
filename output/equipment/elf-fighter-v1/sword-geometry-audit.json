@@ -1,0 +1,17 @@
+{
+  "fbx_version": 7200,
+  "vertices": 855,
+  "polygon_sizes": {
+    "3": 148,
+    "4": 750
+  },
+  "polygons": 898,
+  "triangulated": 1648,
+  "quad_percent": 83.51893095768374,
+  "target_faces": 750,
+  "asset_id": "14ad0d64-5835-4d3f-b739-447bfee65c4f",
+  "model": "P2.0",
+  "topology_mode": "Quad",
+  "credits_observed": 100,
+  "balance_after": 25100
+}

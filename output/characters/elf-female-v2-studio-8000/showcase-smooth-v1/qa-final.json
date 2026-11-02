@@ -1,0 +1,18 @@
+{
+  "frames": 376,
+  "fps": 30,
+  "duration": 12.533333333333333,
+  "width": 568,
+  "height": 540,
+  "audio": false,
+  "method": "Equal 2px camera drag per captured angle; image-sequence playback at 30fps. Not realtime screen capture. No synthesized/interpolated frames.",
+  "step_difference_median": 0.6956872427983539,
+  "step_difference_max": 0.9631399176954734,
+  "near_duplicate_steps": 0,
+  "loop_match_error": 0.029922839506172843,
+  "raw_frames_retained": 385,
+  "asset_id": "8193d3b0-b4cc-48fc-be79-4f9adb51262b",
+  "credits_used": 0,
+  "final_file": "elf-v2-clean-smooth-orbit-final.mp4",
+  "edge_crop": "16px removed from each horizontal edge to exclude blue UI sliver; raw and initial encode retained"
+}

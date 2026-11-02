@@ -1,0 +1,52 @@
+{
+  "asset_id": "8193d3b0-b4cc-48fc-be79-4f9adb51262b",
+  "rig": "Humanoid / Mixamo",
+  "rig_cost": 20,
+  "preset_and_export_observed_cost": 0,
+  "balance": 25030,
+  "animations_tested": [
+    "idle",
+    "walk",
+    "slash"
+  ],
+  "clean_video": "elf-v2-motion-tests-clean.mp4",
+  "combined_order": [
+    "idle",
+    "walk-wide",
+    "slash"
+  ],
+  "qa": {
+    "shoulders_elbows": "No gross tearing or detached limbs visible in sampled front and walk side views; close-up skin-weight validation not performed.",
+    "hips_knees": "Bend coherently in preview; no gross inversion visible in samples.",
+    "hands": "Remain attached. Slash is unarmed; weapon grip and finger precision are untested.",
+    "feet": "Walk has forward root motion and snaps back at loop boundary. Foot sliding cannot be reliably assessed without a ground/contact reference.",
+    "clipping": "No gross limb disconnection visible. Self-intersection during fast attack and game collision not conclusively checked.",
+    "framing": "Initial walk raw capture reaches top crop edge; replaced by walk-wide in final montage. Both retained.",
+    "capture": "Real-time screenshots at approximately 18.5-18.8 fps encoded at 30 fps with timestamp-based duplication; not native 30 fps capture. Orbit is a separate equally stepped camera sequence."
+  },
+  "export": {
+    "studio_status": "completed_successfully",
+    "local_status": "downloaded_and_audited",
+    "format": "FBX",
+    "preset": "Mixamo",
+    "skeleton": true,
+    "animations": [
+      "idle",
+      "walk",
+      "slash"
+    ],
+    "stay_in_place": false,
+    "zip": "exports/rigged/elf-female-v2-rigged-idle-walk-slash.zip",
+    "bone_count": 65,
+    "animation_stack_names": [
+      "walk.001",
+      "slash.001",
+      "idle.001"
+    ],
+    "texture_resolution": [
+      2048,
+      2048
+    ]
+  },
+  "scope": "Studio visual motion test only, no game import or animation-controller validation."
+}

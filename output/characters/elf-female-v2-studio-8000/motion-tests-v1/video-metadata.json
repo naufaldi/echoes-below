@@ -1,0 +1,74 @@
+{
+  "elf-v2-motion-tests-clean.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 560,
+        "height": 550,
+        "r_frame_rate": "30/1",
+        "side_data_list": [
+          {}
+        ]
+      }
+    ],
+    "format": {
+      "duration": "40.066667"
+    }
+  },
+  "elf-v2-walk-wide.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 560,
+        "height": 550,
+        "r_frame_rate": "30/1",
+        "side_data_list": [
+          {}
+        ]
+      }
+    ],
+    "format": {
+      "duration": "10.033333"
+    }
+  },
+  "elf-v2-idle.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 560,
+        "height": 550,
+        "r_frame_rate": "30/1",
+        "side_data_list": [
+          {}
+        ]
+      }
+    ],
+    "format": {
+      "duration": "16.033333"
+    }
+  },
+  "elf-v2-slash.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 560,
+        "height": 550,
+        "r_frame_rate": "30/1",
+        "side_data_list": [
+          {}
+        ]
+      }
+    ],
+    "format": {
+      "duration": "14.000000"
+    }
+  }
+}
