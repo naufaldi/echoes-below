@@ -1,0 +1,32 @@
+[
+  {
+    "file": "01-sword-final-tripo-studio.png",
+    "sha256": "d2e14edb1761494ef222565e0eececc90a8b6c47f68771eaf951c6ab1d844776",
+    "bytes": 92372
+  },
+  {
+    "file": "02-sword-image-reference.png",
+    "sha256": "e5fd79fc5c6b14fdf724c5ecd5c532dfa6398aab7580939f8c002161068950da",
+    "bytes": 1187957
+  },
+  {
+    "file": "03-sword-topology-four-views.png",
+    "sha256": "80d27eb00648da0e08ec7a77cd1d8fb0e0352cf0c6579136c1ed7955836ba640",
+    "bytes": 46617
+  },
+  {
+    "file": "04-sword-side-tripo-studio.png",
+    "sha256": "a6f380f102d2eb75a102cf0c92cd2a76e0d5cf63d63220e7b68f084150f2041d",
+    "bytes": 89918
+  },
+  {
+    "file": "05-p2-quad-generation-settings.png",
+    "sha256": "fc14b8150c391b6950d6131d29dee12cc37eff3998cd8dc0f1f0c5d106c36d04",
+    "bytes": 89759
+  },
+  {
+    "file": "README.md",
+    "sha256": "45a2afa7d15d869541f57d8211220b2e1bd389f431f4af299d09404200297493",
+    "bytes": 1987
+  }
+]

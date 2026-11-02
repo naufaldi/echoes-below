@@ -1,0 +1,65 @@
+{
+  "purpose": "Production archive, not runtime licence manifest",
+  "files": [
+    {
+      "file": "Equipped Elf \u2014 Front  Side  Back.png",
+      "sha256": "5847c8fcbf62bee6ed1c5feda4f2563b76270159800881cb8223bdcb57a02e7d",
+      "bytes": 47306
+    },
+    {
+      "file": "README.md",
+      "sha256": "570bfedf47951882c9455fee04e32cc3f94fa2377c24e7182103abeeb3e8916a",
+      "bytes": 3394
+    },
+    {
+      "file": "completed-ui.txt",
+      "sha256": "97ec4295a6e89af84062567fe4f21207bc51deec8eb49034cd081884226f2824",
+      "bytes": 13537
+    },
+    {
+      "file": "credits.json",
+      "sha256": "a0ba6cfc2fdef1397c7f523e548f6f64afd28ff003d4e763f1f32046fdcc3f1f",
+      "bytes": 311
+    },
+    {
+      "file": "downloaded-glb-audit.json",
+      "sha256": "048351df5a53029edb9ee1163caeaa4a1e876a683601f1aee570f63dea254a00",
+      "bytes": 682
+    },
+    {
+      "file": "elf-fighter-equipped-report.md",
+      "sha256": "27de04f7c61e5d7c8500d36a320b3e27b133f773b9ca4a499282e1806717644f",
+      "bytes": 7917
+    },
+    {
+      "file": "elf-fighter-equipped-tripo-v1.glb",
+      "sha256": "3093be6a205fa9643bc0114013cd60463ca9c5ec75d1ffd6f384ddf38d55c278",
+      "bytes": 4168596
+    },
+    {
+      "file": "input-baseline.json",
+      "sha256": "88d124fc799215cf72ed1195c2582972ecbd25b5c2ed5f2c6d0be5c168edefc1",
+      "bytes": 1036
+    },
+    {
+      "file": "inspection-proof.png",
+      "sha256": "dbedd2645dc57933c986642f2547819a1517b8643059fc2777503c90f3c2678f",
+      "bytes": 86242
+    },
+    {
+      "file": "inspection-ui.txt",
+      "sha256": "de9b95fdac846761f6aec956486d14260282d48192c1088e143d04c8ae2cdae2",
+      "bytes": 8860
+    },
+    {
+      "file": "saved-asset-export-proof.png",
+      "sha256": "3a630313f508ad3c1d97e9748105aa4ea765c44a9ef37b64b2ea65fd7434eb2a",
+      "bytes": 71443
+    },
+    {
+      "file": "studio-equipped-preview.png",
+      "sha256": "dd89e0bcc8e041181f31ca70227a765ed7db537b27f08db4ea7f340cf3d37f8e",
+      "bytes": 41019
+    }
+  ]
+}

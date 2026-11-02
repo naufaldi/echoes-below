@@ -1,0 +1,38 @@
+{
+  "character": {
+    "path": "output/characters/elf-fighter-v1/exports-2026-11-02/elf-fighter-armored-rigged-v1.glb",
+    "sha256": "4acddda9154e2022bff2312d7ca26a337bed73e2bd20919b285aaf84dba7dee8",
+    "bytes": 2233224,
+    "meshes": 1,
+    "materials": 1,
+    "skins": [
+      65
+    ],
+    "animations": [
+      "idle.001",
+      "slash.001",
+      "walk.001"
+    ],
+    "triangles": 11206
+  },
+  "sword": {
+    "path": "output/equipment/elf-fighter-v1/textured/elf-fighter-sword-p2-quad-textured-v1.glb",
+    "sha256": "4187c9edb2efe985f7ce00e9576ad1aa71a4386e1ca053d2642a5186e18e1a5e",
+    "bytes": 842912,
+    "meshes": 1,
+    "materials": 1,
+    "skins": [],
+    "animations": [],
+    "triangles": 1648
+  },
+  "shield": {
+    "path": "output/equipment/elf-fighter-v1/shield/elf-fighter-shield-p2-quad-textured-v1.glb",
+    "sha256": "f5112a1e149d4be8fab3070a788e9ba251318ef723a19e98732df8551f6bc85c",
+    "bytes": 629168,
+    "meshes": 1,
+    "materials": 1,
+    "skins": [],
+    "animations": [],
+    "triangles": 1385
+  }
+}

@@ -327,3 +327,7 @@ These are **production prototypes, not game-ready assets**. Nothing was added to
 5. Test palette/race scaling, portraits, floor contact, transitions and combat in `?asset-review` and the game. Complete Part B acceptance before replacing any KayKit fallback.
 
 The archive manifests record file SHA-256 hashes for reproducibility. They are production inventory, not the runtime licence manifest or proof that Part B acceptance has passed.
+
+### 7.5 Equipment assembly handoff
+
+Sword, shield, original rigged armor, and the downloaded Tripo assembly are archived. See [Blender equipment handoff](BLENDER_EQUIPMENT_HANDOFF.md) for exact inputs, the 65-joint source versus 55-joint Tripo re-export distinction, verified credit totals, and the next comparison task. Runtime integration remains pending §7.4.

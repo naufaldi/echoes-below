@@ -1,0 +1,40 @@
+{
+  "file": "elf-fighter-equipped-tripo-v1.glb",
+  "bytes": 4168596,
+  "sha256": "3093be6a205fa9643bc0114013cd60463ca9c5ec75d1ffd6f384ddf38d55c278",
+  "meshes": 3,
+  "materials": 3,
+  "joints": [
+    55
+  ],
+  "animations": [
+    {
+      "name": "idle.001",
+      "channels": 156
+    },
+    {
+      "name": "slash.001",
+      "channels": 156
+    },
+    {
+      "name": "walk.001",
+      "channels": 156
+    }
+  ],
+  "triangles": 14239,
+  "external_uris": [],
+  "equipment_nodes": [
+    {
+      "name": "Shield_Left",
+      "parent": [
+        "mixamorig:LeftHand"
+      ]
+    },
+    {
+      "name": "Sword_Right",
+      "parent": [
+        "mixamorig:RightHand"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,330 @@
+{
+  "purpose": "Production archive, not runtime licence manifest",
+  "files": [
+    {
+      "file": "README.md",
+      "sha256": "4a19fb127e7241824144995de8e01d192a7a2a3c73fbf1e78ca8e894b273d183",
+      "bytes": 3409
+    },
+    {
+      "file": "assembly-tripo-v1/Equipped Elf \u2014 Front  Side  Back.png",
+      "sha256": "5847c8fcbf62bee6ed1c5feda4f2563b76270159800881cb8223bdcb57a02e7d",
+      "bytes": 47306
+    },
+    {
+      "file": "assembly-tripo-v1/README.md",
+      "sha256": "570bfedf47951882c9455fee04e32cc3f94fa2377c24e7182103abeeb3e8916a",
+      "bytes": 3394
+    },
+    {
+      "file": "assembly-tripo-v1/completed-ui.txt",
+      "sha256": "97ec4295a6e89af84062567fe4f21207bc51deec8eb49034cd081884226f2824",
+      "bytes": 13537
+    },
+    {
+      "file": "assembly-tripo-v1/credits.json",
+      "sha256": "a0ba6cfc2fdef1397c7f523e548f6f64afd28ff003d4e763f1f32046fdcc3f1f",
+      "bytes": 311
+    },
+    {
+      "file": "assembly-tripo-v1/downloaded-glb-audit.json",
+      "sha256": "048351df5a53029edb9ee1163caeaa4a1e876a683601f1aee570f63dea254a00",
+      "bytes": 682
+    },
+    {
+      "file": "assembly-tripo-v1/elf-fighter-equipped-report.md",
+      "sha256": "27de04f7c61e5d7c8500d36a320b3e27b133f773b9ca4a499282e1806717644f",
+      "bytes": 7917
+    },
+    {
+      "file": "assembly-tripo-v1/elf-fighter-equipped-tripo-v1.glb",
+      "sha256": "3093be6a205fa9643bc0114013cd60463ca9c5ec75d1ffd6f384ddf38d55c278",
+      "bytes": 4168596
+    },
+    {
+      "file": "assembly-tripo-v1/input-baseline.json",
+      "sha256": "88d124fc799215cf72ed1195c2582972ecbd25b5c2ed5f2c6d0be5c168edefc1",
+      "bytes": 1036
+    },
+    {
+      "file": "assembly-tripo-v1/inspection-proof.png",
+      "sha256": "dbedd2645dc57933c986642f2547819a1517b8643059fc2777503c90f3c2678f",
+      "bytes": 86242
+    },
+    {
+      "file": "assembly-tripo-v1/inspection-ui.txt",
+      "sha256": "de9b95fdac846761f6aec956486d14260282d48192c1088e143d04c8ae2cdae2",
+      "bytes": 8860
+    },
+    {
+      "file": "assembly-tripo-v1/manifest.json",
+      "sha256": "f0ef2f515dedd14af29233fcc873be5030a370b74d0eef2dca2e28852d922f58",
+      "bytes": 1988
+    },
+    {
+      "file": "assembly-tripo-v1/saved-asset-export-proof.png",
+      "sha256": "3a630313f508ad3c1d97e9748105aa4ea765c44a9ef37b64b2ea65fd7434eb2a",
+      "bytes": 71443
+    },
+    {
+      "file": "assembly-tripo-v1/studio-equipped-preview.png",
+      "sha256": "dd89e0bcc8e041181f31ca70227a765ed7db537b27f08db4ea7f340cf3d37f8e",
+      "bytes": 41019
+    },
+    {
+      "file": "elf-fighter-sword-p2-quad-v1.zip",
+      "sha256": "7cb9d36e75ee626e021aa42a46340b37eb2a5c46b24ba818757eca7cbd6e1cc6",
+      "bytes": 45945
+    },
+    {
+      "file": "shield/01-p2-quad-settings.png",
+      "sha256": "235b9bbf9bdaf9b3ac269fc159525b5bb5884cb542f22f4dc23e3526eb9ce69f",
+      "bytes": 94061
+    },
+    {
+      "file": "shield/02-texture-settings.png",
+      "sha256": "258a5a0f573daa37b181d67e96ade7e99c4d814ebe1dc684cc5f7274b5fcbed1",
+      "bytes": 90441
+    },
+    {
+      "file": "shield/03-studio-front.png",
+      "sha256": "3507e496f72f98eacdda870b673f5b12b383ec561396e9206b9c128269beb683",
+      "bytes": 115577
+    },
+    {
+      "file": "shield/04-studio-back-angle.png",
+      "sha256": "14b586bfb596291bd58ffe651f37ce19ef7ef3b17e7d3ce7e8412f6e3ac5c1fb",
+      "bytes": 101895
+    },
+    {
+      "file": "shield/05-studio-back.png",
+      "sha256": "7824016179d9707e94480f27cedbf34e436992893ecf6c0ad9c7428408d8bdd8",
+      "bytes": 104144
+    },
+    {
+      "file": "shield/README.md",
+      "sha256": "b94b6f2febb6ff8489025f962883c1bae3b24c3c0be43348d598259f5b649f3a",
+      "bytes": 3865
+    },
+    {
+      "file": "shield/elf-fighter-shield-p2-quad-geometry-v1.zip",
+      "sha256": "2b04ebb4b0cf696d3721c8d5c8c38a1e62c563dc35a6f018c0b432daf63ac80f",
+      "bytes": 44059
+    },
+    {
+      "file": "shield/elf-fighter-shield-p2-quad-textured-v1.glb",
+      "sha256": "f5112a1e149d4be8fab3070a788e9ba251318ef723a19e98732df8551f6bc85c",
+      "bytes": 629168
+    },
+    {
+      "file": "shield/elf-fighter-shield-p2-quad-textured-v1.zip",
+      "sha256": "8a2f11d8b232db108dfb2838ca42958c555e5738e442ea480e5355bebd7dfe0f",
+      "bytes": 617485
+    },
+    {
+      "file": "shield/geometry-audit.json",
+      "sha256": "97e3400c31c9904eb2ef12ca50f2c5c9b205f54f0ecc6b231d3ec8607a8c7ef4",
+      "bytes": 176
+    },
+    {
+      "file": "shield/geometry-fbx/tripo_convert_0510e245-07a9-4107-b5fb-4140d934af5e.fbx",
+      "sha256": "d591db803a153a19f24198a644eb7c23fb1938b8afc22d038bb2df1db6817d62",
+      "bytes": 54528
+    },
+    {
+      "file": "shield/manifest.json",
+      "sha256": "4fcc293dd2b6fb76046091d8c60d2bd85b2f5d6fe3329b0698f5438896d5f721",
+      "bytes": 3150
+    },
+    {
+      "file": "shield/shield-geometry-four-views.png",
+      "sha256": "b73afd4bfe87c1de28255080d19a94087cb0fac9752742754c93c3e25efed9cb",
+      "bytes": 588902
+    },
+    {
+      "file": "shield/shield-inspection-geometry.json",
+      "sha256": "75627ac2a181b54a16a08820f7699d12374b36eced7e9993e15e701347a13381",
+      "bytes": 58090
+    },
+    {
+      "file": "shield/shield-reference-v1.png",
+      "sha256": "44e2eb0990eedb6ca7967814ee63cfe23a8376cde66305e016ebd41b27f5280a",
+      "bytes": 1401236
+    },
+    {
+      "file": "shield/social-images.zip",
+      "sha256": "7605d2075b12fd7ee5985f47416d023c6cce4e64b0879a41f5181e763791e748",
+      "bytes": 2197835
+    },
+    {
+      "file": "shield/textured-audit.json",
+      "sha256": "5af4a3fc3a38d63db4077c0e821e5928710ba356ebb9087e3ed9cfc149147708",
+      "bytes": 279
+    },
+    {
+      "file": "shield/textured-fbx/elf-fighter-shield-p2-quad-textured-v1.fbm/elf-fighter-shield-p2-quad-textured-v1_basecolor.jpg",
+      "sha256": "0ed3da0b3edc0657dc7573e5da2ef36ad34dfbdcc19e302aeec499543cdb6d1e",
+      "bytes": 565481
+    },
+    {
+      "file": "shield/textured-fbx/elf-fighter-shield-p2-quad-textured-v1.fbx",
+      "sha256": "fbc1fd397c4e529dbdf77015c457463a99a52e72870fa69fd63820a663deb2c4",
+      "bytes": 66672
+    },
+    {
+      "file": "shield-reference-v1.png",
+      "sha256": "44e2eb0990eedb6ca7967814ee63cfe23a8376cde66305e016ebd41b27f5280a",
+      "bytes": 1401236
+    },
+    {
+      "file": "social-media-sword-hd-v2/README.md",
+      "sha256": "4aefaf70b391184c056b74f8db6b3a9d8b42779b7404428f2d882a8754fc5596",
+      "bytes": 855
+    },
+    {
+      "file": "social-media-sword-hd-v2/manifest.json",
+      "sha256": "b35a599b0114729bb0ef12f588e3dba4d5ac751be6d09263da18213b954064af",
+      "bytes": 458
+    },
+    {
+      "file": "social-media-sword-hd-v2/sword-final-hd-angle-2160x2700.png",
+      "sha256": "4d0dc28b9d31fb8b86c5d40ee85a323515193897be5145976087412888c2a223",
+      "bytes": 898838
+    },
+    {
+      "file": "social-media-sword-hd-v2/sword-final-hd-front-2160x2700.png",
+      "sha256": "ec68cf0438c8808c1772a7db88d3b6c841de9fd82b1fb5c2f36d875b2c2a81bb",
+      "bytes": 972195
+    },
+    {
+      "file": "social-media-sword-hd-v2.zip",
+      "sha256": "6f707aee59659057c69d5207515f1d3e8da77071c8452a4d61228bcab93e10c8",
+      "bytes": 1714922
+    },
+    {
+      "file": "social-media-sword-v1/01-sword-final-tripo-studio.png",
+      "sha256": "d2e14edb1761494ef222565e0eececc90a8b6c47f68771eaf951c6ab1d844776",
+      "bytes": 92372
+    },
+    {
+      "file": "social-media-sword-v1/02-sword-image-reference.png",
+      "sha256": "e5fd79fc5c6b14fdf724c5ecd5c532dfa6398aab7580939f8c002161068950da",
+      "bytes": 1187957
+    },
+    {
+      "file": "social-media-sword-v1/03-sword-topology-four-views.png",
+      "sha256": "80d27eb00648da0e08ec7a77cd1d8fb0e0352cf0c6579136c1ed7955836ba640",
+      "bytes": 46617
+    },
+    {
+      "file": "social-media-sword-v1/04-sword-side-tripo-studio.png",
+      "sha256": "a6f380f102d2eb75a102cf0c92cd2a76e0d5cf63d63220e7b68f084150f2041d",
+      "bytes": 89918
+    },
+    {
+      "file": "social-media-sword-v1/05-p2-quad-generation-settings.png",
+      "sha256": "fc14b8150c391b6950d6131d29dee12cc37eff3998cd8dc0f1f0c5d106c36d04",
+      "bytes": 89759
+    },
+    {
+      "file": "social-media-sword-v1/README.md",
+      "sha256": "45a2afa7d15d869541f57d8211220b2e1bd389f431f4af299d09404200297493",
+      "bytes": 1987
+    },
+    {
+      "file": "social-media-sword-v1/manifest.json",
+      "sha256": "d98a02b556238d54b15846ddab2059da97311f123342dc3472ea3ff9968996e8",
+      "bytes": 924
+    },
+    {
+      "file": "social-media-sword-v1.zip",
+      "sha256": "134c5a47f6364a81f5c8fbc131447d88cf25ea656db7b4b4c92e7df924f6af39",
+      "bytes": 1290231
+    },
+    {
+      "file": "studio-viewer-error.png",
+      "sha256": "bf1ca13c9e997cca7ab39c1e2d2e70575449acc8ff0c60a1ee7dbd69092e8821",
+      "bytes": 92198
+    },
+    {
+      "file": "sword-geometry-audit.json",
+      "sha256": "bfc0c1007463a4dc009bf16d5eed6befa36418aec282c42f5fb6c291e469b9c3",
+      "bytes": 354
+    },
+    {
+      "file": "sword-geometry-four-views.png",
+      "sha256": "80d27eb00648da0e08ec7a77cd1d8fb0e0352cf0c6579136c1ed7955836ba640",
+      "bytes": 46617
+    },
+    {
+      "file": "sword-hd-render.html",
+      "sha256": "62012fd7f859fe630ecd8f6164cd565d0a90d715fe58eefd6ea5022072ef7dd1",
+      "bytes": 2872
+    },
+    {
+      "file": "sword-inspection-geometry.json",
+      "sha256": "761ae9940fb048b910a14d094fe1d0433ce052994f9cda662607e1c2c5cbf116",
+      "bytes": 64167
+    },
+    {
+      "file": "sword-p2-quad-settings.png",
+      "sha256": "fc14b8150c391b6950d6131d29dee12cc37eff3998cd8dc0f1f0c5d106c36d04",
+      "bytes": 89759
+    },
+    {
+      "file": "sword-p2-quad-v1.fbx",
+      "sha256": "0bb95a5d0fef2b83c56cdb0e483dc3129cb93da5289f2597a9a4154ca23775ce",
+      "bytes": 56464
+    },
+    {
+      "file": "sword-reference-v1.png",
+      "sha256": "e5fd79fc5c6b14fdf724c5ecd5c532dfa6398aab7580939f8c002161068950da",
+      "bytes": 1187957
+    },
+    {
+      "file": "sword-texture-settings.png",
+      "sha256": "7958e1064269c67d3dddea76af1852f646aa416db4eb1b1f8b2e524e2d94b7d6",
+      "bytes": 85423
+    },
+    {
+      "file": "sword-textured-audit.json",
+      "sha256": "decce63296e4f4c89608e9b0e44cefd46d56df305408d29267a8a9d7aad6b566",
+      "bytes": 475
+    },
+    {
+      "file": "sword-textured-front.png",
+      "sha256": "d2e14edb1761494ef222565e0eececc90a8b6c47f68771eaf951c6ab1d844776",
+      "bytes": 92372
+    },
+    {
+      "file": "sword-textured-side.png",
+      "sha256": "a6f380f102d2eb75a102cf0c92cd2a76e0d5cf63d63220e7b68f084150f2041d",
+      "bytes": 89918
+    },
+    {
+      "file": "textured/elf-fighter-sword-p2-quad-textured-v1.glb",
+      "sha256": "4187c9edb2efe985f7ce00e9576ad1aa71a4386e1ca053d2642a5186e18e1a5e",
+      "bytes": 842912
+    },
+    {
+      "file": "textured/elf-fighter-sword-p2-quad-textured-v1.zip",
+      "sha256": "592cfe357a447f23655061c62cdf78a62381a63031a40804d76ec69444ac7c0f",
+      "bytes": 9928786
+    },
+    {
+      "file": "textured/fbx/tripo_convert_cba85548-dfcf-4132-9aef-049e49a9b206.fbm/tripo_rgb_a3c0e5bc-744d-45ba-b921-7f2b54eb6a1a.png",
+      "sha256": "eac3398ae028414d4b472302f4813b6436bb7a90efec952331d5b1d4fbee74b6",
+      "bytes": 4928505
+    },
+    {
+      "file": "textured/fbx/tripo_convert_cba85548-dfcf-4132-9aef-049e49a9b206.fbx",
+      "sha256": "94a051487a6e436ae6d15e0c146e53d419a1363c857d771ac25f34646d20dd87",
+      "bytes": 5010768
+    },
+    {
+      "file": "tripo-settings.png",
+      "sha256": "e3f3d849ab0efd18547b658f51a81e8df06c77289d7d61314ca74da753b3e70d",
+      "bytes": 89996
+    }
+  ]
+}
