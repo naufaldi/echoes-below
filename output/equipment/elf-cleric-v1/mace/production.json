@@ -1,0 +1,29 @@
+{
+  "asset": "cleric-mace",
+  "studio_asset_id": "f96d7947-d27e-4552-aa6d-81fc96e5835b",
+  "studio_url": "https://studio.tripo3d.ai/workspace/texture/f96d7947-d27e-4552-aa6d-81fc96e5835b",
+  "model": "P2.0 Smart Mesh",
+  "topology": "Quad",
+  "target_polycount": 750,
+  "texture_resolution": "2K",
+  "credits": {
+    "geometry": 100,
+    "texture": 10,
+    "total": 110
+  },
+  "export_preset": "FBX Blender; GLB",
+  "geometry": {
+    "source": "elf-cleric-mace-v1.fbx",
+    "sha256": "3e20a2240e9203c98219b2efc382ef1586eb21f596e39866cdbcd7122f0e0191",
+    "control_vertices": 746,
+    "polygons": 842,
+    "quads": 580,
+    "triangles": 262,
+    "other_polygons": 0,
+    "triangulated": 1422
+  },
+  "status": "production archive; runtime acceptance pending",
+  "rigged": false,
+  "assembled": false,
+  "blend_created": false
+}

@@ -1,0 +1,29 @@
+{
+  "asset": "rogue-bow",
+  "studio_asset_id": "936047c7-2a74-4b90-9757-67c52ab347dc",
+  "studio_url": "https://studio.tripo3d.ai/workspace/texture/936047c7-2a74-4b90-9757-67c52ab347dc",
+  "model": "P2.0 Smart Mesh",
+  "topology": "Quad",
+  "target_polycount": 750,
+  "texture_resolution": "2K",
+  "credits": {
+    "geometry": 100,
+    "texture": 10,
+    "total": 110
+  },
+  "export_preset": "FBX Blender; GLB",
+  "geometry": {
+    "source": "elf-rogue-bow-v1.fbx",
+    "sha256": "d36c10d6b222b94d0e8912e657b1de48f92fa67457597ae1b4e989607e4ea7f1",
+    "control_vertices": 856,
+    "polygons": 902,
+    "quads": 676,
+    "triangles": 226,
+    "other_polygons": 0,
+    "triangulated": 1578
+  },
+  "status": "production archive; runtime acceptance pending",
+  "rigged": false,
+  "assembled": false,
+  "blend_created": false
+}

@@ -1,0 +1,29 @@
+{
+  "asset": "rogue-dagger",
+  "studio_asset_id": "106eaad1-5d06-4f8b-8add-2adbb94e7183",
+  "studio_url": "https://studio.tripo3d.ai/workspace/texture/106eaad1-5d06-4f8b-8add-2adbb94e7183",
+  "model": "P2.0 Smart Mesh",
+  "topology": "Quad",
+  "target_polycount": 750,
+  "texture_resolution": "2K",
+  "credits": {
+    "geometry": 100,
+    "texture": 10,
+    "total": 110
+  },
+  "export_preset": "FBX Blender; GLB",
+  "geometry": {
+    "source": "elf-rogue-dagger-v1.fbx",
+    "sha256": "2251c12547ed79010f1c13168154a7cab4b4d41dbffa3f624bada9d2c0605fa7",
+    "control_vertices": 799,
+    "polygons": 846,
+    "quads": 726,
+    "triangles": 120,
+    "other_polygons": 0,
+    "triangulated": 1572
+  },
+  "status": "production archive; runtime acceptance pending",
+  "rigged": false,
+  "assembled": false,
+  "blend_created": false
+}

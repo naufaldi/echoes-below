@@ -1,0 +1,29 @@
+{
+  "asset": "wizard-staff",
+  "studio_asset_id": "9c2eba46-07e3-4331-abb9-8d3557450007",
+  "studio_url": "https://studio.tripo3d.ai/workspace/texture/9c2eba46-07e3-4331-abb9-8d3557450007",
+  "model": "P2.0 Smart Mesh",
+  "topology": "Quad",
+  "target_polycount": 750,
+  "texture_resolution": "2K",
+  "credits": {
+    "geometry": 100,
+    "texture": 10,
+    "total": 110
+  },
+  "export_preset": "FBX Blender; GLB",
+  "geometry": {
+    "source": "elf-wizard-staff-v1.fbx",
+    "sha256": "d83e32eac1c45c32c775e5c5e858751c2bb06f39343049b2489499e1fc9fbc0d",
+    "control_vertices": 849,
+    "polygons": 976,
+    "quads": 676,
+    "triangles": 300,
+    "other_polygons": 0,
+    "triangulated": 1652
+  },
+  "status": "production archive; runtime acceptance pending",
+  "rigged": false,
+  "assembled": false,
+  "blend_created": false
+}

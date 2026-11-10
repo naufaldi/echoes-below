@@ -1,0 +1,66 @@
+{
+  "purpose": "Production reference inventory, not runtime licence approval",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 2015,
+      "sha256": "76f5a87c04788784165164f1311ef5aad4deecb7d96aa2e92ac5ccb0ae3b0fb8"
+    },
+    {
+      "file": "elf-rogue-front-reference-v1.png",
+      "bytes": 1284997,
+      "sha256": "81457995e063daebf597f983dbfae1fbaed6937d976bd613df868c7fff1cc56b",
+      "dimensions": [
+        1330,
+        1183
+      ],
+      "source_generated_file": "exec-f3e02dc2-8795-4490-a72f-221723faaecf.png",
+      "kind": "Codex-generated 2D reference, not a Tripo render"
+    },
+    {
+      "file": "inspection/geometry-audit.json",
+      "bytes": 249,
+      "sha256": "c484b69b2651a91522d527f9cbc762671f89f07c89774b454548986a3d9e5a08"
+    },
+    {
+      "file": "inspection/geometry-four-views.png",
+      "bytes": 132924,
+      "sha256": "15435f5f04583b1ca7247d53b0fe31c3e64fd7220f6ab37ee5c331672100831d"
+    },
+    {
+      "file": "inspection/texture-glb-audit.json",
+      "bytes": 339,
+      "sha256": "5775d8b393ecca5b4b8945c7c0f44b76e1bc5784229d6410cf4f897da73639b8"
+    },
+    {
+      "file": "original-tripo/elf-rogue-v1.glb",
+      "bytes": 1773188,
+      "sha256": "fb8ba566a9f82fd523f9cd9e10b166158fd333585b89bf455ab283a14e994092"
+    },
+    {
+      "file": "original-tripo/elf-rogue-v1.zip",
+      "bytes": 1544991,
+      "sha256": "424abee7f2b47c8f0798fc3a46f462686bc6702e392f1e04753a07c2b21aac5b"
+    },
+    {
+      "file": "original-tripo/fbx/elf-rogue-v1.fbm/elf-rogue-v1_basecolor.jpg",
+      "bytes": 962966,
+      "sha256": "517755bb5455fa286358b2c44898d2448c1625747c8d793f884ec97c20c32e29"
+    },
+    {
+      "file": "original-tripo/fbx/elf-rogue-v1.fbx",
+      "bytes": 603760,
+      "sha256": "354a1118331f6af316632c4792940f4a760ae05a419eafec11d05342f586e45e"
+    },
+    {
+      "file": "production.json",
+      "bytes": 825,
+      "sha256": "ccc0fadc0ed5e5d5a2789dc9efba66b8a57729d1acc1fd63f126ff917cfd2d4a"
+    },
+    {
+      "file": "tripo-studio-textured.png",
+      "bytes": 113229,
+      "sha256": "4daced598085d7c333d2ad191956aea024425c0586f47e28cc0dd24f7d5c482d"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "purpose": "Prepared assembly inputs and evidence; no paid run submitted",
+  "files": [
+    {
+      "file": "cleric-assembly-prompt.txt",
+      "bytes": 1018,
+      "sha256": "0e68aa09bc4a239a243caec50049bd2b46ae80c9194238f019b9add7f5816306"
+    },
+    {
+      "file": "plan.json",
+      "bytes": 3066,
+      "sha256": "be2571370dbf5fce04d19d3bfe6ec3911aa404c1e7d9a498b10a47a82cc4b03d"
+    },
+    {
+      "file": "prepared-rogue-inputs.png",
+      "bytes": 58146,
+      "sha256": "39af2ff5239c80a4ccff5a5992e116b40ba87f8c4f255e0fe24a02792f6fb3a6"
+    },
+    {
+      "file": "rogue-assembly-prompt.txt",
+      "bytes": 1001,
+      "sha256": "f762f6539c059c7fb4b14a382a4a3a1d21c70e92ea1e73f7bcb3ba77d3fa9532"
+    },
+    {
+      "file": "wizard-assembly-prompt.txt",
+      "bytes": 1025,
+      "sha256": "e5d04d84bd5956e91648c08e22190f65aaccfff29162e446b1c6714b0c577006"
+    }
+  ]
+}

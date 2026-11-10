@@ -1,0 +1,29 @@
+{
+  "asset": "cleric-holy-symbol",
+  "studio_asset_id": "bb437adf-c07b-41ab-989b-1be8d1188e03",
+  "studio_url": "https://studio.tripo3d.ai/workspace/texture/bb437adf-c07b-41ab-989b-1be8d1188e03",
+  "model": "P2.0 Smart Mesh",
+  "topology": "Quad",
+  "target_polycount": 750,
+  "texture_resolution": "2K",
+  "credits": {
+    "geometry": 100,
+    "texture": 10,
+    "total": 110
+  },
+  "export_preset": "FBX Blender; GLB",
+  "geometry": {
+    "source": "elf-cleric-holy-symbol-v1.fbx",
+    "sha256": "23602143585a4cb55352adbd779b92edd555908ca95fe1e72f9ae37f365963bc",
+    "control_vertices": 871,
+    "polygons": 959,
+    "quads": 779,
+    "triangles": 180,
+    "other_polygons": 0,
+    "triangulated": 1738
+  },
+  "status": "production archive; runtime acceptance pending",
+  "rigged": false,
+  "assembled": false,
+  "blend_created": false
+}

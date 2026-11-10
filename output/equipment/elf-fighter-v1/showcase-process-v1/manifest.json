@@ -1,0 +1,143 @@
+{
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 898,
+      "sha256": "78ccae4d9b134db40224dda6ca952f64c88bf2ee1d77311ef6b62875caecb888"
+    },
+    {
+      "file": "caption-01.png",
+      "bytes": 35091,
+      "sha256": "5f8ac7196d1672dbb9518d9217616a6760a5e5119864e1d0daebfb131671bce2"
+    },
+    {
+      "file": "caption-02.png",
+      "bytes": 36225,
+      "sha256": "f00b4d85d78e4b509570a55a44e2f22bc7860f2502819d829081a6e696fea17b"
+    },
+    {
+      "file": "caption-03.png",
+      "bytes": 35603,
+      "sha256": "a40f73a2d4ba5a420da2e2a1ab4a78224daa33dfce52b0f1be1e6bddf7c4223a"
+    },
+    {
+      "file": "caption-04.png",
+      "bytes": 35037,
+      "sha256": "c875642a378cc5e9981988a0e9dd462900730638c8fe6656ce0f654bf8cc61cb"
+    },
+    {
+      "file": "caption-05.png",
+      "bytes": 34519,
+      "sha256": "ce2f0a61b50c835f5bff48ee1686396c25381bf70f850d224b34f4e812552e6b"
+    },
+    {
+      "file": "caption-06.png",
+      "bytes": 37329,
+      "sha256": "04dbed3de55ddcea47abb337e618dd23fa26af92e2873dffb212cff5450a36fe"
+    },
+    {
+      "file": "caption-07.png",
+      "bytes": 31783,
+      "sha256": "0b75a491612da224fa0b03e5ff963bdf9070f1069c05c49e660f03f0a3121946"
+    },
+    {
+      "file": "caption-08.png",
+      "bytes": 38054,
+      "sha256": "bf60cbee3de7b58a46d600345e6b742e02d525c3b4bf1d1f7f9cdeefbb30b01b"
+    },
+    {
+      "file": "elf-fighter-tripo-process-vertical-41s.mp4",
+      "bytes": 2182792,
+      "sha256": "21ada6fd4fa34e6a99a0305115dc4c12730a2a32d6ac14600d343ca1e6de02d8"
+    },
+    {
+      "file": "preview.jpg",
+      "bytes": 51679,
+      "sha256": "0bb01d0a89bcce69a6db02fd12ad9a832b304e3a85ec8d713210a83f3791f585"
+    },
+    {
+      "file": "render.py",
+      "bytes": 5119,
+      "sha256": "43a16f42ac6362f8ca2b958a77156a320f81a39a2efeae86fb840fe576165063"
+    },
+    {
+      "file": "scene-01.mp4",
+      "bytes": 192053,
+      "sha256": "1cf6f9af7533f21b9a5dd91e258489b4b3542f2a72d8e2f37ffceaaf32455d2f"
+    },
+    {
+      "file": "scene-02.mp4",
+      "bytes": 281543,
+      "sha256": "56d593afe789fa8a1c597f2325e7343204ccf01df346875f38a81c5d8dd93006"
+    },
+    {
+      "file": "scene-03.mp4",
+      "bytes": 174657,
+      "sha256": "9ad4d7773ea641d4a6861044f110676222b49f3f0f4e7f9b65399a8d787b744a"
+    },
+    {
+      "file": "scene-04.mp4",
+      "bytes": 336706,
+      "sha256": "b8b5be13969ffcaa2be8f0e0186d04103c531fa6cb4a85a657e40aa7ea57018a"
+    },
+    {
+      "file": "scene-05.mp4",
+      "bytes": 382885,
+      "sha256": "4e518e3879d284d3ffa9c8ba33cd9bae752a0ad82e5d87e5cfd759421806bb9d"
+    },
+    {
+      "file": "scene-06.mp4",
+      "bytes": 430992,
+      "sha256": "28f05bba2de228ff0965178c8e4a8ba0921f073f041abcbd88d6ec1650cd1f61"
+    },
+    {
+      "file": "scene-07.mp4",
+      "bytes": 188951,
+      "sha256": "3d4dcad98a8d7be104d02b9ceb9feff78387f8355fc119bba1256cacb03aedf8"
+    },
+    {
+      "file": "scene-08.mp4",
+      "bytes": 200735,
+      "sha256": "ae0c54270bce0f2254ba996bb891b5ab85c4491cfdc5d637af263a2640e2e26c"
+    },
+    {
+      "file": "timeline.txt",
+      "bytes": 160,
+      "sha256": "c4413a599a24303efed9735894fc821c8ae65c5d631f93e7e56fdb993e627e69"
+    }
+  ],
+  "sources": [
+    {
+      "file": "output/equipment/elf-fighter-v1/assembly-tripo-v1/studio-equipped-preview.png",
+      "sha256": "dd89e0bcc8e041181f31ca70227a765ed7db537b27f08db4ea7f340cf3d37f8e"
+    },
+    {
+      "file": "output/characters/elf-fighter-v1/elf-fighter-front.png",
+      "sha256": "7819c82ef16a4e04fff66c001162c0e0a7d20e69b0668b5460ae6a88fd0c189b"
+    },
+    {
+      "file": "output/equipment/elf-fighter-v1/sword-reference-v1.png",
+      "sha256": "e5fd79fc5c6b14fdf724c5ecd5c532dfa6398aab7580939f8c002161068950da"
+    },
+    {
+      "file": "output/equipment/elf-fighter-v1/sword-textured-front.png",
+      "sha256": "d2e14edb1761494ef222565e0eececc90a8b6c47f68771eaf951c6ab1d844776"
+    },
+    {
+      "file": "output/equipment/elf-fighter-v1/shield/03-studio-front.png",
+      "sha256": "3507e496f72f98eacdda870b673f5b12b383ec561396e9206b9c128269beb683"
+    },
+    {
+      "file": "output/equipment/elf-fighter-v1/assembly-tripo-v1/inspection-proof.png",
+      "sha256": "dbedd2645dc57933c986642f2547819a1517b8643059fc2777503c90f3c2678f"
+    },
+    {
+      "file": "output/equipment/elf-fighter-v1/assembly-tripo-v1/studio-equipped-preview.png",
+      "sha256": "dd89e0bcc8e041181f31ca70227a765ed7db537b27f08db4ea7f340cf3d37f8e"
+    },
+    {
+      "file": "output/equipment/elf-fighter-v1/assembly-tripo-v1/studio-equipped-preview.png",
+      "sha256": "dd89e0bcc8e041181f31ca70227a765ed7db537b27f08db4ea7f340cf3d37f8e"
+    }
+  ]
+}

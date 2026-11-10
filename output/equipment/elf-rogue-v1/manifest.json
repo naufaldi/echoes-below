@@ -1,0 +1,132 @@
+{
+  "purpose": "Production reference inventory, not runtime licence approval",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 1407,
+      "sha256": "2aa79eb5bf563a657e46f7012eaf9ac2db58dbd293e8a3fc4bf7a58e0712e979"
+    },
+    {
+      "file": "bow/README.md",
+      "bytes": 766,
+      "sha256": "c7f49a21d2d06dcb75f73fc044ad799fdf8054f2d2b4ec768ccc1b90ea6d5916"
+    },
+    {
+      "file": "bow/inspection/geometry-audit.json",
+      "bytes": 248,
+      "sha256": "ac019e662a61b697a5b615889b1a68c9ab15d05bdb89a30ef7c604f927855c88"
+    },
+    {
+      "file": "bow/inspection/geometry-four-views.png",
+      "bytes": 73897,
+      "sha256": "fc293eaa0a6104474e714eb0c8bcc5caa772c0dc111b86be2ac8b041481ebef1"
+    },
+    {
+      "file": "bow/inspection/texture-glb-audit.json",
+      "bytes": 345,
+      "sha256": "cb3e219bcf3dae33eb2dd2f76996555a162a8d6d148833a19a77042013143fd9"
+    },
+    {
+      "file": "bow/original-tripo/elf-rogue-bow-v1.glb",
+      "bytes": 678636,
+      "sha256": "c13f648a1f49c7c7345066b04bfc4b14e8b5fa8ff51df1210e072bc71c3928cc"
+    },
+    {
+      "file": "bow/original-tripo/elf-rogue-bow-v1.zip",
+      "bytes": 659918,
+      "sha256": "c8bafa66651afac2a263905d8e30220b5bf04be292df7b50dd6e91183e9598e1"
+    },
+    {
+      "file": "bow/original-tripo/fbx/elf-rogue-bow-v1.fbm/elf-rogue-bow-v1_basecolor.jpg",
+      "bytes": 599717,
+      "sha256": "52553c16974ea34c6e249c717bedb1f7a10f6fa7833f683196d1a925fcf0b0f2"
+    },
+    {
+      "file": "bow/original-tripo/fbx/elf-rogue-bow-v1.fbx",
+      "bytes": 72832,
+      "sha256": "d36c10d6b222b94d0e8912e657b1de48f92fa67457597ae1b4e989607e4ea7f1"
+    },
+    {
+      "file": "bow/production.json",
+      "bytes": 823,
+      "sha256": "ed7a8e9af314e51e8d41fcbf7cd3f6d51804f544beb16d255edde3a257630484"
+    },
+    {
+      "file": "bow/tripo-studio-textured.png",
+      "bytes": 92740,
+      "sha256": "17b4118bf91d6e38db6313a6a192b490212a258b51428e756c2a320068768112"
+    },
+    {
+      "file": "bow-reference-v1.png",
+      "bytes": 1100721,
+      "sha256": "2b3dd92c385c1c9b94f4cfa9324a29b17cedf0dec277b63b81eea00640ea2736",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "source_generated_file": "exec-e2f30e15-9751-438a-8fae-02011230d2be.png",
+      "kind": "Codex-generated 2D reference, not a Tripo render"
+    },
+    {
+      "file": "dagger/README.md",
+      "bytes": 772,
+      "sha256": "4dd0179dd2ccbaacab2f8bd5ec47f66f6dc1f494792b3054c51b847eaada27df"
+    },
+    {
+      "file": "dagger/inspection/geometry-audit.json",
+      "bytes": 251,
+      "sha256": "815c46f2e2f0014a82104ab0ea817dc549191971a3c083a2fd474ed8030c921e"
+    },
+    {
+      "file": "dagger/inspection/geometry-four-views.png",
+      "bytes": 69314,
+      "sha256": "baf056960b9f0fcbc5ca0a1ead76bdde61d1b31657bdd42580735beb70aff2a0"
+    },
+    {
+      "file": "dagger/inspection/texture-glb-audit.json",
+      "bytes": 351,
+      "sha256": "6cb56162610d108ecb42205722ae21c0bc69eeca11787e5413960fa38ffc45ce"
+    },
+    {
+      "file": "dagger/original-tripo/elf-rogue-dagger-v1.glb",
+      "bytes": 542656,
+      "sha256": "813a687e3632f88096bf822ad14862e8e2afc7e8ad8d72c34af6c81468ba7907"
+    },
+    {
+      "file": "dagger/original-tripo/elf-rogue-dagger-v1.zip",
+      "bytes": 526789,
+      "sha256": "1c262a87a09f8ee28a7d51d9e1bde7853dc910b2f390e7d8d127f2628506cfbb"
+    },
+    {
+      "file": "dagger/original-tripo/fbx/elf-rogue-dagger-v1.fbm/elf-rogue-dagger-v1_basecolor.jpg",
+      "bytes": 472956,
+      "sha256": "cee9d8d0a5e4dc8be793458bd47372afaccbd57b52996a34214adebc237a0e00"
+    },
+    {
+      "file": "dagger/original-tripo/fbx/elf-rogue-dagger-v1.fbx",
+      "bytes": 67344,
+      "sha256": "2251c12547ed79010f1c13168154a7cab4b4d41dbffa3f624bada9d2c0605fa7"
+    },
+    {
+      "file": "dagger/production.json",
+      "bytes": 829,
+      "sha256": "a7e8ec0f7b346e7a940b26162635662cbe97fe705a828584cbf6aa18d5997745"
+    },
+    {
+      "file": "dagger/tripo-studio-textured.png",
+      "bytes": 91985,
+      "sha256": "b951aa02ff916e4cefc2753c60e08411cc574a2a32c011814bbb972e5fb6a125"
+    },
+    {
+      "file": "dagger-reference-v1.png",
+      "bytes": 1076064,
+      "sha256": "cb1d68c38a904ec8cf4727e8051183af11712f909ac22898c73ef9570316dfa0",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "source_generated_file": "exec-dee5244b-db3b-4a47-99d6-4db03c137775.png",
+      "kind": "Codex-generated 2D reference, not a Tripo render"
+    }
+  ]
+}
