@@ -1,0 +1,89 @@
+{
+  "file": "elf-cleric-equipped-tripo-v1.glb",
+  "sha256": "f6e929ac093022fde1687ed6506a9ce575b143a42fda0161f7fb55b0b925bba2",
+  "triangles": 18317,
+  "vertices": 19937,
+  "meshes": [
+    {
+      "name": "meshes[0]",
+      "triangles": 15157,
+      "vertices": 16192
+    },
+    {
+      "name": "meshes[1]",
+      "triangles": 1738,
+      "vertices": 2064
+    },
+    {
+      "name": "meshes[2]",
+      "triangles": 1422,
+      "vertices": 1681
+    }
+  ],
+  "materials": 3,
+  "images": [
+    {
+      "name": "elf-cleric-equipped-tripo-v1_elf_cleric_original_basecolor.jpg",
+      "sha256": "591f07cc39a5ac30e700933099eb13d805f7769c628b2f067339cb8f96d1f60c",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "elf-cleric-equipped-tripo-v1_holy_symbol_anatomical_left_basecolor.jpg",
+      "sha256": "49ce71708de4fb5d55febff5a556ce1fbd047e65cb4af340d0be61fb506e328b",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "elf-cleric-equipped-tripo-v1_mace_anatomical_right_basecolor.jpg",
+      "sha256": "3b49952e6330f960fc3a1572148fba1c86229b8e49ca1ea1f0d6a060717a9e73",
+      "size": [
+        2048,
+        2048
+      ]
+    }
+  ],
+  "skins": 0,
+  "animations": 0,
+  "nodes": [
+    {
+      "name": "ROOT",
+      "children": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "name": "RootNode"
+    },
+    {
+      "name": "RootNode_001"
+    },
+    {
+      "name": "RootNode_002"
+    },
+    {
+      "name": "elf_cleric_original",
+      "mesh": 0
+    },
+    {
+      "name": "holy_symbol_anatomical_left",
+      "mesh": 1
+    },
+    {
+      "name": "mace_anatomical_right",
+      "mesh": 2
+    }
+  ],
+  "provenance": "Downloaded Tripo Studio export, audited locally. Lab preservation report describes the pre-export assembly; Studio export may normalize, weld vertices and re-encode data.",
+  "all_three_source_texture_bytes_preserved": true,
+  "source_files_unchanged": true
+}

@@ -1,0 +1,101 @@
+{
+  "file": "elf-wizard-equipped-tripo-v1.glb",
+  "sha256": "a55d05af926ba2df1c7687b52c5ca0f9c4946d4dfd9176fdb0a6f5e8bdaa0b1f",
+  "triangles": 17539,
+  "vertices": 19856,
+  "meshes": [
+    {
+      "name": "meshes[0]",
+      "triangles": 1339,
+      "vertices": 1687
+    },
+    {
+      "name": "meshes[1]",
+      "triangles": 1652,
+      "vertices": 1977
+    },
+    {
+      "name": "meshes[2]",
+      "triangles": 14548,
+      "vertices": 16192
+    }
+  ],
+  "materials": 3,
+  "images": [
+    {
+      "name": "elf-wizard-equipped-tripo-v1_closed_spellbook_anatomical_left_mesh_basecolor.jpg",
+      "sha256": "93d39f1086eb1076ada2c9d259427eeac0e69cb2329c0e8f1535509ecee65455",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "elf-wizard-equipped-tripo-v1_staff_anatomical_right_mesh_basecolor.jpg",
+      "sha256": "3db3c12fae6abe46725cb5b1565246d4f9a2988390e41de9f100ae55ba61c81c",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "elf-wizard-equipped-tripo-v1_tripo_70caf1fd_50d7_42c3_a7cb_9c12520684_basecolor.jpg",
+      "sha256": "3ce455fa1edbc08b0459391526118930e2058e1862c331b0c037435e9ae3d67d",
+      "size": [
+        2048,
+        2048
+      ]
+    }
+  ],
+  "skins": 0,
+  "animations": 0,
+  "nodes": [
+    {
+      "name": "ROOT",
+      "children": [
+        1,
+        2,
+        4,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "name": "RootNode"
+    },
+    {
+      "name": "staff_anatomical_right",
+      "children": [
+        3
+      ]
+    },
+    {
+      "name": "RootNode_001"
+    },
+    {
+      "name": "closed_spellbook_anatomical_left",
+      "children": [
+        5
+      ]
+    },
+    {
+      "name": "RootNode_002"
+    },
+    {
+      "name": "closed_spellbook_anatomical_left_mesh",
+      "mesh": 0
+    },
+    {
+      "name": "staff_anatomical_right_mesh",
+      "mesh": 1
+    },
+    {
+      "name": "tripo_70caf1fd_50d7_42c3_a7cb_9c12520684",
+      "mesh": 2
+    }
+  ],
+  "provenance": "Downloaded Tripo Studio export, audited locally. Lab preservation report describes the pre-export assembly; Studio export may normalize, weld vertices and re-encode data.",
+  "all_three_source_texture_bytes_preserved": true,
+  "source_files_unchanged": true
+}

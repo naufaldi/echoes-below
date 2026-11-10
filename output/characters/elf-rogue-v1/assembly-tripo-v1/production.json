@@ -1,0 +1,28 @@
+{
+  "class": "rogue",
+  "inputs": [
+    {
+      "path": "output/characters/elf-rogue-v1/original-tripo/elf-rogue-v1.glb",
+      "bytes": 1773188,
+      "sha256": "fb8ba566a9f82fd523f9cd9e10b166158fd333585b89bf455ab283a14e994092"
+    },
+    {
+      "path": "output/equipment/elf-rogue-v1/bow/original-tripo/elf-rogue-bow-v1.glb",
+      "bytes": 678636,
+      "sha256": "c13f648a1f49c7c7345066b04bfc4b14e8b5fa8ff51df1210e072bc71c3928cc"
+    },
+    {
+      "path": "output/equipment/elf-rogue-v1/dagger/original-tripo/elf-rogue-dagger-v1.glb",
+      "bytes": 542656,
+      "sha256": "813a687e3632f88096bf822ad14862e8e2afc7e8ad8d72c34af6c81468ba7907"
+    }
+  ],
+  "placement": "Place the bow in the anatomical left hand and the dagger in the anatomical right hand.",
+  "status": "completed; downloaded and locally audited",
+  "credits": 38,
+  "canvas_url": "https://studio.tripo3d.ai/canvas/projects/01a1c42d-e079-77a8-9c41-20785df0e5bf",
+  "archive": "output/characters/elf-rogue-v1/assembly-tripo-v1",
+  "triangles": 20127,
+  "static": true,
+  "placement_adjustments_reported": 0
+}

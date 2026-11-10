@@ -1,0 +1,28 @@
+{
+  "class": "cleric",
+  "inputs": [
+    {
+      "path": "output/characters/elf-cleric-v1/original-tripo/elf-cleric-v1.glb",
+      "bytes": 1712532,
+      "sha256": "dd548d30a0ca2045a3808c4be457262730eee963cd3f46250b758ba0554f2a41"
+    },
+    {
+      "path": "output/equipment/elf-cleric-v1/mace/original-tripo/elf-cleric-mace-v1.glb",
+      "bytes": 671140,
+      "sha256": "e1b0c7b2c9f936c75a47451a6288c36e2d8802a8423be6ed3ba53d77910409ea"
+    },
+    {
+      "path": "output/equipment/elf-cleric-v1/holy-symbol/original-tripo/elf-cleric-holy-symbol-v1.glb",
+      "bytes": 840884,
+      "sha256": "14c7b4a5477f26bc217d14b5905cf4c0e53424584ebb9b7bd8b70be985823d53"
+    }
+  ],
+  "placement": "Place the mace in the anatomical right hand and the handheld holy symbol in the anatomical left hand.",
+  "status": "completed; downloaded and locally audited",
+  "credits": 45,
+  "canvas_url": "https://studio.tripo3d.ai/canvas/projects/01a1c440-c436-7660-8a11-08fa6ca5b90e",
+  "archive": "output/characters/elf-cleric-v1/assembly-tripo-v1",
+  "triangles": 18317,
+  "static": true,
+  "placement_adjustments_reported": 0
+}

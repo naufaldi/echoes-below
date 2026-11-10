@@ -1,5 +1,5 @@
 {
-  "status": "awaiting approval of uncertain Lab credits",
+  "status": "completed; downloaded and locally audited",
   "starting_studio_balance": 24835,
   "historical_fighter_cost": 155,
   "three_run_historical_reference": 465,
@@ -26,7 +26,13 @@
         }
       ],
       "placement": "Place the bow in the anatomical left hand and the dagger in the anatomical right hand.",
-      "status": "prepared, not submitted"
+      "status": "completed; downloaded and locally audited",
+      "credits": 38,
+      "canvas_url": "https://studio.tripo3d.ai/canvas/projects/01a1c42d-e079-77a8-9c41-20785df0e5bf",
+      "archive": "output/characters/elf-rogue-v1/assembly-tripo-v1",
+      "triangles": 20127,
+      "static": true,
+      "placement_adjustments_reported": 0
     },
     {
       "class": "wizard",
@@ -48,7 +54,13 @@
         }
       ],
       "placement": "Place the staff in the anatomical right hand and the closed spellbook supported by the anatomical left hand.",
-      "status": "prepared, not submitted"
+      "status": "completed; downloaded and locally audited",
+      "credits": 43,
+      "canvas_url": "https://studio.tripo3d.ai/canvas/projects/01a1c43f-97ec-7bc2-bc75-3e2c755233b7",
+      "archive": "output/characters/elf-wizard-v1/assembly-tripo-v1",
+      "triangles": 17539,
+      "static": true,
+      "placement_adjustments_reported": 0
     },
     {
       "class": "cleric",
@@ -70,7 +82,16 @@
         }
       ],
       "placement": "Place the mace in the anatomical right hand and the handheld holy symbol in the anatomical left hand.",
-      "status": "prepared, not submitted"
+      "status": "completed; downloaded and locally audited",
+      "credits": 45,
+      "canvas_url": "https://studio.tripo3d.ai/canvas/projects/01a1c440-c436-7660-8a11-08fa6ca5b90e",
+      "archive": "output/characters/elf-cleric-v1/assembly-tripo-v1",
+      "triangles": 18317,
+      "static": true,
+      "placement_adjustments_reported": 0
     }
-  ]
+  ],
+  "approval": "Owner: yes and continue work for perakitan",
+  "ending_studio_balance": 24709,
+  "actual_assembly_credits": 126
 }

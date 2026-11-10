@@ -1,0 +1,70 @@
+{
+  "purpose": "Completed Tripo assembly production archive; not runtime approval",
+  "files": [
+    {
+      "file": "0  45  90  180 degree wireframe \u2014 18,317 triangles.png",
+      "bytes": 162886,
+      "sha256": "a107e6b90c70ebfef1f37ea4bd7e84ff90b026482091167056b87358f2ad0a76"
+    },
+    {
+      "file": "README.md",
+      "bytes": 2638,
+      "sha256": "25e04b1fe95156379709e3c55a7aee5fec12eaa7dc28c2ed5c8c4ab2f2ec91d3"
+    },
+    {
+      "file": "Textured front  side  back \u2014 actual geometry.png",
+      "bytes": 123538,
+      "sha256": "ae5460947937f9d7314e0db3c5c0d7564fcf40875267bcc3539064693e40cfa8"
+    },
+    {
+      "file": "downloaded-glb-audit.json",
+      "bytes": 1970,
+      "sha256": "42b154395cfdc5800165c36604434550afedee17935c73ab7ac7662e38b000e8"
+    },
+    {
+      "file": "elf-cleric-equipped-tripo-v1.glb",
+      "bytes": 3223132,
+      "sha256": "f6e929ac093022fde1687ed6506a9ce575b143a42fda0161f7fb55b0b925bba2"
+    },
+    {
+      "file": "elf-cleric-preservation-report.md",
+      "bytes": 2810,
+      "sha256": "c05e0746a22ecd480898085adb66342b6de53d49ab1525435946204867d77509"
+    },
+    {
+      "file": "geometry-four-views.png",
+      "bytes": 159767,
+      "sha256": "14bc3281aee6923385616b87d14ac0b69c343ba4d76fb266d9ae24c7b0795c7d"
+    },
+    {
+      "file": "production.json",
+      "bytes": 1115,
+      "sha256": "e97b0cbb4aaa2d681c56754a89038aca8c356efb164dbd946cbc9704110e063b"
+    },
+    {
+      "file": "tripo-lab-completed.png",
+      "bytes": 92790,
+      "sha256": "fc758b117c0bdc4b8caa7ec06d46c5edca6ba91e9105ca6f1d7ffd3ea88055d0"
+    },
+    {
+      "file": "tripo-lab-completed.txt",
+      "bytes": 9365,
+      "sha256": "fbe7bc91a6c1e42e837819503a613b5c2aac1ba8d46e1cdbef2193c66d35404b"
+    },
+    {
+      "file": "tripo-studio-back.png",
+      "bytes": 40911,
+      "sha256": "d1eafe2d30e69bd8489cf6498f526009daef1481e8462d5d340d3cc568c51bbd"
+    },
+    {
+      "file": "tripo-studio-equipped.png",
+      "bytes": 42594,
+      "sha256": "9c60d0aea6cbc1b0b883976357601941177cd7946197eec01aafcf3b2d29629e"
+    },
+    {
+      "file": "tripo-studio-side.png",
+      "bytes": 37610,
+      "sha256": "01cc36b0eede7072a502d53f8662363577cb65bcc4572430ff662bbc7c8806e6"
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+Browser tab: 138101992, Title: "Tripo AI Agentic Canvas: Visual 3D Workflow Builder", URL: "https://studio.tripo3d.ai/canvas/projects/01a1c440-c436-7660-8a11-08fa6ca5b90e".
+0 AXWebArea Tripo AI Agentic Canvas: Visual 3D Workflow Builder, URL: studio.tripo3d.ai/canvas/projects/01a1c440-c436-7660-8a11-08fa6ca5b90e
+	1 container
+		263 container
+			264 pop up button (collapsed) Description: Open navigation, Secondary Actions: Expand
+			265 container
+				266 text Untitled
+				267 button (collapsed) Description: Switch canvas, Secondary Actions: Expand
+			268 container
+				269 button Share
+				270 container Account credits
+					271 pop up button (collapsed) DCC Bridge, ID: reka-popover-trigger-v-0-1-1, Secondary Actions: Expand
+						272 text DCC Bridge
+					273 container
+						274 text 24709
+						275 button Upgrade
+							276 container
+								277 text Upgrade
+								278 image loading
+				279 container
+					280 button Collapse Agent panel
+					281 container
+						282 button elf-cleric-v1.glb
+						283 button elf-cleric-mace-v1.glb
+						284 button elf-cleric-holy-symbol-v1.glb
+						285 text Assemble ONLY these three existing Tripo GLB assets into one equipped Elf cleric. Place the mace in the anatomical right hand and the handheld holy symbol in the anatomical left hand. Preserve the original character geometry, pose, UVs, materials and embedded textures. These inputs are unrigged: make a STATIC assembly, do not create a skeleton or animations. Keep equipment as separate named objects. Adjust only equipment scale, rotation and position to fit the hands, keep the face visible and minimize intersections. Work on copies. Do not generate replacement assets, images or textures; do not remesh or fuse meshes. One bounded assembly run, at most two placement adjustments. Deliver a downloadable elf-cleric-equipped-tripo-v1.glb, a textured front/side/back preview and a 0/45/90/180 degree actual-geometry wireframe sheet with measured triangle counts, plus a preservation report. Clearly distinguish rendered geometry evidence from concept art. No extra paid generation calls or additional assembly runs. Proceed via AI 3D Lab; this bounded assembly and uncertain Lab credit cost are approved by the owner.
+						286 button Copy
+						287 text 14:02
+					288 container
+						289 text AI 3D Lab can assemble the three existing GLB assets as a static elf cleric while preserving their geometry, UVs, materials, and textures, then provide the requested GLB, geometry previews, wireframe evidence, and preservation report. Click Enter Lab and send this request there. AI 3D Lab GPT·Astra Auto-check model optimization items
+						290 button Enter
+						291 button Copy
+						292 text 14:02
+					293 container Description: Start with an idea, or type..., Value: 
+
+						294 container
+							295 text Start with an idea, or type...
+					296 button Attach files
+					297 combo box (collapsed) Description: Agent mode, Value: Control, Secondary Actions: Expand
+						298 text Control
+					299 button (disabled) Send
+				300 container AI 3D Lab
+					301 container
+						302 text Assemble Equipped Elf Cleric
+						303 button Back to Agent
+					304 container
+						305 button elf-cleric-v1.glb elf-cleric-v1.glb
+							306 image elf-cleric-v1.glb
+							307 text elf-cleric-v1.glb
+						308 button elf-cleric-mace-v1.glb elf-cleric-mace-v1.glb
+							309 image elf-cleric-mace-v1.glb
+							310 text elf-cleric-mace-v1.glb
+						311 button elf-cleric-holy-symbol-v1.glb elf-cleric-holy-symbol-v1.glb
+							312 image elf-cleric-holy-symbol-v1.glb
+							313 text elf-cleric-holy-symbol-v1.glb
+						314 text Assemble ONLY these three existing Tripo GLB assets into one equipped Elf cleric. Place the mace in the anatomical right hand and the handheld holy symbol in the anatomical left hand. Preserve the original character geometry, pose, UVs, materials and embedded textures. These inputs are unrigged: make a STATIC assembly, do not create a skeleton or animations. Keep equipment as separate named objects. Adjust only equipment scale, rotation and position to fit the hands, keep the face visible and minimize intersections. Work on copies. Do not generate replacement assets, images or textures; do not remesh or fuse meshes. One bounded assembly run, at most two placement adjustments. Deliver a downloadable elf-cleric-equipped-tripo-v1.glb, a textured front/side/back preview and a 0/45/90/180 degree actual-geometry wireframe sheet with measured triangle counts, plus a preservation report. Clearly distinguish rendered geometry evidence from concept art. No extra paid generation calls or additional assembly runs. Proceed via AI 3D Lab; this bounded assembly and uncertain Lab credit cost are approved by the owner.
+						315 button (expanded) Run details Completed, Secondary Actions: Collapse
+							316 text Run details
+							317 text Completed
+						318 text Inspecting the three supplied assets to locate the hands and equipment grips before a static assembly.
+						319 text Verified the static assembly preserves source geometry, UVs, materials and embedded textures, with 18,317 triangles and separate equipment objects.
+						320 button Textured front / side / back — actual geometry PNG, Help: Textured front / side / back — actual geometry
+							321 text Textured front / side / back — actual geometry
+							322 text PNG
+						323 button Export Textured front / side / back — actual geometry
+						324 button 0 / 45 / 90 / 180 degree wireframe — 18,317 triangles PNG, Help: 0 / 45 / 90 / 180 degree wireframe — 18,317 triangles
+							325 text 0 / 45 / 90 / 180 degree wireframe — 18,317 triangles
+							326 text PNG
+						327 button Export 0 / 45 / 90 / 180 degree wireframe — 18,317 triangles
+						328 button Elf cleric preservation report MD, Help: Elf cleric preservation report
+							329 text Elf cleric preservation report
+							330 text MD
+						331 button Export Elf cleric preservation report
+						332 button elf-cleric-equipped-tripo-v1.glb GLB, Help: elf-cleric-equipped-tripo-v1.glb
+							333 text elf-cleric-equipped-tripo-v1.glb
+							334 text GLB
+						335 button Export elf-cleric-equipped-tripo-v1.glb
+						336 text Completed and published 
+						337 text elf-cleric-equipped-tripo-v1.glb
+						338 text , plus the textured front/side/back preview, 0/45/90/180° wireframe sheet, and preservation report.
+						339 content list
+							340 text Mace: anatomical right hand; holy symbol: anatomical left.
+							341 text Static assembly with separate named equipment objects.
+							342 text Original geometry, pose, UVs, materials and embedded textures verified preserved.
+							343 container
+								344 text 18,317 triangles ; one assembly run, zero placement adjustments, no generation calls.
+						345 text The previews show actual rendered geometry, not concept art. Original open fingers remain; intersections were checked visually, not exhaustively.
+						346 button Copy
+						347 text 45 Credits
+					348 container
+						349 container Description: Start with an idea, or type..., Value: 
+
+							350 container
+								351 text Start with an idea, or type...
+						352 button Attach files
+						353 button (disabled) Send
+			354 container
+				355 toolbar Canvas tools
+					356 button Add node
+					357 button Templates
+					358 pop up button (collapsed) Description: Select and marquee, Secondary Actions: Expand
+					359 checkbox Description: Draw a section on the canvas, Value: 0
+					360 button (collapsed) Description: Keyboard shortcuts, Secondary Actions: Expand
+				361 container
+					362 container
+						363 container
+							364 heading #1 Assemble Equipped Elf Cleric, Value: 3
+								365 text #1 Assemble Equipped Elf Cleric
+							366 text #1 Assemble Equipped Elf Cleric
+							367 text elf-cleric-equipped-tripo-v1.glb
+							368 button (expanded) Task instructions, Secondary Actions: Collapse
+							369 button Copy
+							370 container Task instructions
+								371 text Assemble only 3 provided Tripo GLBs in AI 3D Lab into equipped Elf cleric; work on copies, preserve character geometry/pose/UVs/materials/embedded textures. Mace→anatomical right hand; holy symbol→left. Static, unrigged: no skeleton/animation. Separate named objects; alter equipment scale/rotation/position only; fit hands, visible face, minimal intersections; no replacement assets/images/textures, remesh/fusion. 1 bounded assembly run, ≤2 placement adjustments; no extra paid calls/runs; owner approves run/uncertain credit cost. Deliver downloadable elf-cleric-equipped-tripo-v1.glb; textured front/side/back preview; actual-geometry wireframe sheet at 0/45/90/180° with measured triangle counts; preservation report separating rendered-geometry evidence from concept art.
+							372 button (disabled) Reuse instructions
+							373 container Assets
+								374 text Assets
+							375 container Description: Add and connect next node, Help: Output
+							376 button Preview
+				377 toolbar Canvas view controls
+					378 button Auto layout
+					379 checkbox Description: Hide connections, Value: 1
+					380 button Fit to canvas
+					381 pop up button (collapsed) Description: Canvas zoom, Secondary Actions: Expand
+		34 container Notifications alt+T
+			35 content list
+		262 text 1Password menu is available. Press down arrow to select.
+
+The focused UI element is 376 button Preview
