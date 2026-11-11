@@ -13,6 +13,8 @@ KayKit placeholder characters are acceptable at v1.0 (ROADMAP D11), so these mod
 
 Production update, 30 October 2026: the owner approved a female heroic-chibi Elf exploration. The base, Fighter variant, and v2 Studio rig/animation tests are archived in `output/characters/`. See §7 for completed work and remaining integration requirements. These prototypes do not replace the four-class delivery contract or the current KayKit assets.
 
+Production update, 10 November 2026: adult female dwarf 2D references are archived in `output/characters/dwarf-female-v5/`. See §8. They are inputs for a later Tripo conversion and are not a game model.
+
 This document says what 3D characters the game needs, how they must be built, and how they plug into the code. It has two audiences:
 
 - **Part A — model production.** For whoever generates the models (the owner with Tripo, plus any cleanup tool such as Blender).
@@ -331,3 +333,12 @@ The archive manifests record file SHA-256 hashes for reproducibility. They are p
 ### 7.5 Equipment assembly handoff
 
 Sword, shield, original rigged armor, and the downloaded Tripo assembly are archived. See [Blender equipment handoff](BLENDER_EQUIPMENT_HANDOFF.md) for exact inputs, the 65-joint source versus 55-joint Tripo re-export distinction, verified credit totals, and the next comparison task. Runtime integration remains pending §7.4.
+
+## 8. Dwarf reference record — 10 November 2026
+
+Adult female dwarf **2D references** for a later Tripo conversion. No mesh, rig, Blender source, or runtime file was produced. Nothing was added to `public/assets/`.
+
+- [Reference folder](../output/characters/dwarf-female-v5/README.md): `dwarf-front.png`, 1344×2016, SHA-256 `b5a748174a6296474eeb05794dffd32178cd228d3959abb703d2e36732be301d`; `character-sheet.png`, 2016×1344, SHA-256 `4e7ed17ab4e5c3bca59eae3215257044bce7b134b340e02447e0d3e78caeda49`.
+- Generator: ImagineArt GPT Image 2.5 Flare, Medium, 2K, opaque. Label `cpp-imagine`. Generated 2026-11-10.
+- Read: adult stocky female dwarf, copper blunt fringe, rounded ears, broad grounded face, grey crop and shorts, barefoot. Front is about 3.2 heads tall.
+- Retained limitations: thin white knee-edge gaps and outer eyeliner tails on the front. The sheet connects the knees, shows fuller side and back hair, uses a near eye-level game view, and models the face more realistically than the existing elf. This archive is not game-ready and has not been Tripo-tested.
