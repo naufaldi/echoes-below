@@ -1,0 +1,11 @@
+{
+  "inspection": 42,
+  "assembly_one_run": 113,
+  "assembly_experiment_total": 155,
+  "starting_balance": 24980,
+  "before_assembly_balance": 24938,
+  "ending_balance": 24825,
+  "sword_and_shield_prior_generation": 220,
+  "sword_shield_plus_assembly_experiment": 375,
+  "character_generation_excluded": true
+}

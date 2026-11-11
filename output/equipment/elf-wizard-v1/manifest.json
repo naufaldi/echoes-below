@@ -1,0 +1,132 @@
+{
+  "purpose": "Production reference inventory, not runtime licence approval",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 1408,
+      "sha256": "a8d09f8e5687deb9c664d1ab49de6a0aab10a3657ab1b95e87340276e2676842"
+    },
+    {
+      "file": "spellbook/README.md",
+      "bytes": 779,
+      "sha256": "78b13f4fd5713ec796e7d699ae1cfda580db76304f9e6e223640bda299ed6b73"
+    },
+    {
+      "file": "spellbook/inspection/geometry-audit.json",
+      "bytes": 255,
+      "sha256": "8716be04b9f65853923a3a60196617762e24861899c3bac06532ee49a1199de5"
+    },
+    {
+      "file": "spellbook/inspection/geometry-four-views.png",
+      "bytes": 91004,
+      "sha256": "c483f0cc7e70c34c8cb7149037d95b8b37e1df6776f8b03f03e98ce4a2f965c5"
+    },
+    {
+      "file": "spellbook/inspection/texture-glb-audit.json",
+      "bytes": 359,
+      "sha256": "f376f0861eb278c075f0931fc96b8d404ed4a7aa305ba9d5417bbf00bec79dce"
+    },
+    {
+      "file": "spellbook/original-tripo/elf-wizard-spellbook-v1.glb",
+      "bytes": 637960,
+      "sha256": "c36605e1b9b5af4a80179783071cca6b596173c83e2af77c7cb8bf266488e40c"
+    },
+    {
+      "file": "spellbook/original-tripo/elf-wizard-spellbook-v1.zip",
+      "bytes": 620678,
+      "sha256": "b78f592b9acc0c772bcc48455131ee53d90788d0dd12870ad7e35a4c1ad5b096"
+    },
+    {
+      "file": "spellbook/original-tripo/fbx/elf-wizard-spellbook-v1.fbm/elf-wizard-spellbook-v1_basecolor.jpg",
+      "bytes": 565210,
+      "sha256": "93d39f1086eb1076ada2c9d259427eeac0e69cb2329c0e8f1535509ecee65455"
+    },
+    {
+      "file": "spellbook/original-tripo/fbx/elf-wizard-spellbook-v1.fbx",
+      "bytes": 69008,
+      "sha256": "0cb64ff4980b031dae3d41888ee0b17aa955119b9f08b1a7a10391029a40494c"
+    },
+    {
+      "file": "spellbook/production.json",
+      "bytes": 837,
+      "sha256": "14dc60fcd03c7d63d8490ce905a3747354d3510b55f50234aec618f10bfa2642"
+    },
+    {
+      "file": "spellbook/tripo-studio-textured.png",
+      "bytes": 104714,
+      "sha256": "aa7c3f9ad31a480df244f696f8dd0851f86ffc2a33d81ded550c41dbb983d849"
+    },
+    {
+      "file": "spellbook-reference-v1.png",
+      "bytes": 1459745,
+      "sha256": "e0f976f844b367e11dd97d5ee95dd3612719fb3e9a417e7a6bb75f39f0117155",
+      "dimensions": [
+        1312,
+        1199
+      ],
+      "source_generated_file": "exec-f88c5b32-3fde-4ee7-92f8-8dbadefdd960.png",
+      "kind": "Codex-generated 2D reference, not a Tripo render"
+    },
+    {
+      "file": "staff/README.md",
+      "bytes": 771,
+      "sha256": "de0e8fbbb57bd5ea760f84aba369fbd9a9aa162f014d1d7ab5ce2d18a32e29ac"
+    },
+    {
+      "file": "staff/inspection/geometry-audit.json",
+      "bytes": 251,
+      "sha256": "be13a2cd3fec0979f8bb33b4a2d02b1c0ebfe0aa26c6b77f042c67662b16de7a"
+    },
+    {
+      "file": "staff/inspection/geometry-four-views.png",
+      "bytes": 57500,
+      "sha256": "48d4a5f0522962abaa35d73c066afcf2e15823d3b0d794694e16873fd9a74014"
+    },
+    {
+      "file": "staff/inspection/texture-glb-audit.json",
+      "bytes": 351,
+      "sha256": "1fc9766ba364d2fb5bbb429ce5fc31e0c890123dd418389da3b93348af93846c"
+    },
+    {
+      "file": "staff/original-tripo/elf-wizard-staff-v1.glb",
+      "bytes": 787756,
+      "sha256": "1c68a74d83bc6d472537add049df03eacc5e42d0081daa07513caa2a02aaba49"
+    },
+    {
+      "file": "staff/original-tripo/elf-wizard-staff-v1.zip",
+      "bytes": 765241,
+      "sha256": "6eff123591e1459ee84b0f178cde47fb7fc22b432c06d3622b5143412243bb99"
+    },
+    {
+      "file": "staff/original-tripo/fbx/elf-wizard-staff-v1.fbm/elf-wizard-staff-v1_basecolor.jpg",
+      "bytes": 702789,
+      "sha256": "3db3c12fae6abe46725cb5b1565246d4f9a2988390e41de9f100ae55ba61c81c"
+    },
+    {
+      "file": "staff/original-tripo/fbx/elf-wizard-staff-v1.fbx",
+      "bytes": 75232,
+      "sha256": "d83e32eac1c45c32c775e5c5e858751c2bb06f39343049b2489499e1fc9fbc0d"
+    },
+    {
+      "file": "staff/production.json",
+      "bytes": 829,
+      "sha256": "6957dc58d2745fe86143746553d85f301f3b7e96be33e85f0b18b834e9dde5bb"
+    },
+    {
+      "file": "staff/tripo-studio-textured.png",
+      "bytes": 90869,
+      "sha256": "a891d58af5f5827880c1983210c45da667bd3b3a88b138887118e03b6880f65c"
+    },
+    {
+      "file": "staff-reference-v1.png",
+      "bytes": 1080353,
+      "sha256": "9847890980957123b55e5e02173a294ff0c94704a47cae0d8a534be511b62c14",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "source_generated_file": "exec-7cfcd412-accc-439a-a286-6e29f1bbc1bc.png",
+      "kind": "Codex-generated 2D reference, not a Tripo render"
+    }
+  ]
+}

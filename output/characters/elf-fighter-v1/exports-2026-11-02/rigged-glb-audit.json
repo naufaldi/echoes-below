@@ -1,0 +1,12 @@
+{
+  "bytes": 2233224,
+  "skins": 1,
+  "joints": [
+    65
+  ],
+  "animations": [
+    "idle.001",
+    "slash.001",
+    "walk.001"
+  ]
+}

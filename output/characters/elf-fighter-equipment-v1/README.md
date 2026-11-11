@@ -1,11 +1,22 @@
-# Tripo Fighter: modular equipment preparation
+# Historical Fighter equipment experiment
 
 Production-only work, 30 October 2026. The selected character is the steel-armored
 Tripo Elf Fighter, Studio asset `1447de15-fb60-4516-a6db-1384f4a9e5a7`.
 The original character archives are unchanged. No character was replaced and no
 game integration, merge or deployment was performed.
 
-## Source inspection: the Fighter export is missing
+Status updated 11 November 2026: this is an archived procedural experiment,
+not the current equipment production path. The original armored Fighter export
+was archived on 2 November. Use the Tripo sword, shield and character sources in
+[the Blender handoff](../../../docs/BLENDER_EQUIPMENT_HANDOFF.md) for further work.
+Current project rules require Tripo for new assets. The Blender generator here
+is preserved as historical source, not an approved replacement workflow.
+
+The missing-export findings and 487-test result below describe the original
+30 October inspection. They do not describe the current branch or certify the
+later Fighter export. The source audit retains its original commit scope.
+
+## Historical source inspection — 30 October 2026
 
 The complete tree of `docs/elf-character-production` at
 `d9b7aef6605be647b81b8610666717ccf1bb7209` contains 1,702 files under
@@ -28,7 +39,7 @@ image, not a UV texture. Neither was substituted for a model.
 
 ## Delivered equipment
 
-These are newly authored, separate low-poly props intended to complement that
+These were separate low-poly props authored in Blender to complement that
 direction. They are not extracted Tripo geometry or the blue/brass body prototype.
 
 | File | Exact mesh/node | Triangles | Bytes | Materials / primitives |
@@ -67,6 +78,15 @@ The render was visually checked for silhouette, material separation, blade and
 guard shape, and rear grip. The shield backing was moved forward to provide
 finger clearance. No equipped-character or in-game visual test was possible.
 
+![Actual exported geometry at 0, 45, 90 and 180 degrees](geometry-four-views.png)
+
+This is a local orthographic wireframe render of the archived GLBs, not a Tripo
+Studio screenshot or an image-generated wireframe. The exported geometry has
+0 quads and 322 triangles in the sword, and 0 quads and 332 triangles in the
+shield. GLB stores these exports as triangles; this does not establish the
+authoring mesh's original quad count. Reproduce with Python 3 and Pillow:
+`python3 inspection/render-wireframes.py` from this directory.
+
 ## Rig and motion assessment
 
 The archived Fighter samples reviewed were `walk/frame-00000.jpg`, `00069`,
@@ -81,12 +101,13 @@ curves, loop continuity, foot sliding or ground penetration.
 body would not fix this selected Fighter. No claim is made that `Idle`, `Walk`,
 `Attack_Melee`, `Hit`, `Death`, `Use_Item` or `Dodge` exist in an exported Fighter.
 
-To unblock the next pass, export this exact Studio asset as FBX or GLB with its
+The original next-step request was to export this exact Studio asset with its
 skin, skeleton, base-color texture and idle/walk/slash clips. Include the bind
 pose and preserve the original export. Supply the Tripo plan/terms evidence
 before runtime distribution; the archive still lacks resolved Tripo licensing.
 
-Once that source exists:
+That export is now archived. The following was the original proposed workflow;
+the current handoff linked above uses the later Tripo equipment instead:
 
 1. Audit actual topology, weights, `Head`, bones, scale, facing and clip ranges.
 2. Work on a copy. Measure world-space horizontal root/hips displacement over
@@ -95,7 +116,7 @@ Once that source exists:
 3. Bake at 30 fps, close the cycle without a duplicate-frame pause, and verify
    no horizontal drift at the loop boundary. Tune feet using a visible floor
    and known travel speed; an in-place clip alone cannot certify no sliding.
-4. Fit these props, test idle/walk/attack grips and armor/shield intersections,
+4. Fit the selected props, test idle/walk/attack grips and armor/shield intersections,
    and keep the weapons below the head in the rest pose used for bounds.
 5. Export the assembled GLB and check all character requirements, including
    missing clips, license evidence and the final 20k/4 MB budgets, before Part B
@@ -112,8 +133,8 @@ blender --background --threads 4 --python scripts/characters/generate-fighter-eq
 python scripts/characters/verify-fighter-equipment.py
 ```
 
-The generator is the editable source; no large `.blend`, ZIP or frame sequence
-is needed. Blender exporter changes may produce different file hashes; review
+The generator is the preserved editable source; no `.blend` was saved for this
+experiment. Blender exporter changes may produce different file hashes; review
 the outputs and update the inventory after intentional regeneration.
 
 The verifier checks GLB structure, names, identity transforms, lack of external

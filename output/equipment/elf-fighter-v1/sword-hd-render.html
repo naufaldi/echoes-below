@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Sword HD render</title><style>body{margin:0;background:#20252d;color:white;font:16px system-ui;display:flex;align-items:center;justify-content:center;gap:24px}canvas{height:90vh!important;width:auto!important;display:block}button{display:block;padding:12px;margin:12px}#status{max-width:240px}</style><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script></head><body><main id="view"></main><aside><p id="status">Loading model…</p><button id="front" disabled>Save front HD PNG</button><button id="angle" disabled>Save angled HD PNG</button></aside><script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const W=2160,H=2700;
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(W,H);renderer.setPixelRatio(1);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;document.querySelector('#view').append(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#e9e5dd');
+scene.add(new THREE.HemisphereLight(0xffffff,0x655b4b,1.5));
+for(const [pos,power,color] of [[[3,4,5],2,0xfff4df],[[-4,1,2],.8,0xdce9ff],[[2,3,-4],2,0xffffff]]){const l=new THREE.DirectionalLight(color,power);l.position.set(...pos);scene.add(l);}
+const camera=new THREE.OrthographicCamera(-.8,.8,1,-1,.01,100);let model;
+function draw(angle){model.rotation.y=angle;renderer.render(scene,camera);}
+function save(name,angle){draw(angle);renderer.domElement.toBlob(blob=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),10000);},'image/png');}
+try{const gltf=await new GLTFLoader().loadAsync('./textured/elf-fighter-sword-p2-quad-textured-v1.glb');model=gltf.scene;const box=new THREE.Box3().setFromObject(model),center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3());const pivot=new THREE.Group();model.position.sub(center);pivot.add(model);const scale=1.72/size.y;pivot.scale.setScalar(scale);scene.add(pivot);model=pivot;camera.position.set(0,0,5);camera.lookAt(0,0,0);draw(0);document.querySelector('#status').textContent='Ready · 2160 × 2700 PNG · original Tripo GLB and embedded 2K texture';for(const id of ['front','angle'])document.getElementById(id).disabled=false;document.getElementById('front').onclick=()=>save('sword-final-hd-front-2160x2700.png',0);document.getElementById('angle').onclick=()=>save('sword-final-hd-angle-2160x2700.png',Math.PI/7);}
+catch(e){document.querySelector('#status').textContent='Render failed: '+e.message;}
+</script></body></html>

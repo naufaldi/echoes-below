@@ -1,0 +1,25 @@
+{
+  "bytes": 842912,
+  "triangles": 1648,
+  "meshes": 1,
+  "materials": 1,
+  "images": [
+    {
+      "mime": "image/jpeg",
+      "dimensions": [
+        2048,
+        2048
+      ]
+    }
+  ],
+  "external_uris": [],
+  "has_uv": true,
+  "credits": {
+    "geometry": 100,
+    "texture_2k": 10,
+    "export_additional_observed": 0,
+    "total": 110,
+    "balance": 25090
+  },
+  "note": "GLB is a production export; grip/orientation/scale and runtime integration not validated."
+}

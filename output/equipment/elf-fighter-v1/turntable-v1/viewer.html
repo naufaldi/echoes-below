@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Equipped Elf — 360° render</title><style>body{margin:0;background:#191d22;color:#eee;font:16px system-ui;display:flex;align-items:center;justify-content:center;gap:24px;height:100vh}canvas{height:94vh!important;width:auto!important}aside{max-width:240px}button{padding:16px;border:0;border-radius:8px;cursor:pointer;font:inherit}</style><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script></head><body><main></main><aside><h2>Equipped elf fighter</h2><p id="status">Loading original Tripo GLB…</p><button id="record" disabled>Render 360° video</button></aside><script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+renderer.setSize(1080,1920);renderer.setPixelRatio(1);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
+document.querySelector('main').append(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#dedbd4');
+scene.add(new THREE.HemisphereLight(0xffffff,0x847d70,2.3));
+for(const [pos,intensity,color] of [[[3,5,4],2.8,0xfff4e3],[[-4,2,1],1.3,0xe3efff],[[1,4,-4],2.3,0xffffff]]){const light=new THREE.DirectionalLight(color,intensity);light.position.set(...pos);scene.add(light);}
+const camera=new THREE.PerspectiveCamera(30,1080/1920,.01,100);
+const status=document.querySelector('#status'),button=document.querySelector('#record');
+try{
+ const gltf=await new GLTFLoader().loadAsync('../assembly-tripo-v1/elf-fighter-equipped-tripo-v1.glb');
+ const model=gltf.scene;scene.add(model);const idle=gltf.animations.find(c=>c.name==='idle.001');if(idle){const mixer=new THREE.AnimationMixer(model);mixer.clipAction(idle).play();mixer.update(1);}model.updateMatrixWorld(true);model.traverse(o=>{if(o.isSkinnedMesh)o.skeleton.update();});
+ const bad=[];model.traverse(o=>{if(o.matrixWorld.elements.some(v=>!Number.isFinite(v)))bad.push({name:o.name,pos:o.position.toArray(),quat:o.quaternion.toArray(),scale:o.scale.toArray()});});status.dataset.bad=JSON.stringify(bad.slice(0,4));const box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
+ model.position.sub(center);const pivot=new THREE.Group();scene.remove(model);pivot.add(model);scene.add(pivot);
+ status.dataset.bounds=JSON.stringify({size:size.toArray(),center:center.toArray()});const radius=Math.max(size.x,size.z)*.5,fit=Math.max(size.y*1.18,2*radius/(1080/1920)*1.18);
+ const distance=fit/(2*Math.tan(THREE.MathUtils.degToRad(15)));camera.position.set(0,size.y*.08,distance);camera.lookAt(0,0,0);
+ const floor=new THREE.Mesh(new THREE.CircleGeometry(size.y*1.1,80),new THREE.MeshStandardMaterial({color:0xc5c1b8,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-size.y/2-.008;scene.add(floor);
+ function draw(angle){pivot.rotation.y=angle+Math.PI/2;renderer.render(scene,camera);}
+ draw(0);button.disabled=false;status.textContent='Ready · original equipped Tripo model · 1080 × 1920 · 12 seconds';
+ button.onclick=async()=>{
+  button.disabled=true;status.textContent='Recording 360° turntable…';
+  const stream=renderer.domElement.captureStream(30),chunks=[];
+  const mime=['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'].find(x=>MediaRecorder.isTypeSupported(x));
+  const recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:18000000});
+  const stopped=new Promise(resolve=>{recorder.onstop=resolve;});recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
+  draw(0);recorder.start();const start=performance.now();
+  await new Promise(resolve=>{function frame(now){const t=Math.min((now-start)/12000,1);draw(t*Math.PI*2);if(t<1)requestAnimationFrame(frame);else resolve();}requestAnimationFrame(frame);});
+  recorder.stop();await stopped;stream.getTracks().forEach(t=>t.stop());
+  const response=await fetch('/save-render',{method:'POST',headers:{'Content-Type':mime},body:new Blob(chunks,{type:mime})});
+  if(!response.ok)throw new Error('Saving recording failed');
+  status.textContent='Saved · equipped-elf-turntable.webm · 360° complete';button.disabled=false;
+ };
+}catch(error){status.textContent=String(error);}
+</script></body></html>

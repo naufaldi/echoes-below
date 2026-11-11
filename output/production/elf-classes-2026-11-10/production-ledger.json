@@ -1,0 +1,156 @@
+{
+  "status": "complete",
+  "approved_credit_cap": 990,
+  "studio_starting_balance": 25825,
+  "api_balance_not_used": 890,
+  "tasks": [
+    {
+      "asset": "elf-rogue",
+      "studio_asset_id": "688b6d82-29cb-45c0-91bd-e7a116c0a736",
+      "step": "P2 Quad geometry",
+      "target_quads": 8000,
+      "credits": 100,
+      "status": "complete"
+    },
+    {
+      "asset": "elf-rogue",
+      "studio_asset_id": "688b6d82-29cb-45c0-91bd-e7a116c0a736",
+      "step": "2K texture",
+      "credits": 10,
+      "status": "complete"
+    },
+    {
+      "asset": "elf-wizard",
+      "studio_asset_id": "ccb88108-0220-4a5d-bc0a-64c2e62522ad",
+      "step": "P2 Quad geometry",
+      "target_quads": 8000,
+      "credits": 100,
+      "status": "complete"
+    },
+    {
+      "asset": "elf-wizard",
+      "studio_asset_id": "ccb88108-0220-4a5d-bc0a-64c2e62522ad",
+      "step": "2K texture",
+      "credits": 10,
+      "status": "complete"
+    },
+    {
+      "asset": "elf-cleric",
+      "studio_asset_id": "ed4fc8c7-cc35-45ee-baa8-729cd5db03d5",
+      "step": "P2 Quad geometry",
+      "target_quads": 8000,
+      "credits": 100,
+      "status": "complete"
+    },
+    {
+      "asset": "elf-cleric",
+      "studio_asset_id": "ed4fc8c7-cc35-45ee-baa8-729cd5db03d5",
+      "step": "2K texture",
+      "credits": 10,
+      "status": "complete"
+    },
+    {
+      "asset": "rogue-bow",
+      "studio_asset_id": "936047c7-2a74-4b90-9757-67c52ab347dc",
+      "step": "P2 Quad geometry",
+      "target_quads": 750,
+      "credits": 100,
+      "status": "complete"
+    },
+    {
+      "asset": "rogue-bow",
+      "studio_asset_id": "936047c7-2a74-4b90-9757-67c52ab347dc",
+      "step": "2K texture",
+      "credits": 10,
+      "status": "complete"
+    },
+    {
+      "asset": "rogue-dagger",
+      "studio_asset_id": "106eaad1-5d06-4f8b-8add-2adbb94e7183",
+      "step": "P2 Quad geometry",
+      "target_quads": 750,
+      "credits": 100,
+      "status": "complete"
+    },
+    {
+      "asset": "rogue-dagger",
+      "studio_asset_id": "106eaad1-5d06-4f8b-8add-2adbb94e7183",
+      "step": "2K texture",
+      "credits": 10,
+      "status": "complete"
+    },
+    {
+      "asset": "wizard-staff",
+      "studio_asset_id": "9c2eba46-07e3-4331-abb9-8d3557450007",
+      "step": "P2 Quad geometry",
+      "target_quads": 750,
+      "credits": 100,
+      "status": "complete"
+    },
+    {
+      "asset": "wizard-staff",
+      "studio_asset_id": "9c2eba46-07e3-4331-abb9-8d3557450007",
+      "step": "2K texture",
+      "credits": 10,
+      "status": "complete"
+    },
+    {
+      "asset": "wizard-spellbook",
+      "studio_asset_id": "d557d529-a696-4412-92bc-5a9014872984",
+      "step": "P2 Quad geometry",
+      "target_quads": 750,
+      "credits": 100,
+      "status": "complete"
+    },
+    {
+      "asset": "wizard-spellbook",
+      "studio_asset_id": "d557d529-a696-4412-92bc-5a9014872984",
+      "step": "2K texture",
+      "credits": 10,
+      "status": "complete"
+    },
+    {
+      "asset": "cleric-mace",
+      "studio_asset_id": "f96d7947-d27e-4552-aa6d-81fc96e5835b",
+      "step": "P2 Quad geometry",
+      "target_quads": 750,
+      "credits": 100,
+      "status": "complete"
+    },
+    {
+      "asset": "cleric-mace",
+      "studio_asset_id": "f96d7947-d27e-4552-aa6d-81fc96e5835b",
+      "step": "2K texture",
+      "credits": 10,
+      "status": "complete"
+    },
+    {
+      "asset": "cleric-holy-symbol",
+      "studio_asset_id": "bb437adf-c07b-41ab-989b-1be8d1188e03",
+      "step": "P2 Quad geometry",
+      "target_quads": 750,
+      "credits": 100,
+      "status": "complete"
+    },
+    {
+      "asset": "cleric-holy-symbol",
+      "studio_asset_id": "bb437adf-c07b-41ab-989b-1be8d1188e03",
+      "step": "2K texture",
+      "credits": 10,
+      "status": "complete"
+    }
+  ],
+  "required_per_asset": [
+    "reference image",
+    "original textured FBX and GLB",
+    "Studio screenshot",
+    "actual-geometry wireframe sheet at 0,45,90,180 degrees",
+    "geometry counts",
+    "sha256 manifest"
+  ],
+  "observed_balance": 24835,
+  "studio_ending_balance": 24835,
+  "observed_total_credits": 990,
+  "downloads_verified": 9,
+  "wireframe_sheets_verified": 9
+}

@@ -1,0 +1,15 @@
+{
+  "purpose": "Production working files; not runtime approval",
+  "files": [
+    {
+      "file": "serve.py",
+      "bytes": 667,
+      "sha256": "36037b19e2c43a0c0e18836c90ad6face46115091088cd3c99dbe27fd20b0e90"
+    },
+    {
+      "file": "viewer.html",
+      "bytes": 4512,
+      "sha256": "09f4c144f7d54f1467b400e2ddfa0a81fb7bf0348145dd3879cb0b862508fab8"
+    }
+  ]
+}

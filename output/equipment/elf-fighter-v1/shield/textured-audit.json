@@ -1,0 +1,18 @@
+{
+  "file": "elf-fighter-shield-p2-quad-textured-v1.glb",
+  "bytes": 629168,
+  "meshes": 1,
+  "materials": 1,
+  "triangles": 1385,
+  "uv": true,
+  "images": [
+    {
+      "mime": "image/jpeg",
+      "size": [
+        2048,
+        2048
+      ]
+    }
+  ],
+  "external_uris": []
+}

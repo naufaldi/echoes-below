@@ -1,0 +1,40 @@
+{
+  "purpose": "Completed Tripo assembly production archive; not runtime approval",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 1913,
+      "sha256": "8866a08a6bb3b11bf877ad377c61565dc3477a19d05020dded69b954c706cbe6"
+    },
+    {
+      "file": "cleric-assembly-prompt.txt",
+      "bytes": 1018,
+      "sha256": "0e68aa09bc4a239a243caec50049bd2b46ae80c9194238f019b9add7f5816306"
+    },
+    {
+      "file": "inspect_assembly.py",
+      "bytes": 4512,
+      "sha256": "41267965f0230caa412aa6f1a95febc1f4cec9f2d614e53df1443b6b602e9b9c"
+    },
+    {
+      "file": "plan.json",
+      "bytes": 4098,
+      "sha256": "953d2ab46d8676dcc9162196a5445fc2aae11c5dcde9d23531e633324431c18b"
+    },
+    {
+      "file": "prepared-rogue-inputs.png",
+      "bytes": 58146,
+      "sha256": "39af2ff5239c80a4ccff5a5992e116b40ba87f8c4f255e0fe24a02792f6fb3a6"
+    },
+    {
+      "file": "rogue-assembly-prompt.txt",
+      "bytes": 1001,
+      "sha256": "f762f6539c059c7fb4b14a382a4a3a1d21c70e92ea1e73f7bcb3ba77d3fa9532"
+    },
+    {
+      "file": "wizard-assembly-prompt.txt",
+      "bytes": 1025,
+      "sha256": "e5d04d84bd5956e91648c08e22190f65aaccfff29162e446b1c6714b0c577006"
+    }
+  ]
+}

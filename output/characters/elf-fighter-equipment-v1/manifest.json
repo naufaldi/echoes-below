@@ -1,9 +1,9 @@
 {
-  "status": "production-only; not fitted or integrated",
+  "status": "historical procedural experiment; not approved for runtime or further production",
   "source": {
     "tool": "Blender 4.3.2, original procedural equipment",
     "generator": "../../../scripts/characters/generate-fighter-equipment.py",
-    "target_character": "Tripo Studio 1447de15-fb60-4516-a6db-1384f4a9e5a7; mesh export absent"
+    "target_character": "Tripo Studio 1447de15-fb60-4516-a6db-1384f4a9e5a7; original missing-export audit scoped to d9b7aef"
   },
   "license": {
     "equipment": "CC0-1.0",
@@ -18,8 +18,8 @@
     },
     {
       "file": "README.md",
-      "sha256": "6fb993ae8780ab62f28a69ca5fe4f0336943d349392aea0dbd1147e8fa8cd744",
-      "bytes": 7884
+      "sha256": "b092e3a5bd2cbb18d8154ff8a9fbf012983a3bc8b1459d2f0f7152ee5ca89ed4",
+      "bytes": 9240
     },
     {
       "file": "equipment-preview.png",
@@ -30,6 +30,16 @@
       "file": "geometry-audit.json",
       "sha256": "229aa50ca4356e82f4bb02650c07ca362e89aae931f967d4f4cb80f950fa8e4e",
       "bytes": 1226
+    },
+    {
+      "file": "geometry-four-views.png",
+      "sha256": "5e136af7682944af8aa9c7daaca8f6d18166c8540825d8997cd47dc4adfb28fd",
+      "bytes": 71195
+    },
+    {
+      "file": "inspection/render-wireframes.py",
+      "sha256": "d0b3977ec083a4c62825b8fe3e4c7c6d761bf8da05b34d70212e34d6062d152b",
+      "bytes": 3708
     },
     {
       "file": "shield.glb",
@@ -61,5 +71,6 @@
       "sha256": "d0720d67dc73d1b2a186f113cc354d0e27c1b746053c2c7b27aae259df18b32c",
       "bytes": 3801
     }
-  ]
+  ],
+  "current_handoff": "../../../docs/BLENDER_EQUIPMENT_HANDOFF.md"
 }

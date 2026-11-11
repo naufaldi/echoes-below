@@ -1,0 +1,29 @@
+{
+  "asset": "wizard-spellbook",
+  "studio_asset_id": "d557d529-a696-4412-92bc-5a9014872984",
+  "studio_url": "https://studio.tripo3d.ai/workspace/texture/d557d529-a696-4412-92bc-5a9014872984",
+  "model": "P2.0 Smart Mesh",
+  "topology": "Quad",
+  "target_polycount": 750,
+  "texture_resolution": "2K",
+  "credits": {
+    "geometry": 100,
+    "texture": 10,
+    "total": 110
+  },
+  "export_preset": "FBX Blender; GLB",
+  "geometry": {
+    "source": "elf-wizard-spellbook-v1.fbx",
+    "sha256": "0cb64ff4980b031dae3d41888ee0b17aa955119b9f08b1a7a10391029a40494c",
+    "control_vertices": 758,
+    "polygons": 832,
+    "quads": 507,
+    "triangles": 325,
+    "other_polygons": 0,
+    "triangulated": 1339
+  },
+  "status": "production archive; runtime acceptance pending",
+  "rigged": false,
+  "assembled": false,
+  "blend_created": false
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "file": "README.md",
+    "sha256": "4aefaf70b391184c056b74f8db6b3a9d8b42779b7404428f2d882a8754fc5596",
+    "bytes": 855
+  },
+  {
+    "file": "sword-final-hd-angle-2160x2700.png",
+    "sha256": "4d0dc28b9d31fb8b86c5d40ee85a323515193897be5145976087412888c2a223",
+    "bytes": 898838
+  },
+  {
+    "file": "sword-final-hd-front-2160x2700.png",
+    "sha256": "ec68cf0438c8808c1772a7db88d3b6c841de9fd82b1fb5c2f36d875b2c2a81bb",
+    "bytes": 972195
+  }
+]

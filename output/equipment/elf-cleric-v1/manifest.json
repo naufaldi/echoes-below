@@ -1,0 +1,132 @@
+{
+  "purpose": "Production reference inventory, not runtime licence approval",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 1408,
+      "sha256": "dd6c2ee81c8abc6c787f86009cd8357c5fb3dffb3f3c76725b34f80d34b44dc4"
+    },
+    {
+      "file": "holy-symbol/README.md",
+      "bytes": 783,
+      "sha256": "9f62d26d3ce0b38f9ba91ec336a3e16340ded172730289e9bd0cc57095ecbc3b"
+    },
+    {
+      "file": "holy-symbol/inspection/geometry-audit.json",
+      "bytes": 257,
+      "sha256": "a72a08316001d010c4e127da4871680b4220f79f6b6aaeb88d5d9e35bd8240a8"
+    },
+    {
+      "file": "holy-symbol/inspection/geometry-four-views.png",
+      "bytes": 96664,
+      "sha256": "f87b57305b77022b8ca613687868969e0a580654227ff1cc3c45a5d58729f3f5"
+    },
+    {
+      "file": "holy-symbol/inspection/texture-glb-audit.json",
+      "bytes": 363,
+      "sha256": "0c91d2e8c0223fbc42f2ecc97a3d9aa58fa2c2fc9bdb7259b5edbda9f6462bf2"
+    },
+    {
+      "file": "holy-symbol/original-tripo/elf-cleric-holy-symbol-v1.glb",
+      "bytes": 840884,
+      "sha256": "14c7b4a5477f26bc217d14b5905cf4c0e53424584ebb9b7bd8b70be985823d53"
+    },
+    {
+      "file": "holy-symbol/original-tripo/elf-cleric-holy-symbol-v1.zip",
+      "bytes": 816138,
+      "sha256": "55b4a5fe78d94b805fdaea064ed189250877337a8a25bc76faa6a2d664daf36b"
+    },
+    {
+      "file": "holy-symbol/original-tripo/fbx/elf-cleric-holy-symbol-v1.fbm/elf-cleric-holy-symbol-v1_basecolor.jpg",
+      "bytes": 752091,
+      "sha256": "49ce71708de4fb5d55febff5a556ce1fbd047e65cb4af340d0be61fb506e328b"
+    },
+    {
+      "file": "holy-symbol/original-tripo/fbx/elf-cleric-holy-symbol-v1.fbx",
+      "bytes": 76816,
+      "sha256": "23602143585a4cb55352adbd779b92edd555908ca95fe1e72f9ae37f365963bc"
+    },
+    {
+      "file": "holy-symbol/production.json",
+      "bytes": 841,
+      "sha256": "077f046221ceb405fe95e57544dfe61cfd71997065a5e611498caa01b5a85ebe"
+    },
+    {
+      "file": "holy-symbol/tripo-studio-textured.png",
+      "bytes": 104140,
+      "sha256": "6a07ca99cfb837326a0e9617bf167dc7ab052ec05b704d318c85f1b78f692a2c"
+    },
+    {
+      "file": "holy-symbol-reference-v1.png",
+      "bytes": 1316484,
+      "sha256": "b04fc70109ed9f37f0de02c305c6cd5ed95df462b4fe56222fbdeda01ebfde35",
+      "dimensions": [
+        1199,
+        1312
+      ],
+      "source_generated_file": "exec-59f720c9-db36-4744-858b-04e0628749e7.png",
+      "kind": "Codex-generated 2D reference, not a Tripo render"
+    },
+    {
+      "file": "mace/README.md",
+      "bytes": 769,
+      "sha256": "8c6325d2574d6fa174aaeb25ba7fb04c685e94af71dcd7ed17bb93dd598cacf7"
+    },
+    {
+      "file": "mace/inspection/geometry-audit.json",
+      "bytes": 250,
+      "sha256": "b6edde0cb7170ffcabfa1e4d63e70c09b8dc86e9a0d4b3fe8e0f0ef097268a0f"
+    },
+    {
+      "file": "mace/inspection/geometry-four-views.png",
+      "bytes": 91580,
+      "sha256": "09174c607573db79281ec19d8e358052a779d54e87459ae97dee295a3ccdb2fe"
+    },
+    {
+      "file": "mace/inspection/texture-glb-audit.json",
+      "bytes": 349,
+      "sha256": "5024f49114f75c98e91154ca727cfa11b3f9bf3f0be3e155bd102022d9841733"
+    },
+    {
+      "file": "mace/original-tripo/elf-cleric-mace-v1.glb",
+      "bytes": 671140,
+      "sha256": "e1b0c7b2c9f936c75a47451a6288c36e2d8802a8423be6ed3ba53d77910409ea"
+    },
+    {
+      "file": "mace/original-tripo/elf-cleric-mace-v1.zip",
+      "bytes": 653035,
+      "sha256": "35f45e5e4df235d8edd84231531f9ec9fc9b451db7e0f4840ef22f509a0d1367"
+    },
+    {
+      "file": "mace/original-tripo/fbx/elf-cleric-mace-v1.fbm/elf-cleric-mace-v1_basecolor.jpg",
+      "bytes": 598358,
+      "sha256": "3b49952e6330f960fc3a1572148fba1c86229b8e49ca1ea1f0d6a060717a9e73"
+    },
+    {
+      "file": "mace/original-tripo/fbx/elf-cleric-mace-v1.fbx",
+      "bytes": 67504,
+      "sha256": "3e20a2240e9203c98219b2efc382ef1586eb21f596e39866cdbcd7122f0e0191"
+    },
+    {
+      "file": "mace/production.json",
+      "bytes": 827,
+      "sha256": "5a847a5c0eb09ca4f915c9ea83d91526bdbf6983c9944e463f5359dbc7ef2e99"
+    },
+    {
+      "file": "mace/tripo-studio-textured.png",
+      "bytes": 94826,
+      "sha256": "ac3d43e80eccdc88de80b44559b604020b54e17909013d31815c4a36d7a02b9c"
+    },
+    {
+      "file": "mace-reference-v1.png",
+      "bytes": 1190597,
+      "sha256": "c77fd590049e837d49c305b6ffa9c12640296460ab8f32b304a52f83729e1f83",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "source_generated_file": "exec-564ca859-3187-41fe-a932-455d9f05c1d3.png",
+      "kind": "Codex-generated 2D reference, not a Tripo render"
+    }
+  ]
+}

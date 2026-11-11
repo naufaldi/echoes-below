@@ -1,0 +1,10 @@
+{
+  "control_vertices": 808,
+  "polygons": 836,
+  "polygon_sizes": {
+    "3": 287,
+    "4": 549
+  },
+  "triangulated_triangles": 1385,
+  "quad_percentage": 65.66985645933015
+}

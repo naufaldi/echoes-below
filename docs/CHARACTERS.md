@@ -328,10 +328,12 @@ These are **production prototypes, not game-ready assets**. Nothing was added to
 
 The archive manifests record file SHA-256 hashes for reproducibility. They are production inventory, not the runtime licence manifest or proof that Part B acceptance has passed.
 
-### 7.5 Tripo Fighter equipment preparation — 30 October 2026
+### 7.5 Equipment assembly handoff
 
-The owner confirmed the original steel-armored Tripo Fighter (`1447de15-fb60-4516-a6db-1384f4a9e5a7`). An audit of `docs/elf-character-production` at `d9b7aef` found only reference images and recordings for that Fighter: **no Fighter mesh, texture atlas, skeleton or animation export**. The available v1/v2 FBXs are unarmored bases and were not substituted. Earlier statements that the Fighter was rigged refer to Studio previews, not a usable rig committed here.
+Sword, shield, original rigged armor, and the downloaded Tripo assembly are archived. See [Blender equipment handoff](BLENDER_EQUIPMENT_HANDOFF.md) for exact inputs, the 65-joint source versus 55-joint Tripo re-export distinction, verified credit totals, and the next comparison task. Runtime integration remains pending §7.4.
 
-[Separate sword and shield GLBs](../output/characters/elf-fighter-equipment-v1/README.md) are prepared with `Weapon_Main` / `Shield` names, grip-centered pivots and a light `Accent` shield panel. They total 654 triangles / 37,252 bytes and have no external dependencies. The original archives are preserved. The package includes reproducible Blender source, a geometry/hash verifier, a render of the re-imported exports, and the source audit.
+### 7.6 Historical procedural equipment experiment — 30 October 2026
 
-Hand fitting, actual rig/weight validation, in-place walk editing and combined character budget checks remain blocked on an export of that exact Fighter with texture and idle/walk/slash clips. No Fighter animation or game integration was changed. These props are newly authored CC0 equipment; that does not resolve the Tripo character's license evidence.
+[The earlier sword and shield experiment](../output/characters/elf-fighter-equipment-v1/README.md) preserves two Blender-authored GLBs, their source, and geometry/hash checks. They total 654 triangles / 37,252 bytes. The source audit describes `d9b7aef`, before the original armored Fighter export was archived on 2 November; it is not the current source inventory.
+
+These procedural props are historical material. Current production uses the Tripo sources in §7.5 and requires Tripo for new assets. This archive does not approve the procedural props for game integration or resolve the Tripo character's licence evidence. No character animation or runtime asset changes are included.

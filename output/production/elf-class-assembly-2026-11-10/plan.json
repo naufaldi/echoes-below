@@ -1,0 +1,97 @@
+{
+  "status": "completed; downloaded and locally audited",
+  "starting_studio_balance": 24835,
+  "historical_fighter_cost": 155,
+  "three_run_historical_reference": 465,
+  "price_guaranteed": false,
+  "canvas_url": "https://studio.tripo3d.ai/canvas/projects/01a1c42d-e079-77a8-9c41-20785df0e5bf",
+  "assets": [
+    {
+      "class": "rogue",
+      "inputs": [
+        {
+          "path": "output/characters/elf-rogue-v1/original-tripo/elf-rogue-v1.glb",
+          "bytes": 1773188,
+          "sha256": "fb8ba566a9f82fd523f9cd9e10b166158fd333585b89bf455ab283a14e994092"
+        },
+        {
+          "path": "output/equipment/elf-rogue-v1/bow/original-tripo/elf-rogue-bow-v1.glb",
+          "bytes": 678636,
+          "sha256": "c13f648a1f49c7c7345066b04bfc4b14e8b5fa8ff51df1210e072bc71c3928cc"
+        },
+        {
+          "path": "output/equipment/elf-rogue-v1/dagger/original-tripo/elf-rogue-dagger-v1.glb",
+          "bytes": 542656,
+          "sha256": "813a687e3632f88096bf822ad14862e8e2afc7e8ad8d72c34af6c81468ba7907"
+        }
+      ],
+      "placement": "Place the bow in the anatomical left hand and the dagger in the anatomical right hand.",
+      "status": "completed; downloaded and locally audited",
+      "credits": 38,
+      "canvas_url": "https://studio.tripo3d.ai/canvas/projects/01a1c42d-e079-77a8-9c41-20785df0e5bf",
+      "archive": "output/characters/elf-rogue-v1/assembly-tripo-v1",
+      "triangles": 20127,
+      "static": true,
+      "placement_adjustments_reported": 0
+    },
+    {
+      "class": "wizard",
+      "inputs": [
+        {
+          "path": "output/characters/elf-wizard-v1/original-tripo/elf-wizard-v1.glb",
+          "bytes": 1691108,
+          "sha256": "96a82b3eb271d9544981f2f5fae347f61ce3b3ebecc04a03be003c5f5b98369c"
+        },
+        {
+          "path": "output/equipment/elf-wizard-v1/staff/original-tripo/elf-wizard-staff-v1.glb",
+          "bytes": 787756,
+          "sha256": "1c68a74d83bc6d472537add049df03eacc5e42d0081daa07513caa2a02aaba49"
+        },
+        {
+          "path": "output/equipment/elf-wizard-v1/spellbook/original-tripo/elf-wizard-spellbook-v1.glb",
+          "bytes": 637960,
+          "sha256": "c36605e1b9b5af4a80179783071cca6b596173c83e2af77c7cb8bf266488e40c"
+        }
+      ],
+      "placement": "Place the staff in the anatomical right hand and the closed spellbook supported by the anatomical left hand.",
+      "status": "completed; downloaded and locally audited",
+      "credits": 43,
+      "canvas_url": "https://studio.tripo3d.ai/canvas/projects/01a1c43f-97ec-7bc2-bc75-3e2c755233b7",
+      "archive": "output/characters/elf-wizard-v1/assembly-tripo-v1",
+      "triangles": 17539,
+      "static": true,
+      "placement_adjustments_reported": 0
+    },
+    {
+      "class": "cleric",
+      "inputs": [
+        {
+          "path": "output/characters/elf-cleric-v1/original-tripo/elf-cleric-v1.glb",
+          "bytes": 1712532,
+          "sha256": "dd548d30a0ca2045a3808c4be457262730eee963cd3f46250b758ba0554f2a41"
+        },
+        {
+          "path": "output/equipment/elf-cleric-v1/mace/original-tripo/elf-cleric-mace-v1.glb",
+          "bytes": 671140,
+          "sha256": "e1b0c7b2c9f936c75a47451a6288c36e2d8802a8423be6ed3ba53d77910409ea"
+        },
+        {
+          "path": "output/equipment/elf-cleric-v1/holy-symbol/original-tripo/elf-cleric-holy-symbol-v1.glb",
+          "bytes": 840884,
+          "sha256": "14c7b4a5477f26bc217d14b5905cf4c0e53424584ebb9b7bd8b70be985823d53"
+        }
+      ],
+      "placement": "Place the mace in the anatomical right hand and the handheld holy symbol in the anatomical left hand.",
+      "status": "completed; downloaded and locally audited",
+      "credits": 45,
+      "canvas_url": "https://studio.tripo3d.ai/canvas/projects/01a1c440-c436-7660-8a11-08fa6ca5b90e",
+      "archive": "output/characters/elf-cleric-v1/assembly-tripo-v1",
+      "triangles": 18317,
+      "static": true,
+      "placement_adjustments_reported": 0
+    }
+  ],
+  "approval": "Owner: yes and continue work for perakitan",
+  "ending_studio_balance": 24709,
+  "actual_assembly_credits": 126
+}

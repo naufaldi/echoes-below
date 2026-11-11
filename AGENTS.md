@@ -27,3 +27,12 @@
 - Never deploy without the owner's explicit "deploy". Reuse the existing Site in `.openai/hosting.json`; never create a new one.
 - Stop only processes you started, by PID. Never `pkill` or `killall` by pattern, because other agents' servers may be running.
 - Work happens on a branch with a PR. Merge only with the owner's approval.
+
+## 3D asset production and storage
+- Always use Tripo to generate new 3D assets for this project. Use Tripo Studio for visual inspection and production evidence; use the Tripo plugin/CLI when appropriate. Do not substitute another 3D generator without the owner's explicit instruction.
+- Reference images may be generated separately, then supplied to Tripo. Blender may clean up, adjust UVs, attach equipment, prepare animations, and export the Tripo-generated asset.
+- Keep each asset's reference images, original Tripo exports (FBX/GLB and textures), game export, and any Blender source file actually created together under a versioned `output/characters/`, `output/equipment/`, or other appropriate `output/` asset folder in this repository. Do not leave the only copy in Downloads, a tool cache, or Tripo Studio.
+- Keep social-media images tied to the same asset version used for game work. Label direct Tripo Studio screenshots separately from local renders and concept images; do not present a concept image or altered render as the actual 3D result.
+- For every generated asset, archive a wireframe inspection sheet of its actual exported geometry at 0°, 45°, 90°, and 180°. Include measured quad and triangle counts and label it as a local orthographic render, separate from the direct Tripo Studio screenshot. Do not use an image-generated wireframe as geometry evidence.
+- Record the Tripo asset ID, generation settings, observed credit costs, geometry/texture checks, and SHA-256 manifest. Preserve original exports when making optimized game variants and record which source they derive from. Do not claim a `.blend` file exists unless one was saved.
+- Production archives are not runtime approval. Add files to `public/assets/` only after the existing licence, manifest, budget, and integration checks pass. These rules do not grant permission to commit, push, publish, or deploy.

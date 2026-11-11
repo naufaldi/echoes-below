@@ -1,0 +1,9 @@
+{
+  "vertices": 6089,
+  "polygons": 6262,
+  "polygon_sizes": {
+    "3": 1318,
+    "4": 4944
+  },
+  "triangulated_triangles": 11206
+}
