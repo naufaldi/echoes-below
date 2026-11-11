@@ -1,0 +1,29 @@
+{
+  "purpose": "2D production reference inventory; not runtime licence approval",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 1891,
+      "sha256": "567efee924f99a97efc004c65075357191e1c3f665f695bcec16b4bbce4895cd"
+    },
+    {
+      "file": "human-front.png",
+      "bytes": 3329317,
+      "sha256": "37758f2de2482955f43b0af32c98eb0ef4f81954a6f8e77e6d44c0993146c1ad",
+      "dimensions": [
+        2720,
+        1536
+      ]
+    },
+    {
+      "file": "production.json",
+      "bytes": 1142,
+      "sha256": "e1af3ca9b5077b40e6d0348454002f7c2a4dd95cb23ef7bbe76083d87d7df885"
+    },
+    {
+      "file": "prompts.json",
+      "bytes": 4320,
+      "sha256": "cd20db29d7e8576ae584121f2d0bb555cd59896bfeb15ab3ed0d396a3516bc89"
+    }
+  ]
+}

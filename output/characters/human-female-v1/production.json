@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-11",
+  "kind": "2D concept reference; not actual 3D geometry",
+  "provider": "Higgsfield",
+  "model": "minimax_h3_image",
+  "requested_settings": {
+    "resolution": "2k",
+    "aspect_ratio": "16:9",
+    "count": 1
+  },
+  "base": {
+    "job_id": "2a10153d-66fd-4b33-9989-6f9871879f91",
+    "status": "completed",
+    "file": "human-front.png",
+    "output_dimensions": [
+      2720,
+      1536
+    ],
+    "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_33imnLvD6uyywairsidVekmcsRa/hf_20261111_123219_2a10153d-66fd-4b33-9989-6f9871879f91.png",
+    "reference_file": "../elf-female-v1/elf-front.png",
+    "reference_media_id": "93d4dc7d-a90b-41a0-b543-508db4d4b69f",
+    "reference_transport": "JPEG encoding of original Elf PNG; original unchanged",
+    "quoted_credits": 3
+  },
+  "sheet": {
+    "job_id": "3c3933d8-8d76-40c6-a6b6-5c576dfa76c3",
+    "status": "nsfw",
+    "file": null,
+    "reference_job_id": "2a10153d-66fd-4b33-9989-6f9871879f91",
+    "quoted_credits": 3,
+    "notes": "No output returned. Actual charge or refund was not verified."
+  },
+  "tripo_asset_id": null,
+  "runtime_approved": false
+}

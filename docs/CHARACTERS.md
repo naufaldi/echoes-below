@@ -331,3 +331,9 @@ The archive manifests record file SHA-256 hashes for reproducibility. They are p
 ### 7.5 Equipment assembly handoff
 
 Sword, shield, original rigged armor, and the downloaded Tripo assembly are archived. See [Blender equipment handoff](BLENDER_EQUIPMENT_HANDOFF.md) for exact inputs, the 65-joint source versus 55-joint Tripo re-export distinction, verified credit totals, and the next comparison task. Runtime integration remains pending §7.4.
+
+## Human base reference — 11 November 2026
+
+The owner selected an adult female Human base using the existing Elf as the style reference, with a distinct Human face and rounded ears. The original H3 Image output, prompts, generation status, and hash inventory are archived in [human-female-v1](../output/characters/human-female-v1/README.md).
+
+The front reference is complete. Higgsfield blocked the multi-view sheet attempt (`nsfw`); no sheet output exists in this archive. These are 2D production references only. The four Human class outfits, Tripo model, rig, animations, and runtime acceptance remain pending. The class designs and acceptance contract above still apply.
