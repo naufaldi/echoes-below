@@ -1,0 +1,19 @@
+
+Interrupted while running:
+
+⚠ tests/backend-asset-bundle.test.ts (tests/backend-asset-bundle.test.ts:1:1)
+✖ tests/backend-asset-bundle.test.ts (14926.131946ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 0
+ℹ cancelled 1
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14933.781063
+
+✖ failing tests:
+
+test at tests/backend-asset-bundle.test.ts:1:1
+✖ tests/backend-asset-bundle.test.ts (14926.131946ms)
+  'Promise resolution is still pending but the event loop has already resolved'

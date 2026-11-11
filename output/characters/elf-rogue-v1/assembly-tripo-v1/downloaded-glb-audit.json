@@ -1,0 +1,89 @@
+{
+  "file": "elf-rogue-equipped-tripo-v1.glb",
+  "sha256": "0860524316c5d4f303ba1b0916a1576e2b021d353fbb576f0ee967e2f03ac247",
+  "triangles": 20127,
+  "vertices": 22160,
+  "meshes": [
+    {
+      "name": "meshes[0]",
+      "triangles": 1578,
+      "vertices": 1814
+    },
+    {
+      "name": "meshes[1]",
+      "triangles": 1572,
+      "vertices": 1530
+    },
+    {
+      "name": "meshes[2]",
+      "triangles": 16977,
+      "vertices": 18816
+    }
+  ],
+  "materials": 3,
+  "images": [
+    {
+      "name": "elf-rogue-equipped-tripo-v1_Bow_Left_Hand_basecolor.jpg",
+      "sha256": "52553c16974ea34c6e249c717bedb1f7a10f6fa7833f683196d1a925fcf0b0f2",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "elf-rogue-equipped-tripo-v1_Dagger_Right_Hand_basecolor.jpg",
+      "sha256": "cee9d8d0a5e4dc8be793458bd47372afaccbd57b52996a34214adebc237a0e00",
+      "size": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "elf-rogue-equipped-tripo-v1_tripo_08a26d30_335a_4742_b6a1_8b78c729f7_basecolor.jpg",
+      "sha256": "517755bb5455fa286358b2c44898d2448c1625747c8d793f884ec97c20c32e29",
+      "size": [
+        2048,
+        2048
+      ]
+    }
+  ],
+  "skins": 0,
+  "animations": 0,
+  "nodes": [
+    {
+      "name": "ROOT",
+      "children": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "name": "RootNode"
+    },
+    {
+      "name": "Bow_Placement"
+    },
+    {
+      "name": "Dagger_Placement"
+    },
+    {
+      "name": "Bow_Left_Hand",
+      "mesh": 0
+    },
+    {
+      "name": "Dagger_Right_Hand",
+      "mesh": 1
+    },
+    {
+      "name": "tripo_08a26d30_335a_4742_b6a1_8b78c729f7",
+      "mesh": 2
+    }
+  ],
+  "provenance": "Downloaded Tripo Studio export, audited locally. Lab preservation report describes the pre-export assembly; Studio export may normalize, weld vertices and re-encode data.",
+  "all_three_source_texture_bytes_preserved": true,
+  "source_files_unchanged": true
+}

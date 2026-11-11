@@ -11,3 +11,7 @@ artifacts/
 .DS_Store
 *.tgz
 *.tar.gz
+
+# Development-only rogue fixture; never ship.
+public/__elf-rogue-preview.glb
+public/__rogue-combat-fixture.json

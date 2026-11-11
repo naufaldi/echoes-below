@@ -1,3 +1,4 @@
+import {rangedPresentation} from './rogue-preview';
 import {useRef,useState,useEffect} from 'react';
 import {useFrame} from '@react-three/fiber';
 import TextSprite from './TextSprite';
@@ -17,14 +18,15 @@ function Floater({actor,text,tone,reduced}:{actor:Actor;text:string;tone:'damage
 /** Drawn over bodies like the floaters: a shot in melee range starts and ends inside the two characters. */
 const cueMaterial={transparent:true,depthTest:false,depthWrite:false,toneMapped:false} as const;
 function Projectile({from,to,kind,reduced}:{from:Actor;to:Actor;kind:'ranged'|'spell';reduced:boolean}){
- const group=useRef<Group>(null),progress=useRef(0);const [done,setDone]=useState(reduced);
+ const group=useRef<Group>(null),elapsed=useRef(0),origin=useRef<[number,number,number]|null>(null);const [done,setDone]=useState(reduced);
+ const release=kind==='ranged'?rangedPresentation(from.id).releaseSeconds:0;
  const start=at(from,actorHeight(from)*.6),end=at(to,actorHeight(to)*.6),arc=kind==='ranged'?.35:.15;
- useFrame((_,delta)=>{if(done||!group.current)return;progress.current=Math.min(1,progress.current+delta/.38);const t=progress.current,g=group.current;
-  g.position.set(start[0]+(end[0]-start[0])*t,start[1]+(end[1]-start[1])*t+Math.sin(t*Math.PI)*arc,start[2]+(end[2]-start[2])*t);
+ useFrame((_,delta)=>{if(done||!group.current)return;elapsed.current+=delta;const g=group.current;g.visible=elapsed.current>=release;if(!g.visible)return;if(!origin.current){const socket=kind==='ranged'?rangedPresentation(from.id).origin():undefined;origin.current=socket?[socket.x,socket.y,socket.z]:start;}const source=origin.current;const t=Math.min(1,(elapsed.current-release)/.38);
+  g.position.set(source[0]+(end[0]-source[0])*t,source[1]+(end[1]-source[1])*t+Math.sin(t*Math.PI)*arc,source[2]+(end[2]-source[2])*t);
   // Point along the arc's tangent so an arrow flies nose first.
-  g.lookAt(g.position.x+end[0]-start[0],g.position.y+end[1]-start[1]+Math.cos(t*Math.PI)*Math.PI*arc,g.position.z+end[2]-start[2]);if(t>=1)setDone(true);});
+  g.lookAt(g.position.x+end[0]-source[0],g.position.y+end[1]-source[1]+Math.cos(t*Math.PI)*Math.PI*arc,g.position.z+end[2]-source[2]);if(t>=1)setDone(true);});
  if(done)return null;
- return <group ref={group} position={start}>{kind==='ranged'?<>
+ return <group ref={group} position={start} visible={release===0}>{kind==='ranged'?<>
   <mesh rotation={[Math.PI/2,0,0]} position={[0,0,-.2]} renderOrder={19} raycast={()=>null}><cylinderGeometry args={[.035,.015,.5,6]}/><meshBasicMaterial color="#f7e7c1" opacity={.95} {...cueMaterial}/></mesh>
   <mesh renderOrder={19} raycast={()=>null}><sphereGeometry args={[.08,10,10]}/><meshBasicMaterial color="#fff6dc" {...cueMaterial}/></mesh>
  </>:<>
@@ -37,7 +39,7 @@ function Projectile({from,to,kind,reduced}:{from:Actor;to:Actor;kind:'ranged'|'s
 export default function CombatCues({cue,save,reduced}:{cue:WorldCue;save:PublicSave;reduced:boolean}){
  const actors=[...save.party,...save.enemies],find=(id?:string)=>actors.find(a=>a.id===id);
  const attacker=find(cue.actorId),[visible,setVisible]=useState(true);
- useEffect(()=>{const t=setTimeout(()=>setVisible(false),1600);return()=>clearTimeout(t);},[]);
+ useEffect(()=>{const t=setTimeout(()=>setVisible(false),Math.max(1600,(rangedPresentation(cue.actorId).releaseSeconds+.38+.3)*1000));return()=>clearTimeout(t);},[]);
  const target=find(cue.missTargetId)??find(cue.changes.find(c=>c.delta<0&&c.actorId!==cue.actorId)?.actorId);
  if(!visible)return null;
  return <>

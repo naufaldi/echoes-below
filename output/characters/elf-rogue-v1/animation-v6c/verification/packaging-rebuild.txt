@@ -1,0 +1,137 @@
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender').
+19:17:59 | INFO: Data are loaded, start creating Blender stuff
+19:17:59 | INFO: Blender create Mesh node Cylinder
+19:17:59 | INFO: Blender create Mesh node Retopologized bowstring
+19:17:59 | INFO: Blender create Mesh node meshes[2].001
+19:17:59 | INFO: Blender create Mesh node meshes[0].001
+19:17:59 | INFO: Blender create Mesh node meshes[1].001
+19:17:59 | INFO: glTF import finished in 0.11s
+ERROR Draco mesh compression is not available because library could not be found at /usr/bin/4.3/python/lib/python3.13/site-packages/libextern_draco.so
+19:17:59 | INFO: Starting glTF 2.0 export
+19:17:59 | INFO: Extracting primitive: Cylinder
+19:17:59 | INFO: Primitives created: 3
+19:17:59 | INFO: Extracting primitive: Retopologized bowstring
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Extracting primitive: Fitted leather sheath
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Extracting primitive: meshes[2].001
+19:17:59 | INFO: Primitives created: 2
+19:17:59 | INFO: Extracting primitive: meshes[0].001
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Extracting primitive: meshes[1].001
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Finished glTF 2.0 export in 0.2220592498779297 s
+
+19:17:59 | INFO: Starting glTF 2.0 export
+19:17:59 | INFO: Extracting primitive: Cylinder
+19:17:59 | INFO: Primitives created: 3
+19:17:59 | INFO: Extracting primitive: Retopologized bowstring
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Extracting primitive: Fitted leather sheath
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Extracting primitive: meshes[2].001
+19:17:59 | INFO: Primitives created: 2
+19:17:59 | INFO: Extracting primitive: meshes[0].001
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Extracting primitive: meshes[1].001
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Finished glTF 2.0 export in 0.15156936645507812 s
+
+19:17:59 | INFO: Starting glTF 2.0 export
+19:17:59 | INFO: Extracting primitive: Cylinder
+19:17:59 | INFO: Primitives created: 3
+19:17:59 | INFO: Extracting primitive: Retopologized bowstring
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Extracting primitive: Fitted leather sheath
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Extracting primitive: meshes[2].001
+19:17:59 | INFO: Primitives created: 2
+19:17:59 | INFO: Extracting primitive: meshes[0].001
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Extracting primitive: meshes[1].001
+19:17:59 | INFO: Primitives created: 1
+19:17:59 | INFO: Finished glTF 2.0 export in 0.1468524932861328 s
+
+19:18:00 | INFO: Starting glTF 2.0 export
+19:18:00 | INFO: Extracting primitive: Cylinder
+19:18:00 | INFO: Primitives created: 3
+19:18:00 | INFO: Extracting primitive: Retopologized bowstring
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: Fitted leather sheath
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: meshes[2].001
+19:18:00 | INFO: Primitives created: 2
+19:18:00 | INFO: Extracting primitive: meshes[0].001
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: meshes[1].001
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Finished glTF 2.0 export in 0.14957189559936523 s
+
+19:18:00 | INFO: Starting glTF 2.0 export
+19:18:00 | INFO: Extracting primitive: Cylinder
+19:18:00 | INFO: Primitives created: 3
+19:18:00 | INFO: Extracting primitive: Retopologized bowstring
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: Fitted leather sheath
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: meshes[2].001
+19:18:00 | INFO: Primitives created: 2
+19:18:00 | INFO: Extracting primitive: meshes[0].001
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: meshes[1].001
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Finished glTF 2.0 export in 0.17073273658752441 s
+
+19:18:00 | INFO: Starting glTF 2.0 export
+19:18:00 | INFO: Extracting primitive: Cylinder
+19:18:00 | INFO: Primitives created: 3
+19:18:00 | INFO: Extracting primitive: Retopologized bowstring
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: Fitted leather sheath
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: meshes[2].001
+19:18:00 | INFO: Primitives created: 2
+19:18:00 | INFO: Extracting primitive: meshes[0].001
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: meshes[1].001
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Finished glTF 2.0 export in 0.15381479263305664 s
+
+19:18:00 | INFO: Starting glTF 2.0 export
+19:18:00 | INFO: Extracting primitive: Cylinder
+19:18:00 | INFO: Primitives created: 3
+19:18:00 | INFO: Extracting primitive: Retopologized bowstring
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: Fitted leather sheath
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: meshes[2].001
+19:18:00 | INFO: Primitives created: 2
+19:18:00 | INFO: Extracting primitive: meshes[0].001
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: meshes[1].001
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Finished glTF 2.0 export in 0.16498470306396484 s
+
+19:18:00 | INFO: Starting glTF 2.0 export
+19:18:00 | INFO: Extracting primitive: Cylinder
+19:18:00 | INFO: Primitives created: 3
+19:18:00 | INFO: Extracting primitive: Retopologized bowstring
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: Fitted leather sheath
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: meshes[2].001
+19:18:00 | INFO: Primitives created: 2
+19:18:00 | INFO: Extracting primitive: meshes[0].001
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Extracting primitive: meshes[1].001
+19:18:00 | INFO: Primitives created: 1
+19:18:00 | INFO: Finished glTF 2.0 export in 0.16076374053955078 s
+
+Info: Saved "elf-rogue-weapon-fix.blend"
+Blender 4.3.2
+
+Blender quit
+[('Attack_Ranged', 70), ('Idle', 70), ('Walk', 70), ('Attack_Melee', 70), ('Hit', 70), ('Dodge', 70), ('Death', 70), ('Use_Item', 70)]
+2374996 eed37e08843e810e046bb739fcff55417beeae56fdff1797fb010497350bab4b
+
+Result: /tmp/tmp.ys2juaALg4/archer-motion-prototype-v6c

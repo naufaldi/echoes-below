@@ -1,0 +1,28 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> echoes-below@0.1.0 build
+> node scripts/elf-rogue-preview.mjs guard && node scripts/generate-campaign-map.mjs && node scripts/generate-credits.mjs && vite build && node scripts/verify-asset-bundle.mjs && node scripts/build-worker.mjs
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 699 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/client/index.html                              1.17 kB │ gzip:   0.57 kB
+dist/client/assets/index-g2Rloamh.css              75.56 kB │ gzip:  15.40 kB
+dist/client/assets/rolldown-runtime-XKyaHtl9.js     0.72 kB │ gzip:   0.42 kB
+dist/client/assets/RogueCombatReview-BxxCQphH.js    2.23 kB │ gzip:   1.02 kB
+dist/client/assets/AssetReview-BmQ_OKhU.js          2.32 kB │ gzip:   1.26 kB
+dist/client/assets/PortraitSheet-DJvxmrA7.js        4.34 kB │ gzip:   1.91 kB
+dist/client/assets/HollowChoir-pTWvq2f-.js         30.15 kB │ gzip:   9.07 kB
+dist/client/assets/AshMarket-cPANiPwD.js           30.32 kB │ gzip:   8.63 kB
+dist/client/assets/DrownedArchive-DeROX-Sz.js      32.86 kB │ gzip:  10.75 kB
+dist/client/assets/RootboundPrison-DAWLHQ4d.js     34.41 kB │ gzip:  10.08 kB
+dist/client/assets/LastDescent-CUBpaJqj.js         35.14 kB │ gzip:  10.72 kB
+dist/client/assets/react-CAz5jXQU.js              189.52 kB │ gzip:  59.59 kB
+dist/client/assets/index-ChxiWBU8.js              250.17 kB │ gzip:  84.38 kB
+dist/client/assets/r3f-CSp_aRcH.js                278.04 kB │ gzip:  85.33 kB
+dist/client/assets/three-DNJkNj48.js              743.70 kB │ gzip: 190.14 kB
+
+✓ built in 463ms
+Verified 122 models, 14 licensed audio files (4.1 MB), 81 CC0 environment files (2.3 MB), 51 manifest-listed model files and 158 bundled files, including external glTF dependencies.
