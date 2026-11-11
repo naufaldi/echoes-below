@@ -15,3 +15,8 @@ artifacts/
 # Development-only rogue fixture; never ship.
 public/__elf-rogue-preview.glb
 public/__rogue-combat-fixture.json
+
+# Heavy production sources live in the private Drive archive.
+# Keep the small handoff visible; restored sources must not enter Sites Git.
+/output/*
+!/output/README.md
