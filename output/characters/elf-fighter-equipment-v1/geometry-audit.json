@@ -1,0 +1,63 @@
+[
+  {
+    "file": "sword.glb",
+    "sha256": "effe84115cec9490ea594e3bbf5c33222a7d0213202044f3a51013247b7ad6ae",
+    "bytes": 18084,
+    "triangles": 322,
+    "meshes": 1,
+    "primitives": 3,
+    "skins": 0,
+    "joints": 0,
+    "animations": [],
+    "textures": 0,
+    "materials": [
+      "Steel",
+      "Steel_Edge",
+      "Leather"
+    ],
+    "bounds_m": [
+      [
+        -0.15000000596046448,
+        -0.13050000369548798,
+        -0.04100000113248825
+      ],
+      [
+        0.15000000596046448,
+        0.7200000286102295,
+        0.04100000113248825
+      ]
+    ],
+    "node": "Weapon_Main"
+  },
+  {
+    "file": "shield.glb",
+    "sha256": "93ce735f24eb7c4c50e9ad0eb7a12e0830fb808db1611f46c1993b8c512fcba3",
+    "bytes": 19168,
+    "triangles": 332,
+    "meshes": 1,
+    "primitives": 4,
+    "skins": 0,
+    "joints": 0,
+    "animations": [],
+    "textures": 0,
+    "materials": [
+      "Steel",
+      "Accent",
+      "Steel_Edge",
+      "Leather"
+    ],
+    "bounds_m": [
+      [
+        -0.25999999046325684,
+        -0.33000001311302185,
+        -0.023000000044703484
+      ],
+      [
+        0.25999999046325684,
+        0.3199999928474426,
+        0.15150000154972076
+      ]
+    ],
+    "node": "Shield"
+  }
+]

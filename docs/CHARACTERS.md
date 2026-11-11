@@ -331,3 +331,9 @@ The archive manifests record file SHA-256 hashes for reproducibility. They are p
 ### 7.5 Equipment assembly handoff
 
 Sword, shield, original rigged armor, and the downloaded Tripo assembly are archived. See [Blender equipment handoff](BLENDER_EQUIPMENT_HANDOFF.md) for exact inputs, the 65-joint source versus 55-joint Tripo re-export distinction, verified credit totals, and the next comparison task. Runtime integration remains pending §7.4.
+
+### 7.6 Historical procedural equipment experiment — 30 October 2026
+
+[The earlier sword and shield experiment](../output/characters/elf-fighter-equipment-v1/README.md) preserves two Blender-authored GLBs, their source, and geometry/hash checks. They total 654 triangles / 37,252 bytes. The source audit describes `d9b7aef`, before the original armored Fighter export was archived on 2 November; it is not the current source inventory.
+
+These procedural props are historical material. Current production uses the Tripo sources in §7.5 and requires Tripo for new assets. This archive does not approve the procedural props for game integration or resolve the Tripo character's licence evidence. No character animation or runtime asset changes are included.

@@ -66988,5 +66988,60 @@
     "path": "equipment/elf-fighter-v1/tripo-settings.png",
     "sha256": "e3f3d849ab0efd18547b658f51a81e8df06c77289d7d61314ca74da753b3e70d",
     "bytes": 89996
+  },
+  {
+    "path": "characters/elf-fighter-equipment-v1/LICENSE.txt",
+    "bytes": 454,
+    "sha256": "d4eccd12072c02e2d8350a943344ac6ac4ddb1b79f1b6ed5d35473c94a25abf8"
+  },
+  {
+    "path": "characters/elf-fighter-equipment-v1/README.md",
+    "bytes": 9240,
+    "sha256": "b092e3a5bd2cbb18d8154ff8a9fbf012983a3bc8b1459d2f0f7152ee5ca89ed4"
+  },
+  {
+    "path": "characters/elf-fighter-equipment-v1/equipment-preview.png",
+    "bytes": 775051,
+    "sha256": "a0e7db71d2b9d194a4d254d65c60b5ca50b94c465ccb49f9895da70c64d11f53"
+  },
+  {
+    "path": "characters/elf-fighter-equipment-v1/geometry-audit.json",
+    "bytes": 1226,
+    "sha256": "229aa50ca4356e82f4bb02650c07ca362e89aae931f967d4f4cb80f950fa8e4e"
+  },
+  {
+    "path": "characters/elf-fighter-equipment-v1/geometry-four-views.png",
+    "bytes": 71195,
+    "sha256": "5e136af7682944af8aa9c7daaca8f6d18166c8540825d8997cd47dc4adfb28fd"
+  },
+  {
+    "path": "characters/elf-fighter-equipment-v1/inspection/render-wireframes.py",
+    "bytes": 3708,
+    "sha256": "d0b3977ec083a4c62825b8fe3e4c7c6d761bf8da05b34d70212e34d6062d152b"
+  },
+  {
+    "path": "characters/elf-fighter-equipment-v1/manifest.json",
+    "bytes": 2534,
+    "sha256": "be4233cfebd411d994bbe41306644c034124be6fb350272668f43ffce42c4168"
+  },
+  {
+    "path": "characters/elf-fighter-equipment-v1/shield.glb",
+    "bytes": 19168,
+    "sha256": "93ce735f24eb7c4c50e9ad0eb7a12e0830fb808db1611f46c1993b8c512fcba3"
+  },
+  {
+    "path": "characters/elf-fighter-equipment-v1/source-audit.json",
+    "bytes": 2816,
+    "sha256": "0576498b95f95025f8e3e631a12ebbb1f6a1dcb857c90eba723ebeae8ceb3c99"
+  },
+  {
+    "path": "characters/elf-fighter-equipment-v1/sword.glb",
+    "bytes": 18084,
+    "sha256": "effe84115cec9490ea594e3bbf5c33222a7d0213202044f3a51013247b7ad6ae"
+  },
+  {
+    "path": "characters/elf-fighter-equipment-v1/validation.json",
+    "bytes": 830,
+    "sha256": "2ee239e7f7cc86be4c6835d933577b74be1c27228e6d6e2ff788b1588cb49899"
   }
 ]

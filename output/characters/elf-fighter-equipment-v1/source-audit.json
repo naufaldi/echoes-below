@@ -1,0 +1,63 @@
+{
+  "source_commit": "d9b7aef6605be647b81b8610666717ccf1bb7209",
+  "source_branch": "docs/elf-character-production",
+  "target_studio_asset_id": "1447de15-fb60-4516-a6db-1384f4a9e5a7",
+  "fighter_archive_file_count": 1702,
+  "fighter_archive_extensions": {
+    ".ffconcat": 5,
+    ".jpg": 1690,
+    ".mp4": 5,
+    ".png": 1,
+    ".txt": 1
+  },
+  "fighter_mesh_exports": [],
+  "fighter_rig_exports": [],
+  "fighter_texture_atlas_exports": [],
+  "other_character_exports": [
+    {
+      "file": "output/characters/elf-female-v1/tripo-out/elf-female-base-v1-4b07e5ca/model.fbx",
+      "bytes": 551020,
+      "sha256": "d45d5d805740f04fd05a9c08bfa31a9a80767427f344e70c8573a8c45763ce07",
+      "identity": "unarmored base; not the requested Fighter"
+    },
+    {
+      "file": "output/characters/elf-female-v2-studio-8000/exports/elf-female-v2-p2-8000-geometry.fbx",
+      "bytes": 362864,
+      "sha256": "87eca0fa4c9a52bf04437bb8352aa4a7a9c253fcbbb05d187b3853c85a5e0458",
+      "identity": "unarmored base; not the requested Fighter"
+    },
+    {
+      "file": "output/characters/elf-female-v2-studio-8000/exports/elf-female-v2-p2-8000-textured.zip",
+      "bytes": 1256864,
+      "sha256": "8b1254d7c746eb92b14e46693bda2ed59f1d8b3fabc6eee5725bcd90a343b2cd",
+      "identity": "unarmored base; not the requested Fighter",
+      "members": [
+        "elf-female-v2-p2-8000-textured.fbx",
+        "elf-female-v2-p2-8000-textured.fbm/elf-female-v2-p2-8000-textured_basecolor.jpg"
+      ]
+    },
+    {
+      "file": "output/characters/elf-female-v2-studio-8000/exports/rigged/elf-female-v2-rigged-idle-walk-slash.zip",
+      "bytes": 10768293,
+      "sha256": "c9f516cfd8e7baa97f80a4dc72be796047cd8a42ac8ad5bf18e4a1e8013fcc2f",
+      "identity": "unarmored base; not the requested Fighter",
+      "members": [
+        "tripo_convert_c0fc6445-98f0-43ca-85cb-adfc494d6842.fbx",
+        "tripo_convert_c0fc6445-98f0-43ca-85cb-adfc494d6842.fbm/tripo_rgb_49562103-b2c8-4da6-a41a-ea015ed22ae8.png"
+      ]
+    },
+    {
+      "file": "output/characters/elf-female-v2-studio-8000/exports/rigged/unpacked/tripo_convert_c0fc6445-98f0-43ca-85cb-adfc494d6842.fbx",
+      "bytes": 9840576,
+      "sha256": "0d0e7a030fe0a5a0d6ef930cf534245322097c4289d7ca7d18f3f55fdebb76ed",
+      "identity": "unarmored base; not the requested Fighter"
+    },
+    {
+      "file": "output/characters/elf-female-v2-studio-8000/exports/textured/elf-female-v2-p2-8000-textured.fbx",
+      "bytes": 555072,
+      "sha256": "b9a865d7d3ec949ae3234115d85eaf9a9a0241bc0e8a37f37b9b0c018f491370",
+      "identity": "unarmored base; not the requested Fighter"
+    }
+  ],
+  "limitations": "Asset ID is recorded in repository documentation; Studio was not accessed. JPG/PNG reference images and motion recordings are not usable mesh, texture atlas or rig sources."
+}

@@ -1,0 +1,8 @@
+Original modular sword and shield geometry and their flat materials in this
+directory are dedicated under CC0 1.0 Universal:
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Created procedurally for Echoes Below on 2026-10-30. No downloaded or extracted
+mesh or texture was used. This dedication applies only to the new equipment;
+it does not cover or change the rights of any Tripo character, reference image,
+recording, or other pre-existing asset.
