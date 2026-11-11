@@ -1,0 +1,28 @@
+✔ yaw points a +z-forward model at the target; engine y maps to world −z (0.714861ms)
+✔ turning takes the short way round and snaps when asked (0.140523ms)
+✔ in a fight each side faces its nearest living foe (0.866181ms)
+✔ exploring, the party faces the selected thing, else the nearest person, else into the room — never the camera (0.325432ms)
+✔ tactical:missile:guard-1 records spell independently from narration (19.310523ms)
+✔ tactical:attack:guard-1 records spell independently from narration (3.650686ms)
+✔ tactical:bless records spell independently from narration (2.68285ms)
+✔ tactical:attack:guard-1 records ranged independently from narration (8.003952ms)
+✔ tactical:dodge records dodge independently from narration (2.161952ms)
+✔ all shipped models resolve exact locomotion, death and attack clips (67.167611ms)
+✔ AI prose cannot trigger a visual action and structured cues survive wording changes (0.941074ms)
+✔ a revealed beat reports hit point changes from saved frames only (1.451076ms)
+✔ a miss marks the named target and never the attacker (0.235466ms)
+✔ unrecognised phrasing shows no miss marker and healing is positive (0.132581ms)
+✔ echo enemy attacks name their weapon and duplicate enemies keep their numbered labels (6.017617ms)
+✔ an Echo attack log without a saved cue still presents a scout shot or an adept spell (0.303359ms)
+✔ release metadata and animated socket are sampled in world coordinates, not actor centre (1.884151ms)
+✔ old model cleanup never removes newer model registration for same actor (0.24449ms)
+✔ prototype canonical clips resolve and shipped names remain fallbacks (0.373646ms)
+✔ contract palette recolours only Accent and never modifies original materials (2.175062ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 278.706105

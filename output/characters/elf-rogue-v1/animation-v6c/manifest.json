@@ -1,0 +1,268 @@
+{
+  "status": "development prototype; not runtime licence approval",
+  "version": "V6c",
+  "source": {
+    "repository": "naufaldi/echoes-below",
+    "gameBase": "8842d313c76a1ec2222f504fdccdbb46490ba2b9",
+    "originalAssetBranch": "docs/elf-character-production",
+    "originalAssetCommit": "02043bc756b982b5f718a1db19af2647ac9fb879",
+    "tripoAssetId": "688b6d82-29cb-45c0-91bd-e7a116c0a736",
+    "assemblyProject": "01a1c42d-e079-77a8-9c41-20785df0e5bf"
+  },
+  "license": {
+    "status": "unverified",
+    "productionApproved": false
+  },
+  "files": [
+    {
+      "file": "Attack_Melee-side.mp4",
+      "bytes": 29429,
+      "sha256": "386ad5dc6ea7291ed8e5ebed9665bc964c3ecc9fdafc8758e75d667e33b0ac14"
+    },
+    {
+      "file": "Attack_Ranged-side.mp4",
+      "bytes": 36398,
+      "sha256": "123f5cbfc6538fb9ab935a1e050febcd234daf8821d7d0b3cccb08c6426fa177"
+    },
+    {
+      "file": "README.md",
+      "bytes": 3015,
+      "sha256": "197aacd4a8ad2b76f75f69d326ea3d7b293030e108fee5573cba5d708d09d847"
+    },
+    {
+      "file": "bow-alignment.json",
+      "bytes": 439,
+      "sha256": "30a46606a4da1e09c18cde97ef71011457d07dcdb774f53f51535dfe446bdf43"
+    },
+    {
+      "file": "clearance-audit.json",
+      "bytes": 39750,
+      "sha256": "7370c7e3ee0878a4c7a7950e97eb54bb14d4ad5eeef1ebf2d30395c4fbc204fa"
+    },
+    {
+      "file": "elf-rogue-weapon-fix.blend",
+      "bytes": 6263060,
+      "sha256": "947a95081877814dabf27d4eb689c5a361b207c4dcb53d4abc1b5bf8042d2db5"
+    },
+    {
+      "file": "elf-rogue-weapon-fix.glb",
+      "bytes": 2374996,
+      "sha256": "eed37e08843e810e046bb739fcff55417beeae56fdff1797fb010497350bab4b"
+    },
+    {
+      "file": "inputs/elf-rogue-contract-prototype-v5.glb",
+      "bytes": 2364956,
+      "sha256": "8d9bea955193245116e898cb2b214fd1af55472ae21cd9b341d194fbde717b5e"
+    },
+    {
+      "file": "roundtrip-body-bounds.json",
+      "bytes": 9857,
+      "sha256": "2eed110750ae594666a624fef7a3f1bde31ae321bea854ab98f505c885b97406"
+    },
+    {
+      "file": "scripts/clearance-v6c.py",
+      "bytes": 2166,
+      "sha256": "c73cfb90f5b217f620dec0b39314e8b1a1b2e39f2706a2de00435c55ed00e4b6"
+    },
+    {
+      "file": "scripts/finalize-v6c.py",
+      "bytes": 1012,
+      "sha256": "e8737928d8973d410f27e2c4da5509c0f6fa3f93f1320cf5af6b5c1661a1d819"
+    },
+    {
+      "file": "scripts/merge-clips-v6c.py",
+      "bytes": 2985,
+      "sha256": "69e1a32f1339dee500aee0a709d3192af500f5eb26779bd1b48f2613e20b6846"
+    },
+    {
+      "file": "scripts/rebuild.sh",
+      "bytes": 644,
+      "sha256": "10cdc13584144021bfae4d882af493c631d01a8261ebdf293dbd41e5d3a71ce8"
+    },
+    {
+      "file": "scripts/render-v6c.py",
+      "bytes": 2442,
+      "sha256": "f846fde379ae1d1b72b05cc3cfd243d57ddfefe807cfb9cd4433740b8f50eff9"
+    },
+    {
+      "file": "scripts/side-motion-v6c.py",
+      "bytes": 617,
+      "sha256": "a1a07fa5fbda57ed7f05b656f2d3b98d31a7a7f4f9f70d661d589b2d92ba7561"
+    },
+    {
+      "file": "scripts/views-v6c.py",
+      "bytes": 1571,
+      "sha256": "a415ccdacf5de51b975922650e392cb459e66d57f825db9a3f39c676eacd7063"
+    },
+    {
+      "file": "scripts/weapon-fix-v6c.py",
+      "bytes": 7297,
+      "sha256": "ff9cfe17af408946e378781ede64c74ca50da670697eaae405942adcd6a7fe6f"
+    },
+    {
+      "file": "validation.json",
+      "bytes": 1316,
+      "sha256": "d29f86d73ae6a615fab0c35fa8e219ab4c83b31f14211c5193156b52f69ab63b"
+    },
+    {
+      "file": "verification/README.md",
+      "bytes": 2490,
+      "sha256": "cded2b54bd507663afa9161a543d5f052bd0c75b894616f2d07d838f35865699"
+    },
+    {
+      "file": "verification/angles.txt",
+      "bytes": 1710,
+      "sha256": "0a1e8b3dc44ed32fdb3d524ef5cd785d43f1b512d018199a7470608ad6a04746"
+    },
+    {
+      "file": "verification/browser.txt",
+      "bytes": 36766,
+      "sha256": "5952a2c61b2047cb462af5c631dab25eea71e3bda51abbd33f36baf8fd0207b9"
+    },
+    {
+      "file": "verification/full-suite-blocker-v5.txt",
+      "bytes": 486,
+      "sha256": "ed4a944e53c3b0703facdfb6bf1b8c9d22a60881e97952f64d12053fc77f2aa0"
+    },
+    {
+      "file": "verification/game-captures/bow-angle-0.png",
+      "bytes": 269929,
+      "sha256": "dcdd1f2bcf26d308ed8296a4a3940d46e8350c46e3792633a5c09f653cee5851"
+    },
+    {
+      "file": "verification/game-captures/bow-angle-1.png",
+      "bytes": 279880,
+      "sha256": "f6dea443a361629112e2434b7fee8a3ea4e886383239d42bee3563980e947f2a"
+    },
+    {
+      "file": "verification/game-captures/bow-angle-2.png",
+      "bytes": 270929,
+      "sha256": "0b96a72353faa8b71714a7dfe3ff3534efc7860ddbe343367920a8c218ffdb88"
+    },
+    {
+      "file": "verification/game-captures/draw.png",
+      "bytes": 339800,
+      "sha256": "88b3d7f671c1a7595ef4b5d7ecc4e75d208c959b57c8a0a13832fd35f8c86dba"
+    },
+    {
+      "file": "verification/game-captures/idle-final.png",
+      "bytes": 340873,
+      "sha256": "5c2dea757bb6be51e216aa73dc1b3641857d0d76e9ca6e2480763ae48010bf64"
+    },
+    {
+      "file": "verification/game-captures/idle.png",
+      "bytes": 340822,
+      "sha256": "7de4b61c845e12009606f5a2dee0c21458842b6002d113de1fccf4119bf3de75"
+    },
+    {
+      "file": "verification/game-captures/knife-angle-0.png",
+      "bytes": 153665,
+      "sha256": "33fdc33b72a7a525de505f310c1796b77e1d256a70674368fd20cfd65d64b930"
+    },
+    {
+      "file": "verification/game-captures/knife-angle-1.png",
+      "bytes": 282484,
+      "sha256": "2eb0a51b611d4ec17640b7f9e2e66cc92dd5032906e98e118ba3d6fba1c8cd63"
+    },
+    {
+      "file": "verification/game-captures/knife-angle-2.png",
+      "bytes": 187413,
+      "sha256": "c89685cb37406c5fb44ceef407a3641da3c03e06ee860490299b9f1a319ce80f"
+    },
+    {
+      "file": "verification/game-captures/melee.png",
+      "bytes": 339910,
+      "sha256": "4f17d5499e5baa22e284d951bb102a3b5d9200dca2131e04cc1e02042f3ac01d"
+    },
+    {
+      "file": "verification/game-captures/stowed-angle-0.png",
+      "bytes": 153708,
+      "sha256": "296866d1a777860786a1153f3d1e4db8bc8bf5c20cc1e504d473e604d718616f"
+    },
+    {
+      "file": "verification/game-captures/stowed-angle-1.png",
+      "bytes": 282695,
+      "sha256": "8053ccd730a072e2023b2a73fa1d17f68e31ece53b696415db0f53d13b0af483"
+    },
+    {
+      "file": "verification/game-captures/stowed-angle-2.png",
+      "bytes": 188939,
+      "sha256": "a6c7b36521c025a71360364f5c176d6ef9c9f39b5e6930310e1e2215cd0d55b3"
+    },
+    {
+      "file": "verification/melee-settle.txt",
+      "bytes": 781,
+      "sha256": "bc2ffef370756c23b4da404689cf7b29ea67829c1a0e52eb80829df7817b80be"
+    },
+    {
+      "file": "verification/packaging-build.txt",
+      "bytes": 1885,
+      "sha256": "6a46696a59d5a82f370f7a085d6d1d4a49b590951cef6c75c1f209f3cc6cab0f"
+    },
+    {
+      "file": "verification/packaging-client-typecheck.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "verification/packaging-full-suite-blocker.txt",
+      "bytes": 962,
+      "sha256": "932f0cbbaa561246ab8530f383f7109ba3560098ea7ee37e4863e04df7f6e5bc"
+    },
+    {
+      "file": "verification/packaging-hosted-typecheck.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "verification/packaging-rebuild.txt",
+      "bytes": 6379,
+      "sha256": "7bc3759cea3e97dbea86744ef6be82b7596d3de7bb777b7aa7428fdd00ac459d"
+    },
+    {
+      "file": "verification/packaging-results.md",
+      "bytes": 1993,
+      "sha256": "8ac758def41573cc387033264a93e937d1637cd39126119ee29f16366a09ed9c"
+    },
+    {
+      "file": "verification/packaging-server-typecheck.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "verification/packaging-suite-excluding-asset.txt",
+      "bytes": 58708,
+      "sha256": "ee2e3ecd21d9c8f8ab298cb78fb4ed8c32932a3bc332c5f8acdebfa42c9efd6b"
+    },
+    {
+      "file": "verification/packaging-targeted.txt",
+      "bytes": 1880,
+      "sha256": "336de0640670017b47db721ba068d80c9ed3b00ac8165dc4600a0db9d4c20bc1"
+    },
+    {
+      "file": "verification/structural.json",
+      "bytes": 457,
+      "sha256": "7786fec60a280f321c5a40075713b480f1501131f9ff0205a3a78de2e289a1e1"
+    },
+    {
+      "file": "verification/targeted-tests.txt",
+      "bytes": 1878,
+      "sha256": "22423eb4ecb1bd0159423606790eca74d1afff31778074f9660114c94d794279"
+    },
+    {
+      "file": "verification/typecheck.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "weapon-change.json",
+      "bytes": 594,
+      "sha256": "bb6c9bee36d44dcf2b9eea933b10c9e3de7d780289169cacd7d0a7d39a64158b"
+    },
+    {
+      "file": "weapon-review.png",
+      "bytes": 937069,
+      "sha256": "4fb438a871ecd056bfae150c1bcd5a38e3ca66f69ffa29231058b0eb1e128aeb"
+    }
+  ]
+}

@@ -36,3 +36,7 @@ Every shipped audio file is listed with its source, author, licence, retrieval d
 - Exploration music: “In Darkness” by Of Far Different Nature, [OpenGameArt](https://opengameart.org/content/in-darkness), licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/); transcoded from MP3 to AAC.
 
 The owner approved both music tracks by ear on 27 October 2026.
+
+## Elf Rogue animation preview
+
+[Elf Rogue V6c handoff and step-by-step game tutorial](docs/ELF-ROGUE-V6C-HANDOFF.md). Development-only; production model remains unchanged.

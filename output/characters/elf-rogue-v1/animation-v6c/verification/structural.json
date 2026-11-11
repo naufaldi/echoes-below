@@ -1,0 +1,22 @@
+{
+  "sha256": "eed37e08843e810e046bb739fcff55417beeae56fdff1797fb010497350bab4b",
+  "bytes": 2374996,
+  "triangles": 19958,
+  "atlas": [
+    2048,
+    2048
+  ],
+  "joints": 18,
+  "clips": {
+    "Attack_Ranged": 1,
+    "Idle": 1,
+    "Walk": 1,
+    "Attack_Melee": 1,
+    "Hit": 0.6,
+    "Dodge": 0.8,
+    "Death": 1,
+    "Use_Item": 1
+  },
+  "weighted_vertices_validated": 18699,
+  "result": "PASS structural contract, not licence or artistic acceptance"
+}

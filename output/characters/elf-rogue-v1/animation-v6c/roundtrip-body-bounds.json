@@ -1,0 +1,494 @@
+[
+  {
+    "clip": "Attack_Ranged",
+    "frame": 0,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Ranged",
+    "frame": 3,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Ranged",
+    "frame": 6,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Ranged",
+    "frame": 9,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Ranged",
+    "frame": 12,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Ranged",
+    "frame": 15,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Ranged",
+    "frame": 18,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Ranged",
+    "frame": 21,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Ranged",
+    "frame": 24,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Ranged",
+    "frame": 27,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Ranged",
+    "frame": 30,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Idle",
+    "frame": 0,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Idle",
+    "frame": 3,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Idle",
+    "frame": 6,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Idle",
+    "frame": 9,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Idle",
+    "frame": 12,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Idle",
+    "frame": 15,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Idle",
+    "frame": 18,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Idle",
+    "frame": 21,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Idle",
+    "frame": 24,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Idle",
+    "frame": 27,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Idle",
+    "frame": 30,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Walk",
+    "frame": 0,
+    "bodyMinZ": 2.3037202367959253e-08,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Walk",
+    "frame": 3,
+    "bodyMinZ": 0.00011515840014908463,
+    "bodyMaxZ": 0.871863603591919
+  },
+  {
+    "clip": "Walk",
+    "frame": 6,
+    "bodyMinZ": -4.8431298637297004e-05,
+    "bodyMaxZ": 0.868426501750946
+  },
+  {
+    "clip": "Walk",
+    "frame": 9,
+    "bodyMinZ": -7.521447696490213e-05,
+    "bodyMaxZ": 0.868426501750946
+  },
+  {
+    "clip": "Walk",
+    "frame": 12,
+    "bodyMinZ": 0.0002882450062315911,
+    "bodyMaxZ": 0.871863603591919
+  },
+  {
+    "clip": "Walk",
+    "frame": 15,
+    "bodyMinZ": 2.3037202367959253e-08,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Walk",
+    "frame": 18,
+    "bodyMinZ": 0.00028819203726015985,
+    "bodyMaxZ": 0.871863603591919
+  },
+  {
+    "clip": "Walk",
+    "frame": 21,
+    "bodyMinZ": -7.52350315451622e-05,
+    "bodyMaxZ": 0.868426501750946
+  },
+  {
+    "clip": "Walk",
+    "frame": 24,
+    "bodyMinZ": -4.846261799684726e-05,
+    "bodyMaxZ": 0.868426501750946
+  },
+  {
+    "clip": "Walk",
+    "frame": 27,
+    "bodyMinZ": 0.00011512105993460864,
+    "bodyMaxZ": 0.871863603591919
+  },
+  {
+    "clip": "Walk",
+    "frame": 30,
+    "bodyMinZ": 2.3037202367959253e-08,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Melee",
+    "frame": 0,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Melee",
+    "frame": 3,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Melee",
+    "frame": 6,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Melee",
+    "frame": 9,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Melee",
+    "frame": 12,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Melee",
+    "frame": 15,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Melee",
+    "frame": 18,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Melee",
+    "frame": 21,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Melee",
+    "frame": 24,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Melee",
+    "frame": 27,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Attack_Melee",
+    "frame": 30,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Hit",
+    "frame": 0,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Hit",
+    "frame": 3,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8700896501541138
+  },
+  {
+    "clip": "Hit",
+    "frame": 6,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8660087585449219
+  },
+  {
+    "clip": "Hit",
+    "frame": 9,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8642627000808716
+  },
+  {
+    "clip": "Hit",
+    "frame": 12,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8660087585449219
+  },
+  {
+    "clip": "Hit",
+    "frame": 15,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8700896501541138
+  },
+  {
+    "clip": "Hit",
+    "frame": 18,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Dodge",
+    "frame": 0,
+    "bodyMinZ": 0.0009999703615903854,
+    "bodyMaxZ": 0.875023365020752
+  },
+  {
+    "clip": "Dodge",
+    "frame": 3,
+    "bodyMinZ": 0.001054425723850727,
+    "bodyMaxZ": 0.8891230225563049
+  },
+  {
+    "clip": "Dodge",
+    "frame": 6,
+    "bodyMinZ": 0.0009999405592679977,
+    "bodyMaxZ": 0.8967872858047485
+  },
+  {
+    "clip": "Dodge",
+    "frame": 9,
+    "bodyMinZ": 0.0009977631270885468,
+    "bodyMaxZ": 0.9003115892410278
+  },
+  {
+    "clip": "Dodge",
+    "frame": 12,
+    "bodyMinZ": 0.000999990850687027,
+    "bodyMaxZ": 0.9012033939361572
+  },
+  {
+    "clip": "Dodge",
+    "frame": 15,
+    "bodyMinZ": 0.0009977631270885468,
+    "bodyMaxZ": 0.9003115892410278
+  },
+  {
+    "clip": "Dodge",
+    "frame": 18,
+    "bodyMinZ": 0.0009999405592679977,
+    "bodyMaxZ": 0.8967872858047485
+  },
+  {
+    "clip": "Dodge",
+    "frame": 21,
+    "bodyMinZ": 0.001054425723850727,
+    "bodyMaxZ": 0.8891230225563049
+  },
+  {
+    "clip": "Dodge",
+    "frame": 24,
+    "bodyMinZ": 0.0009999703615903854,
+    "bodyMaxZ": 0.875023365020752
+  },
+  {
+    "clip": "Death",
+    "frame": 0,
+    "bodyMinZ": 0.0009999703615903854,
+    "bodyMaxZ": 0.875023365020752
+  },
+  {
+    "clip": "Death",
+    "frame": 3,
+    "bodyMinZ": 0.000988277606666088,
+    "bodyMaxZ": 0.8854021430015564
+  },
+  {
+    "clip": "Death",
+    "frame": 6,
+    "bodyMinZ": 0.0009917952120304108,
+    "bodyMaxZ": 0.8972814083099365
+  },
+  {
+    "clip": "Death",
+    "frame": 9,
+    "bodyMinZ": 0.0010025277733802795,
+    "bodyMaxZ": 0.8674836158752441
+  },
+  {
+    "clip": "Death",
+    "frame": 12,
+    "bodyMinZ": 0.000978708267211914,
+    "bodyMaxZ": 0.8058464527130127
+  },
+  {
+    "clip": "Death",
+    "frame": 15,
+    "bodyMinZ": 0.0009999722242355347,
+    "bodyMaxZ": 0.6963258981704712
+  },
+  {
+    "clip": "Death",
+    "frame": 18,
+    "bodyMinZ": 0.00029966235160827637,
+    "bodyMaxZ": 0.6009447574615479
+  },
+  {
+    "clip": "Death",
+    "frame": 21,
+    "bodyMinZ": 0.0073408037424087524,
+    "bodyMaxZ": 0.543273389339447
+  },
+  {
+    "clip": "Death",
+    "frame": 24,
+    "bodyMinZ": -0.0004006624221801758,
+    "bodyMaxZ": 0.5406219959259033
+  },
+  {
+    "clip": "Death",
+    "frame": 27,
+    "bodyMinZ": 0.0009998083114624023,
+    "bodyMaxZ": 0.5424327254295349
+  },
+  {
+    "clip": "Death",
+    "frame": 30,
+    "bodyMinZ": 0.0009998679161071777,
+    "bodyMaxZ": 0.5424326658248901
+  },
+  {
+    "clip": "Use_Item",
+    "frame": 0,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Use_Item",
+    "frame": 3,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Use_Item",
+    "frame": 6,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Use_Item",
+    "frame": 9,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Use_Item",
+    "frame": 12,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Use_Item",
+    "frame": 15,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Use_Item",
+    "frame": 18,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Use_Item",
+    "frame": 21,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Use_Item",
+    "frame": 24,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Use_Item",
+    "frame": 27,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  },
+  {
+    "clip": "Use_Item",
+    "frame": 30,
+    "bodyMinZ": -1.8566197468317114e-09,
+    "bodyMaxZ": 0.8740234375
+  }
+]

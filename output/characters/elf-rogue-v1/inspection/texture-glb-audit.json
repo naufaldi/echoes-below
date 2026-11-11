@@ -1,0 +1,19 @@
+{
+  "glb_version": 2,
+  "glb_bytes": 1773188,
+  "triangles": 16977,
+  "meshes": 1,
+  "materials": 1,
+  "embedded_images": 1,
+  "skins": 0,
+  "animations": 0,
+  "basecolor_textures": [
+    {
+      "file": "original-tripo/fbx/elf-rogue-v1.fbm/elf-rogue-v1_basecolor.jpg",
+      "dimensions": [
+        2048,
+        2048
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "sha256": "eed37e08843e810e046bb739fcff55417beeae56fdff1797fb010497350bab4b",
+  "bytes": 2374996,
+  "triangles": 19958,
+  "images": 1,
+  "textures": 1,
+  "joints": 18,
+  "durations": {
+    "Attack_Ranged": 1,
+    "Idle": 1,
+    "Walk": 1,
+    "Attack_Melee": 1,
+    "Hit": 0.6,
+    "Dodge": 0.8,
+    "Death": 1,
+    "Use_Item": 1
+  },
+  "alignment": {
+    "planarBowGripVsPullAngleDegrees": 179.98021112074164,
+    "restString": [
+      -0.22868561744689941,
+      -0.20552727580070496,
+      0.4165765941143036
+    ],
+    "grip": [
+      -0.23353728652000427,
+      -0.29692959785461426,
+      0.4176979660987854
+    ],
+    "nock": [
+      -0.21371473371982574,
+      0.07803307473659515,
+      0.47615253925323486
+    ],
+    "arrowRest": [
+      -0.23753732442855835,
+      -0.29692956805229187,
+      0.47699999809265137
+    ]
+  },
+  "sampledFaceOverlapCandidates": 0,
+  "stowedDaggerOrSheathBodyOverlaps": 0,
+  "stowedDaggerSheathWallOverlaps": 0,
+  "collisionScope": "Mesh BVH sampled frames in Idle/Walk/ranged/melee; grip contacts intentional; not blanket guarantee of all continuous-time collision-free geometry.",
+  "morphAxes": [
+    0.08,
+    0.4,
+    0.1
+  ],
+  "runtime": "v6c actualWorld verification pending worker report",
+  "releaseGate": "Licence evidence and animation polish still required"
+}
