@@ -13,6 +13,8 @@ KayKit placeholder characters are acceptable at v1.0 (ROADMAP D11), so these mod
 
 Production update, 30 October 2026: the owner approved a female heroic-chibi Elf exploration. The base, Fighter variant, and v2 Studio rig/animation tests are archived in `output/characters/`. See §7 for completed work and remaining integration requirements. These prototypes do not replace the four-class delivery contract or the current KayKit assets.
 
+Production update, 10 November 2026: the female heroic-chibi Dwarf v5 front and turnaround sheet are **already made** as 2D concept references. See §8 and [output/characters/dwarf-female-v5/README.md](../output/characters/dwarf-female-v5/README.md). This is not a 3D model, not a Tripo conversion, and not in the game.
+
 This document says what 3D characters the game needs, how they must be built, and how they plug into the code. It has two audiences:
 
 - **Part A — model production.** For whoever generates the models (the owner with Tripo, plus any cleanup tool such as Blender).
@@ -331,3 +333,13 @@ The archive manifests record file SHA-256 hashes for reproducibility. They are p
 ### 7.5 Equipment assembly handoff
 
 Sword, shield, original rigged armor, and the downloaded Tripo assembly are archived. See [Blender equipment handoff](BLENDER_EQUIPMENT_HANDOFF.md) for exact inputs, the 65-joint source versus 55-joint Tripo re-export distinction, verified credit totals, and the next comparison task. Runtime integration remains pending §7.4.
+
+## 8. Dwarf v5 concept references — already made, 10 November 2026
+
+The female Dwarf base-body concepts for later Tripo or game modelling are finished. Do not regenerate them and do not treat older dwarf fronts or sheets as the current reference. Only v5 is archived here.
+
+[Folder and current status](../output/characters/dwarf-female-v5/README.md): canonical 2K PNGs in `raw/`, JPEG previews beside them, and the generation record in `prompts.md`. ImagineArt GPT Image 2.5 Flare, quality medium, resolution 2K, 10 November 2026. Front `1344×2016`. Sheet `2016×1344` with FRONT, SIDE facing the viewer's right, BACK, GAME VIEW and FACE. Observed cost: 23 + 23 = 46 credits.
+
+Faldi accepted the front, including its thin outer lash-line tails, and asked for the sheet. The sheet repaired the front's knee splits. Soft caveats that remain: thin eyeliner tails, side and back hair a little fuller and rounder than the front, and GAME VIEW closer to eye level than slightly from above.
+
+These files are 2D concept references only. No Tripo mesh, rig, Blender source, `public/assets/` import or running-game integration exists for this dwarf. The YAML status at the top of `prompts.md` is the earlier gate hold; the update at the end of that file, and the folder README, are the current acceptance.
