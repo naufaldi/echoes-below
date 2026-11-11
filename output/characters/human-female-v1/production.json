@@ -22,14 +22,35 @@
     "reference_transport": "JPEG encoding of original Elf PNG; original unchanged",
     "quoted_credits": 3
   },
+  "tripo_asset_id": null,
+  "runtime_approved": false,
+  "sheet_attempts": [
+    {
+      "job_id": "3c3933d8-8d76-40c6-a6b6-5c576dfa76c3",
+      "status": "nsfw",
+      "file": null,
+      "reference_job_id": "2a10153d-66fd-4b33-9989-6f9871879f91",
+      "quoted_credits": 3,
+      "notes": "No output returned. Actual charge or refund was not verified."
+    }
+  ],
   "sheet": {
-    "job_id": "3c3933d8-8d76-40c6-a6b6-5c576dfa76c3",
-    "status": "nsfw",
-    "file": null,
+    "job_id": "6f9ab139-462b-4169-a209-1ec6c7f2ca78",
+    "status": "completed",
+    "file": "character-sheet.png",
+    "output_dimensions": [
+      2720,
+      1536
+    ],
+    "source_url": "https://d8j0ntlcm91z4.cloudfront.net/user_33imnLvD6uyywairsidVekmcsRa/hf_20261111_125853_6f9ab139-462b-4169-a209-1ec6c7f2ca78.png",
     "reference_job_id": "2a10153d-66fd-4b33-9989-6f9871879f91",
     "quoted_credits": 3,
-    "notes": "No output returned. Actual charge or refund was not verified."
-  },
-  "tripo_asset_id": null,
-  "runtime_approved": false
+    "actual_charge_verified": false,
+    "owner_approved_change": "Plain gray short-sleeved tunic and knee-length shorts",
+    "observed_limitations": [
+      "Side profile faces left rather than requested right.",
+      "Shorts stop above the knees rather than at knee length.",
+      "Tied-back hair is clearer in side/game views than in rear view; reconcile before 3D modeling."
+    ]
+  }
 }
