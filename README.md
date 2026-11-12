@@ -12,6 +12,10 @@ Choose a character and begin the descent. Select a contextual action, review it,
 
 AI is optional. Open Settings to connect a personal OpenAI key for the current page. It goes directly to OpenAI and clears on reload; the game server never receives it. Dialogue and game progress are stored on the hosted service under a private browser cookie. Clearing cookies loses access because account recovery is not implemented. Sponsored mode is available in code but disabled until a protected owner secret is configured.
 
+## Heavy asset sources and agent handoff
+
+Editable Blender files, original Tripo exports, production textures, recordings and other heavy `output/` sources are stored in the [private Google Drive asset archive](https://drive.google.com/drive/folders/1PsC5KGXSNGwIFF0TBlI-fuSA2y4PATaG). Read [asset storage, access and restoration](docs/ASSET-STORAGE.md) before looking for or regenerating a missing source asset. The hosted source snapshot omits these archives; the game builds and runs with the checked-in `public/assets/` files and does not fetch assets from Drive.
+
 ## Local development
 
 Node24+, npm. Install with `npm install`; build with `npm run build`; run `npm start` for the local game at127.0.0.1:4317. `START.command` starts the local production game from Finder. The existing private `.env` may contain OpenAI settings; never commit or print it. Local saves remain in ignored `data/echoes.sqlite` and are not uploaded to Sites.
