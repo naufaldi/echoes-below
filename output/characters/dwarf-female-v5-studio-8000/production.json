@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-12",
+  "tool": "Tripo Studio in Chrome",
+  "asset_id": "3cbd250c-da04-4298-93bf-dfd065a32463",
+  "input": "references/dwarf-front.png",
+  "settings": {
+    "model": "P2.0",
+    "mode": "Smart Mesh",
+    "topology": "Quad",
+    "target_faces": 8000,
+    "candidates": 1
+  },
+  "texture_settings": {
+    "resolution": "2K",
+    "remove_lighting": true,
+    "style": "None"
+  },
+  "credits": {
+    "generation": 100,
+    "texture": 10,
+    "rig": 0,
+    "total": 110
+  },
+  "status": "textured prototype; rig held by owner for hairstyle correction",
+  "issue": "Tripo invented a small rear bun, unlike accepted short haircut",
+  "completed": [
+    "geometry",
+    "texture",
+    "original geometry FBX archive",
+    "original textured FBX ZIP archive",
+    "measured geometry and local orthographic wireframe",
+    "direct Studio inspection screenshots"
+  ],
+  "pending": [
+    "hairstyle correction",
+    "rig",
+    "motion tests",
+    "runtime acceptance"
+  ]
+}

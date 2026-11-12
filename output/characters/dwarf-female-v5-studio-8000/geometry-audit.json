@@ -1,0 +1,11 @@
+{
+  "source": "exports/dwarf-female-v5-geometry.fbx",
+  "vertices": 6502,
+  "polygons": 7870,
+  "quads": 5699,
+  "triangles": 2171,
+  "ngons": 0,
+  "triangulated_triangles": 13569,
+  "mesh_count": 1,
+  "rigged": false
+}
