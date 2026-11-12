@@ -1,0 +1,95 @@
+{
+  "purpose": "production archive, not runtime approval",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 2331,
+      "sha256": "f07e53e28e0228f51c449158498e788f26bd8b1b3b4bb6b7055dda5e21fccb43"
+    },
+    {
+      "file": "evidence/geometry-four-views.png",
+      "bytes": 152241,
+      "sha256": "0aaf43bfc8b38d2cf88d018227baeca517cd141443fd13306fe694bfe4f3c24c"
+    },
+    {
+      "file": "evidence/rig-export-browser-block.jpg",
+      "bytes": 17905,
+      "sha256": "db62de3a8c8857ed5e163e2fcdaea3373f5e7685bd6eeab0294c10adc1a99292"
+    },
+    {
+      "file": "evidence/studio-idle.jpg",
+      "bytes": 91860,
+      "sha256": "434f72b419456efed1a2df48061479e25a56c0f63f59c754c088319a3db62eb0"
+    },
+    {
+      "file": "evidence/studio-rig-export-settings.jpg",
+      "bytes": 102758,
+      "sha256": "7fd4de273b072292627377aafb506c96fb44713f5099fc446769361dcba77ad7"
+    },
+    {
+      "file": "evidence/studio-slash.jpg",
+      "bytes": 94733,
+      "sha256": "eb4540c7e8a692e632fc95eda98e74e77c95f1f4d4f36890f31eac9b7047999c"
+    },
+    {
+      "file": "evidence/studio-textured-back.jpg",
+      "bytes": 95708,
+      "sha256": "559998b01cf0ff7a8e688d7b86d881b5380cb6226b5b174301c8179a6d742564"
+    },
+    {
+      "file": "evidence/studio-textured-front.jpg",
+      "bytes": 96700,
+      "sha256": "9589d3f07a624e6cdaddc8b6dc06fcc3294e9e1208cb9ef51d022c917423fa02"
+    },
+    {
+      "file": "evidence/studio-textured-side.jpg",
+      "bytes": 93613,
+      "sha256": "ac17cdf57836a788b21550fd2825424cfa39b9dce68c869fc732e8abb48c4437"
+    },
+    {
+      "file": "evidence/studio-walk.jpg",
+      "bytes": 92409,
+      "sha256": "a75f072c0ed260b22dc49ac9a520a657b5c5d447e5ef2b41f910f720f8213d17"
+    },
+    {
+      "file": "exports/human-female-v1-geometry.fbx",
+      "bytes": 363424,
+      "sha256": "fbef8282e91f0e13fef0d585bfcbd7c2979dff6718fc343b162558151a345cbc"
+    },
+    {
+      "file": "exports/human-female-v1-textured.zip",
+      "bytes": 1251443,
+      "sha256": "0ae1f12eb3ed8d1997afc9940083750a5bee57ce29993007bacdaaeeab2b93a7"
+    },
+    {
+      "file": "exports/textured/human-female-v1-textured.fbm/human-female-v1-textured_basecolor.jpg",
+      "bytes": 709738,
+      "sha256": "eed44bd6a9e4c2effcc505be79d54d89e709514c4b39f39349ae3c253dbf4542"
+    },
+    {
+      "file": "exports/textured/human-female-v1-textured.fbx",
+      "bytes": 562032,
+      "sha256": "7185d4fbc3146050987ad211d072ffda5aab0a512570f400a5467ab95c0f3276"
+    },
+    {
+      "file": "geometry-audit.json",
+      "bytes": 554,
+      "sha256": "dc8c85f284ac422147578edaa66b35adf7eda4136b7ba84fb8b84f86126eeba1"
+    },
+    {
+      "file": "production.json",
+      "bytes": 1564,
+      "sha256": "2aa11ce564f00346ddfa49c7dcea7da8747197c7f71c846c5331336587518cbe"
+    },
+    {
+      "file": "references/character-sheet.png",
+      "bytes": 5348834,
+      "sha256": "729b8e436a8af2b3df81e34301215ba0c5e252998453acc969fd5621d7abadfa"
+    },
+    {
+      "file": "references/human-front.png",
+      "bytes": 3329317,
+      "sha256": "37758f2de2482955f43b0af32c98eb0ef4f81954a6f8e77e6d44c0993146c1ad"
+    }
+  ]
+}

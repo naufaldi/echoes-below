@@ -1,0 +1,26 @@
+{
+  "source": "exports/human-female-v1-geometry.fbx",
+  "fbx_version": 7400,
+  "mesh_count": 1,
+  "vertices": 8410,
+  "polygons": 9199,
+  "quads": 7527,
+  "triangles": 1672,
+  "ngons": 0,
+  "triangulated_triangles": 16726,
+  "raw_local_bounds": [
+    [
+      -0.290771484375,
+      0.290771484375
+    ],
+    [
+      0.0,
+      0.99951171875
+    ],
+    [
+      -0.268310546875,
+      0.268310546875
+    ]
+  ],
+  "limitations": "Raw FBX mesh coordinates; no rig or motion validation. Wireframe uses local +Z as front; orientation requires confirmation."
+}

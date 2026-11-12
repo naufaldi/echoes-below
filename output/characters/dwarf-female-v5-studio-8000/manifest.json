@@ -1,0 +1,80 @@
+{
+  "purpose": "production archive, not runtime approval",
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 1704,
+      "sha256": "a344f49fa7487212c8bcb452be001268d96c0040ecf1bfc1a52c62d5a9100581"
+    },
+    {
+      "file": "evidence/geometry-four-views.png",
+      "bytes": 137352,
+      "sha256": "b8f6ccd0f83669117776e087b222acacf26f5bb0e6e7e6a4f7d950f4fc6df34d"
+    },
+    {
+      "file": "evidence/studio-geometry.jpg",
+      "bytes": 109915,
+      "sha256": "050bc38fde690ffa9e1dbcc9d14d7604530eb3ca906dfb3cabae963bb8d77341"
+    },
+    {
+      "file": "evidence/studio-textured-back.jpg",
+      "bytes": 96331,
+      "sha256": "16f72764ba890232ebac99a68b15369fcaede340ae4966127eee42d4f2f16c77"
+    },
+    {
+      "file": "evidence/studio-textured-front.jpg",
+      "bytes": 98276,
+      "sha256": "67e75070a8a798464341d62ba227b1a4f8a7154777a315f04bd246279a8b9775"
+    },
+    {
+      "file": "evidence/studio-textured-side.jpg",
+      "bytes": 97188,
+      "sha256": "ac589ff9c1673eefa476161c69f4743e367f84dd222f652104bd415bfb9daf4c"
+    },
+    {
+      "file": "exports/dwarf-female-v5-geometry.fbx",
+      "bytes": 288560,
+      "sha256": "a879963095288e2f3209b09858caa0ad8cc11efdf7c801be4ced2de34ee26c1c"
+    },
+    {
+      "file": "exports/dwarf-female-v5-textured.zip",
+      "bytes": 1046081,
+      "sha256": "f0571abdd7f87f08abf7c2b9b7c180247973f5907a73ce5dad37e31043e232a6"
+    },
+    {
+      "file": "exports/textured/dwarf-female-v5-textured.fbm/dwarf-female-v5-textured_basecolor.jpg",
+      "bytes": 592457,
+      "sha256": "8cc1cbd585337465634a618db56028303127ac98475269d3a5e27fd92e23f029"
+    },
+    {
+      "file": "exports/textured/dwarf-female-v5-textured.fbx",
+      "bytes": 473120,
+      "sha256": "fb52c24ef4b38daeca918db38b5dffa3bcfe5bb74763e462e3ac70b1579ac9d6"
+    },
+    {
+      "file": "geometry-audit.json",
+      "bytes": 220,
+      "sha256": "ec0e0d7659f5cd1bc1c10cdf40dc84e51c64dbfce8365e262dce2d2451b785fd"
+    },
+    {
+      "file": "production.json",
+      "bytes": 982,
+      "sha256": "85ad754487f3ffab0873ee78f7647dff67e14cbc4dfac7a4a4376064429e711d"
+    },
+    {
+      "file": "references/README.md",
+      "bytes": 1768,
+      "sha256": "388d96875477745d2dd717c99bf9ad956a2f0c37e4c806da03bc131ebe11d382"
+    },
+    {
+      "file": "references/character-sheet.png",
+      "bytes": 2332963,
+      "sha256": "4e7ed17ab4e5c3bca59eae3215257044bce7b134b340e02447e0d3e78caeda49"
+    },
+    {
+      "file": "references/dwarf-front.png",
+      "bytes": 1779804,
+      "sha256": "b5a748174a6296474eeb05794dffd32178cd228d3959abb703d2e36732be301d"
+    }
+  ]
+}

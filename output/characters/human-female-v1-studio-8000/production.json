@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-12",
+  "tool": "Tripo Studio in Chrome",
+  "asset_id": "99ee9ad0-48ce-494b-8455-505c28e3cbf0",
+  "input": "references/human-front.png",
+  "settings": {
+    "model": "P2.0",
+    "mode": "Smart Mesh",
+    "topology": "Quad",
+    "target_faces": 8000,
+    "candidates": 1
+  },
+  "credits": {
+    "generation": 100,
+    "observed_balance_before": 24709,
+    "observed_balance_after": 24609,
+    "texture": 10,
+    "rig": 20,
+    "total": 130,
+    "observed_batch_final_balance": 24469
+  },
+  "completed": [
+    "geometry generation",
+    "original FBX export",
+    "local geometry count",
+    "local orthographic wireframe sheet",
+    "2K texture generation and original textured FBX ZIP archive",
+    "humanoid Mixamo rig in Studio",
+    "idle walk slash preset previews",
+    "direct Studio screenshots"
+  ],
+  "pending": [
+    "rigged export local download",
+    "exported rig and clip audit",
+    "full game animation set",
+    "runtime acceptance"
+  ],
+  "blocker": "Chrome blocked rigged FBX export download with ERR_BLOCKED_BY_CLIENT. No local rigged export exists. No bypass attempted.",
+  "texture_settings": {
+    "resolution": "2K",
+    "remove_lighting": true,
+    "style": "None"
+  },
+  "rig_settings": {
+    "type": "Humanoid",
+    "skeleton": "Mixamo"
+  },
+  "rig_export_attempt": {
+    "format": "FBX",
+    "preset": "Blender",
+    "texture": "2K",
+    "export_skeleton": true,
+    "animations": [
+      "idle",
+      "walk",
+      "slash"
+    ],
+    "animation_stay_in_place": true,
+    "status": "browser download blocked"
+  }
+}
